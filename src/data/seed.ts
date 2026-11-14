@@ -34,7 +34,7 @@ interface Profile {
 const PROFILES: Profile[] = [
   {
     // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
-    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', trackedIndicators: ALL_BUT_GLUCOSE },
+    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
     seed: 11,
     base: { systolic: 116, diastolic: 74, heartRate: 66, glucose: 88, temperature: 36.6, sleepHours: 7.5, exerciseMinutes: 88, radiationDose: 420 },
     story: (values, daysLeft) => {
@@ -48,13 +48,13 @@ const PROFILES: Profile[] = [
   },
   {
     // Tudo dentro do esperado. É o único que acompanha glicemia.
-    member: { id: 'kenji', name: 'Kenji Mori', role: 'Médico de bordo', trackedIndicators: ['glucose', ...ALL_BUT_GLUCOSE] },
+    member: { id: 'kenji', name: 'Kenji Mori', role: 'Médico de bordo', sex: 'male', trackedIndicators: ['glucose', ...ALL_BUT_GLUCOSE] },
     seed: 23,
     base: { systolic: 121, diastolic: 78, heartRate: 71, glucose: 86, temperature: 36.5, sleepHours: 7.8, exerciseMinutes: 95, radiationDose: 415 },
   },
   {
     // Mudança leve na visão nos últimos dias, com dor de cabeça.
-    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', trackedIndicators: ALL_BUT_GLUCOSE },
+    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
     seed: 37,
     base: { systolic: 112, diastolic: 72, heartRate: 74, glucose: 90, temperature: 36.7, sleepHours: 7.6, exerciseMinutes: 82, radiationDose: 425 },
     story: (values, daysLeft) => {

@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon.svg', 'body/corpo.webp'],
+      includeAssets: ['icons/icon.svg', 'body/corpo.webp', 'body/corpo-feminino.webp'],
       manifest: {
         name: 'Sentinela',
         short_name: 'Sentinela',

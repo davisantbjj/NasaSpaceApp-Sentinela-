@@ -94,7 +94,12 @@ export function DashboardPage() {
             <p className="small muted">Toque numa região para ver os indicadores.</p>
           </div>
           <div className="body-layout">
-            <BodyMap levels={regionLevels} selected={region} onSelect={choose} />
+            <BodyMap
+              levels={regionLevels}
+              selected={region}
+              onSelect={choose}
+              figure={member.sex === 'female' ? 'female' : 'male'}
+            />
             <ul className="region-list">
               {REGION_ORDER.map((r) => (
                 <li key={r}>

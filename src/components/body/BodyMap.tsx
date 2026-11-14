@@ -2,18 +2,19 @@ import { useId, type CSSProperties, type KeyboardEvent } from 'react';
 import { REGIONS } from '../../content/indicators';
 import type { BodyRegion, Level } from '../../types';
 import { LEVEL_ICON_PATH, LEVEL_TEXT } from '../alerts/LevelBadge';
-import { BODY_IMAGE, BODY_REGIONS, BODY_VIEWBOX, type BodyRegionDef, type RegionShape } from './bodyRegions';
+import { BODY_FIGURES, type BodyFigure, type BodyRegionDef, type RegionShape } from './bodyRegions';
 import './BodyMap.css';
 
 interface Props {
   levels: Partial<Record<BodyRegion, Level>>; // região ausente = sem dados
   selected: BodyRegion;
   onSelect: (region: BodyRegion) => void;
+  figure?: BodyFigure; // padrão: masculina
 }
 
-// A imagem fica em public/ para funcionar sem internet. BASE_URL mantém o caminho certo
+// As imagens ficam em public/ para funcionar sem internet. BASE_URL mantém o caminho certo
 // se o app for publicado numa subpasta (GitHub Pages).
-const IMAGE_SRC = `${import.meta.env.BASE_URL}body/corpo.webp`;
+const imageSrc = (file: string) => `${import.meta.env.BASE_URL}${file}`;
 
 const MARKER_R = 15;
 
@@ -52,7 +53,8 @@ function Marker({ marker, level }: { marker: BodyRegionDef['marker']; level: Lev
 
 // Figura humana com regiões clicáveis. Cada região mostra a cor e também o ícone do nível:
 // a cor nunca é o único sinal.
-export function BodyMap({ levels, selected, onSelect }: Props) {
+export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) {
+  const { image, viewBox, regions } = BODY_FIGURES[figure];
   const glowId = `bodymap-glow-${useId().replace(/:/g, '')}`;
 
   const onKey = (event: KeyboardEvent, region: BodyRegion) => {
@@ -65,7 +67,7 @@ export function BodyMap({ levels, selected, onSelect }: Props) {
   return (
     <svg
       className="bodymap"
-      viewBox={BODY_VIEWBOX}
+      viewBox={viewBox}
       role="group"
       aria-label="Estado de cada região do corpo"
       style={{ '--bodymap-glow': `url(#${glowId})` } as CSSProperties}
@@ -80,8 +82,8 @@ export function BodyMap({ levels, selected, onSelect }: Props) {
           </feMerge>
         </filter>
       </defs>
-      <image href={IMAGE_SRC} width={BODY_IMAGE.width} height={BODY_IMAGE.height} aria-hidden="true" />
-      {BODY_REGIONS.map((def) => {
+      <image href={imageSrc(image.file)} width={image.width} height={image.height} aria-hidden="true" />
+      {regions.map((def) => {
         const { id, shapes, marker, padHit, outline } = def;
         const level = levels[id];
         const status = level ? LEVEL_TEXT[level].label : 'sem dados';

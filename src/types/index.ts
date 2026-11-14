@@ -19,6 +19,7 @@ export interface CrewMember {
   role: string;
   missionStart: string; // data ISO, AAAA-MM-DD
   trackedIndicators: IndicatorId[]; // o check-in só pede estes
+  sex?: 'female' | 'male'; // só escolhe a figura do painel; não muda nenhuma faixa
 }
 
 export interface DailyValues {
