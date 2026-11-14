@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom';
 import { AlertCard } from '../components/alerts/AlertCard';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { formatDate } from '../lib/dates';
+import { currentReview } from '../lib/reviews';
 import { useAppStore } from '../store/useAppStore';
 import { latestRecord } from './helpers';
 
 export function AlertsPage() {
-  const { alerts, correlations, records } = useAppStore();
+  const { alerts, correlations, records, reviews, session, reviewAlert } = useAppStore();
+  const isMedicalOfficer = session?.role === 'medicalOfficer';
   const latest = latestRecord(records);
   const red = alerts.filter((a) => a.level === 'red').length;
   const yellow = alerts.length - red;
@@ -35,7 +37,14 @@ export function AlertsPage() {
         </section>
       ) : (
         <div className="stack" style={{ gap: 16 }}>
-          {alerts.map((alert) => <AlertCard key={alert.id} alert={alert} />)}
+          {alerts.map((alert) => (
+            <AlertCard
+              key={alert.id}
+              alert={alert}
+              review={currentReview(alert, reviews, records)}
+              onReview={isMedicalOfficer ? (note) => reviewAlert(alert, note) : undefined}
+            />
+          ))}
         </div>
       )}
 

@@ -8,8 +8,8 @@ export type IndicatorId =
   | 'vision' | 'symptoms';
 
 export type BodyRegion =
-  | 'head' | 'heart' | 'musculoskeletal' | 'immune'
-  | 'metabolism' | 'mind' | 'wholeBody';
+  | 'head' | 'heart' | 'musculoskeletal'
+  | 'mind' | 'wholeBody';
 
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
 
@@ -42,6 +42,76 @@ export interface DailyRecord {
   missionDay: number;
   values: DailyValues;
   createdAt: string;
+  syncedAt?: string; // quando chegou à central de bordo; sem valor, ainda está só no aparelho
+}
+
+// Papéis e acesso. O comandante é tripulante: vê os próprios dados e, dos outros, só o status de check-in e se há vermelho.
+export type Role = 'crew' | 'commander' | 'medicalOfficer' | 'groundSurgeon';
+
+export interface Profile {
+  id: string;
+  name: string;
+  role: Role;
+  crewId?: string; // ausente no médico do solo, que não é tripulante
+}
+
+export interface Session {
+  profileId: string;
+  name: string;
+  role: Role;
+  crewId?: string;
+}
+
+// Alerta marcado como visto pelo oficial médico, com a conduta anotada.
+export interface AlertReview {
+  id: string; // o mesmo id do alerta
+  crewId: string;
+  date: string;
+  indicator: IndicatorId;
+  seenByProfileId: string;
+  seenBy: string;
+  seenAt: string;
+  note: string;
+  syncedAt?: string;
+  // O "visto" vale só para o alerta como estava: se o check-in for refeito ou o nível mudar,
+  // o alerta volta a aparecer como não visto (lib/reviews.ts).
+  level?: Level;
+  recordCreatedAt?: string;
+}
+
+// Quem abriu os dados de quem. O tripulante vê os acessos aos dados dele.
+export interface AccessLogEntry {
+  id: string;
+  subjectCrewId: string;
+  actorProfileId: string;
+  actorName: string;
+  actorRole: Role;
+  at: string;
+  what: string;
+}
+
+// Pacote diário que a central de bordo manda para a Terra.
+export interface PacketPayload {
+  crewName: string;
+  crewRole: string;
+  missionDay: number;
+  environment: Environment;
+  recordedAt: string;
+  values: DailyValues;
+  alerts: { id: string; indicator: IndicatorId; level: Level; whatChanged: string }[];
+  notes: { indicator: IndicatorId; note: string; seenBy: string; seenAt: string }[];
+}
+
+export interface GroundPacket {
+  id: string;
+  crewId: string;
+  date: string;
+  createdAt: string;
+  priority: 'red' | 'normal'; // vermelho passa na frente da fila
+  attemptedAt?: string; // primeira tentativa de envio; daí em diante o conteúdo não muda mais
+  sentAt?: string;
+  deliverAt?: string; // envio + atraso da comunicação no ambiente atual
+  payload: PacketPayload;
 }
 
 export type BpComponent = 'systolic' | 'diastolic';
@@ -84,7 +154,7 @@ export interface Correlation {
 
 export interface Settings {
   environment: Environment;
-  activeCrewId: string;
+  activeCrewId: string; // tripulante cujos dados estão na tela
   reminders: { indicator: IndicatorId; everyDays: number }[];
 }
 

@@ -51,8 +51,9 @@ function Marker({ marker, level }: { marker: BodyRegionDef['marker']; level: Lev
   );
 }
 
-// Figura humana com regiões clicáveis. Cada região mostra a cor e também o ícone do nível:
-// a cor nunca é o único sinal.
+// Figura humana com cinco regiões clicáveis. Amarelo e vermelho mostram a cor e também o ícone
+// do nível (a cor nunca é o único sinal); verde fica só com a forma discreta. O corpo inteiro
+// não está aqui: é o selo WholeBodySeal, ao lado da figura.
 export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) {
   const { image, viewBox, regions } = BODY_FIGURES[figure];
   const glowId = `bodymap-glow-${useId().replace(/:/g, '')}`;
@@ -84,7 +85,7 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
       </defs>
       <image href={imageSrc(image.file)} width={image.width} height={image.height} aria-hidden="true" />
       {regions.map((def) => {
-        const { id, shapes, marker, padHit, outline } = def;
+        const { id, shapes, marker, padHit, hit } = def;
         const level = levels[id];
         const status = level ? LEVEL_TEXT[level].label : 'sem dados';
         const isSelected = selected === id;
@@ -100,10 +101,10 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
             onClick={() => onSelect(id)}
             onKeyDown={(event) => onKey(event, id)}
           >
-            {outline && <path className="bodymap-outline" d={outline} aria-hidden="true" />}
+            {hit?.map((d, i) => <path key={`area-${i}`} className="bodymap-area" d={d} />)}
             {padHit && shapes.map((shape, i) => <Shape key={`hit-${i}`} shape={shape} className="bodymap-hit" />)}
             {shapes.map((shape, i) => <Shape key={i} shape={shape} className="bodymap-shape" />)}
-            {level && <Marker marker={marker} level={level} />}
+            {(level === 'yellow' || level === 'red') && <Marker marker={marker} level={level} />}
           </g>
         );
       })}

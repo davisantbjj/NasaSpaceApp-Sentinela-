@@ -50,7 +50,7 @@
     },
     "glucose": {
       "label": "Glicemia",
-      "region": "metabolism",
+      "region": "wholeBody",
       "unit": "mg/dL",
       "green": { "min": 70, "max": 99 },
       "yellow": { "min": 60, "max": 125 },
@@ -70,7 +70,7 @@
     },
     "temperature": {
       "label": "Temperatura",
-      "region": "immune",
+      "region": "wholeBody",
       "unit": "°C",
       "green": { "min": 36.1, "max": 37.2 },
       "yellow": { "min": 35.5, "max": 37.9 },

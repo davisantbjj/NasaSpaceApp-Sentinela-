@@ -9,7 +9,7 @@ interface Props {
 export function CrewSwitcher({ crew, activeId, onChange }: Props) {
   return (
     <label>
-      <span className="visually-hidden">Tripulante ativo</span>
+      <span className="visually-hidden">Ver os dados de</span>
       <select className="select" value={activeId} onChange={(event) => onChange(event.target.value)}>
         {crew.map((member) => (
           <option key={member.id} value={member.id}>{member.name} · {member.role}</option>
