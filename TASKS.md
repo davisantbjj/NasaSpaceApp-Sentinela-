@@ -87,7 +87,7 @@ Atualizado em 2026-11-14.
 
 - [x] `vite-plugin-pwa` configurado, com manifesto e ícone SVG
 - [x] Tela de tendências carregada sob demanda (o build não passa de 500 kB por arquivo)
-- [ ] Ícones PNG de 192 e 512 px, para o app ser instalável em todos os navegadores
+- [x] Ícones PNG de 192 e 512 px (mais o maskable para Android e o apple-touch-icon de 180 px para iPhone), para o app ser instalável em todos os navegadores
 - [ ] Testar o uso sem rede no build de produção (`npm run build` e `npm run preview`)
 - [ ] Escolher Vercel ou GitHub Pages e publicar (no GitHub Pages é preciso ajustar `base` em `vite.config.ts`)
 - [ ] Rever os avisos do `npm audit` (baixos e moderados, em dependências do build do PWA e no `react-router` 6)
