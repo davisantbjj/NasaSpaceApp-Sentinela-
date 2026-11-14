@@ -1,0 +1,230 @@
+{
+  "config": {
+    "baselineDays": 7,
+    "sustainedDays": 3,
+    "baselineDeviationPercent": 15,
+    "demo": true
+  },
+  "indicators": {
+    "bloodPressure": {
+      "label": "Pressão arterial",
+      "region": "heart",
+      "unit": "mmHg",
+      "components": {
+        "systolic": { "green": { "min": 100, "max": 130 }, "yellow": { "min": 90, "max": 140 } },
+        "diastolic": { "green": { "min": 60, "max": 85 }, "yellow": { "min": 55, "max": 90 } }
+      },
+      "useBaseline": true,
+      "deviationDirection": "both",
+      "nasaRisk": "Cardiovascular Adaptations",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "Sem gravidade, os líquidos do corpo sobem para a cabeça e o coração trabalha de outro jeito. A pressão pode variar com o contexto da missão.",
+        "whatToDo": {
+          "yellow": "Repita a medida após 10 minutos de repouso e registre de novo.",
+          "red": "Repita a medida, fique em repouso e avise o médico de bordo."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
+      "demo": true
+    },
+    "heartRate": {
+      "label": "Frequência cardíaca",
+      "region": "heart",
+      "unit": "bpm",
+      "green": { "min": 60, "max": 100 },
+      "yellow": { "min": 50, "max": 120 },
+      "useBaseline": true,
+      "deviationDirection": "both",
+      "nasaRisk": "Cardiovascular Adaptations",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "A falta de gravidade altera a circulação e o funcionamento do coração.",
+        "whatToDo": {
+          "yellow": "Repita a medida após 10 minutos de repouso e registre de novo.",
+          "red": "Descanse e avise o médico de bordo."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
+      "demo": true
+    },
+    "glucose": {
+      "label": "Glicemia",
+      "region": "metabolism",
+      "unit": "mg/dL",
+      "green": { "min": 70, "max": 99 },
+      "yellow": { "min": 60, "max": 125 },
+      "useBaseline": true,
+      "deviationDirection": "both",
+      "nasaRisk": "Inadequate Food and Nutrition",
+      "hazards": ["distance", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "A alimentação de bordo é limitada e precisa sustentar a tripulação por toda a missão. A glicemia em jejum ajuda a acompanhar a nutrição.",
+        "whatToDo": {
+          "yellow": "Registre o que comeu e quando, e meça de novo em jejum conforme o protocolo.",
+          "red": "Meça de novo agora e avise o médico de bordo."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-inadequate-food-and-nutrition/",
+      "demo": true
+    },
+    "temperature": {
+      "label": "Temperatura",
+      "region": "immune",
+      "unit": "°C",
+      "green": { "min": 36.1, "max": 37.2 },
+      "yellow": { "min": 35.5, "max": 37.9 },
+      "useBaseline": false,
+      "nasaRisk": "Altered Immune System Responses",
+      "hazards": ["isolation", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "O estresse do voo altera a resposta imunológica e pode reativar vírus dormentes no corpo.",
+        "whatToDo": {
+          "yellow": "Meça de novo em 1 hora e observe outros sintomas.",
+          "red": "Avise o médico de bordo e siga o protocolo médico da missão."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-altered-immune-system-responses/",
+      "demo": true
+    },
+    "sleepHours": {
+      "label": "Sono",
+      "region": "mind",
+      "unit": "h",
+      "green": { "min": 7, "max": 9 },
+      "yellow": { "min": 5, "max": 10 },
+      "useBaseline": true,
+      "deviationDirection": "below",
+      "nasaRisk": "Inadequate Sleep and Irregular Schedules",
+      "hazards": ["isolation", "distance"],
+      "messages": {
+        "whyItMatters": "Na estação a tripulação vê cerca de 16 nasceres do sol por dia, o que desregula o relógio do corpo. Dormir pouco reduz a atenção e o desempenho.",
+        "whatToDo": {
+          "yellow": "Proteja o horário de descanso de hoje e ajuste a luz da cabine conforme o protocolo.",
+          "red": "Avise o médico de bordo e evite tarefas críticas até descansar."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
+      "demo": true
+    },
+    "mood": {
+      "label": "Humor",
+      "region": "mind",
+      "unit": "na escala de 1 a 5",
+      "green": { "min": 4, "max": 5 },
+      "yellow": { "min": 3, "max": 5 },
+      "valueLabels": { "1": "muito mal", "2": "mal", "3": "neutro", "4": "bem", "5": "muito bem" },
+      "useBaseline": false,
+      "nasaRisk": "Behavioral Conditions and Psychiatric Disorders",
+      "hazards": ["isolation", "distance"],
+      "messages": {
+        "whyItMatters": "Isolamento, confinamento e distância da Terra pesam no humor ao longo da missão. O que importa é a tendência, não um dia isolado.",
+        "whatToDo": {
+          "yellow": "Use o diário de bordo e mantenha o contato previsto com a equipe e a família.",
+          "red": "Converse com o médico de bordo ou com o apoio psicológico da missão."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
+      "demo": true
+    },
+    "exerciseMinutes": {
+      "label": "Exercício",
+      "region": "musculoskeletal",
+      "unit": "min",
+      "green": { "min": 60, "max": 150 },
+      "yellow": { "min": 30, "max": 180 },
+      "useBaseline": true,
+      "deviationDirection": "below",
+      "nasaRisk": "Reduced Cardiorespiratory and Musculoskeletal Fitness",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção.",
+        "whatToDo": {
+          "yellow": "Registre o tipo de treino e reponha a sessão conforme o seu plano individual.",
+          "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-reduced-cardiorespiratory-and-musculoskeletal-fitness/",
+      "demo": true
+    },
+    "radiationDose": {
+      "label": "Radiação",
+      "region": "wholeBody",
+      "unit": "µSv",
+      "useBaseline": true,
+      "deviationDirection": "above",
+      "nasaRisk": "Radiation-Induced Cancers",
+      "hazards": ["radiation"],
+      "messages": {
+        "whyItMatters": "A radiação espacial aumenta o risco de câncer ao longo da vida. A dose do dia é comparada com o seu próprio histórico na missão.",
+        "whatToDo": {
+          "yellow": "Passe mais tempo nas áreas mais protegidas e siga o protocolo de radiação da missão.",
+          "red": "Vá para a área de abrigo e avise o médico de bordo."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/",
+      "demo": true
+    },
+    "vision": {
+      "label": "Visão",
+      "region": "head",
+      "unit": "",
+      "green": { "min": 0, "max": 0 },
+      "yellow": { "min": 0, "max": 1 },
+      "valueLabels": { "0": "sem mudança", "1": "mudança leve", "2": "mudança clara" },
+      "useBaseline": false,
+      "nasaRisk": "Spaceflight Associated Neuro-ocular Syndrome (SANS)",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "Cerca de 70% dos astronautas da estação têm inchaço no fundo do olho. Um autoteste não diagnostica nada, mas mostra quando pedir um exame.",
+        "whatToDo": {
+          "yellow": "Registre o que mudou e repita o autoteste amanhã no mesmo horário.",
+          "red": "Avise o médico de bordo e peça uma avaliação ocular."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/",
+      "demo": true
+    },
+    "symptoms": {
+      "label": "Sintomas",
+      "region": "wholeBody",
+      "unit": "",
+      "useBaseline": false,
+      "nasaRisk": "Vários riscos",
+      "hazards": ["gravity", "isolation", "hostileEnvironment", "distance", "radiation"],
+      "messages": {
+        "whyItMatters": "Longe da Terra, um sintoma registrado cedo dá tempo para agir com os recursos de bordo.",
+        "whatToDo": {
+          "yellow": "Anote quando começou e como evolui, e registre de novo amanhã.",
+          "red": "Avise o médico de bordo agora."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/hrp/risks/",
+      "demo": true
+    }
+  },
+  "symptoms": [
+    { "id": "headache", "label": "Dor de cabeça", "level": "yellow" },
+    { "id": "nausea", "label": "Enjoo", "level": "yellow" },
+    { "id": "dizziness", "label": "Tontura", "level": "yellow" },
+    { "id": "fatigue", "label": "Cansaço fora do comum", "level": "yellow" },
+    { "id": "backPain", "label": "Dor nas costas", "level": "yellow" },
+    { "id": "congestion", "label": "Nariz entupido", "level": "yellow" },
+    { "id": "skinRash", "label": "Irritação na pele", "level": "yellow" },
+    { "id": "chestPain", "label": "Dor no peito", "level": "red" },
+    { "id": "shortBreath", "label": "Falta de ar", "level": "red" }
+  ],
+  "environmentNotes": {
+    "radiationDose": {
+      "station": "A estação fica dentro da magnetosfera, que bloqueia boa parte da radiação.",
+      "transit": "Fora da magnetosfera a exposição é maior. Siga o protocolo de abrigo da missão.",
+      "moon": "A Lua fica fora da magnetosfera. Use as áreas mais protegidas do habitat.",
+      "mars": "Fora da magnetosfera e com resposta do solo de até 20 minutos."
+    }
+  },
+  "correlationPairs": [
+    ["sleepHours", "mood"],
+    ["exerciseMinutes", "mood"],
+    ["sleepHours", "heartRate"]
+  ]
+}

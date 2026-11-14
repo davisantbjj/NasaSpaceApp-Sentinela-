@@ -1,0 +1,54 @@
+# Sentinela
+
+Aplicativo web de monitoramento de saúde para astronautas em missões longas. Feito para o NASA Space Apps Challenge 2026, desafio "Create Health Monitoring Software for Astronauts on Space Missions".
+
+Projeto da equipe **CosmoTI**.
+
+O astronauta registra indicadores de saúde todo dia, vê o estado de cada sistema do corpo numa figura humana clicável e recebe orientação sobre o que fazer.
+
+> Protótipo de apoio à decisão. Não é dispositivo médico e não faz diagnóstico. Os dados da tripulação são simulados.
+
+## Estado
+
+As cinco telas funcionam com dados simulados: painel com o corpo humano, check-in diário, alertas, tendências e missão. Faltam a revisão das faixas pela equipe, a publicação e o material de entrega. Detalhes em [TASKS.md](TASKS.md).
+
+Na primeira abertura o app cria três tripulantes fictícios com 60 dias de registros. A Ana Ribeiro tem o caso preparado para a demonstração: o sono cai por vários dias e o humor cai junto.
+
+## Como rodar
+
+Precisa de Node.js 22 ou mais novo.
+
+```bash
+npm install
+npm run dev
+```
+
+| Comando | O que faz |
+| --- | --- |
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm test` | Testes (Vitest) |
+| `npm run typecheck` | Checagem de tipos |
+| `npm run build` | Build de produção em `dist/` |
+| `npm run preview` | Serve o build localmente |
+
+## Como funciona
+
+- Roda inteiro no navegador, sem servidor e sem rede em tempo de uso.
+- Os dados ficam no dispositivo (IndexedDB, via Dexie).
+- As regras de alerta ficam em `src/rules/rules.json`, fora do código.
+- Cada indicador é comparado com a faixa geral e com a linha de base pessoal. Vale o pior dos dois níveis.
+- Três níveis: verde, amarelo e vermelho.
+
+Tecnologias: React 18, TypeScript, Vite, React Router, Zustand, Dexie, Recharts, vite-plugin-pwa e Vitest.
+
+## Documentação
+
+| Arquivo | Conteúdo |
+| --- | --- |
+| [TASKS.md](TASKS.md) | Tarefas feitas e pendentes |
+| [CONTEXTO-IA.md](CONTEXTO-IA.md) | Resumo do projeto e regras para assistentes de IA |
+| [docs/arquitetura.md](docs/arquitetura.md) | Camadas, tipos de dados, motor de regras |
+| [docs/estrutura-do-projeto.md](docs/estrutura-do-projeto.md) | Árvore de pastas e papel de cada arquivo |
+| [docs/diagramas/](docs/diagramas/) | Visão geral, fluxo do check-in, dados, níveis e navegação |
+| [docs/pesquisa/](docs/pesquisa/) | Pesquisa e proposta que deram origem ao projeto |
+| [docs/pesquisa/riscos-nasa-links-completo.md](docs/pesquisa/riscos-nasa-links-completo.md) | Riscos de saúde da NASA, com as páginas e os links de dentro delas |

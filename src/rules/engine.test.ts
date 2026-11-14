@@ -1,0 +1,212 @@
+import { describe, expect, it } from 'vitest';
+import { addDays } from '../lib/dates';
+import type { Alert, DailyRecord, DailyValues, Rules } from '../types';
+import { computeBaselines, findBaseline } from './baseline';
+import { findCorrelations } from './correlation';
+import { evaluateRecord, levelByRegion, levelForRange } from './engine';
+import { rules } from './rules';
+
+const START = '2026-01-01';
+
+// Um registro por item, em dias seguidos a partir de START.
+function records(days: DailyValues[], crewId = 'c1'): DailyRecord[] {
+  return days.map((values, i) => {
+    const date = addDays(START, i);
+    return { id: `${crewId}_${date}`, crewId, date, missionDay: i + 1, values, createdAt: date };
+  });
+}
+
+function evaluateLast(days: DailyValues[], environment: 'station' | 'mars' = 'station', r: Rules = rules) {
+  const all = records(days);
+  const last = all[all.length - 1];
+  const baselines = computeBaselines('c1', all, r);
+  return evaluateRecord(last, all.slice(0, -1), baselines, r, environment);
+}
+
+const repeat = (values: DailyValues, times: number): DailyValues[] => Array.from({ length: times }, () => values);
+
+describe('levelForRange', () => {
+  const green = { min: 60, max: 100 };
+  const yellow = { min: 50, max: 120 };
+
+  it('classifica pelos limites, incluindo as bordas', () => {
+    expect(levelForRange(60, green, yellow)).toBe('green');
+    expect(levelForRange(100, green, yellow)).toBe('green');
+    expect(levelForRange(55, green, yellow)).toBe('yellow');
+    expect(levelForRange(120, green, yellow)).toBe('yellow');
+    expect(levelForRange(49, green, yellow)).toBe('red');
+    expect(levelForRange(121, green, yellow)).toBe('red');
+  });
+
+  it('sem faixa geral fica verde', () => {
+    expect(levelForRange(999)).toBe('green');
+  });
+});
+
+describe('evaluateRecord', () => {
+  it('valor dentro da faixa verde não gera alerta', () => {
+    expect(evaluateLast(repeat({ heartRate: 70 }, 8))).toEqual([]);
+  });
+
+  it('fora da verde e dentro da amarela gera alerta amarelo', () => {
+    const [alert] = evaluateLast([...repeat({ heartRate: 70 }, 8), { heartRate: 110 }]);
+    expect(alert.level).toBe('yellow');
+    expect(alert.trigger).toBe('generalRange');
+    expect(alert.region).toBe('heart');
+    expect(alert.reference).toBe('Faixa geral: 60 a 100 bpm');
+    expect(alert.notifyGround).toBe(false);
+    expect(alert.confidence).toBe('normal');
+  });
+
+  it('fora da amarela gera alerta vermelho com notifyGround', () => {
+    const [alert] = evaluateLast([...repeat({ heartRate: 70 }, 8), { heartRate: 130 }]);
+    expect(alert.level).toBe('red');
+    expect(alert.notifyGround).toBe(true);
+    expect(alert.whatToDo).toBe(rules.indicators.heartRate!.messages.whatToDo.red);
+  });
+
+  it('todo alerta traz as seis partes', () => {
+    const [alert] = evaluateLast([...repeat({ heartRate: 70 }, 8), { heartRate: 110 }]);
+    for (const part of [alert.whatChanged, alert.reference, alert.whyItMatters, alert.whatToDo, alert.confidence, alert.sourceUrl]) {
+      expect(part).toBeTruthy();
+    }
+  });
+
+  it('desvio da linha de base por sustainedDays dias vira amarelo, mesmo dentro da faixa geral', () => {
+    // Padrão pessoal de 65 bpm; 80 bpm está na faixa verde, mas 23% acima do padrão.
+    const days = [...repeat({ heartRate: 65 }, 7), ...repeat({ heartRate: 80 }, 3)];
+    const [alert] = evaluateLast(days);
+    expect(alert.level).toBe('yellow');
+    expect(alert.trigger).toBe('baselineDeviation');
+    expect(alert.whatChanged).toContain('acima do seu padrão há 3 dias');
+    expect(alert.reference).toBe('Seu padrão pessoal: 65 bpm (7 dias)');
+  });
+
+  it('desvio por menos de sustainedDays dias não gera alerta', () => {
+    expect(evaluateLast([...repeat({ heartRate: 65 }, 7), ...repeat({ heartRate: 80 }, 2)])).toEqual([]);
+  });
+
+  it('respeita o sentido de risco do desvio', () => {
+    // Sono só alerta quando cai. 8,8 h está 17% acima do padrão de 7,5 h e dentro da faixa.
+    expect(evaluateLast([...repeat({ sleepHours: 7.5 }, 7), ...repeat({ sleepHours: 8.8 }, 3)])).toEqual([]);
+  });
+
+  it('linha de base nunca deixa verde um valor fora da faixa geral', () => {
+    // 110 bpm todos os dias é o "normal" da pessoa, mas continua fora da faixa verde.
+    const [alert] = evaluateLast(repeat({ heartRate: 110 }, 10));
+    expect(alert.level).toBe('yellow');
+    expect(alert.trigger).toBe('generalRange');
+  });
+
+  it('ambiente acrescenta environmentNote e não muda o nível', () => {
+    const days = [...repeat({ radiationDose: 400 }, 7), ...repeat({ radiationDose: 520 }, 3)];
+    const [station] = evaluateLast(days, 'station');
+    const [mars] = evaluateLast(days, 'mars');
+    expect(station.level).toBe('yellow');
+    expect(mars.level).toBe(station.level);
+    expect(station.environmentNote).toBe(rules.environmentNotes.radiationDose!.station);
+    expect(mars.environmentNote).toBe(rules.environmentNotes.radiationDose!.mars);
+  });
+
+  it('linha de base incompleta marca confidence low', () => {
+    const [alert] = evaluateLast([...repeat({ heartRate: 70 }, 3), { heartRate: 110 }]);
+    expect(alert.confidence).toBe('low');
+    expect(alert.confidenceNote).toBe('Linha de base em formação (3 de 7 dias)');
+  });
+
+  it('pressão arterial usa o pior dos dois números', () => {
+    const [alert] = evaluateLast([
+      ...repeat({ bloodPressure: { systolic: 118, diastolic: 76 } }, 8),
+      { bloodPressure: { systolic: 120, diastolic: 95 } },
+    ]);
+    expect(alert.level).toBe('red');
+    expect(alert.whatChanged).toBe('Pressão arterial está em 120/95 mmHg');
+  });
+
+  it('escalas mostram o texto do valor', () => {
+    const [alert] = evaluateLast([{ vision: 1 }]);
+    expect(alert.level).toBe('yellow');
+    expect(alert.whatChanged).toBe('Visão está em mudança leve');
+    expect(alert.reference).toBe('Esperado: sem mudança');
+  });
+
+  it('sintomas usam o pior nível entre os marcados', () => {
+    expect(evaluateLast([{ symptoms: [] }])).toEqual([]);
+    const [yellow] = evaluateLast([{ symptoms: ['headache'] }]);
+    expect(yellow.level).toBe('yellow');
+    expect(yellow.trigger).toBe('symptom');
+    const [red] = evaluateLast([{ symptoms: ['headache', 'chestPain'] }]);
+    expect(red.level).toBe('red');
+    expect(red.whatChanged).toBe('Sintomas relatados: dor de cabeça, dor no peito');
+  });
+
+  it('ordena os alertas do mais grave para o menos grave', () => {
+    const alerts = evaluateLast([{ heartRate: 110, temperature: 39, mood: 3 }]);
+    expect(alerts.map((a) => a.level)).toEqual(['red', 'yellow', 'yellow']);
+  });
+});
+
+describe('computeBaselines', () => {
+  it('usa os primeiros baselineDays dias válidos', () => {
+    const all = records([...repeat({ heartRate: 70 }, 7), ...repeat({ heartRate: 90 }, 5)]);
+    const baseline = findBaseline(computeBaselines('c1', all, rules), 'heartRate')!;
+    expect(baseline.mean).toBe(70);
+    expect(baseline.sampleDays).toBe(7);
+    expect(baseline.excludedDays).toBe(0);
+  });
+
+  it('descarta dias fora da faixa verde e conta em excludedDays', () => {
+    const all = records([...repeat({ heartRate: 115 }, 2), ...repeat({ heartRate: 70 }, 7)]);
+    const baseline = findBaseline(computeBaselines('c1', all, rules), 'heartRate')!;
+    expect(baseline.mean).toBe(70);
+    expect(baseline.excludedDays).toBe(2);
+  });
+
+  it('informa quantos dias já tem enquanto está em formação', () => {
+    const baseline = findBaseline(computeBaselines('c1', records(repeat({ heartRate: 70 }, 4)), rules), 'heartRate')!;
+    expect(baseline.sampleDays).toBe(4);
+  });
+
+  it('trata sistólica e diastólica como séries separadas', () => {
+    const all = records(repeat({ bloodPressure: { systolic: 120, diastolic: 80 } }, 7));
+    const baselines = computeBaselines('c1', all, rules);
+    expect(findBaseline(baselines, 'bloodPressure', 'systolic')!.mean).toBe(120);
+    expect(findBaseline(baselines, 'bloodPressure', 'diastolic')!.mean).toBe(80);
+  });
+
+  it('não cria linha de base para humor, visão e sintomas', () => {
+    const all = records(repeat({ mood: 4, vision: 0, symptoms: [] }, 7));
+    expect(computeBaselines('c1', all, rules)).toEqual([]);
+  });
+});
+
+describe('findCorrelations', () => {
+  it('aponta indicadores que saíram do esperado nos mesmos dias, sem falar em causa', () => {
+    const all = records([...repeat({ sleepHours: 7.5, mood: 4 }, 8), ...repeat({ sleepHours: 5.5, mood: 3 }, 4)]);
+    const [correlation] = findCorrelations(all, computeBaselines('c1', all, rules), rules);
+    expect(correlation.indicators).toEqual(['sleepHours', 'mood']);
+    expect(correlation.description).toBe('Sono e humor mudaram juntos nos últimos 4 dias');
+    expect(correlation.fromDate).toBe(addDays(START, 8));
+    expect(correlation.description).not.toMatch(/caus|porque|por causa/i);
+  });
+
+  it('não aponta nada se durou menos que sustainedDays', () => {
+    const all = records([...repeat({ sleepHours: 7.5, mood: 4 }, 8), ...repeat({ sleepHours: 5.5, mood: 3 }, 2)]);
+    expect(findCorrelations(all, computeBaselines('c1', all, rules), rules)).toEqual([]);
+  });
+});
+
+describe('levelByRegion', () => {
+  const alert = (region: Alert['region'], level: Alert['level']) => ({ region, level }) as Alert;
+
+  it('deixa verde as regiões sem alerta', () => {
+    expect(levelByRegion([]).heart).toBe('green');
+  });
+
+  it('fica com o pior nível da região', () => {
+    const levels = levelByRegion([alert('heart', 'yellow'), alert('heart', 'red'), alert('mind', 'yellow')]);
+    expect(levels.heart).toBe('red');
+    expect(levels.mind).toBe('yellow');
+    expect(levels.head).toBe('green');
+  });
+});

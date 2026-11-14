@@ -1,0 +1,35 @@
+/* Único lugar onde as cores dos níveis são definidas. */
+:root {
+  color-scheme: dark;
+
+  --level-green: #4ade80;
+  --level-yellow: #facc15;
+  --level-red: #f87171;
+
+  --bg: #070b14;
+  --surface: #101827;
+  --surface-2: #17213a;
+  --surface-3: #1f2c4a;
+  --ring: rgba(148, 170, 220, 0.14);
+  --ring-strong: rgba(148, 170, 220, 0.3);
+  --text: #eef3fb;
+  --text-muted: #a3b1c9;
+  --text-faint: #7686a3;
+  --accent: #7cc4ff;
+  --accent-strong: #3987e5;
+  --on-accent: #06101f;
+
+  /* Séries dos gráficos: par validado para fundo escuro (azul e laranja). */
+  --chart-1: #3987e5;
+  --chart-2: #d95926;
+  --chart-band: rgba(163, 177, 201, 0.12);
+  --chart-grid: rgba(163, 177, 201, 0.14);
+
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --space: 16px;
+  --shadow: 0 0 0 1px var(--ring), 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
