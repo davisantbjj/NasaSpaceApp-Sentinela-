@@ -28,11 +28,12 @@ export function AlertsPage() {
           </div>
         )}
       </header>
+      <p><Link to="/medical-contact">Não pode falar? Escreva para mostrar ao oficial médico →</Link></p>
 
       {alerts.length === 0 ? (
         <section className="card empty">
-          <LevelBadge level="green" />
-          <p className="muted">Todos os indicadores medidos estão dentro da faixa geral e do padrão pessoal.</p>
+          {latest && <LevelBadge level="green" />}
+          <p className="muted">{latest ? 'Todos os indicadores medidos estão dentro da faixa geral e do padrão pessoal.' : 'Sem registros para avaliar. Faça um check-in para acompanhar os indicadores.'}</p>
           <Link className="link-arrow" to="/">Voltar ao painel →</Link>
         </section>
       ) : (

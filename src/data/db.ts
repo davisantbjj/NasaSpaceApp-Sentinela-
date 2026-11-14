@@ -1,6 +1,8 @@
 import Dexie, { type Table } from 'dexie';
 import type { Sealed } from '../lib/crypto';
-import type { AccessLogEntry, AlertReview, CrewMember, DailyRecord, GroundPacket, Profile, Settings } from '../types';
+import type {
+  AccessLogEntry, AlertReview, CrewMember, DailyRecord, DeletionRequest, GroundPacket, MedicalMessage, Profile, Settings,
+} from '../types';
 
 export interface SettingsRow {
   key: 'app';
@@ -13,6 +15,13 @@ export type StoredRecord = Omit<DailyRecord, 'values'> & { sealed: Sealed };
 export type StoredReview = Omit<AlertReview, 'note'> & { sealed: Sealed };
 export type StoredPacket = Omit<GroundPacket, 'payload'> & { sealed: Sealed };
 export type StoredProfile = Profile & { salt: Uint8Array; wrappedKey: Sealed };
+export type StoredMessage = Omit<MedicalMessage, 'body'> & { sealed: Sealed };
+
+// Preferências do aparelho, sem dado de saúde (ex.: versão do aviso de privacidade aceita).
+export interface PreferenceRow {
+  key: string;
+  value: string;
+}
 
 // Mesmos valores de seed.ts, usados só para atualizar a demonstração já gravada (v3).
 const DEMO_CREW_SEX: Record<string, NonNullable<CrewMember['sex']>> = {
@@ -31,6 +40,9 @@ export class SentinelaDB extends Dexie {
   reviews!: Table<StoredReview, string>;
   accessLog!: Table<AccessLogEntry, string>;
   packets!: Table<StoredPacket, string>;
+  preferences!: Table<PreferenceRow, string>;
+  medicalMessages!: Table<StoredMessage, string>;
+  deletionRequests!: Table<DeletionRequest, string>;
 
   constructor() {
     super('sentinela');
@@ -67,6 +79,13 @@ export class SentinelaDB extends Dexie {
         profile.role = 'commander';
       }),
     );
+    // v6: privacidade e comunicação (aviso aceito, mensagens ao oficial médico, pedidos de exclusão).
+    // As mensagens são cifradas como os outros dados de saúde.
+    this.version(6).stores({
+      preferences: 'key',
+      medicalMessages: 'id, crewId, createdAt',
+      deletionRequests: 'id, crewId',
+    });
   }
 }
 

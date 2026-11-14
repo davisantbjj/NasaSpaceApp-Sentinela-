@@ -19,7 +19,7 @@ export interface CrewMember {
   role: string;
   missionStart: string; // data ISO, AAAA-MM-DD
   trackedIndicators: IndicatorId[]; // o check-in só pede estes
-  sex?: 'female' | 'male'; // só escolhe a figura do painel; não muda nenhuma faixa
+  sex?: 'female' | 'male'; // figura e contexto educativo; não muda nenhuma faixa
 }
 
 export interface DailyValues {
@@ -158,6 +158,29 @@ export interface Settings {
   reminders: { indicator: IndicatorId; everyDays: number }[];
 }
 
+export interface MedicalMessage {
+  id: string;
+  crewId: string;
+  body: string;
+  createdAt: string;
+  status: 'local'; // sem entrega até a integração com papéis e central de bordo
+}
+
+export interface DeletionRequest {
+  id: string;
+  crewId: string;
+  createdAt: string;
+  status: 'pending'; // solicitação local, sem envio a um controlador
+}
+
+export interface RangeEvidence {
+  status: 'demo-not-clinically-validated';
+  generalReferenceUrls: string[];
+  green: string;
+  yellow: string;
+  red: string;
+}
+
 // Formato de src/rules/rules.json
 
 export interface Range {
@@ -194,6 +217,7 @@ export interface IndicatorRule {
   };
   sourceUrl: string;
   demo: boolean;
+  rangeEvidence?: RangeEvidence;
 }
 
 export interface Rules {

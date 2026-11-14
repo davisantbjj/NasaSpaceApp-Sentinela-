@@ -52,7 +52,12 @@ export function UserMenu({ session, pendingSync, onLock }: Props) {
               Sincronização
               {pendingSync > 0 && <span className="chip num">{pendingSync} na fila</span>}
             </Link>
-            {session.crewId && <Link to="/privacy" onClick={close}>Seus dados</Link>}
+            {session.crewId && (
+              <>
+                <Link to="/your-data" onClick={close}>Seus dados</Link>
+                <Link to="/medical-contact" onClick={close}>Escrever ao oficial médico</Link>
+              </>
+            )}
           </>
         )}
         <button type="button" className="btn btn-ghost" onClick={() => { close(); onLock(); }}>

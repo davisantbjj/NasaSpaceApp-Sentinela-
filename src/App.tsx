@@ -2,6 +2,7 @@ import { lazy, Suspense, useCallback, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Disclaimer } from './components/layout/Disclaimer';
 import { NavBar } from './components/layout/NavBar';
+import { PrivacyNotice } from './components/layout/PrivacyNotice';
 import { useIdleLock } from './hooks/useIdleLock';
 import { AlertsPage } from './pages/AlertsPage';
 import { CheckinPage } from './pages/CheckinPage';
@@ -11,8 +12,9 @@ import { DashboardPage } from './pages/DashboardPage';
 import { GroundPage } from './pages/GroundPage';
 import { LoginPage } from './pages/LoginPage';
 import { MissionPage } from './pages/MissionPage';
-import { PrivacyPage } from './pages/PrivacyPage';
+import { MedicalContactPage } from './pages/MedicalContactPage';
 import { SyncPage } from './pages/SyncPage';
+import { YourDataPage } from './pages/YourDataPage';
 import { useAppStore } from './store/useAppStore';
 import type { Role } from './types';
 
@@ -35,7 +37,9 @@ function OnBoardRoutes({ activeCrewId, role }: { activeCrewId: string; role: Rol
       />
       <Route path="/mission" element={<MissionPage />} />
       <Route path="/sync" element={<SyncPage />} />
-      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/your-data" element={<YourDataPage />} />
+      <Route path="/medical-contact" element={<MedicalContactPage />} />
+      <Route path="/privacy" element={<Navigate to="/your-data" replace />} />
       {role === 'medicalOfficer' && <Route path="/crew" element={<CrewOverviewPage />} />}
       {role === 'commander' && <Route path="/crew" element={<CrewStatusPage />} />}
       <Route path="*" element={<Navigate to="/" replace />} />
@@ -73,7 +77,8 @@ function ViewingBanner() {
 }
 
 export function App() {
-  const { ready, error, session, crew, settings, alerts, sync, loadCrew, switchCrew, lock, syncNow } = useAppStore();
+  const { ready, privacyAcknowledged, error, session, crew, settings, alerts, sync, loadCrew, switchCrew, lock, syncNow } =
+    useAppStore();
 
   useEffect(() => {
     void loadCrew();
@@ -120,6 +125,8 @@ export function App() {
           </div>
         ) : !ready ? (
           <div className="loading">Preparando os dados da tripulação…</div>
+        ) : !privacyAcknowledged ? (
+          <PrivacyNotice />
         ) : !session ? (
           <LoginPage />
         ) : session.role === 'groundSurgeon' ? (

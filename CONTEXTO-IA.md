@@ -73,6 +73,18 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 
 ## Regras para quem for gerar código
 
+### Entrega de Larissa (14/11/2026), integrada aos papéis e à criptografia
+
+- Aviso de privacidade versionado antes de tudo, inclusive antes do login. Leitura guardada em `preferences`, sem alegar consentimento para saúde ou base legal automática.
+- Rotas `/your-data` e `/medical-contact`, acessíveis pelo menu do avatar, por Missão e pelo rodapé (só para tripulantes que entraram); comunicação também por Alertas. Não alteram as entradas da barra principal.
+- "Seus dados" vale só para os dados de quem entrou (nunca os do tripulante que o oficial médico está vendo): exportação JSON legível (registros, anotações, mensagens, registro de acesso, pedido), pedido de exclusão local e exclusão confirmada de check-ins, anotações, mensagens, pedido e pacotes ainda não enviados. Fica o registro de acesso e o perfil fictício. Pacotes já entregues à Terra e cópias exportadas ficam fora do alcance da exclusão.
+- Banco v6 acrescenta `preferences`, `medicalMessages` (texto cifrado) e `deletionRequests`. Reset da demonstração apaga mensagens e pedidos de todos, mas preserva a leitura do aviso.
+- Mensagens são salvas para mostrar a tela à equipe, **não enviadas** ao oficial médico. A entrega pela central é uma tarefa futura.
+- `src/content/crewContext.ts` mostra contexto por sexo em Missão, sem entrar no motor nem mudar nível. `rangeEvidence` no JSON documenta a origem e limites de verde/amarelo/vermelho. Todos os cortes permanecem demonstrativos; revisão documental não é aprovação clínica.
+- Conteúdo e roteiro: `docs/apresentacao.md`, `docs/roteiro-demonstracao.md`, `docs/pesquisa/revisao-faixas.md` e `docs/privacidade.md`.
+
+### Convenções de implementação
+
 - O backend na Terra só guarda e devolve pacotes cifrados. Não coloque regra de alerta nem dado aberto nele.
 - Componentes não leem nem gravam dado de saúde sem passar pelos repositórios, que cifram e decifram.
 - Não escreva faixas clínicas no código. Leia de `rules.json`.

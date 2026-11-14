@@ -1,5 +1,7 @@
 # Estrutura do projeto
 
+Adições de Larissa (14/11): `src/data/privacyRepo.ts` e `messagesRepo.ts` encapsulam privacidade e mensagens; `src/content/privacy.ts` e `crewContext.ts` guardam textos; `src/components/layout/PrivacyNotice.tsx` apresenta o aviso inicial; `src/pages/YourDataPage.tsx` e `MedicalContactPage.tsx` implementam as novas rotas. Documentação em `docs/privacidade.md`, `docs/pesquisa/revisao-faixas.md`, `docs/apresentacao.md` e `docs/roteiro-demonstracao.md`. As tabelas e rotas originais abaixo são complementadas por essas adições.
+
 ## Árvore de pastas
 
 ```

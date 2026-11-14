@@ -5,6 +5,7 @@ import { clearDataKey, setDataKey } from '../data/keyring';
 import { listPackets } from '../data/packetsRepo';
 import { listProfiles, unlockProfile } from '../data/profilesRepo';
 import { listRecords, saveRecord } from '../data/recordsRepo';
+import { acknowledgePrivacyNotice, deleteCrewHealthData, hasAcknowledgedPrivacyNotice } from '../data/privacyRepo';
 import { listReviews, saveReview } from '../data/reviewsRepo';
 import { resetDemo, seedIfEmpty } from '../data/seed';
 import { loadSettings, saveSettings } from '../data/settingsRepo';
@@ -58,6 +59,7 @@ export interface SyncState {
 
 interface AppState extends Derived {
   ready: boolean;
+  privacyAcknowledged: boolean;
   error?: string;
   crew: CrewMember[];
   profiles: Profile[];
@@ -83,6 +85,8 @@ interface AppState extends Derived {
   loadCrewStatus: () => Promise<CrewStatusRow[]>;
   recordGroundAccess: (crewId: string, what: string) => Promise<void>;
   loadAccessLog: () => Promise<AccessLogEntry[]>;
+  acknowledgePrivacy: () => Promise<void>;
+  deleteActiveHealthData: () => Promise<void>; // apaga o histórico de quem entrou, nunca de outra pessoa
 }
 
 // Único ponto que junta dados, linha de base e motor de regras.
@@ -190,6 +194,7 @@ export const useAppStore = create<AppState>((set, get) => {
 
   return {
     ready: false,
+    privacyAcknowledged: false,
     crew: [],
     profiles: [],
     session: null,
@@ -198,10 +203,14 @@ export const useAppStore = create<AppState>((set, get) => {
 
     loadCrew: async () => {
       try {
+        if (!await hasAcknowledgedPrivacyNotice()) {
+          set({ ready: true, privacyAcknowledged: false, error: undefined });
+          return;
+        }
         await seedIfEmpty();
         const [crew, profiles, saved] = await Promise.all([listCrew(), listProfiles(), loadSettings()]);
         const settings: Settings = { ...EMPTY_SETTINGS, ...saved };
-        set({ crew, profiles, settings, ready: true });
+        set({ crew, profiles, settings, ready: true, privacyAcknowledged: true, error: undefined });
       } catch (error) {
         set({ error: error instanceof Error ? error.message : String(error) });
       }
@@ -223,6 +232,20 @@ export const useAppStore = create<AppState>((set, get) => {
       epoch += 1;
       clearDataKey();
       set({ session: null, lockNotice: notice, ...EMPTY_DATA });
+    },
+
+    acknowledgePrivacy: async () => {
+      await acknowledgePrivacyNotice();
+      set({ ready: false });
+      await get().loadCrew();
+    },
+
+    deleteActiveHealthData: async () => {
+      const session = requireSession();
+      if (!session.crewId) throw new Error('Só tripulantes têm histórico de saúde para excluir.');
+      await deleteCrewHealthData(session.crewId);
+      await loadActive(get().settings);
+      await loadSyncState();
     },
 
     switchCrew: async (crewId) => {

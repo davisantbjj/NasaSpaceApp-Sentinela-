@@ -134,10 +134,13 @@ export const DEMO_PROFILES: (Profile & { pin: string })[] = [
 async function writeSeed(): Promise<void> {
   const seed = buildSeed(todayISO());
   // Uma chave de dados nova a cada demonstração, guardada cifrada no PIN de cada perfil.
+  // As preferências do aparelho (ex.: aviso de privacidade aceito) não são apagadas.
   const dataKey = await createDataKey();
   const profiles = await Promise.all(DEMO_PROFILES.map(({ pin, ...profile }) => buildProfile(profile, pin, dataKey)));
   const records = await Promise.all(seed.records.map((record) => sealRecord(dataKey, record)));
-  const tables = [db.crew, db.records, db.settings, db.profiles, db.reviews, db.accessLog, db.packets];
+  const tables = [
+    db.crew, db.records, db.settings, db.profiles, db.reviews, db.accessLog, db.packets, db.medicalMessages, db.deletionRequests,
+  ];
   await db.transaction('rw', tables, async () => {
     await Promise.all(tables.map((table) => table.clear()));
     await db.crew.bulkPut(seed.crew);

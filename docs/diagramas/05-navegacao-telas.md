@@ -1,10 +1,13 @@
 # Diagrama 5: navegação entre telas
 
-Mostra a entrada, as telas de cada papel e os caminhos entre elas.
+Mostra o aviso de privacidade, a entrada, as telas de cada papel e os caminhos entre elas.
 
 ```mermaid
 flowchart LR
-    Open(["Abrir o app"]) --> First{"Primeira vez?"}
+    Open(["Abrir o app"]) --> Notice{"Aviso atual já lido?"}
+    Notice -- não --> PrivacyNotice["Aviso de privacidade"]
+    PrivacyNotice -- "registrar leitura" --> First
+    Notice -- sim --> First{"Primeira vez?"}
     First -- sim --> SeedStep["Carrega dados simulados<br/>e perfis da demo"]
     SeedStep --> Login
     First -- não --> Login
@@ -32,7 +35,8 @@ flowchart LR
     subgraph Menu["Menu do avatar"]
         Mission["Missão e rotina<br/>/mission"]
         Sync["Sincronização<br/>/sync"]
-        Privacy["Seus dados<br/>/privacy"]
+        Data["Seus dados<br/>/your-data"]
+        Message["Comunicação por texto<br/>/medical-contact"]
         Lock["Bloquear e trocar de perfil"]
     end
 
@@ -51,12 +55,18 @@ flowchart LR
     Bordo -. "avatar" .-> Menu
     Lock --> Login
     Idle(["5 min sem uso"]) --> Login
+    Mission --> Data
+    Mission --> Message
+    Alerts --> Message
+    Message --> Data
+    Data -- "excluir histórico confirmado" --> Dash
 ```
 
 ## Rotas
 
 | Rota | Página | Quem vê | Prioridade |
 | --- | --- | --- | --- |
+| (antes de tudo) | `PrivacyNotice` | Todos, uma vez por versão do aviso | Essencial |
 | (sem sessão) | `LoginPage` | Todos | Essencial |
 | `/` | `DashboardPage` | Bordo | Essencial |
 | `/checkin` | `CheckinPage` | Bordo | Essencial |
@@ -66,7 +76,9 @@ flowchart LR
 | `/crew` | `CrewStatusPage` | Comandante | Essencial |
 | `/crew` | `CrewOverviewPage` | Oficial médico | Essencial |
 | `/sync` | `SyncPage` | Bordo | Desejável |
-| `/privacy` | `PrivacyPage` | Quem é tripulante | Desejável |
+| `/your-data` | `YourDataPage` | Quem é tripulante, só os próprios dados | Privacidade local |
+| `/medical-contact` | `MedicalContactPage` | Quem é tripulante | Texto salvo para mostrar à equipe, sem envio |
+| `/privacy` | redireciona para `/your-data` | | |
 | `/ground/:crewId` | `GroundPage` | Médico do solo | Essencial |
 
 "Bordo" é tripulante, comandante e oficial médico. O médico do solo só tem `/ground`; qualquer outra rota volta para lá.
@@ -90,6 +102,7 @@ No máximo cinco links. No celular eles viram a barra de baixo.
 - Faixa "você está vendo os dados de...", quando o oficial médico vê outro tripulante.
 - Menu do avatar com nome e papel; ponto quando há itens na fila de sincronização.
 - Rodapé com o aviso de protótipo.
+- Links de privacidade e comunicação no rodapé. Antes da leitura do aviso, os links também mostram o aviso, sem liberar formulários.
 
 ## Menu do avatar
 

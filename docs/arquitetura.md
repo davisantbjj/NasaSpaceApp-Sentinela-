@@ -273,7 +273,7 @@ O diagrama de níveis está em `diagramas/04-niveis-de-alerta.md`.
 
 ## Persistência
 
-`src/data/db.ts` define sete tabelas no Dexie:
+`src/data/db.ts` define dez tabelas no Dexie. As três últimas vieram com a entrega de privacidade da Larissa (v6):
 
 | Tabela | Chave | Índices | O que fica cifrado |
 | --- | --- | --- | --- |
@@ -284,6 +284,11 @@ O diagrama de níveis está em `diagramas/04-niveis-de-alerta.md`.
 | `reviews` | `id` | `crewId` | `note` |
 | `accessLog` | `id` | `subjectCrewId` | nada |
 | `packets` | `id` | `crewId` | `payload` |
+| `preferences` | `key` | | nada (ex.: versão do aviso de privacidade aceita) |
+| `medicalMessages` | `id` | `crewId`, `createdAt` | `body` |
+| `deletionRequests` | `id` | `crewId` | nada (pedido local, sem envio) |
+
+`privacyRepo.ts` cuida do aviso, da exportação, do pedido e da exclusão; `messagesRepo.ts` valida e grava as mensagens cifradas. A exportação é montada pelos repositórios, que abrem os dados com a chave da sessão. A exclusão apaga, do tripulante que entrou, check-ins, anotações, mensagens, pedido e pacotes ainda não enviados; o registro de acesso e o perfil fictício ficam. `loadCrew` confere o aviso antes de popular a demonstração. Os limites estão em `docs/privacidade.md`.
 
 Versões do esquema:
 
@@ -292,6 +297,7 @@ Versões do esquema:
 - v3: o tripulante ganha `sex`.
 - v4: cria `profiles`, `reviews`, `accessLog` e `packets`. Os registros antigos estavam abertos, e não dá para cifrá-los dentro da atualização do banco (a Web Crypto é assíncrona). Como são da demonstração, são apagados e recriados.
 - v5: a Ana da demonstração vira comandante.
+- v6: `preferences`, `medicalMessages` (texto cifrado) e `deletionRequests`, da entrega de privacidade da Larissa.
 
 Alertas, correlações e linhas de base não são gravados. São recalculados a partir dos registros sempre que o app abre, um check-in é salvo ou o tripulante muda. Assim, mudar uma regra atualiza tudo.
 
