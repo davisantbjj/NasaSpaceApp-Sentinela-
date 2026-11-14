@@ -25,6 +25,9 @@ export interface SyncAdapter {
 
 export interface EarthLink {
   readonly name: string;
+  // 'simulated': nenhum servidor configurado, o envio acontece só dentro deste navegador.
+  // 'server': o backend da equipe; isOpen() pergunta ao servidor se ele está de pé.
+  readonly mode: 'simulated' | 'server';
   isOpen(): boolean | Promise<boolean>;
   // Envia os pacotes indicados. A ordem dos ids é a ordem de envio.
   send(packetIds: string[], environment: Environment): Promise<void>;

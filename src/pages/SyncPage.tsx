@@ -100,18 +100,28 @@ export function SyncPage() {
               Atraso de ida no ambiente atual ({env.label}): {env.signalDelayLabel}. Um alerta vermelho passa na frente da fila.
             </p>
           </div>
-          <Status
-            ok={online && !earth.lastError}
-            okText="Conectada"
-            waitText={
-              online
-                ? 'O servidor da Terra não respondeu. Os pacotes esperam na central e o envio é tentado de novo sozinho'
-                : 'Sem conexão. Os pacotes esperam na central e saem sozinhos quando ela voltar'
-            }
-          />
+          {!online ? (
+            <Status ok={false} okText="" waitText="Sem conexão. Os pacotes esperam na central e saem sozinhos quando ela voltar" />
+          ) : earth.mode === 'simulated' ? (
+            <p role="status">
+              <strong style={{ color: 'var(--accent)' }}>◎ Simulada neste navegador</strong>
+              <span className="small muted"> · nenhum servidor da Terra configurado. Os pacotes “chegam” só aqui, para a demonstração.</span>
+            </p>
+          ) : earth.reachable === undefined ? (
+            <p role="status" className="muted">Verificando o servidor da Terra…</p>
+          ) : (
+            <Status
+              ok={earth.reachable}
+              okText="Conectada ao servidor da Terra"
+              waitText="O servidor da Terra não respondeu. Os pacotes esperam na central e o envio é tentado de novo sozinho"
+            />
+          )}
           <p className="small muted">
             Destino: {earth.name}
-            {earth.lastError && online && <> · último erro {formatDateTime(earth.lastErrorAt!, true)}: {earth.lastError}</>}
+            {earth.checkedAt && earth.mode === 'server' && <> · verificado {formatDateTime(earth.checkedAt, true)}</>}
+            {earth.lastError && online && earth.mode === 'server' && earth.reachable === false && earth.lastErrorAt && (
+              <> · último erro {formatDateTime(earth.lastErrorAt, true)}: {earth.lastError}</>
+            )}
           </p>
           {inTransit && (
             <div className="row">

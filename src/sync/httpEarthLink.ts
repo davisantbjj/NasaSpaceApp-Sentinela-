@@ -19,11 +19,24 @@ import { signalDelayMs } from './packets';
 const TIMEOUT_MS = 10_000;
 const MAX_PER_REQUEST = 100; // o mesmo limite do servidor (server/src/validate.js)
 
+const HEALTH_TIMEOUT_MS = 5_000;
+
 export function createHttpEarthLink(baseUrl: string, token: string): EarthLink {
-  const url = `${baseUrl.replace(/\/$/, '')}/api/packets`;
+  const base = baseUrl.replace(/\/$/, '');
+  const url = `${base}/api/packets`;
   return {
     name: 'Backend na Terra',
-    isOpen: () => typeof navigator === 'undefined' || navigator.onLine,
+    mode: 'server',
+    // "Conectada" só quando o servidor responde de verdade, não só porque o navegador tem internet.
+    async isOpen() {
+      if (typeof navigator !== 'undefined' && !navigator.onLine) return false;
+      try {
+        const response = await fetch(`${base}/api/health`, { cache: 'no-store', signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS) });
+        return response.ok;
+      } catch {
+        return false;
+      }
+    },
     async send(packetIds, environment) {
       // Em lotes de 100, na ordem da fila. Se um lote falha, os seguintes esperam o próximo ciclo.
       for (let i = 0; i < packetIds.length; i += MAX_PER_REQUEST) {

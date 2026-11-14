@@ -48,6 +48,7 @@ export function earthReachable(): boolean {
 export function createSimulatedEarthLink(isOpen: () => boolean): EarthLink {
   return {
     name: 'Ligação com a Terra (simulada)',
+    mode: 'simulated',
     isOpen,
     async send(packetIds, environment) {
       for (const id of packetIds) {
@@ -75,14 +76,20 @@ export function createEarthLink(): EarthLink {
   return EARTH_API_URL ? createHttpEarthLink(EARTH_API_URL, EARTH_TOKEN) : createSimulatedEarthLink(earthReachable);
 }
 
-// Estado da última tentativa de envio à Terra, para a tela de sincronização.
+// Estado da ligação com a Terra, para a tela de sincronização. `reachable` só fica verdadeiro
+// depois de uma verificação de verdade: com servidor, ele respondeu ao /api/health; simulada,
+// o navegador está online. Antes da primeira verificação fica indefinido ("verificando").
 export interface EarthLinkStatus {
   name: string;
+  mode: EarthLink['mode'];
+  reachable?: boolean;
+  checkedAt?: string;
   lastError?: string;
   lastErrorAt?: string;
 }
 
-let earthStatus: EarthLinkStatus = { name: createEarthLink().name };
+const initialLink = createEarthLink();
+let earthStatus: EarthLinkStatus = { name: initialLink.name, mode: initialLink.mode };
 
 export function earthLinkStatus(): EarthLinkStatus {
   return earthStatus;
@@ -115,7 +122,16 @@ async function runCycle(settings: Settings, sendAll: boolean): Promise<SyncResul
   if (outbox.length > 0 && (await central.reachable())) pushed = (await central.push(outbox)).length;
 
   let sent = 0;
-  if (await link.isOpen()) {
+  const open = await link.isOpen();
+  earthStatus = {
+    ...earthStatus,
+    name: link.name,
+    mode: link.mode,
+    reachable: open,
+    checkedAt: new Date().toISOString(),
+    ...(open ? {} : { lastError: link.mode === 'server' ? 'O servidor da Terra não respondeu.' : 'Sem conexão.', lastErrorAt: new Date().toISOString() }),
+  };
+  if (open) {
     // Só sai o pacote cujo registro (e anotações) já chegou à central.
     const atCentral = await atCentralChecker();
     const queue = transmitOrder((await listPacketMeta()).filter((p) => atCentral(p.waitsFor)));
@@ -123,11 +139,12 @@ async function runCycle(settings: Settings, sendAll: boolean): Promise<SyncResul
     try {
       await link.send(batch, settings.environment);
       sent = batch.length;
-      earthStatus = { name: link.name };
+      earthStatus = { ...earthStatus, lastError: undefined, lastErrorAt: undefined };
     } catch (error) {
       // Servidor fora do ar ou sem rede: os pacotes ficam na fila e saem no próximo ciclo.
       earthStatus = {
-        name: link.name,
+        ...earthStatus,
+        reachable: false,
         lastError: error instanceof Error ? error.message : String(error),
         lastErrorAt: new Date().toISOString(),
       };
