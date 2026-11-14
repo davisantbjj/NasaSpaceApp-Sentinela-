@@ -5,7 +5,7 @@
   --level-green: #4ade80;
   --level-yellow: #facc15;
   --level-red: #f87171;
-  --level-none: #64748b; /* região sem dados */
+  --level-none: #8494b0; /* região sem dados; contraste de 4,5:1 ou mais em todos os fundos */
 
   --bg: #070b14;
   --surface: #101827;
@@ -15,7 +15,7 @@
   --ring-strong: rgba(148, 170, 220, 0.3);
   --text: #eef3fb;
   --text-muted: #a3b1c9;
-  --text-faint: #7686a3;
+  --text-faint: #8f9dba; /* contraste de 4,5:1 ou mais em todos os fundos (WCAG 1.4.3) */
   --accent: #7cc4ff;
   --accent-strong: #3987e5;
   --on-accent: #06101f;
