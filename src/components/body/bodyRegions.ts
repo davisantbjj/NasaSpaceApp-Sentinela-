@@ -1,42 +1,66 @@
 import type { BodyRegion } from '../../types';
 
-// Figura humana em viewBox 0 0 240 500. O lado esquerdo do corpo fica à direita de quem olha.
-export const BODY_VIEWBOX = '0 0 240 500';
+// Coordenadas em pixels da imagem public/body/corpo.webp (1024 x 765).
+// Se trocar a imagem, refaça as formas abaixo.
+export const BODY_IMAGE = { width: 1024, height: 765 } as const;
 
-// Silhueta de fundo, sem interação.
-export const BODY_BASE: string[] = [
-  'M108 92h24v24h-24z', // pescoço
-  'M100 108h40a30 30 0 0 1 30 30v112a22 22 0 0 1-22 22H92a22 22 0 0 1-22-22V138a30 30 0 0 1 30-30z', // tronco
-];
+// Recorte mostrado na tela: só a área do corpo, sem o fundo vazio dos lados.
+export const BODY_VIEWBOX = '318 84 388 676';
 
-export interface RegionShape {
-  region: BodyRegion;
-  paths: string[];
-  mark: { x: number; y: number }; // onde fica o ícone do nível
-  whole?: boolean; // contorno em volta da figura
+export type RegionShape =
+  | { kind: 'ellipse'; cx: number; cy: number; rx: number; ry: number }
+  | { kind: 'polygon'; points: string };
+
+export interface BodyRegionDef {
+  id: BodyRegion;
+  shapes: RegionShape[];
+  anchor: { x: number; y: number }; // onde fica o marcador com o ícone do nível
 }
 
 // A ordem define quem fica por cima no desenho.
-export const BODY_REGIONS: RegionShape[] = [
+export const BODY_REGIONS: BodyRegionDef[] = [
   {
-    region: 'wholeBody',
-    whole: true,
-    paths: ['M70 14h100a48 48 0 0 1 48 48v376a48 48 0 0 1-48 48H70a48 48 0 0 1-48-48V62a48 48 0 0 1 48-48z'],
-    mark: { x: 120, y: 486 },
+    id: 'wholeBody',
+    shapes: [{ kind: 'ellipse', cx: 512, cy: 738, rx: 120, ry: 16 }],
+    anchor: { x: 512, y: 738 },
   },
   {
-    region: 'musculoskeletal',
-    paths: [
-      'M47 124a13 13 0 0 1 13 13v126a13 13 0 0 1-26 0V137a13 13 0 0 1 13-13z', // braço
-      'M193 124a13 13 0 0 1 13 13v126a13 13 0 0 1-26 0V137a13 13 0 0 1 13-13z', // braço
-      'M76 280h40v176a20 20 0 0 1-40 0z', // perna
-      'M124 280h40v176a20 20 0 0 1-40 0z', // perna
+    id: 'musculoskeletal',
+    shapes: [
+      { kind: 'polygon', points: '440,222 425,235 418,280 405,315 388,350 374,390 358,402 345,420 350,452 380,452 396,412 412,370 430,330 445,295 452,250' },
+      { kind: 'polygon', points: '583,222 598,235 605,280 618,315 635,350 649,390 665,402 678,420 673,452 643,452 627,412 611,370 593,330 578,295 571,250' },
+      { kind: 'polygon', points: '446,432 510,438 508,470 498,540 490,600 482,660 482,700 476,724 438,724 452,690 452,620 448,560 450,500 446,460' },
+      { kind: 'polygon', points: '577,432 513,438 515,470 525,540 533,600 541,660 541,700 547,724 585,724 571,690 571,620 575,560 573,500 577,460' },
     ],
-    mark: { x: 96, y: 380 },
+    anchor: { x: 470, y: 590 },
   },
-  { region: 'mind', paths: ['M82 58a38 38 0 0 1 76 0z'], mark: { x: 120, y: 44 } },
-  { region: 'head', paths: ['M82 62h76a38 38 0 0 1-76 0z'], mark: { x: 120, y: 82 } },
-  { region: 'immune', paths: ['M100 132a17 17 0 1 1 0 34a17 17 0 0 1 0-34z'], mark: { x: 100, y: 154 } },
-  { region: 'heart', paths: ['M140 130a19 19 0 1 1 0 38a19 19 0 0 1 0-38z'], mark: { x: 140, y: 154 } },
-  { region: 'metabolism', paths: ['M120 190a34 28 0 1 1 0 56a34 28 0 0 1 0-56z'], mark: { x: 120, y: 223 } },
+  {
+    id: 'metabolism',
+    shapes: [{ kind: 'ellipse', cx: 512, cy: 352, rx: 46, ry: 48 }],
+    anchor: { x: 512, y: 352 },
+  },
+  {
+    id: 'immune',
+    shapes: [
+      { kind: 'ellipse', cx: 512, cy: 203, rx: 20, ry: 9 },
+      { kind: 'ellipse', cx: 452, cy: 252, rx: 9, ry: 9 },
+      { kind: 'ellipse', cx: 571, cy: 252, rx: 9, ry: 9 },
+    ],
+    anchor: { x: 470, y: 208 },
+  },
+  {
+    id: 'heart',
+    shapes: [{ kind: 'ellipse', cx: 533, cy: 262, rx: 24, ry: 20 }],
+    anchor: { x: 533, y: 262 },
+  },
+  {
+    id: 'mind',
+    shapes: [{ kind: 'ellipse', cx: 512, cy: 122, rx: 27, ry: 20 }],
+    anchor: { x: 566, y: 112 },
+  },
+  {
+    id: 'head',
+    shapes: [{ kind: 'ellipse', cx: 512, cy: 152, rx: 30, ry: 9 }],
+    anchor: { x: 566, y: 162 },
+  },
 ];

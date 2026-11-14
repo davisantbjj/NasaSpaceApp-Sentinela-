@@ -5,6 +5,7 @@
   --level-green: #4ade80;
   --level-yellow: #facc15;
   --level-red: #f87171;
+  --level-none: #64748b; /* região sem dados */
 
   --bg: #070b14;
   --surface: #101827;

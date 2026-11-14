@@ -31,7 +31,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | Estado | Zustand |
 | Dados locais | IndexedDB via Dexie |
 | Gráficos | Recharts |
-| Corpo humano | SVG próprio com regiões clicáveis |
+| Corpo humano | Imagem em `public/body/corpo.webp` com regiões SVG clicáveis por cima (`src/components/body/`) |
 | Offline | vite-plugin-pwa |
 | Testes | Vitest (só no motor de regras) |
 | Publicação | Vercel ou GitHub Pages |

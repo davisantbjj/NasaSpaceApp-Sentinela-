@@ -195,21 +195,7 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 }
 .region-panel-anchor { scroll-margin-top: 72px; min-width: 0; }
 
-.body-map { width: 100%; max-width: 210px; filter: drop-shadow(0 0 14px rgba(124, 196, 255, 0.08)); height: auto; display: block; overflow: visible; }
-.body-base { fill: #1b2742; stroke: rgba(148, 170, 220, 0.28); stroke-width: 1.5; }
-.body-region { cursor: pointer; outline: none; }
-.body-region .region-shape {
-  fill: currentColor; fill-opacity: 0.22; stroke: currentColor; stroke-width: 2;
-  transition: fill-opacity 0.18s var(--ease), stroke-width 0.18s var(--ease);
-}
-.body-region.whole .region-shape { fill: none; stroke-dasharray: 5 7; stroke-width: 3; stroke-linecap: round; pointer-events: stroke; }
-.body-region:hover .region-shape { fill-opacity: 0.4; }
-.body-region[aria-pressed='true'] .region-shape { fill-opacity: 0.55; stroke-width: 3; }
-.body-region.whole:hover .region-shape, .body-region.whole[aria-pressed='true'] .region-shape { stroke-width: 5; }
-.body-region:focus-visible .region-shape { stroke: var(--accent); stroke-width: 4; }
-.body-region .region-mark-bg { fill: var(--surface); stroke: currentColor; stroke-width: 2; }
-.body-region .region-mark { fill: var(--text); font-size: 15px; font-weight: 800; pointer-events: none; }
-.body-region[data-level='yellow'] .region-shape, .body-region[data-level='red'] .region-shape { fill-opacity: 0.38; }
+/* O mapa do corpo tem os próprios estilos em components/body/BodyMap.css. */
 
 .region-list { display: grid; gap: 6px; list-style: none; margin: 0; padding: 0; }
 .region-button {

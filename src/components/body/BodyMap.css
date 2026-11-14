@@ -1,0 +1,78 @@
+/* Mapa do corpo. As cores dos níveis vêm de styles/tokens.css. */
+
+.bodymap {
+  display: block;
+  width: 100%;
+  max-width: 210px;
+  height: auto;
+  border-radius: var(--radius-md);
+  background: #070d18;
+  box-shadow: 0 0 0 1px var(--ring);
+  touch-action: manipulation;
+}
+
+.bodymap-region { cursor: pointer; outline: none; --c: var(--level-none); }
+.bodymap-region--green { --c: var(--level-green); }
+.bodymap-region--yellow { --c: var(--level-yellow); }
+.bodymap-region--red { --c: var(--level-red); }
+
+.bodymap-region > ellipse,
+.bodymap-region > polygon {
+  fill: var(--c);
+  fill-opacity: 0.16;
+  stroke: var(--c);
+  stroke-opacity: 0.55;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  transition: fill-opacity 160ms var(--ease), stroke-opacity 160ms var(--ease), stroke-width 160ms var(--ease);
+}
+
+/* Verde fica discreto para o alerta chamar atenção. */
+.bodymap-region--green > ellipse,
+.bodymap-region--green > polygon { fill-opacity: 0.08; stroke-opacity: 0.35; }
+
+.bodymap-region--yellow > ellipse,
+.bodymap-region--yellow > polygon { fill-opacity: 0.3; stroke-opacity: 0.9; }
+
+.bodymap-region--red > ellipse,
+.bodymap-region--red > polygon {
+  fill-opacity: 0.4;
+  stroke-opacity: 1;
+  filter: drop-shadow(0 0 6px var(--level-red));
+}
+
+/* Sem dados: contorno tracejado, sem preenchimento. */
+.bodymap-region--none > ellipse,
+.bodymap-region--none > polygon { fill-opacity: 0; stroke-dasharray: 5 5; stroke-opacity: 0.45; }
+
+@media (hover: hover) {
+  .bodymap-region:hover > ellipse,
+  .bodymap-region:hover > polygon { fill-opacity: 0.42; stroke-opacity: 1; }
+}
+
+.bodymap-region.is-selected > ellipse,
+.bodymap-region.is-selected > polygon { fill-opacity: 0.45; stroke-opacity: 1; stroke-width: 3; }
+
+.bodymap-region:focus-visible > ellipse,
+.bodymap-region:focus-visible > polygon { fill-opacity: 0.45; stroke: var(--accent); stroke-opacity: 1; stroke-width: 4; }
+
+/* Marcador com o ícone do nível. */
+.bodymap-marker circle { fill: #0b111b; stroke: var(--c); stroke-width: 3.5; }
+.bodymap-marker text {
+  fill: var(--c);
+  font: 800 22px/1 var(--font);
+  text-anchor: middle;
+  pointer-events: none;
+}
+.bodymap-region--red .bodymap-marker circle { animation: bodymap-pulse 1.6s ease-in-out infinite; }
+
+@keyframes bodymap-pulse {
+  0%, 100% { stroke-width: 3.5; }
+  50% { stroke-width: 7; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bodymap-region--red .bodymap-marker circle { animation: none; }
+  .bodymap-region > ellipse,
+  .bodymap-region > polygon { transition: none; }
+}
