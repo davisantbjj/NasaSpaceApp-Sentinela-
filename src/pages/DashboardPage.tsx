@@ -8,13 +8,12 @@ import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
 import { formatDate, missionDay, todayISO } from '../lib/dates';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { rules } from '../rules/rules';
-import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
+import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { BodyRegion } from '../types';
 import { baselineNote, latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
 
 export function DashboardPage() {
   const member = useActiveCrew();
-  const viewingOther = useViewingOther();
   const { records, alerts, baselines, correlations, regionLevels, settings } = useAppStore();
   const [selected, setSelected] = useState<BodyRegion | null>(null);
 
@@ -72,8 +71,8 @@ export function DashboardPage() {
           </div>
         </div>
         <div className="stack" style={{ justifyItems: 'start' }}>
-          {latest ? <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} /> : <span className="chip">Sem registros para avaliar</span>}
-          {viewingOther ? null : checkinDone ? (
+          <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} />
+          {checkinDone ? (
             <Link className="btn" to="/checkin">Refazer check-in de hoje</Link>
           ) : (
             <Link className="btn btn-primary" to="/checkin">Fazer o check-in de hoje →</Link>
@@ -84,11 +83,7 @@ export function DashboardPage() {
       {!checkinDone && (
         <p className="notice">
           <span className="notice-icon" aria-hidden="true">!</span>
-          <span>
-            {viewingOther
-              ? `O check-in de hoje ainda não chegou à central. O painel mostra o registro de ${latest ? formatDate(latest.date) : 'nenhum dia'}.`
-              : `O check-in de hoje está pendente. O painel mostra o registro de ${latest ? formatDate(latest.date) : 'nenhum dia'}.`}
-          </span>
+          <span>O check-in de hoje está pendente. O painel mostra o registro de {latest ? formatDate(latest.date) : 'nenhum dia'}.</span>
         </p>
       )}
 
@@ -100,7 +95,7 @@ export function DashboardPage() {
           </div>
           <div className="body-layout">
             <BodyMap
-              levels={latest ? regionLevels : {}}
+              levels={regionLevels}
               selected={region}
               onSelect={choose}
               figure={member.sex === 'female' ? 'female' : 'male'}
@@ -110,7 +105,7 @@ export function DashboardPage() {
                 <li key={r}>
                   <button type="button" className="region-button" aria-pressed={region === r} onClick={() => choose(r)}>
                     <span className="region-name">{REGIONS[r].label}</span>
-                    {latest ? <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} /> : <span className="chip">Sem dados</span>}
+                    <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} />
                   </button>
                 </li>
               ))}
@@ -121,7 +116,7 @@ export function DashboardPage() {
         <div ref={panelRef} className="region-panel-anchor">
         <RegionPanel
           region={region}
-          level={latest ? regionLevels[region] : undefined}
+          level={regionLevels[region]}
           items={items}
           alerts={alerts}
           togetherNotes={togetherNotes}

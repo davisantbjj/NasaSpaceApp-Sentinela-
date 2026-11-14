@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { INDICATORS } from '../../content/indicators';
-import type { Alert, AlertReview } from '../../types';
-import { AlertReviewBox } from './AlertReviewBox';
+import type { Alert } from '../../types';
 import { LevelBadge } from './LevelBadge';
 
 const TRIGGER_TEXT: Record<Alert['trigger'], string> = {
@@ -12,13 +11,7 @@ const TRIGGER_TEXT: Record<Alert['trigger'], string> = {
 
 // As seis partes de todo alerta: o que mudou, a referência, por que importa,
 // o que fazer, a confiança do dado e a fonte.
-interface Props {
-  alert: Alert;
-  review?: AlertReview;
-  onReview?: (note: string) => Promise<void>; // só para o oficial médico
-}
-
-export function AlertCard({ alert, review, onReview }: Props) {
+export function AlertCard({ alert }: { alert: Alert }) {
   return (
     <article className="card alert-card level-color" data-level={alert.level}>
       <div className="row-between">
@@ -61,11 +54,9 @@ export function AlertCard({ alert, review, onReview }: Props) {
       {alert.notifyGround && (
         <p className="notice" style={{ color: 'var(--text)' }}>
           <span className="notice-icon" aria-hidden="true">↗</span>
-          <span>Vai na frente da fila de pacotes para a equipe médica na Terra.</span>
+          <span>Marcado para aviso à equipe médica em solo no próximo contato.</span>
         </p>
       )}
-
-      {(review || onReview) && <AlertReviewBox review={review} onReview={onReview} />}
 
       <div className="row-between">
         {alert.indicator !== 'symptoms' ? (

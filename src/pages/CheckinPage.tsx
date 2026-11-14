@@ -9,7 +9,7 @@ import { displayText } from '../content/format';
 import { INDICATORS } from '../content/indicators';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
-import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
+import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { Alert, DailyValues, IndicatorId } from '../types';
 import { latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
 
@@ -68,31 +68,7 @@ function toValues(steps: IndicatorId[], draft: Draft): DailyValues {
   return values;
 }
 
-// O check-in é de cada tripulante: o oficial médico vendo outra pessoa não preenche por ela.
 export function CheckinPage() {
-  const viewingOther = useViewingOther();
-  const { crew, settings, session, switchCrew } = useAppStore();
-  if (viewingOther) {
-    const member = crew.find((c) => c.id === settings.activeCrewId);
-    return (
-      <div className="page checkin">
-        <section className="card step">
-          <span className="eyebrow">Check-in diário</span>
-          <h1>O check-in é de cada tripulante</h1>
-          <p className="muted">Você está vendo os dados de {member?.name ?? 'outro tripulante'}. Para fazer o seu check-in, volte aos seus dados.</p>
-          {session?.crewId && (
-            <div className="row">
-              <button type="button" className="btn btn-primary" onClick={() => void switchCrew(session.crewId!)}>Voltar aos meus dados</button>
-            </div>
-          )}
-        </section>
-      </div>
-    );
-  }
-  return <OwnCheckin />;
-}
-
-function OwnCheckin() {
   const member = useActiveCrew();
   const { records, saveCheckin } = useAppStore();
   const latest = latestRecord(records);

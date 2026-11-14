@@ -26,15 +26,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://medlineplus.gov/ency/article/002341.htm"
-        ],
-        "green": "Sistólica 100–130 e diastólica 60–85: escolha de demonstração. A referência geral informa 90/60–120/80 em repouso e não valida estes cortes separados.",
-        "yellow": "Sistólica 90–140 e diastólica 55–90: escolha de demonstração, sem validação clínica.",
-        "red": "Fora da amarela: lógica de demonstração, não um limiar de emergência validado."
-      },
       "demo": true
     },
     "heartRate": {
@@ -55,15 +46,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://medlineplus.gov/ency/article/002341.htm"
-        ],
-        "green": "60–100 bpm: referência geral para adulto saudável em repouso; não é uma faixa validada para astronautas.",
-        "yellow": "50–120 bpm: escolha de demonstração, sem validação clínica.",
-        "red": "Fora de 50–120: lógica de demonstração, não um limiar de emergência validado."
-      },
       "demo": true
     },
     "glucose": {
@@ -84,16 +66,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-inadequate-food-and-nutrition/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis",
-          "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/low-blood-glucose-hypoglycemia"
-        ],
-        "green": "70–99 mg/dL combina referências distintas: limite de hipoglicemia em contexto de diabetes e glicemia plasmática de jejum até 99. Não valida medidor capilar nem astronautas.",
-        "yellow": "60–125 mg/dL: escolha de demonstração. O intervalo plasmático 100–125 citado pelo NIDDK não define urgência nem valida o limite inferior 60.",
-        "red": "Fora da amarela: demonstração. Não confundir classificação diagnóstica de laboratório com urgência de medida capilar."
-      },
       "demo": true
     },
     "temperature": {
@@ -113,15 +85,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-altered-immune-system-responses/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://medlineplus.gov/ency/article/002341.htm"
-        ],
-        "green": "36,1–37,2 °C: escolha anterior mantida como demonstração. A referência consultada informa 36,5–37,3 °C; local e método de medida importam.",
-        "yellow": "35,5–37,9 °C: escolha de demonstração, sem validação clínica.",
-        "red": "Fora da amarela: lógica de demonstração, sem validar urgência por método de medida."
-      },
       "demo": true
     },
     "sleepHours": {
@@ -142,15 +105,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.nichd.nih.gov/health/topics/factsheets/sleep"
-        ],
-        "green": "7–9 horas: referência geral de sono para a maioria dos adultos, sem validar triagem de astronautas.",
-        "yellow": "5–10 horas: escolha de demonstração, sem validação clínica.",
-        "red": "Menos de 5 ou mais de 10: escolha de demonstração, não critério clínico universal."
-      },
       "demo": true
     },
     "mood": {
@@ -171,15 +125,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/"
-        ],
-        "green": "4–5 em escala própria de 1–5: escolha de demonstração. A fonte explica o risco, não valida esta escala.",
-        "yellow": "3: escolha de demonstração, não escala psicológica validada.",
-        "red": "1–2: escolha de demonstração, não diagnóstico ou avaliação de risco individual."
-      },
       "demo": true
     },
     "exerciseMinutes": {
@@ -200,15 +145,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-reduced-cardiorespiratory-and-musculoskeletal-fitness/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.nasa.gov/general/astronaut-exercise/"
-        ],
-        "green": "60–150 min: escolha de demonstração. A NASA descreve média de cerca de duas horas por dia, não este intervalo nem uma meta universal.",
-        "yellow": "30–180 min: escolha de demonstração; duração isolada não informa intensidade ou prescrição individual.",
-        "red": "Fora da amarela: escolha de demonstração, sem validação clínica."
-      },
       "demo": true
     },
     "radiationDose": {
@@ -227,15 +163,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp"
-        ],
-        "green": "Sem faixa geral. Ausência de alerta não significa dose segura.",
-        "yellow": "Desvio pessoal: algoritmo de demonstração (7 amostras, mais de 15% por 3 registros), não limite dosimétrico. Os 150 µSv/dia do Radi-N2 são só nêutrons na ISS.",
-        "red": "Não é gerado por dose no motor atual. O protótipo não avalia eventos agudos nem limites cumulativos."
-      },
       "demo": true
     },
     "vision": {
@@ -256,15 +183,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/"
-        ],
-        "green": "0 = sem mudança: escala própria de demonstração; a fonte SANS não valida um autoteste 0–2.",
-        "yellow": "1 = mudança leve: classificação de demonstração, sem validação clínica.",
-        "red": "2 = mudança clara: classificação de demonstração, não diagnóstico de SANS."
-      },
       "demo": true
     },
     "symptoms": {
@@ -282,15 +200,6 @@
         }
       },
       "sourceUrl": "https://www.nasa.gov/hrp/risks/",
-      "rangeEvidence": {
-        "status": "demo-not-clinically-validated",
-        "generalReferenceUrls": [
-          "https://www.nasa.gov/hrp/risks/"
-        ],
-        "green": "Nenhum sintoma marcado: não é atestado de saúde.",
-        "yellow": "headache, nausea, dizziness, fatigue, backPain, congestion, skinRash: níveis fixos de demonstração, não validados pela página de riscos.",
-        "red": "chestPain e shortBreath: prioridade de demonstração. A página de riscos não valida este protocolo de triagem."
-      },
       "demo": true
     }
   },

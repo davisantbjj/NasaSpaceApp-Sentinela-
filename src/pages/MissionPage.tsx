@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { seriesPoints } from '../lib/series';
@@ -45,7 +43,6 @@ export function MissionPage() {
   if (!member) return null;
   const today = todayISO();
   const tracked = trackedInOrder(member);
-  const healthContext = crewHealthContext(member.sex);
 
   return (
     <div className="page">
@@ -71,18 +68,6 @@ export function MissionPage() {
           <span className="small muted">Registros</span>
           <span className="metric-value">{records.length}</span>
         </div>
-      </section>
-
-      <section className="card stack">
-        <h2>Contexto de readaptação à gravidade</h2>
-        <p>{healthContext.text}</p>
-        <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA — intolerância ortostática (abre outro site)</a>
-      </section>
-
-      <section className="card stack">
-        <h2>Privacidade e comunicação</h2>
-        <p>Consulte os dados deste perfil ou escreva uma mensagem para mostrar à equipe de bordo.</p>
-        <div className="row"><Link className="btn" to="/your-data">Seus dados</Link><Link className="btn" to="/medical-contact">Escrever ao oficial médico</Link></div>
       </section>
 
       <section className="card stack" style={{ gap: 14 }}>
@@ -148,7 +133,7 @@ export function MissionPage() {
         <div>
           <h2>Dados da demonstração</h2>
           <p className="small muted">
-            Os três tripulantes e os 60 dias de registros são simulados. Recriar a demonstração apaga os check-ins, mensagens e pedidos de exclusão de todos os perfis neste navegador. O aviso de privacidade permanece registrado.
+            Os três tripulantes e os 60 dias de registros são simulados. Recriar a demonstração apaga os check-ins feitos neste navegador.
           </p>
         </div>
         <div className="row">

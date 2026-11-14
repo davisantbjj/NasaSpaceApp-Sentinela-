@@ -1,9 +1,6 @@
 import { addDays, missionDay, todayISO } from '../lib/dates';
-import { createDataKey } from '../lib/crypto';
-import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Profile, Settings } from '../types';
+import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Settings } from '../types';
 import { db } from './db';
-import { buildProfile } from './profilesRepo';
-import { sealRecord } from './recordsRepo';
 
 // Dados SIMULADOS para a demonstração. Nenhum valor aqui vem de uma pessoa real.
 // Os registros vão até ontem, para o check-in de hoje ficar pendente.
@@ -26,7 +23,7 @@ function mulberry32(seed: number): () => number {
   };
 }
 
-interface SeedProfile {
+interface Profile {
   member: Omit<CrewMember, 'missionStart'>;
   seed: number;
   base: { systolic: number; diastolic: number; heartRate: number; glucose: number; temperature: number; sleepHours: number; exerciseMinutes: number; radiationDose: number };
@@ -34,7 +31,7 @@ interface SeedProfile {
   story?: (values: DailyValues, daysLeft: number) => void;
 }
 
-const PROFILES: SeedProfile[] = [
+const PROFILES: Profile[] = [
   {
     // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
     member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
@@ -110,52 +107,29 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         missionDay: missionDay(missionStart, date),
         values,
         createdAt: `${date}T08:00:00`,
-        syncedAt: `${date}T08:05:00`, // a demonstração já chegou à central
       });
     }
   }
 
-  return {
-    crew,
-    records,
-    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [] },
-  };
+  return { crew, records, settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [] } };
 }
-
-// Perfis de entrada da demonstração. Os PINs aparecem na tela de entrada, porque é uma demo.
-// A Ana é a comandante. O Kenji é o oficial médico de bordo. O médico do solo não é tripulante.
-export const DEMO_PROFILES: (Profile & { pin: string })[] = [
-  { id: 'ana', name: 'Ana Ribeiro', role: 'commander', crewId: 'ana', pin: '1111' },
-  { id: 'kenji', name: 'Kenji Mori', role: 'medicalOfficer', crewId: 'kenji', pin: '2222' },
-  { id: 'lia', name: 'Lia Santos', role: 'crew', crewId: 'lia', pin: '3333' },
-  { id: 'ground', name: 'Médico de voo', role: 'groundSurgeon', pin: '4444' },
-];
 
 async function writeSeed(): Promise<void> {
   const seed = buildSeed(todayISO());
-  // Uma chave de dados nova a cada demonstração, guardada cifrada no PIN de cada perfil.
-  // As preferências do aparelho (ex.: aviso de privacidade aceito) não são apagadas.
-  const dataKey = await createDataKey();
-  const profiles = await Promise.all(DEMO_PROFILES.map(({ pin, ...profile }) => buildProfile(profile, pin, dataKey)));
-  const records = await Promise.all(seed.records.map((record) => sealRecord(dataKey, record)));
-  const tables = [
-    db.crew, db.records, db.settings, db.profiles, db.reviews, db.accessLog, db.packets, db.medicalMessages, db.deletionRequests,
-  ];
-  await db.transaction('rw', tables, async () => {
-    await Promise.all(tables.map((table) => table.clear()));
+  await db.transaction('rw', db.crew, db.records, db.settings, async () => {
+    await Promise.all([db.crew.clear(), db.records.clear(), db.settings.clear()]);
     await db.crew.bulkPut(seed.crew);
-    await db.records.bulkPut(records);
-    await db.profiles.bulkPut(profiles);
+    await db.records.bulkPut(seed.records);
     await db.settings.put({ key: 'app', value: seed.settings });
   });
 }
 
 // Primeira abertura: insere os tripulantes fictícios e os dias simulados.
 export async function seedIfEmpty(): Promise<void> {
-  if ((await db.profiles.count()) === 0) await writeSeed();
+  if ((await db.crew.count()) === 0) await writeSeed();
 }
 
-// Apaga tudo (inclusive perfis, alertas vistos, acessos e pacotes) e recria a demonstração terminando em ontem.
+// Apaga tudo e recria a demonstração terminando em ontem.
 export async function resetDemo(): Promise<void> {
   await writeSeed();
 }

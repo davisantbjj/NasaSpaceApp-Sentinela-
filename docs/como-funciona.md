@@ -220,16 +220,6 @@ O motor é feito de funções puras, sem banco e sem React. Por isso dá para te
 
 ## 13. Limitações
 
-### Privacidade e comunicação local
-
-Antes da primeira entrada, o app apresenta finalidade, dados, acesso, retenção e condições da base legal. Depois da leitura, as rotas **Seus dados** e **Comunicação por texto** podem ser abertas por Missão ou rodapé. A comunicação também é acessível em Alertas.
-
-Seus dados exporta somente o perfil selecionado e seus registros, mensagens e pedido. Registrar o pedido não executa nem envia exclusão. O botão separado de exclusão pede confirmação e apaga o histórico local daquele perfil, preservando o perfil fictício e os outros tripulantes. Recarregar não recria registros; recriar a demonstração é uma ação explícita que também limpa mensagens e pedidos de todos. Cópias JSON já baixadas não são apagadas.
-
-Mensagens são texto local para mostrar à equipe: não são entregues nem têm confirmação de leitura. Cada pessoa entra com o próprio PIN, e o texto fica cifrado no aparelho. Detalhes em `docs/privacidade.md`.
-
-Missão mostra uma nota educativa de readaptação à gravidade, com contexto pelo campo `sex`, sem mudar classificação. A rastreabilidade das faixas está em `rangeEvidence`, no JSON, e em `docs/pesquisa/revisao-faixas.md`. A revisão documental não valida clinicamente os cortes.
-
 - As faixas são de demonstração e ainda precisam de revisão da equipe (ver `TASKS.md`).
 - Os dados ficam só no navegador onde o app foi aberto, sem criptografia.
 - O aviso ao solo é só uma marcação, e os lembretes aparecem só dentro do app.

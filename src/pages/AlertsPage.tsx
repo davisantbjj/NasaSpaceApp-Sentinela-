@@ -2,13 +2,11 @@ import { Link } from 'react-router-dom';
 import { AlertCard } from '../components/alerts/AlertCard';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { formatDate } from '../lib/dates';
-import { currentReview } from '../lib/reviews';
 import { useAppStore } from '../store/useAppStore';
 import { latestRecord } from './helpers';
 
 export function AlertsPage() {
-  const { alerts, correlations, records, reviews, session, reviewAlert } = useAppStore();
-  const isMedicalOfficer = session?.role === 'medicalOfficer';
+  const { alerts, correlations, records } = useAppStore();
   const latest = latestRecord(records);
   const red = alerts.filter((a) => a.level === 'red').length;
   const yellow = alerts.length - red;
@@ -28,24 +26,16 @@ export function AlertsPage() {
           </div>
         )}
       </header>
-      <p><Link to="/medical-contact">Não pode falar? Escreva para mostrar ao oficial médico →</Link></p>
 
       {alerts.length === 0 ? (
         <section className="card empty">
-          {latest && <LevelBadge level="green" />}
-          <p className="muted">{latest ? 'Todos os indicadores medidos estão dentro da faixa geral e do padrão pessoal.' : 'Sem registros para avaliar. Faça um check-in para acompanhar os indicadores.'}</p>
+          <LevelBadge level="green" />
+          <p className="muted">Todos os indicadores medidos estão dentro da faixa geral e do padrão pessoal.</p>
           <Link className="link-arrow" to="/">Voltar ao painel →</Link>
         </section>
       ) : (
         <div className="stack" style={{ gap: 16 }}>
-          {alerts.map((alert) => (
-            <AlertCard
-              key={alert.id}
-              alert={alert}
-              review={currentReview(alert, reviews, records)}
-              onReview={isMedicalOfficer ? (note) => reviewAlert(alert, note) : undefined}
-            />
-          ))}
+          {alerts.map((alert) => <AlertCard key={alert.id} alert={alert} />)}
         </div>
       )}
 

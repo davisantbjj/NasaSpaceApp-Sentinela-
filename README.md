@@ -43,10 +43,6 @@ Tecnologias: React 18, TypeScript, Vite, React Router, Zustand, Dexie, Recharts,
 
 ## Documentação
 
-As tarefas de Larissa incluem agora o aviso de primeira entrada, a tela **Seus dados** (cópia JSON e exclusão local por perfil), comunicação por texto para mostrar à equipe de bordo e contexto educativo de readaptação à gravidade em **Missão**. Acesse as novas telas por Missão ou pelo rodapé; comunicação também está em Alertas. Mensagens e pedidos não são enviados. Ainda não há autenticação, permissões por papel ou criptografia; use apenas dados fictícios.
-
-O [roteiro da demonstração](docs/roteiro-demonstracao.md) e a [base de conteúdo da apresentação](docs/apresentacao.md) estão no repositório, sem slides ou vídeo. A [revisão documental das faixas](docs/pesquisa/revisao-faixas.md) distingue referências gerais e escolhas de demonstração; a aprovação clínica permanece pendente. Consulte também os [fluxos de privacidade](docs/privacidade.md).
-
 | Arquivo | Conteúdo |
 | --- | --- |
 | [docs/como-funciona.md](docs/como-funciona.md) | Como o app funciona: medições, comparações, níveis, alertas e dados da demonstração |

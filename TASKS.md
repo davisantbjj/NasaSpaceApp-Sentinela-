@@ -111,12 +111,12 @@ A divisão é uma sugestão: troquem entre vocês se preferirem, só atualizem o
 
 Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
-- [x] **D1. Central de bordo:** simulada no navegador. A sincronização é automática, sem opção de ligar ou desligar. Além disso, um backend simples na Terra guarda e sincroniza os pacotes (só isso), para a tripulação não perder dados em longos períodos sem comunicação.
-- [x] **D2. Comandante:** decidido: vê só "check-in feito ou pendente" e se há alerta vermelho (sim/não). Dos próprios dados vê tudo, como tripulante.
-- [ ] **D3. Regiões do corpo:** passar de 7 para 5 (mente e sono; olhos e visão; coração e circulação; ossos e músculos; corpo inteiro)? Chegou a ser feito e foi desfeito: a equipe quer o painel como era.
+- [ ] **D1. Central de bordo:** simulada no navegador (recomendado: sem servidor, menos risco no dia) ou servidor real na rede local (Node + SQLite)?
+- [ ] **D2. Comandante:** vê só "check-in feito ou pendente" e se há alerta vermelho, ou não vê nada?
+- [ ] **D3. Regiões do corpo:** passar de 7 para 5 (mente e sono; olhos e visão; coração e circulação; ossos e músculos; corpo inteiro)?
 - [ ] **D4. Predição:** projeção linear simples na tela de tendências, com o rótulo "projeção, não previsão", ou o app só mede e compara?
 
-`CONTEXTO-IA.md`, `docs/arquitetura.md` e os diagramas já refletem as decisões D1 e D2.
+Depois das decisões, o Davi atualiza `CONTEXTO-IA.md`, `docs/arquitetura.md` e os diagramas.
 
 ### Ordem sugerida
 
@@ -126,36 +126,22 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 
 ### Davi: papéis, login, segurança e central de bordo
 
-- [x] Papéis: tripulante (só os próprios dados), oficial médico de bordo (todos; Kenji na demo) e médico do solo (só os pacotes que chegaram à Terra) (`src/lib/access.ts`)
-- [x] 🔒 D2. Papel de comandante (Ana na demo): tela Tripulação só com check-in feito/pendente e alerta vermelho sim/não (`CrewStatusPage`, `loadCrewStatus`); a consulta entra no registro de acesso
-- [x] Tela de entrada com perfil + PIN de 4 a 6 dígitos, aceitando colar e gerenciador de senha; pausa de 30 s depois de 5 PINs errados (`LoginPage`)
-- [x] Bloqueio depois de 5 minutos sem uso e botão "Bloquear e trocar de perfil" no menu do usuário
-- [x] Registros, anotações e pacotes cifrados no IndexedDB (AES-GCM). Uma chave de dados guardada cifrada no PIN de cada perfil (PBKDF2); o PIN não é gravado (`src/lib/crypto.ts`)
-- [x] Registro de acesso: oficial médico e solo abrindo dados de alguém ficam registrados; o tripulante vê em "Seus dados" (`PrivacyPage`)
-- [x] Tela "Tripulação" do oficial médico: nível geral, check-in de hoje, alertas não vistos; "marcar como visto" e conduta em cada alerta
-- [x] Interfaces `SyncAdapter` e `EarthLink` (`src/sync/adapters.ts`) com a central e a ligação com a Terra simuladas (`src/sync/central.ts`). Sincronização automática a cada 5 s; a ligação com a Terra usa a conexão real do navegador
-- [x] Pacote diário por tripulante (registro, alertas, anotações), vermelho na frente da fila, chegada com o atraso do ambiente
-- [x] Tela "Visão do solo" com hora do dado, hora de chegada, atraso e aviso de que a decisão imediata é de bordo
-- [x] Tela "Sincronização" só com o estado (sem botões de ligar ou desligar)
-- [x] **Backend na Terra** (`server/`, Node 24 sem dependências: `node:http` + `node:sqlite`): guarda e devolve pacotes **cifrados**, nunca vê dado aberto; token por missão, CORS por origem, validação de formato. 8 testes (`cd server && npm test`) e job próprio no CI. No app, entra como `EarthLink` (`src/sync/httpEarthLink.ts`) quando `VITE_EARTH_API_URL` está definido; se o servidor cair, os pacotes esperam e saem sozinhos depois
-- [ ] Publicar o backend no Railway com volume em `/data` (passo a passo em `server/README.md`) e configurar `VITE_EARTH_API_URL` e `VITE_EARTH_MISSION_TOKEN` no deploy do app
-- [x] Revisão do código da fase 10 (revisor): corrigidos os 2 críticos e a maior parte dos importantes. Carga atrasada não grava mais dados de outra sessão no store; "visto" deixa de valer se o check-in for refeito ou o nível mudar; o médico do solo só abre pacotes entregues; pacote montado antes de marcar a fila como sincronizada; pacote congelado depois da primeira tentativa de envio; ciclos sem pedido perdido e com erro visível na tela; lotes de 100; trava entre abas; recriar a demonstração espera o ciclo; linhas ilegíveis são puladas; leitura no servidor com `READ_TOKEN` próprio; pausa de PIN por perfil; id aleatório no registro de acesso
-- [ ] Uma chave de dados por tripulante (cifrada no PIN do dono e no do oficial médico). Hoje é uma chave só para o aparelho, então a separação entre papéis é feita pelo app, não pela criptografia (está escrito na tela "Seus dados")
-- [ ] Testes do store e da central com `fake-indexeddb` (bloqueio no meio do ciclo, fila, pacote já enviado). Hoje só as funções puras têm teste
-- [ ] Prender o conteúdo cifrado ao registro (AES-GCM com `id` como dado adicional). Exige recriar a demonstração de novo
-- [ ] Decidir quem pode mudar o ambiente da missão (hoje qualquer tripulante muda para todos)
-- [ ] O perfil do médico do solo roda o ciclo de bordo, porque tudo está num navegador só. Num produto real o solo não teria a chave de bordo
-- [ ] Buscar pacotes do servidor para recuperar dados num aparelho novo (a rota já existe; falta o app usar e resolver como a chave chega ao aparelho novo)
-- [ ] Larissa: `scripts/verify-larissa.mjs` foi escrito antes do login por PIN e precisa entrar com um perfil (ex.: Lia, PIN 3333) antes de testar "Seus dados" e a mensagem
-- [ ] Entregar as mensagens ao oficial médico pela central de bordo (hoje ficam só no aparelho do tripulante, cifradas)
-- [x] `docs/arquitetura.md`, `docs/estrutura-do-projeto.md` e diagramas 01, 03, 05 e 06 (novo: sincronização) atualizados com papéis, central e backend
+- [ ] Papéis: tripulante (vê só os próprios dados), oficial médico (vê todos), médico do solo (vê todos, com atraso, só leitura) e comandante (🔒 D2)
+- [ ] Tela de entrada: escolha de perfil + PIN de 4 a 6 dígitos, permitindo colar e usar gerenciador de senha (WCAG 3.3.8)
+- [ ] Bloqueio após alguns minutos sem uso e ao trocar de tripulante
+- [ ] Criptografar os registros no IndexedDB (Web Crypto, AES-GCM, chave derivada do PIN)
+- [ ] Registro de acesso: cada vez que o oficial médico ou o solo abre os dados de alguém, fica um registro visível para o tripulante
+- [ ] Tela do oficial médico: grade com todos os tripulantes (nível geral, check-in feito ou pendente, alertas abertos), marcar alerta como "visto" e anotar conduta
+- [ ] 🔒 D1. Interface `SyncAdapter` com implementação local e tela de "sincronização" mostrando a fila indo para a central
+- [ ] 🔒 D1. Pacote diário por tripulante para o solo (resumo, alertas, anotações), vermelho no topo da fila
+- [ ] 🔒 D1. Tela "Visão do solo": mesma grade do oficial médico, com hora do dado, hora de chegada e aviso de atraso
 - [ ] 🔒 D3. Passar o mapa do corpo para 5 regiões: `REGIONS` e `rules.json`, e refazer as formas das figuras masculina **e** feminina em `bodyRegions.ts`
 - [ ] 🔒 D3. Na figura: marcador só nas regiões amarelas e vermelhas, selo de "corpo inteiro" ao lado da figura em vez do contorno, área de toque maior na cabeça
 
 ### Talita: acessibilidade, layout e alarmes
 
-- [x] Contraste em `src/styles/tokens.css`: `--text-faint` para `#8f9dba` e `--level-none` para `#8494b0`
-- [x] Fontes de 11 px (barra inferior do celular e contadores) para no mínimo 12 px, de preferência 14 px (barra com 14 px; 12 px abaixo de 420 px de largura, para "Tendências" caber; contador com 12 px)
+- [ ] Contraste em `src/styles/tokens.css`: `--text-faint` para `#8f9dba` e `--level-none` para `#8494b0`
+- [ ] Fontes de 11 px (barra inferior do celular e contadores) para no mínimo 12 px, de preferência 14 px
 - [ ] Botão "Texto maior", que aumenta a escala base da fonte
 - [ ] Testar com zoom de 200%, largura de 320 px e espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12)
 - [ ] Layout no desktop: lista de regiões alinhada ao topo; chip "Estação" vira "Ambiente: Estação"
@@ -163,7 +149,7 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 - [ ] Alarmes com Web Audio, sem arquivos de som: toque curto no amarelo, padrão repetido no vermelho até alguém confirmar
 - [ ] Equivalente visual de todo som: banner fixo com cor, ícone e texto, contador na barra e vibração no celular
 - [ ] Botão "Silenciar" no banner e volume por nível na tela de missão (WCAG 1.4.2). O vermelho pode ser silenciado, mas o banner só sai quando alguém confirma
-- [x] Nada piscando mais de 3 vezes por segundo (WCAG 2.3.1). O único pulso, do vermelho no mapa, repete a cada 1,6 s; o banner novo precisa seguir a mesma regra
+- [ ] Nada piscando mais de 3 vezes por segundo (WCAG 2.3.1)
 - [ ] Passada com leitor de tela e só teclado (fase 9)
 
 ### Lorena: idiomas, horários e escalonamento
@@ -181,24 +167,20 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 
 ### Larissa: pesquisa, LGPD e apresentação
 
-- [x] Revisão **documental** das faixas, com referências e limites de evidência por nível em `rules.json` (`rangeEvidence`) e `docs/pesquisa/revisao-faixas.md`. Aprovação clínica da fase 2 continua pendente; nenhum corte numérico foi alterado
-- [x] Nota educativa pelo sexo em Missão, com fonte NASA e orientação de readaptação à gravidade. Não muda faixas nem níveis; sem `sex`, usa texto geral
-- [x] Texto e tela "Seus dados": finalidade, acesso real no protótipo, retenção, cópia JSON por perfil, pedido local de exclusão e exclusão confirmada do histórico. Limites em `docs/privacidade.md`
-- [x] Aviso antes da primeira entrada: finalidade e limites da base legal (art. 11, II, f), sem presumir tutela da saúde ou consentimento genérico para o hackathon
-- [x] Composição e histórico local de mensagem para **mostrar** ao oficial médico, com indicação de não enviada, validação, exportação e exclusão
-- [ ] Entrega da mensagem ao oficial médico: depende dos papéis, permissões e central de bordo do Davi; não há envio ou confirmação de leitura nesta etapa
-- [x] Conteúdo no Git sobre como a NASA mede e onde o Sentinela entra (`docs/apresentacao.md`)
-- [x] Justificativa dos dados simulados, sem afirmar inexistência absoluta de conjuntos públicos (`docs/apresentacao.md`)
-- [x] Comparação de ambientes e limites da evidência humana; atraso de Marte por sentido, não tempo de resposta médica (`docs/apresentacao.md`)
-- [x] Limites de medição, comparação, predição e autenticação institucional futura (`docs/apresentacao.md`)
-- [x] Roteiro da demonstração e respostas a perguntas (`docs/roteiro-demonstracao.md`); capturas das novas telas e teste de integração em `scripts/verify-larissa.mjs`
-- [ ] Vídeo, slides e envio ao Space Apps: fora do escopo desta etapa, conforme Larissa. Nenhum commit realizado pelo assistente
+- [ ] Revisão das faixas (fase 2), com a fonte de cada faixa citada no `rules.json`
+- [ ] Nota de contexto pelo sexo do tripulante (ex.: ao voltar à gravidade, atenção à tontura ao levantar). Nenhuma faixa muda; o campo `sex` já existe
+- [ ] Texto e tela "Seus dados": o que é coletado, para quê, quem vê, exportar em JSON e pedir exclusão (LGPD, art. 18)
+- [ ] Aviso de primeira entrada com finalidade e base legal (tutela da saúde, art. 11, II, f)
+- [ ] Mensagem de texto para o oficial médico como alternativa a chamada (para quem não fala)
+- [ ] Seção da apresentação: como a NASA mede (Standard Measures, actigrafia, questionários, sangue e urina, dosímetros, conferência médica semanal) e onde o Sentinela entra
+- [ ] Seção da apresentação: por que os dados são simulados (não existe série diária pública de sinais vitais de astronautas)
+- [ ] Seção da apresentação: o que muda em cada ambiente (gravidade, atraso, radiação, evacuação) e que há pouca evidência humana para Lua e Marte
+- [ ] Deixar claro na apresentação: o app mede e compara, não prediz; a autenticação real seria a da agência
+- [ ] Roteiro da demonstração, vídeo ou slides e envio no site do Space Apps (fase 9)
 
 ## Limitações conhecidas
 
-- Os dados ficam no navegador onde o app foi aberto. Outro navegador começa com outra demonstração e outra chave de dados, então não consegue abrir os pacotes do primeiro.
-- A central de bordo é simulada no próprio navegador: todos os perfis usam o mesmo aparelho.
-- O PIN de 4 a 6 números protege pouco contra quem copiar o banco do aparelho (dá para testar todas as combinações fora do app). Num produto real a chave ficaria no hardware do aparelho ou no sistema da agência.
-- O token do backend vai junto do app publicado; só impede gravações de quem não tem o app.
-- O app envia pacotes ao backend, mas ainda não busca de volta para recuperar dados num aparelho novo.
+- Os dados ficam só no navegador onde o app foi aberto; outro navegador começa com a demonstração de novo.
+- O "aviso ao solo" é só uma marcação no alerta; não há envio.
 - Os lembretes aparecem na tela de missão; não há notificação do sistema.
+- O IndexedDB não criptografa os dados. Num produto real isso seria obrigatório.

@@ -62,5 +62,5 @@ Cada indicador pertence a uma região do corpo. A cor da região é o pior níve
 | `musculoskeletal` | `exerciseMinutes` |
 | `immune` | `temperature` |
 | `metabolism` | `glucose` |
-| `wholeBody` | `radiationDose`, `symptoms` |
 | `mind` | `sleepHours`, `mood` |
+| `wholeBody` | `radiationDose`, `symptoms` |
