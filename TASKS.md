@@ -167,16 +167,18 @@ Depois das decisões, o Davi atualiza `CONTEXTO-IA.md`, `docs/arquitetura.md` e 
 
 ### Larissa: pesquisa, LGPD e apresentação
 
-- [ ] Revisão das faixas (fase 2), com a fonte de cada faixa citada no `rules.json`
-- [ ] Nota de contexto pelo sexo do tripulante (ex.: ao voltar à gravidade, atenção à tontura ao levantar). Nenhuma faixa muda; o campo `sex` já existe
-- [ ] Texto e tela "Seus dados": o que é coletado, para quê, quem vê, exportar em JSON e pedir exclusão (LGPD, art. 18)
-- [ ] Aviso de primeira entrada com finalidade e base legal (tutela da saúde, art. 11, II, f)
-- [ ] Mensagem de texto para o oficial médico como alternativa a chamada (para quem não fala)
-- [ ] Seção da apresentação: como a NASA mede (Standard Measures, actigrafia, questionários, sangue e urina, dosímetros, conferência médica semanal) e onde o Sentinela entra
-- [ ] Seção da apresentação: por que os dados são simulados (não existe série diária pública de sinais vitais de astronautas)
-- [ ] Seção da apresentação: o que muda em cada ambiente (gravidade, atraso, radiação, evacuação) e que há pouca evidência humana para Lua e Marte
-- [ ] Deixar claro na apresentação: o app mede e compara, não prediz; a autenticação real seria a da agência
-- [ ] Roteiro da demonstração, vídeo ou slides e envio no site do Space Apps (fase 9)
+- [x] Revisão **documental** das faixas, com referências e limites de evidência por nível em `rules.json` (`rangeEvidence`) e `docs/pesquisa/revisao-faixas.md`. Aprovação clínica da fase 2 continua pendente; nenhum corte numérico foi alterado
+- [x] Nota educativa pelo sexo em Missão, com fonte NASA e orientação de readaptação à gravidade. Não muda faixas nem níveis; sem `sex`, usa texto geral
+- [x] Texto e tela "Seus dados": finalidade, acesso real no protótipo, retenção, cópia JSON por perfil, pedido local de exclusão e exclusão confirmada do histórico. Limites em `docs/privacidade.md`
+- [x] Aviso antes da primeira entrada: finalidade e limites da base legal (art. 11, II, f), sem presumir tutela da saúde ou consentimento genérico para o hackathon
+- [x] Composição e histórico local de mensagem para **mostrar** ao oficial médico, com indicação de não enviada, validação, exportação e exclusão
+- [ ] Entrega da mensagem ao oficial médico: depende dos papéis, permissões e central de bordo do Davi; não há envio ou confirmação de leitura nesta etapa
+- [x] Conteúdo no Git sobre como a NASA mede e onde o Sentinela entra (`docs/apresentacao.md`)
+- [x] Justificativa dos dados simulados, sem afirmar inexistência absoluta de conjuntos públicos (`docs/apresentacao.md`)
+- [x] Comparação de ambientes e limites da evidência humana; atraso de Marte por sentido, não tempo de resposta médica (`docs/apresentacao.md`)
+- [x] Limites de medição, comparação, predição e autenticação institucional futura (`docs/apresentacao.md`)
+- [x] Roteiro da demonstração e respostas a perguntas (`docs/roteiro-demonstracao.md`); capturas das novas telas e teste de integração em `scripts/verify-larissa.mjs`
+- [ ] Vídeo, slides e envio ao Space Apps: fora do escopo desta etapa, conforme Larissa. Nenhum commit realizado pelo assistente
 
 ## Limitações conhecidas
 

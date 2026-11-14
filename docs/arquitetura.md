@@ -214,6 +214,12 @@ O diagrama de níveis está em `diagramas/04-niveis-de-alerta.md`.
 
 ## Persistência
 
+Atualização de Larissa (v4): além das três tabelas originais descritas abaixo, há `preferences` (`key`, `value`) para a leitura versionada do aviso; `medicalMessages` (`id`, índices `crewId` e `createdAt`); e `deletionRequests` (`id`, índice `crewId`). Os tipos de mensagem e pedido estão em `src/types/index.ts`. O perfil também tem `sex` opcional, usado na figura e no contexto educativo, sem afetar o motor.
+
+`privacyRepo.ts` encapsula a leitura do aviso, exportação por tripulante, pedido e exclusão; `messagesRepo.ts` valida e salva mensagens locais. Exportação usa transação de leitura e exclusão usa transação de escrita para registros, mensagens e pedidos. Nenhuma das duas inclui dados de outro tripulante. O perfil fictício é preservado na exclusão para `seedIfEmpty` não recriar dados apagados. `resetDemo` limpa também mensagens e pedidos, preservando `preferences`.
+
+`loadCrew` consulta o aviso antes de popular a demonstração. `acknowledgePrivacy` registra sua versão e carrega os dados; `deleteActiveHealthData` exclui e recalcula o estado derivado. Novas rotas e limites estão em `docs/privacidade.md`. Elas não implementam controle de acesso: isso segue na frente do Davi.
+
 `src/data/db.ts` define três tabelas no Dexie:
 
 | Tabela | Chave | Índices |

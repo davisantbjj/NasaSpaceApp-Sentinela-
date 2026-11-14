@@ -324,6 +324,15 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 }
 
 /* Rodapé */
+.privacy-page { max-width: 850px; margin-inline: auto; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 24px; margin-top: 10px; }
+.message-input { width: 100%; min-height: 160px; padding: 12px; border: 1px solid var(--ring-strong); border-radius: var(--radius-md); background: var(--surface-2); color: var(--text); font: inherit; resize: vertical; }
+.message-body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.saved-message { padding-block: 12px; border-bottom: 1px solid var(--ring); }
+.privacy-page .btn { white-space: normal; }
+.privacy-page a { overflow-wrap: anywhere; }
+.contact-notice { display: block; }
+
 .disclaimer { padding: 14px var(--space) 20px; text-align: center; font-size: 0.8125rem; color: var(--text-faint); box-shadow: 0 -1px 0 var(--ring); }
 .disclaimer strong { color: var(--text-muted); font-weight: 600; }
 
