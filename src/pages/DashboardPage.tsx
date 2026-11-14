@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { BodyMap } from '../components/body/BodyMap';
@@ -17,7 +17,18 @@ export function DashboardPage() {
   const { records, alerts, baselines, correlations, regionLevels, settings } = useAppStore();
   const [selected, setSelected] = useState<BodyRegion | null>(null);
 
+  const panelRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => setSelected(null), [member?.id]);
+
+  // No celular o detalhe fica abaixo da figura: ao escolher uma região, leva a tela até ele.
+  const choose = (r: BodyRegion) => {
+    setSelected(r);
+    if (window.matchMedia('(max-width: 860px)').matches) {
+      const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      panelRef.current?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+    }
+  };
 
   if (!member) return null;
 
@@ -83,11 +94,11 @@ export function DashboardPage() {
             <p className="small muted">Toque numa região para ver os indicadores.</p>
           </div>
           <div className="body-layout">
-            <BodyMap levels={regionLevels} selected={region} onSelect={setSelected} />
+            <BodyMap levels={regionLevels} selected={region} onSelect={choose} />
             <ul className="region-list">
               {REGION_ORDER.map((r) => (
                 <li key={r}>
-                  <button type="button" className="region-button" aria-pressed={region === r} onClick={() => setSelected(r)}>
+                  <button type="button" className="region-button" aria-pressed={region === r} onClick={() => choose(r)}>
                     <span className="region-name">{REGIONS[r].label}</span>
                     <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} />
                   </button>
@@ -97,6 +108,7 @@ export function DashboardPage() {
           </div>
         </section>
 
+        <div ref={panelRef} className="region-panel-anchor">
         <RegionPanel
           region={region}
           level={regionLevels[region]}
@@ -104,6 +116,7 @@ export function DashboardPage() {
           alerts={alerts}
           togetherNotes={togetherNotes}
         />
+        </div>
       </div>
     </div>
   );

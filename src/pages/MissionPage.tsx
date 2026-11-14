@@ -95,7 +95,7 @@ export function MissionPage() {
           <p className="small muted">Para indicadores que não precisam ser medidos todo dia.</p>
         </div>
         <div className="table-wrap">
-          <table>
+          <table className="reminders-table">
             <thead>
               <tr><th>Indicador</th><th>Última medida</th><th>Lembrete</th></tr>
             </thead>

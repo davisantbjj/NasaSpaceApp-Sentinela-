@@ -13,6 +13,7 @@ sentinela/
 ├── vite.config.ts              # inclui vite-plugin-pwa
 ├── tsconfig.json
 ├── docs/
+│   ├── como-funciona.md        # explicação completa do funcionamento
 │   ├── estrutura-do-projeto.md
 │   ├── arquitetura.md
 │   ├── diagramas/

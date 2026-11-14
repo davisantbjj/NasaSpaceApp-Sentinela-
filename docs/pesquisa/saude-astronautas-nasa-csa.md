@@ -1,6 +1,6 @@
 # Saúde humana no voo espacial: dados da NASA (HRP) e da Agência Espacial Canadense (CSA)
 
-Compilado em 13/11/2026 a partir de 5 páginas oficiais e dos 57 links de conteúdo que elas trazem (Parte 2). O conteúdo foi traduzido e reescrito em português. Menus de navegação, rodapés e listas de notícias dos sites foram deixados de fora porque não têm relação com o tema.
+Compilado em 14/11/2026 a partir de 5 páginas oficiais e dos 57 links de conteúdo que elas trazem (Parte 2). O conteúdo foi traduzido e reescrito em português. Menus de navegação, rodapés e listas de notícias dos sites foram deixados de fora porque não têm relação com o tema.
 
 ---
 

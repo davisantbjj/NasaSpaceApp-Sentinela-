@@ -20,14 +20,16 @@ export function App() {
 
   return (
     <div className="app">
+      <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
       <NavBar
         crew={crew}
         activeCrewId={settings.activeCrewId}
         environment={settings.environment}
         alertCount={alerts.length}
+        hasRedAlert={alerts.some((a) => a.level === 'red')}
         onSwitchCrew={(id) => void switchCrew(id)}
       />
-      <main className="app-main">
+      <main className="app-main" id="conteudo" tabIndex={-1}>
         {error ? (
           <div className="card empty">
             <h2>Não foi possível abrir os dados locais</h2>

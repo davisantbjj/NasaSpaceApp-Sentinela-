@@ -40,6 +40,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 
 | Arquivo | Conteúdo |
 | --- | --- |
+| `docs/como-funciona.md` | Explicação completa do funcionamento: medições, linha de base, comparação, níveis, alertas e demonstração. Atualize se as regras mudarem |
 | `TASKS.md` | Tarefas feitas e pendentes. Atualize ao concluir uma tarefa |
 | `docs/estrutura-do-projeto.md` | Árvore de pastas e o papel de cada arquivo |
 | `docs/arquitetura.md` | Camadas, tipos de dados, motor de regras, convenções |

@@ -45,6 +45,7 @@ Tecnologias: React 18, TypeScript, Vite, React Router, Zustand, Dexie, Recharts,
 
 | Arquivo | Conteúdo |
 | --- | --- |
+| [docs/como-funciona.md](docs/como-funciona.md) | Como o app funciona: medições, comparações, níveis, alertas e dados da demonstração |
 | [TASKS.md](TASKS.md) | Tarefas feitas e pendentes |
 | [CONTEXTO-IA.md](CONTEXTO-IA.md) | Resumo do projeto e regras para assistentes de IA |
 | [docs/arquitetura.md](docs/arquitetura.md) | Camadas, tipos de dados, motor de regras |

@@ -2,7 +2,7 @@
 
 ## Monitoramento de saúde de astronautas \| NASA Space Apps Challenge 2026
 
-**Data da pesquisa:** 13 de novembro de 2026\
+**Data da pesquisa:** 14 de novembro de 2026\
 **Desafio:** [Create Health Monitoring Software for Astronauts on Space
 Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/)\
 **Nome provisório do projeto:** Sentinela

@@ -1,6 +1,6 @@
 # Proposta: monitor de saúde para astronautas (Space Apps 2026)
 
-Nov 13, 2026 · @Afonso
+Nov 14, 2026 · @Afonso
 
 ## Resumo
 
