@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { BodyMap } from '../components/body/BodyMap';
-import { WholeBodySeal } from '../components/body/WholeBodySeal';
 import { RegionPanel, type RegionItem } from '../components/body/RegionPanel';
 import { displayValue } from '../content/format';
 import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
@@ -100,15 +99,12 @@ export function DashboardPage() {
             <p className="small muted">Toque numa região para ver os indicadores.</p>
           </div>
           <div className="body-layout">
-            <div className="body-figure">
-              <BodyMap
-                levels={latest ? regionLevels : {}}
-                selected={region}
-                onSelect={choose}
-                figure={member.sex === 'female' ? 'female' : 'male'}
-              />
-              <WholeBodySeal level={latest ? regionLevels.wholeBody : undefined} selected={region === 'wholeBody'} onSelect={() => choose('wholeBody')} />
-            </div>
+            <BodyMap
+              levels={latest ? regionLevels : {}}
+              selected={region}
+              onSelect={choose}
+              figure={member.sex === 'female' ? 'female' : 'male'}
+            />
             <ul className="region-list">
               {REGION_ORDER.map((r) => (
                 <li key={r}>

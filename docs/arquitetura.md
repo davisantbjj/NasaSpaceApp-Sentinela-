@@ -256,7 +256,7 @@ findCorrelations(history: DailyRecord[], baselines: Baseline[], rules: Rules): C
 - O resultado aparece na tela de alertas e no painel da região como "mudaram juntos". O texto nunca diz que um causou o outro.
 - Correlação não cria alerta nem muda nível.
 
-`levelByRegion` devolve, para cada região do corpo, o pior nível entre os alertas daquela região. É isso que pinta a figura humana. São cinco regiões: mente e sono, olhos e visão, coração e circulação, ossos e músculos, e corpo inteiro. "Corpo inteiro" aparece como selo abaixo da figura (`WholeBodySeal`), não sobre ela.
+`levelByRegion` devolve, para cada região do corpo, o pior nível entre os alertas daquela região. É isso que pinta a figura humana.
 
 O diagrama de níveis está em `diagramas/04-niveis-de-alerta.md`.
 

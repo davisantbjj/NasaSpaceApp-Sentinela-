@@ -54,11 +54,24 @@
   pointer-events: all;
 }
 
-/* Área de clique extra da cabeça: invisível, sem sobreposição entre mente e olhos. */
-.bodymap-area { fill: transparent; stroke: none; pointer-events: all; }
+/* Contorno da silhueta (corpo inteiro): só visual, o clique passa para as outras regiões. */
+.bodymap-outline {
+  fill: none;
+  stroke: var(--c);
+  stroke-opacity: 0.22;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  transition: stroke-opacity 180ms var(--ease);
+}
+.bodymap-region--yellow .bodymap-outline,
+.bodymap-region--red .bodymap-outline { stroke-opacity: 0.85; stroke-width: 2; filter: var(--bodymap-glow); }
+.bodymap-region--none .bodymap-outline { stroke-dasharray: 4 4; }
 
 @media (hover: hover) {
   .bodymap-region:hover .bodymap-shape { fill-opacity: 0.38; stroke-opacity: 1; }
+  .bodymap-region:hover .bodymap-outline { stroke-opacity: 0.7; }
 }
 
 /* Selecionada: mais preenchida, com brilho, mesmo quando verde. */
@@ -68,6 +81,7 @@
   stroke-width: 2.5;
   filter: var(--bodymap-glow);
 }
+.bodymap-region.is-selected .bodymap-outline { stroke-opacity: 0.9; stroke-width: 2; filter: var(--bodymap-glow); }
 
 /* Foco de teclado: contorno na cor de destaque, diferente de qualquer nível.
    Troca o retângulo global de foco, que no SVG cobriria as regiões vizinhas. */
@@ -78,6 +92,7 @@
   stroke-opacity: 1;
   stroke-width: 3;
 }
+.bodymap-region:focus-visible .bodymap-outline { stroke: var(--accent); stroke-opacity: 1; stroke-width: 2.5; }
 .bodymap-region:focus-visible .bodymap-marker-ring { stroke: var(--accent); }
 
 /* Marcador com o ícone do nível. */
@@ -117,30 +132,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .bodymap-region--red .bodymap-marker-ring { animation: none; }
-  .bodymap-shape { transition: none; }
+  .bodymap-shape,
+  .bodymap-outline { transition: none; }
 }
-
-/* Selo do corpo inteiro, abaixo da figura. */
-.wholebody-seal {
-  --c: var(--level-none);
-  width: 100%; max-width: 300px; min-height: 44px; padding: 8px 14px;
-  display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
-  border: 1.5px solid var(--c); border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--c) 10%, transparent);
-  color: var(--text); text-align: left; cursor: pointer;
-  transition: background-color 180ms var(--ease), box-shadow 180ms var(--ease);
-}
-.wholebody-seal[data-level='green'] { --c: var(--level-green); }
-.wholebody-seal[data-level='yellow'] { --c: var(--level-yellow); }
-.wholebody-seal[data-level='red'] { --c: var(--level-red); }
-.wholebody-seal[data-level='none'] { border-style: dashed; }
-.wholebody-seal[data-level='yellow'], .wholebody-seal[data-level='red'] { border-width: 2.5px; background: color-mix(in srgb, var(--c) 20%, transparent); }
-.wholebody-seal-title { font-weight: 700; font-size: 0.9375rem; }
-.wholebody-seal-status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8125rem; color: var(--text); }
-.wholebody-seal-status .level-icon { display: inline-flex; color: var(--c); }
-.wholebody-seal[aria-pressed='true'] { box-shadow: 0 0 0 2px var(--c); background: color-mix(in srgb, var(--c) 28%, transparent); }
-.wholebody-seal:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-@media (hover: hover) { .wholebody-seal:hover { background: color-mix(in srgb, var(--c) 24%, transparent); } }
-@media (prefers-reduced-motion: reduce) { .wholebody-seal { transition: none; } }
-
-.body-figure { display: grid; gap: 10px; justify-items: center; }

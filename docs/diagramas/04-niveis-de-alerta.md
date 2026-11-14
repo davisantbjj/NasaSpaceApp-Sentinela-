@@ -60,5 +60,7 @@ Cada indicador pertence a uma região do corpo. A cor da região é o pior níve
 | `head` | `vision` |
 | `heart` | `bloodPressure`, `heartRate` |
 | `musculoskeletal` | `exerciseMinutes` |
-| `wholeBody` | `temperature`, `glucose`, `radiationDose`, `symptoms` |
+| `immune` | `temperature` |
+| `metabolism` | `glucose` |
+| `wholeBody` | `radiationDose`, `symptoms` |
 | `mind` | `sleepHours`, `mood` |

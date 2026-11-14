@@ -7,7 +7,7 @@ import type {
 import { deviationPercent, findBaseline, isBaselineReady, isDeviation } from './baseline';
 
 const REGIONS: BodyRegion[] = [
-  'head', 'heart', 'musculoskeletal', 'mind', 'wholeBody',
+  'head', 'heart', 'musculoskeletal', 'immune', 'metabolism', 'mind', 'wholeBody',
 ];
 
 const COMPONENT_LABEL: Record<BpComponent, string> = { systolic: 'sistólica', diastolic: 'diastólica' };

@@ -62,8 +62,8 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | --- | --- | --- | --- |
 | `bloodPressure` | Pressão arterial | mmHg (sistólica/diastólica) | `heart` |
 | `heartRate` | Frequência cardíaca | bpm | `heart` |
-| `glucose` | Glicemia | mg/dL | `wholeBody` |
-| `temperature` | Temperatura | °C | `wholeBody` |
+| `glucose` | Glicemia | mg/dL | `metabolism` |
+| `temperature` | Temperatura | °C | `immune` |
 | `sleepHours` | Sono | horas por dia | `mind` |
 | `mood` | Humor | escala de 1 a 5 | `mind` |
 | `exerciseMinutes` | Exercício | minutos por dia | `musculoskeletal` |

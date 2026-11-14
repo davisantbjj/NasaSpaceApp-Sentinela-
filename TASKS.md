@@ -113,10 +113,10 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 
 - [x] **D1. Central de bordo:** simulada no navegador. A sincronização é automática, sem opção de ligar ou desligar. Além disso, um backend simples na Terra guarda e sincroniza os pacotes (só isso), para a tripulação não perder dados em longos períodos sem comunicação.
 - [x] **D2. Comandante:** decidido: vê só "check-in feito ou pendente" e se há alerta vermelho (sim/não). Dos próprios dados vê tudo, como tripulante.
-- [x] **D3. Regiões do corpo:** decidido: 5 regiões (mente e sono; olhos e visão; coração e circulação; ossos e músculos; corpo inteiro).
+- [ ] **D3. Regiões do corpo:** passar de 7 para 5 (mente e sono; olhos e visão; coração e circulação; ossos e músculos; corpo inteiro)? Chegou a ser feito e foi desfeito: a equipe quer o painel como era.
 - [ ] **D4. Predição:** projeção linear simples na tela de tendências, com o rótulo "projeção, não previsão", ou o app só mede e compara?
 
-`CONTEXTO-IA.md`, `docs/arquitetura.md` e os diagramas já refletem as decisões D1, D2 e D3.
+`CONTEXTO-IA.md`, `docs/arquitetura.md` e os diagramas já refletem as decisões D1 e D2.
 
 ### Ordem sugerida
 
@@ -149,9 +149,8 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 - [ ] Larissa: `scripts/verify-larissa.mjs` foi escrito antes do login por PIN e precisa entrar com um perfil (ex.: Lia, PIN 3333) antes de testar "Seus dados" e a mensagem
 - [ ] Entregar as mensagens ao oficial médico pela central de bordo (hoje ficam só no aparelho do tripulante, cifradas)
 - [x] `docs/arquitetura.md`, `docs/estrutura-do-projeto.md` e diagramas 01, 03, 05 e 06 (novo: sincronização) atualizados com papéis, central e backend
-- [x] D3. Mapa do corpo com 5 regiões: temperatura e glicemia foram para corpo inteiro; formas das figuras masculina e feminina refeitas em `bodyRegions.ts`
-- [x] D3. Marcador só em amarelo e vermelho; "Corpo inteiro" virou selo abaixo da figura (`WholeBodySeal`); cabeça com áreas de toque maiores e sem sobreposição (27 a 77 px)
-- [ ] Ajuste fino: na figura feminina a faixa dos olhos ficou um pouco baixa (pega o nariz)
+- [ ] 🔒 D3. Passar o mapa do corpo para 5 regiões: `REGIONS` e `rules.json`, e refazer as formas das figuras masculina **e** feminina em `bodyRegions.ts`
+- [ ] 🔒 D3. Na figura: marcador só nas regiões amarelas e vermelhas, selo de "corpo inteiro" ao lado da figura em vez do contorno, área de toque maior na cabeça
 
 ### Talita: acessibilidade, layout e alarmes
 

@@ -188,7 +188,6 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 @media (max-width: 860px) { .dashboard { grid-template-columns: 1fr; } }
 
 .body-layout { display: grid; gap: 20px; grid-template-columns: minmax(180px, 280px) minmax(150px, 1fr); align-items: center; }
-.body-layout .body-figure { justify-self: center; width: 100%; }
 /* Celular: figura grande em cima, lista embaixo. */
 @media (max-width: 560px) {
   .body-layout { grid-template-columns: 1fr; gap: 16px; }

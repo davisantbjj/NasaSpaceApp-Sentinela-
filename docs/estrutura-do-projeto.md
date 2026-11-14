@@ -89,7 +89,6 @@ sentinela/
     │   ├── body/
     │   │   ├── BodyMap.tsx     # SVG com regiões clicáveis
     │   │   ├── bodyRegions.ts  # caminhos do SVG por região
-    │   │   ├── WholeBodySeal.tsx # selo do "Corpo inteiro", abaixo da figura
     │   │   └── RegionPanel.tsx # detalhe da região selecionada
     │   ├── checkin/
     │   │   ├── StepShell.tsx   # moldura de cada passo

@@ -8,8 +8,8 @@ export type IndicatorId =
   | 'vision' | 'symptoms';
 
 export type BodyRegion =
-  | 'head' | 'heart' | 'musculoskeletal'
-  | 'mind' | 'wholeBody';
+  | 'head' | 'heart' | 'musculoskeletal' | 'immune'
+  | 'metabolism' | 'mind' | 'wholeBody';
 
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
 

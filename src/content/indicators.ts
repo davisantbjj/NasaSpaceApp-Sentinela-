@@ -108,13 +108,15 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
 export const REGIONS: Record<BodyRegion, { label: string; description: string }> = {
   mind: { label: 'Mente e sono', description: 'Sono e humor' },
   head: { label: 'Olhos e visão', description: 'Autoteste de visão' },
-  heart: { label: 'Coração e circulação', description: 'Pressão arterial e frequência cardíaca' },
+  heart: { label: 'Coração', description: 'Pressão arterial e frequência cardíaca' },
+  immune: { label: 'Defesas do corpo', description: 'Temperatura' },
+  metabolism: { label: 'Metabolismo', description: 'Glicemia' },
   musculoskeletal: { label: 'Ossos e músculos', description: 'Exercício' },
-  wholeBody: { label: 'Corpo inteiro', description: 'Temperatura, glicemia, radiação e sintomas' },
+  wholeBody: { label: 'Corpo inteiro', description: 'Radiação e sintomas' },
 };
 
 export const REGION_ORDER: BodyRegion[] = [
-  'mind', 'head', 'heart', 'musculoskeletal', 'wholeBody',
+  'mind', 'head', 'heart', 'immune', 'metabolism', 'musculoskeletal', 'wholeBody',
 ];
 
 // signalDelaySeconds: atraso de ida da comunicação com a Terra, usado na simulação do envio.

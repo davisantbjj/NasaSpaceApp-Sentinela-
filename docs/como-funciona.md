@@ -35,8 +35,8 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | --- | --- | --- | --- |
 | Pressão arterial | mmHg (sistólica e diastólica) | Coração | Sente-se preso ao assento, descanse 5 minutos e use o medidor de braço. Digite os dois números. |
 | Frequência cardíaca | bpm | Coração | Meça em repouso, antes do exercício. Use o oxímetro de dedo ou conte os batimentos por 1 minuto. |
-| Temperatura | °C | Corpo inteiro | Use o termômetro de bordo, sempre no mesmo horário e longe do exercício. |
-| Glicemia | mg/dL | Corpo inteiro | Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição. |
+| Temperatura | °C | Defesas do corpo | Use o termômetro de bordo, sempre no mesmo horário e longe do exercício. |
+| Glicemia | mg/dL | Metabolismo | Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição. |
 | Sono | horas | Mente e sono | Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. |
 | Humor | escala de 1 a 5 | Mente e sono | Escolha o rosto que melhor descreve como você se sentiu na maior parte do dia. |
 | Exercício | minutos | Ossos e músculos | Some os minutos de esteira, bicicleta e treino resistido feitos hoje. |
@@ -175,7 +175,7 @@ Hoje só a radiação tem notas por ambiente. Por exemplo: "A estação fica den
 
 | Tela | O que mostra |
 | --- | --- |
-| Painel | Figura humana com cinco regiões clicáveis (mais o selo de Corpo inteiro) (também pelo teclado). Ao lado, a lista de regiões com o nível de cada uma. Ao escolher uma região, aparecem os valores, os níveis, a linha de base e as correlações. Também avisa quando o check-in de hoje está pendente. |
+| Painel | Figura humana com sete regiões clicáveis (também pelo teclado). Ao lado, a lista de regiões com o nível de cada uma. Ao escolher uma região, aparecem os valores, os níveis, a linha de base e as correlações. Também avisa quando o check-in de hoje está pendente. |
 | Check-in | Um indicador por passo, com "como medir" e "por que medir", revisão antes de salvar e resumo com os alertas do dia. |
 | Alertas | Resumo por nível, os cartões de alerta com as seis partes e a seção "Mudaram juntos". |
 | Tendências | Gráfico por indicador em 14, 30 ou 60 dias, com a faixa verde sombreada, o padrão pessoal tracejado e uma tabela com os valores. |
@@ -226,7 +226,7 @@ Antes da primeira entrada, o app apresenta finalidade, dados, acesso, retenção
 
 Seus dados exporta somente o perfil selecionado e seus registros, mensagens e pedido. Registrar o pedido não executa nem envia exclusão. O botão separado de exclusão pede confirmação e apaga o histórico local daquele perfil, preservando o perfil fictício e os outros tripulantes. Recarregar não recria registros; recriar a demonstração é uma ação explícita que também limpa mensagens e pedidos de todos. Cópias JSON já baixadas não são apagadas.
 
-Mensagens são texto local para mostrar à equipe: não são entregues nem têm confirmação de leitura. Qualquer pessoa com acesso ao navegador consegue trocar o perfil. Não há autenticação nem criptografia. Detalhes em `docs/privacidade.md`.
+Mensagens são texto local para mostrar à equipe: não são entregues nem têm confirmação de leitura. Cada pessoa entra com o próprio PIN, e o texto fica cifrado no aparelho. Detalhes em `docs/privacidade.md`.
 
 Missão mostra uma nota educativa de readaptação à gravidade, com contexto pelo campo `sex`, sem mudar classificação. A rastreabilidade das faixas está em `rangeEvidence`, no JSON, e em `docs/pesquisa/revisao-faixas.md`. A revisão documental não valida clinicamente os cortes.
 
