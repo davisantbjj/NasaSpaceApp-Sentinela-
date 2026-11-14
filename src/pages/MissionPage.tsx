@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { seriesPoints } from '../lib/series';
@@ -37,12 +39,15 @@ function lastMeasured(records: DailyRecord[], indicator: IndicatorId): string | 
 
 export function MissionPage() {
   const member = useActiveCrew();
-  const { settings, records, setEnvironment, setReminder, resetDemo } = useAppStore();
+  const { settings, records, session, setEnvironment, setReminder, resetDemo } = useAppStore();
+  // Só o oficial médico recria a demonstração: recriar apaga também o registro de acesso de todos.
+  const canReset = session?.role === 'medicalOfficer';
   const [confirmReset, setConfirmReset] = useState(false);
 
   if (!member) return null;
   const today = todayISO();
   const tracked = trackedInOrder(member);
+  const healthContext = crewHealthContext(member.sex);
 
   return (
     <div className="page">
@@ -68,6 +73,18 @@ export function MissionPage() {
           <span className="small muted">Registros</span>
           <span className="metric-value">{records.length}</span>
         </div>
+      </section>
+
+      <section className="card stack">
+        <h2>Contexto de readaptação à gravidade</h2>
+        <p>{healthContext.text}</p>
+        <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA — intolerância ortostática (abre outro site)</a>
+      </section>
+
+      <section className="card stack">
+        <h2>Privacidade e comunicação</h2>
+        <p>Consulte os dados deste perfil ou escreva uma mensagem para mostrar à equipe de bordo.</p>
+        <div className="row"><Link className="btn" to="/your-data">Seus dados</Link><Link className="btn" to="/medical-contact">Escrever ao oficial médico</Link></div>
       </section>
 
       <section className="card stack" style={{ gap: 14 }}>
@@ -133,10 +150,11 @@ export function MissionPage() {
         <div>
           <h2>Dados da demonstração</h2>
           <p className="small muted">
-            Os três tripulantes e os 60 dias de registros são simulados. Recriar a demonstração apaga os check-ins feitos neste navegador.
+            Os três tripulantes e os 60 dias de registros são simulados. Recriar a demonstração apaga os check-ins, mensagens, pedidos de exclusão e o registro de acesso de todos os perfis neste navegador, e cria chaves novas. O aviso de privacidade permanece registrado.
           </p>
+          {!canReset && <p className="small muted">Só o oficial médico de bordo pode recriar a demonstração.</p>}
         </div>
-        <div className="row">
+        {canReset && <div className="row">
           {confirmReset ? (
             <>
               <button type="button" className="btn btn-danger" onClick={() => { setConfirmReset(false); void resetDemo(); }}>
@@ -147,7 +165,7 @@ export function MissionPage() {
           ) : (
             <button type="button" className="btn" onClick={() => setConfirmReset(true)}>Recriar dados de demonstração</button>
           )}
-        </div>
+        </div>}
       </section>
     </div>
   );

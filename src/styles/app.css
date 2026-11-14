@@ -111,16 +111,18 @@ button, input, select { font: inherit; color: inherit; }
   }
   .navbar-links a {
     flex: 1; min-width: 0; flex-direction: column; justify-content: center; gap: 2px;
-    min-height: 54px; padding: 4px 2px; font-size: 0.6875rem; font-weight: 600;
+    min-height: 54px; padding: 4px 2px; font-size: 0.875rem; font-weight: 600; line-height: 1.15;
   }
   .navbar-links a.active { box-shadow: none; background: var(--surface-3); color: var(--accent); }
-  .nav-count { position: absolute; top: 2px; left: 50%; margin-left: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--level-yellow); color: #1a1400; box-shadow: none; font-size: 0.6875rem; }
+  .nav-count { position: absolute; top: 2px; left: 50%; margin-left: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--level-yellow); color: #1a1400; box-shadow: none; font-size: 0.75rem; }
   .nav-count-red { background: var(--level-red); color: #1f0505; }
   .app { padding-bottom: 72px; }
   .app-main { padding-top: 20px; }
 }
 @media (max-width: 420px) {
   .navbar-tools .chip { display: none; } /* o ambiente continua no painel e na tela de missão */
+  /* Cinco abas em tela estreita: 12 px é o mínimo, para "Tendências" caber sem corte. */
+  .navbar-links a { font-size: 0.75rem; }
 }
 
 .select {
@@ -185,7 +187,9 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 
 /* O mapa do corpo é o destaque do painel: a coluna dele é a mais larga. */
 .dashboard { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
-@media (max-width: 860px) { .dashboard { grid-template-columns: 1fr; } }
+/* Até 1100 px o painel fica numa coluna só: em duas colunas o card da figura ficava estreito
+   e o selo de cada região ("OK", "Acompanhar") descia para baixo do nome. */
+@media (max-width: 1100px) { .dashboard { grid-template-columns: 1fr; } }
 
 .body-layout { display: grid; gap: 20px; grid-template-columns: minmax(180px, 280px) minmax(150px, 1fr); align-items: center; }
 .body-layout .bodymap { justify-self: center; }
@@ -323,7 +327,70 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
   .reminders-table .select { width: 100%; }
 }
 
+/* Entrada */
+.login { max-width: 560px; margin: 0 auto; width: 100%; }
+.login-profiles.options.list { grid-template-columns: 1fr; }
+.login-face { justify-content: flex-start; }
+.avatar {
+  flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--surface-3); box-shadow: 0 0 0 1px var(--ring-strong); color: var(--text); font-weight: 700;
+}
+
+/* Menu do usuário */
+.user-menu { position: relative; }
+.user-menu summary {
+  list-style: none; position: relative; display: grid; place-items: center; width: 44px; height: 44px;
+  border-radius: 50%; cursor: pointer;
+}
+.user-menu summary::-webkit-details-marker { display: none; }
+.user-menu summary:hover .avatar, .user-menu[open] .avatar { box-shadow: 0 0 0 2px var(--accent); }
+.user-menu-dot { position: absolute; top: 6px; right: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--level-yellow); box-shadow: 0 0 0 2px var(--bg); }
+.user-menu-panel {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: min(280px, calc(100vw - 32px));
+  display: grid; gap: 2px; padding: 8px; border-radius: var(--radius-md);
+  background: var(--surface); box-shadow: 0 0 0 1px var(--ring-strong), 0 16px 40px -12px rgba(0, 0, 0, 0.7);
+}
+.user-menu-who { display: grid; padding: 8px 10px 10px; box-shadow: 0 1px 0 var(--ring); margin-bottom: 4px; }
+.user-menu-panel a, .user-menu-panel .btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 0 10px;
+  border-radius: var(--radius-sm); color: var(--text); text-decoration: none; font-weight: 500;
+}
+.user-menu-panel .btn { justify-content: flex-start; font-weight: 500; color: var(--text-muted); }
+.user-menu-panel a:hover { background: rgba(148, 170, 220, 0.08); }
+
+/* Aviso de quem está vendo dados de outra pessoa */
+.viewing-banner { align-items: center; flex-wrap: wrap; margin-bottom: 20px; box-shadow: 0 0 0 1px var(--accent); }
+.viewing-banner > span:nth-child(2) { flex: 1; min-width: 200px; }
+
+/* Tripulação e visão do solo */
+.crew-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.crew-card { position: relative; overflow: hidden; padding-left: 26px; align-content: start; }
+.crew-card::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 6px; background: currentColor; }
+.crew-card:not([data-level])::before { background: var(--level-none); }
+.ground-times { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.ground-times div { display: grid; gap: 2px; }
+.ground-times dt { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); }
+.ground-times dd { margin: 0; color: var(--text); font-size: 0.9375rem; }
+
+/* Sincronização */
+.packets-table td { white-space: normal; }
+
+.textarea {
+  width: 100%; min-height: 64px; padding: 10px 12px; border: 0; border-radius: var(--radius-sm); resize: vertical;
+  background: var(--surface); box-shadow: 0 0 0 1px var(--ring-strong); font: inherit; color: inherit;
+}
+.textarea:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--accent); }
+
 /* Rodapé */
+.privacy-page { max-width: 850px; margin-inline: auto; }
+.footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 24px; margin-top: 10px; }
+.message-input { width: 100%; min-height: 160px; padding: 12px; border: 1px solid var(--ring-strong); border-radius: var(--radius-md); background: var(--surface-2); color: var(--text); font: inherit; resize: vertical; }
+.message-body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.saved-message { padding-block: 12px; border-bottom: 1px solid var(--ring); }
+.privacy-page .btn { white-space: normal; }
+.privacy-page a { overflow-wrap: anywhere; }
+.contact-notice { display: block; }
+
 .disclaimer { padding: 14px var(--space) 20px; text-align: center; font-size: 0.8125rem; color: var(--text-faint); box-shadow: 0 -1px 0 var(--ring); }
 .disclaimer strong { color: var(--text-muted); font-weight: 600; }
 

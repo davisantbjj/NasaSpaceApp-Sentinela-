@@ -8,12 +8,13 @@ import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
 import { formatDate, missionDay, todayISO } from '../lib/dates';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { rules } from '../rules/rules';
-import { useActiveCrew, useAppStore } from '../store/useAppStore';
+import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
 import type { BodyRegion } from '../types';
 import { baselineNote, latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
 
 export function DashboardPage() {
   const member = useActiveCrew();
+  const viewingOther = useViewingOther();
   const { records, alerts, baselines, correlations, regionLevels, settings } = useAppStore();
   const [selected, setSelected] = useState<BodyRegion | null>(null);
 
@@ -21,10 +22,10 @@ export function DashboardPage() {
 
   useEffect(() => setSelected(null), [member?.id]);
 
-  // No celular o detalhe fica abaixo da figura: ao escolher uma região, leva a tela até ele.
+  // Em telas de até 1100 px o detalhe fica abaixo da figura: ao escolher uma região, leva a tela até ele.
   const choose = (r: BodyRegion) => {
     setSelected(r);
-    if (window.matchMedia('(max-width: 860px)').matches) {
+    if (window.matchMedia('(max-width: 1100px)').matches) {
       const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       panelRef.current?.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
     }
@@ -71,8 +72,8 @@ export function DashboardPage() {
           </div>
         </div>
         <div className="stack" style={{ justifyItems: 'start' }}>
-          <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} />
-          {checkinDone ? (
+          {latest ? <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} /> : <span className="chip">Sem registros para avaliar</span>}
+          {viewingOther ? null : checkinDone ? (
             <Link className="btn" to="/checkin">Refazer check-in de hoje</Link>
           ) : (
             <Link className="btn btn-primary" to="/checkin">Fazer o check-in de hoje →</Link>
@@ -83,7 +84,11 @@ export function DashboardPage() {
       {!checkinDone && (
         <p className="notice">
           <span className="notice-icon" aria-hidden="true">!</span>
-          <span>O check-in de hoje está pendente. O painel mostra o registro de {latest ? formatDate(latest.date) : 'nenhum dia'}.</span>
+          <span>
+            {viewingOther
+              ? `O check-in de hoje ainda não chegou à central. O painel mostra o registro de ${latest ? formatDate(latest.date) : 'nenhum dia'}.`
+              : `O check-in de hoje está pendente. O painel mostra o registro de ${latest ? formatDate(latest.date) : 'nenhum dia'}.`}
+          </span>
         </p>
       )}
 
@@ -95,7 +100,7 @@ export function DashboardPage() {
           </div>
           <div className="body-layout">
             <BodyMap
-              levels={regionLevels}
+              levels={latest ? regionLevels : {}}
               selected={region}
               onSelect={choose}
               figure={member.sex === 'female' ? 'female' : 'male'}
@@ -105,7 +110,7 @@ export function DashboardPage() {
                 <li key={r}>
                   <button type="button" className="region-button" aria-pressed={region === r} onClick={() => choose(r)}>
                     <span className="region-name">{REGIONS[r].label}</span>
-                    <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} />
+                    {latest ? <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} /> : <span className="chip">Sem dados</span>}
                   </button>
                 </li>
               ))}
@@ -116,7 +121,7 @@ export function DashboardPage() {
         <div ref={panelRef} className="region-panel-anchor">
         <RegionPanel
           region={region}
-          level={regionLevels[region]}
+          level={latest ? regionLevels[region] : undefined}
           items={items}
           alerts={alerts}
           togetherNotes={togetherNotes}

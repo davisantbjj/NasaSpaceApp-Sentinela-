@@ -1,6 +1,11 @@
 import { addDays, missionDay, todayISO } from '../lib/dates';
-import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Settings } from '../types';
-import { db } from './db';
+import { createDataKey, createKeyPair, exportPublicKey } from '../lib/crypto';
+import { composeForDay } from '../sync/compose';
+import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Profile, Settings } from '../types';
+import { db, DEMO_TABLES } from './db';
+import { clearSessionKeys, setSessionKeys } from './keyring';
+import { buildProfile } from './profilesRepo';
+import { sealRecord } from './recordsRepo';
 
 // Dados SIMULADOS para a demonstração. Nenhum valor aqui vem de uma pessoa real.
 // Os registros vão até ontem, para o check-in de hoje ficar pendente.
@@ -23,7 +28,7 @@ function mulberry32(seed: number): () => number {
   };
 }
 
-interface Profile {
+interface SeedProfile {
   member: Omit<CrewMember, 'missionStart'>;
   seed: number;
   base: { systolic: number; diastolic: number; heartRate: number; glucose: number; temperature: number; sleepHours: number; exerciseMinutes: number; radiationDose: number };
@@ -31,7 +36,7 @@ interface Profile {
   story?: (values: DailyValues, daysLeft: number) => void;
 }
 
-const PROFILES: Profile[] = [
+const PROFILES: SeedProfile[] = [
   {
     // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
     member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
@@ -107,29 +112,93 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         missionDay: missionDay(missionStart, date),
         values,
         createdAt: `${date}T08:00:00`,
+        syncedAt: `${date}T08:05:00`, // a demonstração já chegou à central
       });
     }
   }
 
-  return { crew, records, settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [] } };
+  return {
+    crew,
+    records,
+    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [] },
+  };
 }
+
+// Perfis de entrada da demonstração. Os PINs aparecem na tela de entrada, porque é uma demo.
+// A Ana é a comandante. O Kenji é o oficial médico de bordo. O médico do solo não é tripulante.
+export const DEMO_PROFILES: (Profile & { pin: string })[] = [
+  { id: 'ana', name: 'Ana Ribeiro', role: 'commander', crewId: 'ana', pin: '1111' },
+  { id: 'kenji', name: 'Kenji Mori', role: 'medicalOfficer', crewId: 'kenji', pin: '2222' },
+  { id: 'lia', name: 'Lia Santos', role: 'crew', crewId: 'lia', pin: '3333' },
+  { id: 'ground', name: 'Médico de voo', role: 'groundSurgeon', pin: '4444' },
+];
 
 async function writeSeed(): Promise<void> {
   const seed = buildSeed(todayISO());
-  await db.transaction('rw', db.crew, db.records, db.settings, async () => {
-    await Promise.all([db.crew.clear(), db.records.clear(), db.settings.clear()]);
+
+  // Uma chave de dados por tripulante e um par de chaves para o solo e outro para o comandante,
+  // novos a cada demonstração. Cada perfil guarda, cifradas no próprio PIN, só as chaves que pode abrir:
+  // - tripulante: a dele;
+  // - oficial médico: a dele e a de todos os tripulantes;
+  // - comandante: a dele e a privada do comandante (resumo de check-in e vermelho dos colegas);
+  // - médico do solo: só a privada do solo (pacotes que chegaram à Terra).
+  const crewKeys = Object.fromEntries(await Promise.all(seed.crew.map(async (c) => [c.id, await createDataKey()] as const)));
+  const ground = await createKeyPair();
+  const commander = await createKeyPair();
+  const profiles = await Promise.all(
+    DEMO_PROFILES.map(({ pin, ...profile }) =>
+      buildProfile(profile, pin, {
+        crew:
+          profile.role === 'medicalOfficer'
+            ? crewKeys
+            : profile.crewId
+              ? { [profile.crewId]: crewKeys[profile.crewId] }
+              : {},
+        groundPrivate: profile.role === 'groundSurgeon' ? ground.privateKey : undefined,
+        commanderPrivate: profile.role === 'commander' ? commander.privateKey : undefined,
+      }),
+    ),
+  );
+  const records = await Promise.all(seed.records.map((record) => sealRecord(crewKeys[record.crewId], record)));
+  // Fora da transação: a Web Crypto é assíncrona e encerraria a transação do Dexie.
+  const publicKeys = [
+    { id: 'ground' as const, spki: await exportPublicKey(ground.publicKey) },
+    { id: 'commander' as const, spki: await exportPublicKey(commander.publicKey) },
+  ];
+
+  const tables = DEMO_TABLES.map((name) => db.table(name));
+  await db.transaction('rw', tables, async () => {
+    await Promise.all(tables.map((table) => table.clear()));
     await db.crew.bulkPut(seed.crew);
-    await db.records.bulkPut(seed.records);
+    await db.records.bulkPut(records);
+    await db.profiles.bulkPut(profiles);
+    await db.publicKeys.bulkPut(publicKeys);
     await db.settings.put({ key: 'app', value: seed.settings });
   });
+
+  // Pacote e resumo iniciais de cada tripulante, como se cada um tivesse feito o último check-in.
+  // As chaves ficam abertas só durante esta montagem e são apagadas da memória em seguida.
+  setSessionKeys({
+    crew: new Map(Object.entries(crewKeys)),
+    groundPublic: ground.publicKey,
+    commanderPublic: commander.publicKey,
+  });
+  try {
+    for (const member of seed.crew) {
+      const last = seed.records.filter((r) => r.crewId === member.id).at(-1);
+      if (last) await composeForDay(member, last.date, seed.settings.environment);
+    }
+  } finally {
+    clearSessionKeys();
+  }
 }
 
 // Primeira abertura: insere os tripulantes fictícios e os dias simulados.
 export async function seedIfEmpty(): Promise<void> {
-  if ((await db.crew.count()) === 0) await writeSeed();
+  if ((await db.profiles.count()) === 0) await writeSeed();
 }
 
-// Apaga tudo e recria a demonstração terminando em ontem.
+// Apaga tudo (inclusive perfis, chaves, alertas vistos, acessos e pacotes) e recria a demonstração terminando em ontem.
 export async function resetDemo(): Promise<void> {
   await writeSeed();
 }

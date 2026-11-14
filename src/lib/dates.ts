@@ -41,3 +41,21 @@ export function formatDate(date: string, short = false): string {
   const [y, m, d] = date.split('-');
   return short ? `${d}/${m}` : `${d}/${m}/${y}`;
 }
+
+// Data e hora local de um instante ISO: "14/11 13:05" (ou "14/11/2026 13:05:09" com segundos).
+export function formatDateTime(iso: string, seconds = false): string {
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const date = seconds ? `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}` : `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
+  const time = `${pad(d.getHours())}:${pad(d.getMinutes())}${seconds ? `:${pad(d.getSeconds())}` : ''}`;
+  return `${date} ${time}`;
+}
+
+// "3 min", "12 s", "1 h 05 min": duração curta para atrasos e contagens.
+export function formatDuration(ms: number): string {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 60) return `${s} s`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m} min`;
+  return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')} min`;
+}

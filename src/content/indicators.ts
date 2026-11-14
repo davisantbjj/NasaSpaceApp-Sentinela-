@@ -119,11 +119,14 @@ export const REGION_ORDER: BodyRegion[] = [
   'mind', 'head', 'heart', 'immune', 'metabolism', 'musculoskeletal', 'wholeBody',
 ];
 
-export const ENVIRONMENTS: Record<Environment, { label: string; description: string }> = {
-  station: { label: 'Estação', description: 'Órbita baixa da Terra, dentro da magnetosfera.' },
-  transit: { label: 'Trânsito', description: 'Viagem no espaço profundo, fora da magnetosfera.' },
-  moon: { label: 'Lua', description: 'Superfície lunar, com um sexto da gravidade da Terra.' },
-  mars: { label: 'Marte', description: 'Superfície de Marte, com resposta do solo de até 20 minutos.' },
+// signalDelaySeconds: atraso de ida da comunicação com a Terra, usado na simulação do envio.
+// Estação e Lua são os valores médios publicados pela NASA (DTN, 2016). Trânsito e Marte variam
+// com a distância; os valores aqui são só para a demonstração.
+export const ENVIRONMENTS: Record<Environment, { label: string; description: string; signalDelaySeconds: number; signalDelayLabel: string }> = {
+  station: { label: 'Estação', description: 'Órbita baixa da Terra, dentro da magnetosfera.', signalDelaySeconds: 0.24, signalDelayLabel: 'cerca de 0,24 s' },
+  transit: { label: 'Trânsito', description: 'Viagem no espaço profundo, fora da magnetosfera.', signalDelaySeconds: 120, signalDelayLabel: 'cresce com a distância (2 min na demonstração)' },
+  moon: { label: 'Lua', description: 'Superfície lunar, com um sexto da gravidade da Terra.', signalDelaySeconds: 1.28, signalDelayLabel: 'cerca de 1,28 s' },
+  mars: { label: 'Marte', description: 'Superfície de Marte, com resposta do solo de até 20 minutos.', signalDelaySeconds: 720, signalDelayLabel: 'de 3 a 22 min (12 min na demonstração)' },
 };
 
 export const ENVIRONMENT_ORDER: Environment[] = ['station', 'transit', 'moon', 'mars'];

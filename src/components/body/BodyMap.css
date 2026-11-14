@@ -123,6 +123,8 @@
 .bodymap-region--green .bodymap-leader { stroke-opacity: 0.4; }
 .bodymap-region--yellow .bodymap-marker-ring,
 .bodymap-region--red .bodymap-marker-ring { stroke-width: 3; }
+/* WCAG 2.3.1: nada pode piscar mais de 3 vezes por segundo. Este pulso repete a cada 1,6 s,
+   muda só a espessura (sem clarão) e para com prefers-reduced-motion. Não encurtar abaixo de 0,34 s. */
 .bodymap-region--red .bodymap-marker-ring { animation: bodymap-pulse 1.6s ease-in-out infinite; }
 
 @keyframes bodymap-pulse {
