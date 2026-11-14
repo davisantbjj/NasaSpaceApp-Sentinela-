@@ -111,16 +111,18 @@ button, input, select { font: inherit; color: inherit; }
   }
   .navbar-links a {
     flex: 1; min-width: 0; flex-direction: column; justify-content: center; gap: 2px;
-    min-height: 54px; padding: 4px 2px; font-size: 0.6875rem; font-weight: 600;
+    min-height: 54px; padding: 4px 2px; font-size: 0.875rem; font-weight: 600; line-height: 1.15;
   }
   .navbar-links a.active { box-shadow: none; background: var(--surface-3); color: var(--accent); }
-  .nav-count { position: absolute; top: 2px; left: 50%; margin-left: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--level-yellow); color: #1a1400; box-shadow: none; font-size: 0.6875rem; }
+  .nav-count { position: absolute; top: 2px; left: 50%; margin-left: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--level-yellow); color: #1a1400; box-shadow: none; font-size: 0.75rem; }
   .nav-count-red { background: var(--level-red); color: #1f0505; }
   .app { padding-bottom: 72px; }
   .app-main { padding-top: 20px; }
 }
 @media (max-width: 420px) {
   .navbar-tools .chip { display: none; } /* o ambiente continua no painel e na tela de missão */
+  /* Cinco abas em tela estreita: 12 px é o mínimo, para "Tendências" caber sem corte. */
+  .navbar-links a { font-size: 0.75rem; }
 }
 
 .select {

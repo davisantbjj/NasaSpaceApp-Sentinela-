@@ -154,8 +154,8 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 
 ### Talita: acessibilidade, layout e alarmes
 
-- [ ] Contraste em `src/styles/tokens.css`: `--text-faint` para `#8f9dba` e `--level-none` para `#8494b0`
-- [ ] Fontes de 11 px (barra inferior do celular e contadores) para no mínimo 12 px, de preferência 14 px
+- [x] Contraste em `src/styles/tokens.css`: `--text-faint` para `#8f9dba` e `--level-none` para `#8494b0`
+- [x] Fontes de 11 px (barra inferior do celular e contadores) para no mínimo 12 px, de preferência 14 px (barra com 14 px; 12 px abaixo de 420 px de largura, para "Tendências" caber; contador com 12 px)
 - [ ] Botão "Texto maior", que aumenta a escala base da fonte
 - [ ] Testar com zoom de 200%, largura de 320 px e espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12)
 - [ ] Layout no desktop: lista de regiões alinhada ao topo; chip "Estação" vira "Ambiente: Estação"
@@ -163,7 +163,7 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 - [ ] Alarmes com Web Audio, sem arquivos de som: toque curto no amarelo, padrão repetido no vermelho até alguém confirmar
 - [ ] Equivalente visual de todo som: banner fixo com cor, ícone e texto, contador na barra e vibração no celular
 - [ ] Botão "Silenciar" no banner e volume por nível na tela de missão (WCAG 1.4.2). O vermelho pode ser silenciado, mas o banner só sai quando alguém confirma
-- [ ] Nada piscando mais de 3 vezes por segundo (WCAG 2.3.1)
+- [x] Nada piscando mais de 3 vezes por segundo (WCAG 2.3.1). O único pulso, do vermelho no mapa, repete a cada 1,6 s; o banner novo precisa seguir a mesma regra
 - [ ] Passada com leitor de tela e só teclado (fase 9)
 
 ### Lorena: idiomas, horários e escalonamento
