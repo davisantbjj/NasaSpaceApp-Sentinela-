@@ -1,8 +1,8 @@
-import type { KeyboardEvent } from 'react';
+import { useId, type CSSProperties, type KeyboardEvent } from 'react';
 import { REGIONS } from '../../content/indicators';
 import type { BodyRegion, Level } from '../../types';
-import { LEVEL_TEXT } from '../alerts/LevelBadge';
-import { BODY_IMAGE, BODY_REGIONS, BODY_VIEWBOX, type RegionShape } from './bodyRegions';
+import { LEVEL_ICON_PATH, LEVEL_TEXT } from '../alerts/LevelBadge';
+import { BODY_IMAGE, BODY_REGIONS, BODY_VIEWBOX, type BodyRegionDef, type RegionShape } from './bodyRegions';
 import './BodyMap.css';
 
 interface Props {
@@ -15,16 +15,46 @@ interface Props {
 // se o app for publicado numa subpasta (GitHub Pages).
 const IMAGE_SRC = `${import.meta.env.BASE_URL}body/corpo.webp`;
 
-function Shape({ shape }: { shape: RegionShape }) {
+const MARKER_R = 15;
+
+function Shape({ shape, className }: { shape: RegionShape; className: string }) {
   if (shape.kind === 'ellipse') {
-    return <ellipse cx={shape.cx} cy={shape.cy} rx={shape.rx} ry={shape.ry} />;
+    return <ellipse className={className} cx={shape.cx} cy={shape.cy} rx={shape.rx} ry={shape.ry} />;
   }
-  return <polygon points={shape.points} />;
+  return <path className={className} d={shape.d} />;
+}
+
+// Marcador com o ícone do nível (o mesmo desenho do LevelBadge). Fica fora das formas
+// pequenas, ligado a elas por uma linha curta.
+function Marker({ marker, level }: { marker: BodyRegionDef['marker']; level: Level }) {
+  const { x, y, leader } = marker;
+  let line = null;
+  if (leader) {
+    const dx = leader.x - x;
+    const dy = leader.y - y;
+    const len = Math.hypot(dx, dy) || 1;
+    line = <line className="bodymap-leader" x1={x + (dx / len) * MARKER_R} y1={y + (dy / len) * MARKER_R} x2={leader.x} y2={leader.y} />;
+  }
+  return (
+    <g className="bodymap-marker" aria-hidden="true">
+      {line}
+      <g transform={`translate(${x} ${y})`}>
+        <circle className="bodymap-marker-ring" r={MARKER_R} />
+        <path
+          className={`bodymap-marker-icon${level === 'red' ? ' is-filled' : ''}`}
+          d={LEVEL_ICON_PATH[level]}
+          transform="scale(1.75) translate(-6 -6)"
+        />
+      </g>
+    </g>
+  );
 }
 
 // Figura humana com regiões clicáveis. Cada região mostra a cor e também o ícone do nível:
 // a cor nunca é o único sinal.
 export function BodyMap({ levels, selected, onSelect }: Props) {
+  const glowId = `bodymap-glow-${useId().replace(/:/g, '')}`;
+
   const onKey = (event: KeyboardEvent, region: BodyRegion) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -33,9 +63,26 @@ export function BodyMap({ levels, selected, onSelect }: Props) {
   };
 
   return (
-    <svg className="bodymap" viewBox={BODY_VIEWBOX} role="group" aria-label="Estado de cada região do corpo">
+    <svg
+      className="bodymap"
+      viewBox={BODY_VIEWBOX}
+      role="group"
+      aria-label="Estado de cada região do corpo"
+      style={{ '--bodymap-glow': `url(#${glowId})` } as CSSProperties}
+    >
+      <defs>
+        {/* Brilho suave que usa a cor da própria forma. */}
+        <filter id={glowId} x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       <image href={IMAGE_SRC} width={BODY_IMAGE.width} height={BODY_IMAGE.height} aria-hidden="true" />
-      {BODY_REGIONS.map(({ id, shapes, anchor }) => {
+      {BODY_REGIONS.map((def) => {
+        const { id, shapes, marker, padHit, outline } = def;
         const level = levels[id];
         const status = level ? LEVEL_TEXT[level].label : 'sem dados';
         const isSelected = selected === id;
@@ -43,6 +90,7 @@ export function BodyMap({ levels, selected, onSelect }: Props) {
           <g
             key={id}
             className={`bodymap-region bodymap-region--${level ?? 'none'}${isSelected ? ' is-selected' : ''}`}
+            data-region={id}
             role="button"
             tabIndex={0}
             aria-pressed={isSelected}
@@ -50,13 +98,10 @@ export function BodyMap({ levels, selected, onSelect }: Props) {
             onClick={() => onSelect(id)}
             onKeyDown={(event) => onKey(event, id)}
           >
-            {shapes.map((shape, i) => <Shape key={i} shape={shape} />)}
-            {level && (
-              <g className="bodymap-marker" transform={`translate(${anchor.x} ${anchor.y})`} aria-hidden="true">
-                <circle r={19} />
-                <text dy="0.36em">{LEVEL_TEXT[level].mark}</text>
-              </g>
-            )}
+            {outline && <path className="bodymap-outline" d={outline} aria-hidden="true" />}
+            {padHit && shapes.map((shape, i) => <Shape key={`hit-${i}`} shape={shape} className="bodymap-hit" />)}
+            {shapes.map((shape, i) => <Shape key={i} shape={shape} className="bodymap-shape" />)}
+            {level && <Marker marker={marker} level={level} />}
           </g>
         );
       })}

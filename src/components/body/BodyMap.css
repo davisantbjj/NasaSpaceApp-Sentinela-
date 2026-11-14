@@ -3,12 +3,13 @@
 .bodymap {
   display: block;
   width: 100%;
-  max-width: 210px;
+  max-width: 300px;
   height: auto;
   border-radius: var(--radius-md);
   background: #070d18;
   box-shadow: 0 0 0 1px var(--ring);
   touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .bodymap-region { cursor: pointer; outline: none; --c: var(--level-none); }
@@ -16,63 +17,121 @@
 .bodymap-region--yellow { --c: var(--level-yellow); }
 .bodymap-region--red { --c: var(--level-red); }
 
-.bodymap-region > ellipse,
-.bodymap-region > polygon {
+/* Formas da região. Verde fica discreto; amarelo e vermelho chamam atenção. */
+.bodymap-shape {
   fill: var(--c);
-  fill-opacity: 0.16;
+  fill-opacity: 0.07;
   stroke: var(--c);
-  stroke-opacity: 0.55;
-  stroke-width: 2;
+  stroke-opacity: 0.4;
+  stroke-width: 1.5;
   stroke-linejoin: round;
-  transition: fill-opacity 160ms var(--ease), stroke-opacity 160ms var(--ease), stroke-width 160ms var(--ease);
+  vector-effect: non-scaling-stroke;
+  transition: fill-opacity 180ms var(--ease), stroke-opacity 180ms var(--ease), stroke-width 180ms var(--ease);
 }
 
-/* Verde fica discreto para o alerta chamar atenção. */
-.bodymap-region--green > ellipse,
-.bodymap-region--green > polygon { fill-opacity: 0.08; stroke-opacity: 0.35; }
+.bodymap-region--yellow .bodymap-shape {
+  fill-opacity: 0.22;
+  stroke-opacity: 0.95;
+  stroke-width: 2;
+  filter: var(--bodymap-glow);
+}
 
-.bodymap-region--yellow > ellipse,
-.bodymap-region--yellow > polygon { fill-opacity: 0.3; stroke-opacity: 0.9; }
-
-.bodymap-region--red > ellipse,
-.bodymap-region--red > polygon {
-  fill-opacity: 0.4;
+.bodymap-region--red .bodymap-shape {
+  fill-opacity: 0.32;
   stroke-opacity: 1;
-  filter: drop-shadow(0 0 6px var(--level-red));
+  stroke-width: 2.5;
+  filter: var(--bodymap-glow);
 }
 
 /* Sem dados: contorno tracejado, sem preenchimento. */
-.bodymap-region--none > ellipse,
-.bodymap-region--none > polygon { fill-opacity: 0; stroke-dasharray: 5 5; stroke-opacity: 0.45; }
+.bodymap-region--none .bodymap-shape { fill-opacity: 0; stroke-dasharray: 4 4; stroke-opacity: 0.5; }
+
+/* Área de clique extra das formas pequenas (olhos, garganta, axilas, coração). Invisível. */
+.bodymap-hit {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 12;
+  pointer-events: all;
+}
+
+/* Contorno da silhueta (corpo inteiro): só visual, o clique passa para as outras regiões. */
+.bodymap-outline {
+  fill: none;
+  stroke: var(--c);
+  stroke-opacity: 0.22;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+  transition: stroke-opacity 180ms var(--ease);
+}
+.bodymap-region--yellow .bodymap-outline,
+.bodymap-region--red .bodymap-outline { stroke-opacity: 0.85; stroke-width: 2; filter: var(--bodymap-glow); }
+.bodymap-region--none .bodymap-outline { stroke-dasharray: 4 4; }
 
 @media (hover: hover) {
-  .bodymap-region:hover > ellipse,
-  .bodymap-region:hover > polygon { fill-opacity: 0.42; stroke-opacity: 1; }
+  .bodymap-region:hover .bodymap-shape { fill-opacity: 0.38; stroke-opacity: 1; }
+  .bodymap-region:hover .bodymap-outline { stroke-opacity: 0.7; }
 }
 
-.bodymap-region.is-selected > ellipse,
-.bodymap-region.is-selected > polygon { fill-opacity: 0.45; stroke-opacity: 1; stroke-width: 3; }
+/* Selecionada: mais preenchida, com brilho, mesmo quando verde. */
+.bodymap-region.is-selected .bodymap-shape {
+  fill-opacity: 0.4;
+  stroke-opacity: 1;
+  stroke-width: 2.5;
+  filter: var(--bodymap-glow);
+}
+.bodymap-region.is-selected .bodymap-outline { stroke-opacity: 0.9; stroke-width: 2; filter: var(--bodymap-glow); }
 
-.bodymap-region:focus-visible > ellipse,
-.bodymap-region:focus-visible > polygon { fill-opacity: 0.45; stroke: var(--accent); stroke-opacity: 1; stroke-width: 4; }
+/* Foco de teclado: contorno na cor de destaque, diferente de qualquer nível.
+   Troca o retângulo global de foco, que no SVG cobriria as regiões vizinhas. */
+.bodymap-region:focus-visible { outline: none; }
+.bodymap-region:focus-visible .bodymap-shape {
+  fill-opacity: 0.4;
+  stroke: var(--accent);
+  stroke-opacity: 1;
+  stroke-width: 3;
+}
+.bodymap-region:focus-visible .bodymap-outline { stroke: var(--accent); stroke-opacity: 1; stroke-width: 2.5; }
+.bodymap-region:focus-visible .bodymap-marker-ring { stroke: var(--accent); }
 
 /* Marcador com o ícone do nível. */
-.bodymap-marker circle { fill: #0b111b; stroke: var(--c); stroke-width: 3.5; }
-.bodymap-marker text {
-  fill: var(--c);
-  font: 800 22px/1 var(--font);
-  text-anchor: middle;
-  pointer-events: none;
+.bodymap-marker { pointer-events: all; }
+.bodymap-marker-ring {
+  fill: #0b111b;
+  stroke: var(--c);
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
 }
-.bodymap-region--red .bodymap-marker circle { animation: bodymap-pulse 1.6s ease-in-out infinite; }
+.bodymap-marker-icon {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bodymap-marker-icon.is-filled { fill: var(--c); }
+.bodymap-leader {
+  stroke: var(--c);
+  stroke-opacity: 0.7;
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Verde: marcador mais apagado. Amarelo e vermelho: anel mais forte. */
+.bodymap-region--green .bodymap-marker-ring { stroke-opacity: 0.6; }
+.bodymap-region--green .bodymap-leader { stroke-opacity: 0.4; }
+.bodymap-region--yellow .bodymap-marker-ring,
+.bodymap-region--red .bodymap-marker-ring { stroke-width: 3; }
+.bodymap-region--red .bodymap-marker-ring { animation: bodymap-pulse 1.6s ease-in-out infinite; }
 
 @keyframes bodymap-pulse {
-  0%, 100% { stroke-width: 3.5; }
-  50% { stroke-width: 7; }
+  0%, 100% { stroke-width: 3; }
+  50% { stroke-width: 6; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bodymap-region--red .bodymap-marker circle { animation: none; }
-  .bodymap-region > ellipse,
-  .bodymap-region > polygon { transition: none; }
+  .bodymap-region--red .bodymap-marker-ring { animation: none; }
+  .bodymap-shape,
+  .bodymap-outline { transition: none; }
 }

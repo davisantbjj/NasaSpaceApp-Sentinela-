@@ -183,13 +183,16 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 @media (max-width: 640px) { .hero { grid-template-columns: 1fr; } }
 
-.dashboard { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+/* O mapa do corpo é o destaque do painel: a coluna dele é a mais larga. */
+.dashboard { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
 @media (max-width: 860px) { .dashboard { grid-template-columns: 1fr; } }
 
-.body-layout { display: grid; gap: 16px; grid-template-columns: minmax(120px, 170px) minmax(0, 1fr); align-items: center; }
-/* Celular: figura e lista lado a lado, para o corpo não ocupar a tela inteira. */
+.body-layout { display: grid; gap: 20px; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); align-items: center; }
+.body-layout .bodymap { justify-self: center; }
+/* Celular: figura grande em cima, lista embaixo. */
 @media (max-width: 560px) {
-  .body-layout { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; align-items: start; }
+  .body-layout { grid-template-columns: 1fr; gap: 16px; }
+  .body-layout .bodymap { width: min(100%, 280px); }
   .region-list { gap: 4px; }
   .card { padding: 16px; }
 }
