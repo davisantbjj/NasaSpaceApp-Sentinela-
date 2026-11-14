@@ -187,7 +187,7 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 .dashboard { display: grid; gap: 20px; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); align-items: start; }
 @media (max-width: 860px) { .dashboard { grid-template-columns: 1fr; } }
 
-.body-layout { display: grid; gap: 20px; grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); align-items: center; }
+.body-layout { display: grid; gap: 20px; grid-template-columns: minmax(180px, 280px) minmax(150px, 1fr); align-items: center; }
 .body-layout .bodymap { justify-self: center; }
 /* Celular: figura grande em cima, lista embaixo. */
 @media (max-width: 560px) {
@@ -210,7 +210,11 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 .region-button:hover { background: rgba(148, 170, 220, 0.07); }
 .region-button:active { transform: scale(0.985); }
 .region-button[aria-pressed='true'] { background: var(--surface-2); box-shadow: 0 0 0 1px var(--ring-strong); }
-.region-button .region-name { font-weight: 600; font-size: 0.9375rem; white-space: nowrap; }
+/* O nome pode quebrar linha e o selo não encolhe: assim a lista nunca passa da largura do card. */
+.region-list li { min-width: 0; }
+.region-button .region-name { min-width: 0; font-weight: 600; font-size: 0.9375rem; line-height: 1.25; }
+.region-button { flex-wrap: wrap; row-gap: 2px; }
+.region-button .level-badge { flex: none; }
 
 .metric { display: grid; gap: 6px; }
 .metric-value { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }

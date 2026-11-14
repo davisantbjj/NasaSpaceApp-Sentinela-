@@ -1,6 +1,13 @@
 import Dexie, { type Table } from 'dexie';
 import type { CrewMember, DailyRecord, Settings } from '../types';
 
+// Mesmos valores de seed.ts, usados só para atualizar a demonstração já gravada.
+const DEMO_CREW_SEX: Record<string, NonNullable<CrewMember['sex']>> = {
+  ana: 'female',
+  lia: 'female',
+  kenji: 'male',
+};
+
 export interface SettingsRow {
   key: 'app';
   value: Settings;
@@ -23,6 +30,14 @@ export class SentinelaDB extends Dexie {
     });
     // v2: a linha de base passou a ser derivada dos registros e deixou de ser gravada.
     this.version(2).stores({ baselines: null });
+    // v3: o tripulante ganhou o campo sex, que escolhe a figura do painel. A demonstração
+    // gravada antes disso não tem o campo; preenche aqui para a Ana e a Lia já abrirem
+    // com a figura feminina, sem precisar recriar a demonstração.
+    this.version(3).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (member.sex === undefined && member.id in DEMO_CREW_SEX) member.sex = DEMO_CREW_SEX[member.id];
+      }),
+    );
   }
 }
 
