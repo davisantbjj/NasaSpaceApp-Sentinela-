@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { listCrew } from '../data/crewRepo';
 import { listRecords, saveRecord } from '../data/recordsRepo';
+import { acknowledgePrivacyNotice, deleteCrewHealthData, hasAcknowledgedPrivacyNotice } from '../data/privacyRepo';
 import { resetDemo, seedIfEmpty } from '../data/seed';
 import { loadSettings, saveSettings } from '../data/settingsRepo';
 import { missionDay, todayISO } from '../lib/dates';
@@ -22,6 +23,7 @@ interface Derived {
 
 interface AppState extends Derived {
   ready: boolean;
+  privacyAcknowledged: boolean;
   error?: string;
   crew: CrewMember[];
   settings: Settings;
@@ -32,6 +34,8 @@ interface AppState extends Derived {
   saveCheckin: (values: DailyValues) => Promise<Alert[]>;
   setReminder: (indicator: IndicatorId, everyDays: number) => Promise<void>;
   resetDemo: () => Promise<void>;
+  acknowledgePrivacy: () => Promise<void>;
+  deleteActiveHealthData: () => Promise<void>;
 }
 
 // Único ponto que junta dados, linha de base e motor de regras.
@@ -63,6 +67,7 @@ export const useAppStore = create<AppState>((set, get) => {
 
   return {
     ready: false,
+    privacyAcknowledged: false,
     crew: [],
     settings: EMPTY_SETTINGS,
     records: [],
@@ -70,6 +75,10 @@ export const useAppStore = create<AppState>((set, get) => {
 
     loadCrew: async () => {
       try {
+        if (!await hasAcknowledgedPrivacyNotice()) {
+          set({ ready: true, privacyAcknowledged: false, error: undefined });
+          return;
+        }
         await seedIfEmpty();
         const crew = await listCrew();
         const saved = await loadSettings();
@@ -80,10 +89,22 @@ export const useAppStore = create<AppState>((set, get) => {
         };
         set({ crew });
         await loadActive(settings);
-        set({ ready: true });
+        set({ ready: true, privacyAcknowledged: true, error: undefined });
       } catch (error) {
         set({ error: error instanceof Error ? error.message : String(error) });
       }
+    },
+
+    acknowledgePrivacy: async () => {
+      await acknowledgePrivacyNotice();
+      set({ ready: false });
+      await get().loadCrew();
+    },
+
+    deleteActiveHealthData: async () => {
+      const settings = get().settings;
+      await deleteCrewHealthData(settings.activeCrewId);
+      await loadActive(settings);
     },
 
     switchCrew: async (crewId) => {

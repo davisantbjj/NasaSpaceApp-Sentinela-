@@ -71,7 +71,7 @@ export function DashboardPage() {
           </div>
         </div>
         <div className="stack" style={{ justifyItems: 'start' }}>
-          <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} />
+          {latest ? <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} /> : <span className="chip">Sem registros para avaliar</span>}
           {checkinDone ? (
             <Link className="btn" to="/checkin">Refazer check-in de hoje</Link>
           ) : (
@@ -95,7 +95,7 @@ export function DashboardPage() {
           </div>
           <div className="body-layout">
             <BodyMap
-              levels={regionLevels}
+              levels={latest ? regionLevels : {}}
               selected={region}
               onSelect={choose}
               figure={member.sex === 'female' ? 'female' : 'male'}
@@ -105,7 +105,7 @@ export function DashboardPage() {
                 <li key={r}>
                   <button type="button" className="region-button" aria-pressed={region === r} onClick={() => choose(r)}>
                     <span className="region-name">{REGIONS[r].label}</span>
-                    <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} />
+                    {latest ? <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} /> : <span className="chip">Sem dados</span>}
                   </button>
                 </li>
               ))}
@@ -116,7 +116,7 @@ export function DashboardPage() {
         <div ref={panelRef} className="region-panel-anchor">
         <RegionPanel
           region={region}
-          level={regionLevels[region]}
+          level={latest ? regionLevels[region] : undefined}
           items={items}
           alerts={alerts}
           togetherNotes={togetherNotes}

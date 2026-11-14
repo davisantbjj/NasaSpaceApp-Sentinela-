@@ -1,10 +1,13 @@
 # Diagrama 5: navegação entre telas
 
-Mostra as cinco telas e os caminhos entre elas.
+Mostra as cinco telas principais e os fluxos adicionais de privacidade e comunicação.
 
 ```mermaid
 flowchart LR
-    Open(["Abrir o app"]) --> First{"Primeira vez?"}
+    Open(["Abrir o app"]) --> Notice{"Aviso atual já lido?"}
+    Notice -- não --> Privacy["Aviso de privacidade"]
+    Privacy -- "registrar leitura" --> First
+    Notice -- sim --> First{"Primeira vez?"}
     First -- sim --> SeedStep["Carrega dados simulados"]
     SeedStep --> Dash
     First -- não --> Dash
@@ -14,6 +17,8 @@ flowchart LR
     Alerts["Alertas e ações<br/>/alerts"]
     Trends["Tendências<br/>/trends/:indicator"]
     Mission["Missão e rotina<br/>/mission"]
+    Data["Seus dados<br/>/your-data"]
+    Message["Comunicação por texto<br/>/medical-contact"]
     Region["Detalhe da região<br/>painel lateral"]
 
     Dash -- "clicar numa região" --> Region
@@ -25,6 +30,11 @@ flowchart LR
     Alerts -- "ver histórico" --> Trends
     Dash --> Mission
     Mission -- "trocar ambiente" --> Dash
+    Mission --> Data
+    Mission --> Message
+    Alerts --> Message
+    Message --> Data
+    Data -- "excluir histórico confirmado" --> Dash
 ```
 
 ## Rotas
@@ -36,6 +46,8 @@ flowchart LR
 | `/alerts` | `AlertsPage` | Essencial |
 | `/trends/:indicator` | `TrendsPage` | Desejável |
 | `/mission` | `MissionPage` | Desejável |
+| `/your-data` | `YourDataPage` | Privacidade local |
+| `/medical-contact` | `MedicalContactPage` | Texto salvo para mostrar à equipe, sem envio |
 
 ## Elementos fixos em todas as telas
 
@@ -43,6 +55,7 @@ flowchart LR
 - Seletor de tripulante.
 - Indicador do ambiente atual (estação, trânsito, Lua ou Marte).
 - Rodapé com o aviso de protótipo.
+- Links de privacidade e comunicação no rodapé. Antes da leitura do aviso, os links também mostram o aviso, sem liberar formulários.
 
 ## Passos do check-in
 

@@ -13,7 +13,7 @@ export interface RegionItem {
 
 interface Props {
   region: BodyRegion;
-  level: Level;
+  level?: Level;
   items: RegionItem[];
   alerts: Alert[];
   togetherNotes: string[]; // "mudaram juntos"
@@ -28,7 +28,7 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
           <span className="eyebrow">Região selecionada</span>
           <h2>{REGIONS[region].label}</h2>
         </div>
-        <LevelBadge level={level} />
+        {level ? <LevelBadge level={level} /> : <span className="chip">Sem dados</span>}
       </div>
 
       {items.length === 0 && (

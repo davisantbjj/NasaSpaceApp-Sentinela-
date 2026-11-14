@@ -7,6 +7,8 @@ erDiagram
     CREW_MEMBER ||--o{ DAILY_RECORD : registra
     CREW_MEMBER ||--o{ BASELINE : possui
     CREW_MEMBER ||--o{ CORRELATION : apresenta
+    CREW_MEMBER ||--o{ MEDICAL_MESSAGE : escreve
+    CREW_MEMBER ||--o| DELETION_REQUEST : solicita
     DAILY_RECORD ||--o{ ALERT : gera
     RULE ||--o{ ALERT : justifica
     SETTINGS ||--|| CREW_MEMBER : "tripulante ativo"
@@ -15,6 +17,7 @@ erDiagram
         string id PK
         string name
         string role
+        string sex
         string missionStart
         json trackedIndicators
     }
@@ -74,6 +77,26 @@ erDiagram
         string activeCrewId
         json reminders
     }
+
+    MEDICAL_MESSAGE {
+        string id PK
+        string crewId FK
+        string body
+        string createdAt
+        string status "local, sem envio"
+    }
+
+    DELETION_REQUEST {
+        string id PK
+        string crewId FK
+        string createdAt
+        string status "pending, sem envio"
+    }
+
+    PREFERENCE {
+        string key PK
+        string value "versão do aviso lido"
+    }
 ```
 
 ## Onde cada entidade vive
@@ -87,3 +110,6 @@ erDiagram
 | `RULE` | Arquivo `src/rules/rules.json` | Não vai para o banco |
 | `ALERT` | Só em memória, no store | Recalculado a partir dos registros |
 | `CORRELATION` | Só em memória, no store | Recalculada junto com os alertas; não muda nível |
+| `MEDICAL_MESSAGE` | IndexedDB, tabela `medicalMessages` | Texto por perfil, sem entrega |
+| `DELETION_REQUEST` | IndexedDB, tabela `deletionRequests` | Uma solicitação local por perfil |
+| `PREFERENCE` | IndexedDB, tabela `preferences` | Leitura versionada do aviso; preservada no reset |

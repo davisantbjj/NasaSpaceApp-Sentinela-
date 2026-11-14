@@ -116,8 +116,8 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
 
 async function writeSeed(): Promise<void> {
   const seed = buildSeed(todayISO());
-  await db.transaction('rw', db.crew, db.records, db.settings, async () => {
-    await Promise.all([db.crew.clear(), db.records.clear(), db.settings.clear()]);
+  await db.transaction('rw', db.crew, db.records, db.settings, db.medicalMessages, db.deletionRequests, async () => {
+    await Promise.all([db.crew.clear(), db.records.clear(), db.settings.clear(), db.medicalMessages.clear(), db.deletionRequests.clear()]);
     await db.crew.bulkPut(seed.crew);
     await db.records.bulkPut(seed.records);
     await db.settings.put({ key: 'app', value: seed.settings });

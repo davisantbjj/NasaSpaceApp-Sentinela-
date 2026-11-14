@@ -69,6 +69,18 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 
 ## Regras para quem for gerar código
 
+### Entrega de Larissa (14/11/2026)
+
+- Aviso de privacidade versionado antes de criar a demonstração ou liberar formulários. Leitura guardada em `preferences`, sem alegar consentimento para saúde ou base legal automática.
+- Rotas `/your-data` e `/medical-contact`, acessíveis por Missão e rodapé; comunicação também por Alertas. Não alteram as cinco entradas da navegação principal.
+- Exportação JSON restrita ao perfil ativo; pedido de exclusão somente local; exclusão confirmada de check-ins, mensagens e pedido do perfil. Mantém o perfil fictício para não repopular o histórico. Cópias exportadas ficam fora do alcance da exclusão.
+- Banco v4 acrescenta `preferences`, `medicalMessages` e `deletionRequests`. Repositórios `privacyRepo` e `messagesRepo` isolam persistência das novas telas. Reset da demonstração apaga mensagens e pedidos de todos, mas preserva a leitura do aviso.
+- Mensagens são salvas para mostrar a tela à equipe, **não enviadas**. Entrega depende dos papéis e central do Davi. A seleção de perfil não autentica ninguém.
+- `src/content/crewContext.ts` mostra contexto por sexo em Missão, sem entrar no motor nem mudar nível. `rangeEvidence` no JSON documenta a origem e limites de verde/amarelo/vermelho. Todos os cortes permanecem demonstrativos; revisão documental não é aprovação clínica.
+- Conteúdo e roteiro: `docs/apresentacao.md`, `docs/roteiro-demonstracao.md`, `docs/pesquisa/revisao-faixas.md` e `docs/privacidade.md`. Sem slides, vídeo, submissão ou commits nesta etapa.
+
+### Convenções de implementação
+
 - Não crie backend, autenticação nem chamadas de API.
 - Não escreva faixas clínicas no código. Leia de `rules.json`.
 - Não invente números de saúde. As faixas atuais são de demonstração e estão marcadas com `"demo": true`.

@@ -1,5 +1,5 @@
 import Dexie, { type Table } from 'dexie';
-import type { CrewMember, DailyRecord, Settings } from '../types';
+import type { CrewMember, DailyRecord, DeletionRequest, MedicalMessage, Settings } from '../types';
 
 // Mesmos valores de seed.ts, usados só para atualizar a demonstração já gravada.
 const DEMO_CREW_SEX: Record<string, NonNullable<CrewMember['sex']>> = {
@@ -13,12 +13,20 @@ export interface SettingsRow {
   value: Settings;
 }
 
+export interface PreferenceRow {
+  key: string;
+  value: string;
+}
+
 // Alertas, correlações e linhas de base não são gravados: são recalculados a partir
 // dos registros, então mudar uma regra atualiza tudo.
 export class SentinelaDB extends Dexie {
   crew!: Table<CrewMember, string>;
   records!: Table<DailyRecord, string>;
   settings!: Table<SettingsRow, string>;
+  preferences!: Table<PreferenceRow, string>;
+  medicalMessages!: Table<MedicalMessage, string>;
+  deletionRequests!: Table<DeletionRequest, string>;
 
   constructor() {
     super('sentinela');
@@ -38,6 +46,11 @@ export class SentinelaDB extends Dexie {
         if (member.sex === undefined && member.id in DEMO_CREW_SEX) member.sex = DEMO_CREW_SEX[member.id];
       }),
     );
+    this.version(4).stores({
+      preferences: 'key',
+      medicalMessages: 'id, crewId, createdAt',
+      deletionRequests: 'id, crewId',
+    });
   }
 }
 
