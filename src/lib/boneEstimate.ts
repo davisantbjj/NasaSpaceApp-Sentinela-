@@ -39,6 +39,9 @@ export function estimateBoneLoss(
       monthsMin: bone.studiedMonths.min,
       monthsMax: bone.studiedMonths.max,
     }));
+    if (months < bone.studiedMonths.min) {
+      parts.push(i18n.t('context.boneLoss.shortPeriod', { monthsMin: bone.studiedMonths.min, monthsMax: bone.studiedMonths.max }));
+    }
     if (months > bone.studiedMonths.max) {
       parts.push(i18n.t('context.boneLoss.beyondStudied', { months: bone.studiedMonths.max }));
     }

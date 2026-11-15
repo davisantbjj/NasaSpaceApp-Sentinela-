@@ -38,17 +38,24 @@
   "partialExercise": "Enter both times (use 0 if you skipped one), or skip the step.",
   "sourceQuestion": "Where did the value come from?",
   "reaction": {
-    "saved": "Result saved today: {{value}} ms.",
+    "saved": "Result saved today: {{value}} ms. {{details}}",
     "tooFew": "Too few valid responses ({{valid}}). Retake the test or skip the step.",
-    "result": "Result: {{mean}} ms (average of {{valid}} responses{{early}}).",
-    "early_one": "; {{count}} early response not counted",
-    "early_other": "; {{count}} early responses not counted",
+    "result": "Result: {{mean}} ms ({{mode}}{{interrupted}}; {{valid}} valid responses).",
     "tapNow": "● Tap now!",
     "wait": "Wait for the signal…",
     "secondsLeft": "{{seconds}} s left",
     "stop": "Stop now",
     "retake": "Retake the test (3 min)",
     "start": "Start the test (3 min)",
-    "short": "Short version (30 s, for the demo)"
-  }
+    "short": "Short version (30 s, for the demo)",
+    "disclaimer": "Demo test, without validation equivalent to NASA's Reaction Self Test. Only completed full 3-minute tests enter the personal comparison; the short mode and interrupted tests are kept for reference.",
+    "savedMode": "{{mode}}{{interrupted}}.",
+    "unknownMode": "Mode not recorded; left out of the personal comparison.",
+    "modeShort": "Short mode",
+    "modeFull": "Full mode",
+    "modeShortLower": "short mode",
+    "modeFullLower": "full mode",
+    "interrupted": ", interrupted"
+  },
+  "sourceNote": "Source declared by you. The app does not connect to the device; copy the value and state the source."
 }

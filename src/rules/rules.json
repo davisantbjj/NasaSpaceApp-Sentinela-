@@ -218,7 +218,7 @@
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
           "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
-          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://techport.nasa.gov/projects/23201",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
         ],
         "green": "1–3 em escala própria de 1–5: escolha de demonstração. O Reaction Self Test da NASA usa escalas visuais de estresse e carga de trabalho, mas não valida estes cortes.",
@@ -256,7 +256,8 @@
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
           "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
-          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf"
+          "https://techport.nasa.gov/projects/23201",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/"
         ],
         "green": "1–3 em escala própria de 1–5: escolha de demonstração. O Reaction Self Test da NASA usa escalas visuais de estresse e carga de trabalho, mas não valida estes cortes.",
         "yellow": "4–5: escolha de demonstração, não escala psicológica validada.",
@@ -279,14 +280,14 @@
           "red": "alerts:rules.reactionTime.red"
         }
       },
-      "sourceUrl": "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+      "sourceUrl": "https://techport.nasa.gov/projects/23201",
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://techport.nasa.gov/projects/23201",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
         ],
-        "green": "Sem faixa geral: o tempo de reação varia entre pessoas e aparelhos. Só a comparação com o padrão pessoal é usada.",
+        "green": "Sem faixa geral: só testes completos concluídos com modo registrado entram na comparação pessoal. Curto, interrompido e legado sem modo ficam fora da série; ausência de alerta não atesta atenção ou aptidão.",
         "yellow": "Mais de 15% acima do padrão pessoal por 3 registros: algoritmo de demonstração, não o critério de corte do Reaction Self Test.",
         "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
       },
@@ -341,7 +342,8 @@
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
           "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
-          "https://www.nasa.gov/news-release/nasa-study-provides-new-findings-on-protecting-astronauts-bones-through-diet-and-exercise"
+          "https://www.nasa.gov/news-release/nasa-study-provides-new-findings-on-protecting-astronauts-bones-through-diet-and-exercise",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC7434884/"
         ],
         "green": "Sem faixa geral: o tempo de treino resistido depende do plano individual. Só a comparação com o padrão pessoal é usada.",
         "yellow": "Desvio pessoal para baixo: algoritmo de demonstração (7 amostras, mais de 15% por 3 registros), não prescrição de treino.",
@@ -428,10 +430,12 @@
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight"
+          "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight",
+          "https://ntrs.nasa.gov/citations/20150014490",
+          "https://pubmed.ncbi.nlm.nih.gov/31852573/"
         ],
-        "green": "Todas as doses previstas no dia marcadas como tomadas. Autorrelato, sem conferência do estoque.",
-        "yellow": "Uma ou mais doses previstas não tomadas: regra de demonstração. A fonte da NASA trata da estabilidade e do efeito dos remédios no voo, não da adesão ao tratamento.",
+        "green": "Todas as marcações previstas no dia tomadas: autorrelato, sem conferência do estoque. Há uma marcação por medicamento, não por dose ou horário; pular o passo não comprova adesão.",
+        "yellow": "Uma ou mais marcações não tomadas: regra de demonstração. Dose Tracker sustenta registrar uso e efeitos percebidos, mas não valida este nível universal para dose não tomada.",
         "red": "Não é gerado no motor atual. Um plano real definiria quais remédios exigem aviso imediato."
       },
       "demo": true
@@ -489,7 +493,7 @@
       "daysPerMonth": 30,
       "studiedMonths": { "min": 4, "max": 6 },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
-      "demo": false
+      "demo": true
     },
     "radiationTotal": {
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"

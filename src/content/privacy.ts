@@ -6,6 +6,18 @@ export const PRIVACY_SECTIONS = [
     textKey: 'privacy.sections.stored.text',
   },
   {
+    titleKey: 'privacy.sections.medication.title',
+    textKey: 'privacy.sections.medication.text',
+  },
+  {
+    titleKey: 'privacy.sections.missionContext.title',
+    textKey: 'privacy.sections.missionContext.text',
+  },
+  {
+    titleKey: 'privacy.sections.reactionAndSource.title',
+    textKey: 'privacy.sections.reactionAndSource.text',
+  },
+  {
     titleKey: 'privacy.sections.purpose.title',
     textKey: 'privacy.sections.purpose.text',
   },

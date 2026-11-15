@@ -128,7 +128,7 @@
       "red": "Avise o comandante e o médico de bordo para rever a escala de trabalho."
     },
     "exerciseMinutes": {
-      "whyItMatters": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção.",
+      "whyItMatters": "A microgravidade afeta ossos e músculos. A NASA relata perda média de 1% a 1,5% ao mês nos ossos que sustentam peso em missões de 4 a 6 meses; não é uma previsão individual. Exercício faz parte das contramedidas da missão.",
       "yellow": "Registre o tipo de treino e reponha a sessão conforme o seu plano individual.",
       "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
     },
@@ -153,7 +153,7 @@
       "red": "Avise o médico de bordo agora."
     },
     "reactionTime": {
-      "whyItMatters": "No Reaction Self Test usado na estação, uma reação mais lenta que o padrão da própria pessoa é sinal de fadiga. Num estudo com 24 astronautas, dormir 6 horas ou menos veio junto com reação mais lenta.",
+      "whyItMatters": "Um estudo com 24 astronautas encontrou associação entre sono de 6 horas ou menos e reação mais lenta. O teste deste app é demonstrativo, não equivalente ao protocolo validado do Reaction Self Test e não diagnostica fadiga.",
       "yellow": "Priorize o próximo período de sono e repita o teste amanhã. Se continuar mais lento, converse com o oficial médico sobre medidas contra a fadiga.",
       "red": "Avise o oficial médico agora."
     },

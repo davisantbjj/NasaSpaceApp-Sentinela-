@@ -44,6 +44,14 @@ export interface MedicationDose {
   taken: boolean;
 }
 
+export interface ReactionTestDetails {
+  mode: 'full' | 'short';
+  completed: boolean;
+  elapsedSeconds: number;
+  validResponses: number;
+  anticipations: number;
+}
+
 export interface DailyValues {
   bloodPressure?: { systolic: number; diastolic: number };
   heartRate?: number;
@@ -54,6 +62,7 @@ export interface DailyValues {
   stress?: 1 | 2 | 3 | 4 | 5; // 1 = muito baixo, 5 = muito alto
   workload?: 1 | 2 | 3 | 4 | 5; // 1 = muito leve, 5 = excessiva
   reactionTime?: number; // média do teste de reação, em ms (M4)
+  reactionTest?: ReactionTestDetails; // protocolo e qualidade; registros antigos podem não ter
   exerciseMinutes?: number; // total do dia (aeróbico + resistido)
   resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
   radiationDose?: number;

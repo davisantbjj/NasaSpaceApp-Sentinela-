@@ -6,7 +6,11 @@
     "noSymptoms": "None",
     "noMedication": "None scheduled",
     "allDosesTaken": "All taken",
-    "doseNotTaken": "Not taken: {{doses}}"
+    "doseNotTaken": "Not taken: {{doses}}",
+    "reactionShort": "short",
+    "reactionFull": "full",
+    "reactionInterrupted": ", interrupted",
+    "reactionUnknownMode": "mode not recorded"
   },
   "bloodPressure": {
     "label": "Blood pressure",
@@ -72,7 +76,7 @@
   "exerciseMinutes": {
     "label": "Exercise",
     "howToMeasure": "Enter today's minutes of aerobic exercise (running, cycling, rowing) and resistance training (against a load or resistance, such as squats), using your spacecraft's equipment. The app adds them up. Use 0 if you skipped one of them.",
-    "whyMeasure": "Without gravity, bones lose 1% to 1.5% of their density per month and muscles weaken. Exercise is the main protection, and resistance training protects bones the most."
+    "whyMeasure": "Microgravity affects bones and muscles. NASA reports an average loss of 1% to 1.5% per month in weight-bearing bones in 4- to 6-month missions; this does not predict your loss. Aerobic and resistance exercise are part of the countermeasures, according to your individual plan."
   },
   "radiationDose": {
     "label": "Radiation",
@@ -133,7 +137,7 @@
   "reactionTime": {
     "label": "Reaction time",
     "howToMeasure": "Take the test somewhere quiet. When the signal appears, tap the area or press Space as fast as you can. Do not respond before the signal. The full test takes 3 minutes.",
-    "whyMeasure": "On the station, astronauts take a similar test, the Reaction Self Test, to spot fatigue early. A reaction slower than your usual is a sign to rest."
+    "whyMeasure": "NASA's Reaction Self Test tracks attention and performance. This test is a demo and has not been validated as equivalent; the time also depends on the device and the interaction. A single result does not diagnose fatigue or prove fitness."
   },
   "resistanceMinutes": {
     "label": "Resistance training",

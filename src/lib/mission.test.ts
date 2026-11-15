@@ -46,14 +46,16 @@ describe('perda óssea estimada (M5)', () => {
     expect(estimate.sourceUrl).toContain('nasa.gov');
   });
 
-  it('avisa que não se sabe o ritmo depois de 6 meses', () => {
-    expect(estimateBoneLoss(200, { station: 200 }, rules)!.text).toContain('ainda não sabe se a perda continua');
-    expect(estimateBoneLoss(60, { station: 60 }, rules)!.text).not.toContain('ainda não sabe');
+  it('explicita a extrapolação antes de 4 e depois de 6 meses', () => {
+    expect(estimateBoneLoss(10, { transit: 10 }, rules)!.text).toContain('missão curta não foi validado');
+    expect(estimateBoneLoss(200, { station: 200 }, rules)!.text).toContain('extrapolação linear não foi validada');
+    expect(estimateBoneLoss(150, { station: 150 }, rules)!.text).not.toContain('extrapolação');
+    expect(estimateBoneLoss(150, { station: 150 }, rules)!.text).toContain('Não mede nem prevê');
   });
 
   it('dias em gravidade parcial não entram na conta e são explicados', () => {
     const estimate = estimateBoneLoss(200, { transit: 180, mars: 20 }, rules)!;
-    expect(estimate.text).toContain('depois de 180 dias sem gravidade');
+    expect(estimate.text).toContain('para 180 dias em microgravidade');
     expect(estimate.text).toContain('20 dias foram em gravidade parcial');
   });
 });
@@ -64,7 +66,8 @@ describe('radiação acumulada (M6)', () => {
   it('soma as doses do dia e passa para mSv a partir de 1.000 µSv', () => {
     const total = radiationTotal([day(400), day(420), day(430)], 3, rules)!;
     expect(total.text).toContain('1,3 mSv');
-    expect(total.text).toContain('3 dias com leitura');
+    expect(total.text).toContain('3 dias com valor informado');
+    expect(total.text).toContain('não está conectado a um dosímetro');
     expect(total.text).toContain('não limite');
     expect(total.text).not.toContain('sem leitura');
   });
@@ -72,7 +75,16 @@ describe('radiação acumulada (M6)', () => {
   it('avisa quando há dias sem leitura', () => {
     const total = radiationTotal([day(400), day()], 5, rules)!;
     expect(total.text).toContain('400 µSv');
-    expect(total.text).toContain('4 dias sem leitura não entram');
+    expect(total.text).toContain('4 dias sem leitura válida não entram');
+    expect(total.text).toContain('total registrado está incompleto');
+    expect(total.text).not.toContain('total real é maior');
+  });
+
+  it('ignora doses negativas ou não finitas sem tratar zero como ausência', () => {
+    const total = radiationTotal([day(-10), day(NaN), day(Infinity), day(0)], 4, rules)!;
+    expect(total.text).toContain('0 µSv');
+    expect(total.text).toContain('1 dia com valor informado');
+    expect(total.text).toContain('3 dias sem leitura válida');
   });
 
   it('sem nenhuma leitura não mostra nada', () => {
@@ -96,6 +108,14 @@ describe('metas semanais (M9)', () => {
 });
 
 describe('readaptação à gravidade (M11)', () => {
+  it('o aviso usa a janela configurada, inclui o dia e não inventa evento após o retorno', () => {
+    const profile = MISSION_PROFILES.station;
+    const window = rules.context!.readaptation!.noticeDaysBefore;
+    expect(nextGravityChange(profile, 173)!.inDays).toBeGreaterThan(window);
+    expect(nextGravityChange(profile, 174)!.inDays).toBe(window);
+    expect(nextGravityChange(profile, 181)!.inDays).toBe(0);
+    expect(nextGravityChange(profile, 182)).toBeUndefined();
+  });
   it('acha o próximo pouso ou a volta à Terra', () => {
     expect(nextGravityChange(MISSION_PROFILES.mars, 60)).toEqual({ labelKey: 'common:mission.gravityChange.marsLanding', day: 181, inDays: 121 });
     expect(nextGravityChange(MISSION_PROFILES.mars, 181)).toEqual({ labelKey: 'common:mission.gravityChange.marsLanding', day: 181, inDays: 0 });
@@ -116,7 +136,7 @@ describe('origem do dado (M10)', () => {
 describe('contexto da fase 11 em inglês', () => {
   it('perda óssea, radiação e origem do dado seguem o idioma escolhido', async () => {
     await i18n.changeLanguage('en');
-    expect(estimateBoneLoss(60, { station: 60 }, rules)!.text).toContain('after 60 days without gravity');
+    expect(estimateBoneLoss(60, { station: 60 }, rules)!.text).toContain('for 60 days in microgravity');
     expect(estimateBoneLoss(200, { transit: 180, mars: 20 }, rules)!.text).toContain('20 days were in partial gravity');
     const day = { id: 'x', crewId: 'c1', date: '2026-01-01', missionDay: 1, values: { radiationDose: 1300 }, createdAt: '' };
     expect(radiationTotal([day], 1, rules)!.text).toContain('1.3 mSv');

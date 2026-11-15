@@ -138,7 +138,7 @@
     "wrongPinRemaining_other": "PIN incorreto. Restam {{count}} tentativas antes de uma pausa de 30 segundos.",
     "retryIn": "Tente de novo em {{seconds}} s.",
     "demoPins": "PINs da demonstração",
-    "security": "Os dados ficam cifrados neste aparelho e só abrem com o PIN. A tela bloqueia sozinha depois de 5 minutos sem uso. Num produto real, a entrada seria a do sistema da agência."
+    "security": "Os valores dos check-ins ficam cifrados e abrem com o PIN; o cadastro e o plano de medicação ficam sem criptografia. A tela bloqueia sozinha depois de 5 minutos sem uso. Num produto real, a entrada seria a do sistema da agência."
   },
   "mission": {
     "title": "Missão e rotina",
@@ -316,7 +316,7 @@
     "sections": {
       "stored": {
         "title": "O que fica neste navegador",
-        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, valores e sintomas registrados no check-in, anotações do oficial médico, mensagens digitadas, registro de quem abriu os dados, pedidos de exclusão e preferências. Os dados de saúde ficam cifrados e só abrem com o PIN. Alertas, correlações e linha de base são calculados a partir dos registros."
+        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros."
       },
       "purpose": {
         "title": "Para quê",
@@ -337,6 +337,18 @@
       "rights": {
         "title": "Seus direitos",
         "text": "O art. 18 da LGPD prevê direitos como acesso, correção e, nas hipóteses legais, eliminação. A tela Seus dados oferece cópia JSON e o registro de um pedido de exclusão, que fica para a equipe avaliar: o tripulante não apaga o próprio histórico de saúde. Não há promessa de atendimento remoto nem de conformidade integral com a LGPD."
+      },
+      "medication": {
+        "title": "Medicação e limites da proteção",
+        "text": "O plano de medicação contém nomes e horários previstos. Se vinculado a uma pessoa real, é dado de saúde sensível. Neste protótipo, esse plano fica no cadastro sem criptografia, assim como os dados do perfil e a lista de indicadores. Quem acessa o armazenamento do navegador pode lê-los sem PIN. As marcações diárias de medicação tomada, estresse, carga de trabalho e tempos de exercício ficam cifradas com os demais valores do check-in. Use somente dados fictícios."
+      },
+      "missionContext": {
+        "title": "Contexto calculado da missão",
+        "text": "O perfil e o ambiente da missão ficam nas preferências compartilhadas do aparelho, sem criptografia. A estimativa óssea e a soma das doses registradas de radiação são calculadas na tela, sem criar uma nova medição. A cópia JSON inclui as doses diárias registradas, mas não essas contas nem as preferências compartilhadas da missão. Os dados da demonstração são simulados."
+      },
+      "reactionAndSource": {
+        "title": "Teste de reação e origem declarada",
+        "text": "O check-in pode guardar a média de reação em milissegundos, modo curto ou completo, conclusão, duração, quantidade de respostas válidas e antecipações. Esses dados e a origem declarada dos valores ficam cifrados junto do check-in e aparecem legíveis na cópia JSON. Não guardamos cada toque, gravações ou identificação de aparelhos. Selecionar sensor vestível ou dosímetro apenas informa de onde você copiou o número; o app não lê aparelhos. Metas semanais e avisos de readaptação são calculados na tela, sem diagnóstico."
       }
     }
   },
@@ -344,9 +356,9 @@
     "eyebrow": "Privacidade · {{name}}",
     "title": "Seus dados",
     "intro": "As ações abaixo valem só para os seus dados, do perfil com que você entrou.",
-    "encryption": "Seus dados ficam cifrados com uma chave só sua, que abre com o seu PIN e com o do oficial médico. O PIN de um colega não abre os seus dados. Limite do protótipo: o PIN curto pode ser descoberto por quem copiar o banco.",
+    "encryption": "Os valores dos check-ins, as anotações e o texto das mensagens ficam cifrados com uma chave por tripulante, aberta pelo seu PIN e pelo do oficial médico. O cadastro e o plano de medicação ficam sem criptografia. Limite do protótipo: o PIN curto pode ser descoberto por quem copiar o banco.",
     "actions": "Cópia e pedido de exclusão",
-    "copyIncludes": "A cópia inclui o perfil, os check-ins, as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. É uma cópia para consulta, sem importação nem portabilidade regulamentada.",
+    "copyIncludes": "A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho, exercício, resultado e detalhes do teste de reação e origem declarada, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.",
     "export": "Exportar meus dados em JSON",
     "request": "Registrar pedido de exclusão",
     "requestRecorded": "Pedido registrado localmente",
@@ -379,7 +391,7 @@
     "messages": "Mensagens para mostrar à equipe",
     "none": "Nenhuma mensagem salva neste perfil.",
     "local": "Salva localmente — não enviada",
-    "export": "Exportar ou excluir estas mensagens em Seus dados →"
+    "export": "Exportar dados ou registrar pedido de exclusão em Seus dados →"
   },
   "disclaimer": {
     "lead": "Protótipo, não é dispositivo médico.",
@@ -391,15 +403,16 @@
     "dayCount_one": "{{count}} dia",
     "dayCount_other": "{{count}} dias",
     "boneLoss": {
-      "estimate": "Estimativa, não medida: depois de {{days}} sem gravidade, a perda nos ossos que sustentam peso fica em torno de {{min}}% a {{max}}%. A conta usa a média da NASA ({{rateMin}}% a {{rateMax}}% ao mês, em missões de {{monthsMin}} a {{monthsMax}} meses), um valor de grupo e não o seu.",
-      "beyondStudied": "Depois de {{months}} meses, a NASA ainda não sabe se a perda continua no mesmo ritmo.",
+      "estimate": "Estimativa, não medida: para {{days}} em microgravidade, a conta ilustrativa fica em torno de {{min}}% a {{max}}%. Ela multiplica pelo tempo uma média publicada pela NASA para ossos que sustentam peso ({{rateMin}}% a {{rateMax}}% ao mês, em missões de {{monthsMin}} a {{monthsMax}} meses). Não mede nem prevê a sua perda óssea; exercício, alimentação e diferenças individuais influenciam o resultado.",
+      "beyondStudied": "Depois de {{months}} meses, não se deve supor que a perda continua no mesmo ritmo; a extrapolação linear não foi validada.",
       "partial_one": "{{count}} dia foi em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esse dia não entra na conta.",
-      "partial_other": "{{count}} dias foram em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esses dias não entram na conta."
+      "partial_other": "{{count}} dias foram em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esses dias não entram na conta.",
+      "shortPeriod": "Este período é menor que os {{monthsMin}} a {{monthsMax}} meses citados na fonte: extrapolar a média para uma missão curta não foi validado."
     },
     "radiation": {
-      "total": "Dose acumulada registrada na missão: {{dose}}, somando {{days}} com leitura do dosímetro.",
-      "missing_one": "{{count}} dia sem leitura não entra na soma, então o total real é maior.",
-      "missing_other": "{{count}} dias sem leitura não entram na soma, então o total real é maior.",
+      "total": "Dose acumulada registrada na missão: {{dose}}, somando {{days}} com valor informado. Os dados da demonstração são simulados; o app não está conectado a um dosímetro.",
+      "missing_one": "{{count}} dia sem leitura válida não entra na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.",
+      "missing_other": "{{count}} dias sem leitura válida não entram na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.",
       "notLimit": "É contexto, não limite: o app não avalia limites de dose da carreira nem eventos de radiação intensa."
     }
   },

@@ -14,6 +14,7 @@ export function SourcePicker({ name, options, value, onChange }: Props) {
   return (
     <fieldset className="options list">
       <legend className="small muted">{i18n.t('checkin:sourceQuestion')}</legend>
+      <p className="small muted">{i18n.t('checkin:sourceNote')}</p>
       {options.map((source) => (
         <label key={source} className="option">
           <input type="radio" name={`${name}-source`} checked={value === source} onChange={() => onChange(source)} />

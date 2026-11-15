@@ -37,6 +37,13 @@ export function displayValue(
   }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
+  if (indicator === 'reactionTime') {
+    const details = values.reactionTest;
+    const mode = details
+      ? `${i18n.t(details.mode === 'short' ? 'indicators:display.reactionShort' : 'indicators:display.reactionFull')}${details.completed ? '' : i18n.t('indicators:display.reactionInterrupted')}`
+      : i18n.t('indicators:display.reactionUnknownMode');
+    return { text: `${formatNumber(value)} (${mode})`, unit: content.unit };
+  }
   const option = content.scale?.find((o) => o.value === value);
   if (option) {
     const unit = content.unitKey ? `(${formatNumber(value)} ${content.unit})` : '';

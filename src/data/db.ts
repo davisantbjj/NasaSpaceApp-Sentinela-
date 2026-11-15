@@ -9,8 +9,9 @@ export interface SettingsRow {
   value: Settings;
 }
 
-// O que é dado de saúde fica selado (campo `sealed`). Ficam abertos só os campos usados para
-// buscar e para a fila de sincronização: ids, tripulante, datas e, no pacote, a prioridade.
+// Valores dos registros, anotações e texto das mensagens ficam selados (campo `sealed`).
+// Metadados de busca/fila ficam abertos. Exceção de saúde: crew.medications (plano previsto)
+// permanece sem cifra no cadastro do protótipo; o aviso de privacidade documenta esse limite.
 export type StoredRecord = Omit<DailyRecord, 'values'> & { sealed: Sealed };
 // Da anotação do oficial médico ficam abertos só ids e horários; nível, indicador e texto vão selados.
 export type StoredReview = Pick<AlertReview, 'id' | 'crewId' | 'date' | 'seenAt' | 'syncedAt'> & { sealed: Sealed };

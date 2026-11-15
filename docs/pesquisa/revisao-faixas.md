@@ -1,6 +1,6 @@
 # Revisão documental das faixas
 
-Revisão de Larissa, em 14/11/2026. Esta é uma conferência de rastreabilidade, não uma validação médica. Os números existentes foram mantidos para preservar a demonstração; todas as regras continuam com `demo: true`.
+Revisão de Larissa, iniciada em 14/11/2026 e complementada em 15/11/2026 para M1–M3 e, após os commits da Talita até `097d2fd`, M5–M6. Esta é uma conferência de rastreabilidade, não uma validação médica. Os cortes dos indicadores foram mantidos para preservar a demonstração; todos continuam com `demo: true`.
 
 Cada indicador em `src/rules/rules.json` agora tem `rangeEvidence`: referências gerais, justificativa e limites de evidência separados para verde, amarelo e vermelho. `sourceUrl` continua sendo a fonte do risco e da explicação; não deve ser interpretado como validação de todos os cortes numéricos.
 
@@ -14,10 +14,70 @@ Cada indicador em `src/rules/rules.json` agora tem `rangeEvidence`: referências
 | Exercício | A NASA descreve média de aproximadamente duas horas diárias na ISS. Isso não valida 60–150, 30–180 ou limites universais; prescrição, intensidade e modalidade importam. | [NASA: Astronaut Exercise](https://www.nasa.gov/general/astronaut-exercise/) |
 | Humor | Escala própria 1–5, com cortes 4/3/2. A fonte explica o risco comportamental, sem validar a escala ou seus níveis. | [NASA: risco comportamental](https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/) |
 | Visão | Escala própria 0–2. Os níveis não diagnosticam SANS, e a fonte não valida esse autoteste. | [NASA: SANS](https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/) |
-| Radiação | Sem faixa geral. O algoritmo pessoal é demonstrativo e não representa limite de exposição; não cobre dose acumulada ou eventos agudos. Cerca de 150 µSv/dia no Radi-N2 descreve somente nêutrons na ISS. | [CSA: Radi-N2](https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp) |
+| Radiação | Sem faixa geral. O algoritmo pessoal é demonstrativo e não representa limite de exposição ou de dose acumulada, nem detecta eventos agudos. M6 soma as doses registradas apenas como contexto. Cerca de 150 µSv/dia no Radi-N2 descreve somente nêutrons na ISS. | [CSA: Radi-N2](https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp) |
 | Sintomas | A classificação fixa de cada sintoma é de demonstração. A página de riscos da NASA fornece contexto, sem validar uma regra de triagem para essa lista. | [NASA: riscos](https://www.nasa.gov/hrp/risks/) |
 
 Os parâmetros de linha de base (7 amostras), persistência (3 registros) e desvio (15%) também são decisões de demonstração, sem validação clínica. Registros não precisam ser dias consecutivos no calendário no motor atual. Ausência de alerta significa apenas ausência de gatilho nas regras disponíveis, não ausência de risco.
+
+## Complemento M1–M3: evidência e comportamento conferido
+
+Consulta às fontes em 15/11/2026. Escopo implementado: medicação, estresse, carga de trabalho e separação do exercício em aeróbico e resistido. `exerciseMinutes` continua sendo o **total** dos dois tempos; `resistanceMinutes` guarda a parcela resistida. Não somar novamente a parcela resistida ao total em análises ou exportações.
+
+| Indicador | Regra atual e limite de interpretação | Fontes |
+| --- | --- | --- |
+| Medicação (M1) | Autorrelato: todas as marcações tomadas não geram alerta; uma ou mais não tomadas geram amarelo, nunca vermelho por este indicador. Pular o passo deixa o valor ausente: não comprova adesão. A lista guarda uma marcação por medicamento, mesmo quando o horário diz “2 vezes ao dia”; não é um registro individual de cada dose. Não mede eficácia, estoque ou efeitos adversos. | [NASA/NTRS: Dose Tracker, Wotring e Smith, 2015](https://ntrs.nasa.gov/citations/20150014490); [Wotring, 2020, estudo original](https://pubmed.ncbi.nlm.nih.gov/31852573/) |
+| Estresse e carga (M2) | Escalas próprias de 1–5; 1–3 sem gatilho e 4–5 amarelo. Sem linha de base e sem vermelho para respostas válidas. A motivação vem do RST, mas a escala e esses cortes não foram validados pelas fontes como classificação psicológica ou urgência. | [NASA: PVT/RST](https://techport.nasa.gov/projects/23201); [Jones et al., 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/) |
+| Treino resistido (M3) | Sem faixa geral; apenas desvio para baixo do padrão pessoal, com os parâmetros demonstrativos existentes (7 amostras, mais de 15%, persistência de 3 registros com valor). Só chega ao amarelo; ausência de alerta não atesta treino suficiente. Minutos não representam carga, séries, intensidade nem o plano individual. | [NASA: exercício na ISS](https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/); [English et al., 2020, SPRINT](https://pmc.ncbi.nlm.nih.gov/articles/PMC7434884/) |
+
+### Por que estas fontes foram escolhidas
+
+- **Dose Tracker:** a apresentação NASA/NTRS descreve a coleta de uso de medicamentos e efeitos percebidos. O estudo publicado acompanhou seis participantes em voo e cinco em solo antes da interrupção antecipada. Sustenta registrar uso, mas não valida a regra “qualquer dose não tomada = amarelo”, nem a ausência de vermelho para todos os medicamentos. Referência: Wotring VE, *Dose Tracker Application for Collecting Medication Use Data from International Space Station Crew*, Aerospace Medicine and Human Performance, 2020;91(1):41–45, [PMID 31852573](https://pubmed.ncbi.nlm.nih.gov/31852573/).
+- **Estresse e carga:** o estudo observacional de Jones e colaboradores acompanhou 24 astronautas em missões de aproximadamente seis meses e encontrou associação entre sono curto, desempenho e estresse. Usou escalas visuais analógicas de autorrelato, diferentes das cinco opções do Sentinela. Associação não demonstra causalidade nem permite diagnóstico individual. Referência: *Sleep deficiency in spaceflight is associated with degraded neurobehavioral functions and elevated stress in astronauts on six-month missions aboard the International Space Station*, Sleep, 2022, [texto e métodos](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/).
+- **Exercício:** o SPRINT comparou nove participantes no programa experimental com 17 no grupo de comparação, em voos longos. Intensidade e volume foram considerados, com limitações de amostra e evolução do programa de comparação. Sustenta distinguir modalidades; não oferece um corte universal em minutos nem valida o algoritmo pessoal do app. Referência: English KL et al., *High intensity training during spaceflight: results from the NASA Sprint Study*, npj Microgravity, 2020;6:21, [doi:10.1038/s41526-020-00111-x](https://doi.org/10.1038/s41526-020-00111-x).
+
+## Complemento M5–M6 após a atualização da Talita
+
+### Estimativa óssea (M5)
+
+A [NASA: risco de alterações ósseas](https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/) apresenta perda **média de 1%–1,5% ao mês** em ossos que sustentam peso, em missões de **4–6 meses**. É uma descrição de grupo, com incerteza sobre a manutenção da taxa em missões mais longas. Não valida uma curva linear diária, uma previsão individual ou uma taxa para Lua/Marte.
+
+O app calcula `dias em estação/trânsito ÷ 30 × taxa mensal`. O mês de 30 dias, o ritmo constante e aplicar a média a uma pessoa são simplificações da demonstração. Dias em gravidade parcial são excluídos por falta de taxa validada, **não** porque tenham risco zero. Sem perfil, todos os dias são atribuídos ao ambiente atual; com perfil, usa-se o cronograma de referência, não um histórico de exposição medido. Trocar o perfil pode recalcular o passado ilustrativo. A conta não ajusta exercício, nutrição, tratamento, local do esqueleto ou recuperação entre fases.
+
+Foi mantida a fórmula e reforçado o texto: não mede nem prevê perda individual; há aviso de extrapolação abaixo de 4 e acima de 6 meses. `context.boneLoss.demo` passou a `true`, pois a conta do protótipo é ilustrativa mesmo que a taxa venha de fonte oficial. Não há faixa de alerta ou mudança de nível decorrente dela.
+
+Como estudo original complementar, [Gabel et al., Scientific Reports, 2022;12:9446](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/), doi:10.1038/s41598-022-13461-1, acompanhou 17 astronautas com tomografia de alta resolução de tíbia e rádio antes/depois do voo e durante a recuperação. Nove não recuperaram completamente a densidade total da tíbia em 12 meses. Isso reforça a variabilidade e a necessidade de medição direta; o estudo não valida a fórmula do Sentinela nem transforma a média NASA em prescrição ou diagnóstico.
+
+### Radiação acumulada (M6)
+
+A [NASA: risco de câncer induzido por radiação](https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/) sustenta acompanhar exposição e seus riscos, mas não valida os valores simulados, a qualidade do dado digitado ou um limite de carreira no app. O código soma valores finitos não negativos em µSv e apresenta mSv a partir de 1.000 µSv. Zero é valor válido; dados ausentes não recebem dose presumida.
+
+O resultado é **soma dos valores informados**, não medição direta da exposição total. Dias sem leitura tornam o registro incompleto: não é possível quantificar esses dias nem afirmar estritamente que a dose real seja maior. Não há conexão com dosímetro, correção por tipo de radiação ou comparação com limite ocupacional. Não misturar componentes distintos de dose nem aplicar os 150 µSv/dia de nêutrons do Radi-N2 como dose total universal. Os dados atuais são fictícios. Nenhum alerta é gerado pela soma.
+
+## Complemento após Talita `ec23abd`: M4, M7, M9, M10 e M11
+
+Consulta documental em 15/11/2026. Todas as melhorias M1–M11 agora têm implementação na base integrada; a revisão abaixo descreve os limites efetivos, sem aprovação clínica. Apresentação e material da entrega continuam para depois da conclusão do escopo.
+
+### Reação e associação com sono (M4/M7)
+
+A [NASA: PVT/RST](https://techport.nasa.gov/projects/23201) descreve um protocolo breve com características específicas de temporização e análise, validado em relação ao PVT de dez minutos. Ter três minutos de duração não torna o teste do app equivalente. Latência do navegador, tela, aparelho, método de resposta e interrupções podem afetar a média. Espera aleatória de 1–4 s, exclusão de respostas abaixo de 100 ms e mínimo de três respostas são escolhas desta implementação, não critérios clínicos aprovados.
+
+O estudo original de [Jones et al., Sleep, 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/) acompanhou 24 astronautas em missões de cerca de seis meses. Usou PVT breve e autorrelato, com sessões matutinas/noturnas a cada quatro dias. Encontrou associação entre sono de seis horas ou menos e pior desempenho; não valida o modo curto de 30 s, média isolada ou corte de 15% do Sentinela. O lembrete de quatro dias é uma opção inspirada no estudo, não uma prescrição para todos.
+
+No app, o alerta continua demonstrativo: sete amostras para formar linha de base e mais de 15% de lentidão por três registros válidos, sem faixa geral e sem vermelho. Apenas testes completos concluídos com modo registrado entram na série, linha de base, alertas e correlações. Modo curto, interrompido e legado sem identificação são preservados para consulta/exportação, sem comparação. Os números simulados antigos não recebem um protocolo retroativamente; a linha de base pode precisar ser formada novamente. Mesmo entre testes completos, usar o mesmo aparelho e forma de resposta reduz uma fonte de variação, sem validar o método.
+
+**M7 usa a correlação genérica:** ambos os indicadores precisam se afastar do esperado nos últimos três registros. Sono pode se afastar por faixa geral (atualmente abaixo de 7 ou acima de 9 h) ou desvio pessoal; não existe regra exclusiva `sono ≤ 6 h`. A reação precisa de linha de base pronta. Não é um coeficiente estatístico nem diagnóstico de fadiga; não altera nível, não afirma causa e os registros não precisam ser dias consecutivos. O texto da task foi ajustado para não prometer a regra específica que o código não implementa.
+
+### Metas semanais (M9)
+
+O código conta, nos últimos sete dias incluindo hoje, quantos registros de sono e exercício total caem nas faixas verdes gerais existentes. A meta de cinco dias em sete é escolha de demonstração, sem referência que valide esse número como prescrição. A faixa de sono é referência geral; os limites de exercício continuam demonstrativos. Dias sem dado não contam como êxito e não comprovam descumprimento de um plano médico. Não há meta independente de sessões resistidas. A conquista não certifica saúde, adesão ou aptidão; não modifica alertas. Ausência de registro e valor fora da faixa devem ser interpretados separadamente pela equipe.
+
+### Origem declarada (M10)
+
+`values.sources` indica onde a pessoa diz ter lido ou copiado o valor: `wearable` ou `dosimeter`. `manual`/ausente significa digitado; campos antigos não permitem inferir retrospectivamente um aparelho. Todos os valores continuam inseridos manualmente; não há API, pareamento, identificação do aparelho, dado bruto ou verificação de autenticidade. Não tratar a etiqueta como garantia de precisão. A privacidade e a exportação foram atualizadas sem anunciar leitura automática.
+
+### Readaptação (M11)
+
+O [brief NASA sobre intolerância ortostática](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-019-orthostatic-intolerance.pdf) sustenta orientar sobre dificuldades ao voltar à gravidade. O app destaca a nota nos sete dias anteriores e no dia de um pouso previsto ou retorno à Terra; esse intervalo é escolha de interface, não limiar clínico. Usa fases planejadas, não detecção de pouso ou sintoma. Após a data, não garante acompanhamento: pode deixar de haver próxima mudança. Não mede pressão ao levantar, não diagnostica intolerância nem define tratamento; não muda níveis. Dias em Lua/Marte são contexto de missão, sem extrapolar incidência humana observada no retorno à Terra.
 
 ## O que ainda depende da equipe
 

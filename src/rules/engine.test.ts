@@ -207,12 +207,29 @@ describe('evaluateRecord', () => {
   });
 
   it('tempo de reação: sem faixa geral, só ficar mais lento que o padrão gera amarelo', () => {
-    expect(evaluateLast([{ reactionTime: 900 }])).toEqual([]);
-    const normal = repeat({ reactionTime: 300 }, 7);
-    const slower = evaluateLast([...normal, ...repeat({ reactionTime: 360 }, 3)]);
+    const reactionTest = { mode: 'full' as const, completed: true, elapsedSeconds: 180, validResponses: 30, anticipations: 0 };
+    expect(evaluateLast([{ reactionTime: 900, reactionTest }])).toEqual([]);
+    const normal = repeat({ reactionTime: 300, reactionTest }, 7);
+    const slower = evaluateLast([...normal, ...repeat({ reactionTime: 360, reactionTest }, 3)]);
     expect(slower.map((a) => [a.indicator, a.level, a.region])).toEqual([['reactionTime', 'yellow', 'mind']]);
     // Mais rápido que o padrão não é risco.
-    expect(evaluateLast([...normal, ...repeat({ reactionTime: 240 }, 3)])).toEqual([]);
+    expect(evaluateLast([...normal, ...repeat({ reactionTime: 240, reactionTest }, 3)])).toEqual([]);
+    for (const details of [undefined, { ...reactionTest, mode: 'short' as const }, { ...reactionTest, completed: false }]) {
+      const history = [...normal, ...repeat({ reactionTime: 900, reactionTest: details }, 3)];
+      expect(evaluateLast(history)).toEqual([]);
+      expect(findBaseline(computeBaselines('c1', records(history), rules), 'reactionTime')?.mean).toBe(300);
+    }
+  });
+
+  it('sono e reação usam a associação genérica, sem corte exclusivo de 6 h e sem modo curto', () => {
+    const reactionTest = { mode: 'full' as const, completed: true, elapsedSeconds: 180, validResponses: 30, anticipations: 0 };
+    const normal = repeat({ sleepHours: 8, reactionTime: 300, reactionTest }, 7);
+    const changed = repeat({ sleepHours: 6.5, reactionTime: 360, reactionTest }, 3);
+    const history = records([...normal, ...changed]);
+    const baselines = computeBaselines('c1', history, rules);
+    expect(findCorrelations(history, baselines, rules).some(c => c.indicators.includes('reactionTime'))).toBe(true);
+    const short = records([...normal, ...changed.map(v => ({ ...v, reactionTest: { ...reactionTest, mode: 'short' as const } }))]);
+    expect(findCorrelations(short, baselines, rules).some(c => c.indicators.includes('reactionTime'))).toBe(false);
   });
 
   it('medicação: alerta só quando uma dose prevista não foi tomada', () => {

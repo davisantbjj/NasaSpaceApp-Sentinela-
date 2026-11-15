@@ -128,7 +128,7 @@
       "red": "Notify the commander and onboard medical officer to review the work schedule."
     },
     "exerciseMinutes": {
-      "whyItMatters": "Without gravity, bones lose 1% to 1.5% of their density per month and muscles weaken. Exercise is the main protection.",
+      "whyItMatters": "Microgravity affects bones and muscles. NASA reports an average loss of 1% to 1.5% per month in weight-bearing bones in 4- to 6-month missions; this is not an individual prediction. Exercise is part of the mission countermeasures.",
       "yellow": "Record the type of exercise and make up the session according to your individual plan.",
       "red": "Talk with the onboard medical officer before resuming or changing your exercise plan."
     },
@@ -153,7 +153,7 @@
       "red": "Notify the onboard medical officer now."
     },
     "reactionTime": {
-      "whyItMatters": "In the Reaction Self Test used on the station, a reaction slower than the person's own usual is a sign of fatigue. In a study of 24 astronauts, sleeping 6 hours or less came with slower reactions.",
+      "whyItMatters": "A study of 24 astronauts found an association between sleeping 6 hours or less and slower reactions. This app's test is a demo, not equivalent to the validated Reaction Self Test protocol, and does not diagnose fatigue.",
       "yellow": "Prioritize your next sleep period and retake the test tomorrow. If it stays slower, talk with the medical officer about fatigue countermeasures.",
       "red": "Tell the medical officer now."
     },

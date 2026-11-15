@@ -21,7 +21,7 @@ export function radiationTotal(records: DailyRecord[], missionDay: number, rules
   if (!context) return undefined;
   const doses = records
     .map((r) => r.values.radiationDose)
-    .filter((v): v is number => typeof v === 'number');
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0);
   if (doses.length === 0) return undefined;
 
   const total = doses.reduce((sum, dose) => sum + dose, 0);

@@ -14,7 +14,7 @@ import i18n from '../i18n';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, CrewMember, DailyValues, DataSource, IndicatorId } from '../types';
+import type { Alert, CrewMember, DailyValues, DataSource, IndicatorId, ReactionTestDetails } from '../types';
 import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
@@ -29,6 +29,7 @@ interface Draft {
   symptoms?: string[];
   medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
   reactionTime?: number; // resultado do teste de reação, em ms (M4)
+  reactionTest?: ReactionTestDetails;
   sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
@@ -55,7 +56,7 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     : member?.medications?.length ? [] : undefined;
   const scale: Draft['scale'] = {};
   for (const id of SCALE_IDS) scale[id] = values?.[id];
-  return { text, scale, symptoms: values?.symptoms, medicationTaken, reactionTime: values?.reactionTime, sources: { ...values?.sources } };
+  return { text, scale, symptoms: values?.symptoms, medicationTaken, reactionTime: values?.reactionTime, reactionTest: values?.reactionTest, sources: { ...values?.sources } };
 }
 
 // Quem acompanha treino resistido digita o exercício em dois campos (M3).
@@ -89,7 +90,10 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
     } else if (indicator === 'symptoms') {
       if (draft.symptoms !== undefined) values.symptoms = draft.symptoms;
     } else if (indicator === 'reactionTime') {
-      if (draft.reactionTime !== undefined) values.reactionTime = draft.reactionTime;
+      if (draft.reactionTime !== undefined) {
+        values.reactionTime = draft.reactionTime;
+        if (draft.reactionTest) values.reactionTest = draft.reactionTest;
+      }
     } else if (indicator === 'medication') {
       const taken = draft.medicationTaken;
       if (taken !== undefined && member.medications?.length) {
@@ -163,7 +167,7 @@ function OwnCheckin() {
   if (!member || steps.length === 0) return null;
 
   const values = toValues(steps, draft, member);
-  const filled = Object.keys(values).filter((key) => key !== 'sources').length;
+  const filled = Object.keys(values).filter((key) => key !== 'sources' && key !== 'reactionTest').length;
 
   const next = () => (index < steps.length - 1 ? setIndex(index + 1) : setStage('review'));
   const back = index > 0 ? () => setIndex(index - 1) : undefined;
@@ -186,6 +190,7 @@ function OwnCheckin() {
         symptoms: indicator === 'symptoms' ? undefined : d.symptoms,
         medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
         reactionTime: indicator === 'reactionTime' ? undefined : d.reactionTime,
+        reactionTest: indicator === 'reactionTime' ? undefined : d.reactionTest,
         sources: { ...d.sources, [indicator]: undefined },
       };
     });
@@ -331,7 +336,8 @@ function OwnCheckin() {
         {indicator === 'reactionTime' && (
           <ReactionTestStep
             value={draft.reactionTime}
-            onResult={(reactionTime) => setDraft((d) => ({ ...d, reactionTime }))}
+            details={draft.reactionTest}
+            onResult={(reactionTime, reactionTest) => setDraft((d) => ({ ...d, reactionTime, reactionTest }))}
           />
         )}
         {indicator === 'medication' && (

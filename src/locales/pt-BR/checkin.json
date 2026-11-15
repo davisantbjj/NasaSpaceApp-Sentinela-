@@ -38,17 +38,24 @@
   "partialExercise": "Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.",
   "sourceQuestion": "De onde veio o valor?",
   "reaction": {
-    "saved": "Resultado salvo hoje: {{value}} ms.",
+    "saved": "Resultado salvo hoje: {{value}} ms. {{details}}",
     "tooFew": "Poucas respostas válidas ({{valid}}). Refaça o teste ou pule o passo.",
-    "result": "Resultado: {{mean}} ms (média de {{valid}} respostas{{early}}).",
-    "early_one": "; {{count}} antecipação fora da conta",
-    "early_other": "; {{count}} antecipações fora da conta",
+    "result": "Resultado: {{mean}} ms ({{mode}}{{interrupted}}; {{valid}} respostas válidas).",
     "tapNow": "● Toque agora!",
     "wait": "Aguarde o sinal…",
     "secondsLeft": "Faltam {{seconds}} s",
     "stop": "Encerrar agora",
     "retake": "Refazer o teste (3 min)",
     "start": "Começar o teste (3 min)",
-    "short": "Versão curta (30 s, para demonstração)"
-  }
+    "short": "Versão curta (30 s, para demonstração)",
+    "disclaimer": "Teste demonstrativo, sem validação equivalente ao Reaction Self Test da NASA. Só testes completos de 3 minutos concluídos entram na comparação pessoal; o modo curto e testes interrompidos ficam para consulta.",
+    "savedMode": "{{mode}}{{interrupted}}.",
+    "unknownMode": "Modo não registrado; fora da comparação pessoal.",
+    "modeShort": "Modo curto",
+    "modeFull": "Modo completo",
+    "modeShortLower": "modo curto",
+    "modeFullLower": "modo completo",
+    "interrupted": ", interrompido"
+  },
+  "sourceNote": "Origem declarada por você. O app não se conecta ao aparelho; copie o valor e informe a origem."
 }

@@ -6,7 +6,11 @@
     "noSymptoms": "Nenhum",
     "noMedication": "Nenhuma prevista",
     "allDosesTaken": "Todas tomadas",
-    "doseNotTaken": "Não tomada: {{doses}}"
+    "doseNotTaken": "Não tomada: {{doses}}",
+    "reactionShort": "curto",
+    "reactionFull": "completo",
+    "reactionInterrupted": ", interrompido",
+    "reactionUnknownMode": "modo não registrado"
   },
   "bloodPressure": {
     "label": "Pressão arterial",
@@ -72,7 +76,7 @@
   "exerciseMinutes": {
     "label": "Exercício",
     "howToMeasure": "Digite os minutos de exercício aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência, como agachamento) feitos hoje, com o equipamento da sua nave. O app soma os dois. Use 0 se não fez um deles.",
-    "whyMeasure": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção, e o treino resistido é o que mais protege os ossos."
+    "whyMeasure": "A microgravidade afeta ossos e músculos. A NASA relata perda média de 1% a 1,5% ao mês nos ossos que sustentam peso em missões de 4 a 6 meses; isso não prevê a sua perda. Exercício aeróbico e resistido fazem parte das contramedidas, conforme o plano individual."
   },
   "radiationDose": {
     "label": "Radiação",
@@ -133,7 +137,7 @@
   "reactionTime": {
     "label": "Tempo de reação",
     "howToMeasure": "Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.",
-    "whyMeasure": "Na estação, os astronautas fazem um teste parecido, o Reaction Self Test, para perceber a fadiga cedo. Reação mais lenta que o seu padrão é um sinal para descansar."
+    "whyMeasure": "O Reaction Self Test da NASA acompanha atenção e desempenho. Este teste é demonstrativo e não foi validado como equivalente; o tempo também depende do aparelho e da interação. Um resultado isolado não diagnostica fadiga nem comprova aptidão."
   },
   "resistanceMinutes": {
     "label": "Treino resistido",

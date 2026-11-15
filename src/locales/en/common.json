@@ -138,7 +138,7 @@
     "wrongPinRemaining_other": "Incorrect PIN. {{count}} attempts remain before a 30-second pause.",
     "retryIn": "Try again in {{seconds}} s.",
     "demoPins": "Demo PINs",
-    "security": "Data is encrypted on this device and can only be opened with the PIN. The screen locks automatically after 5 minutes of inactivity. A real product would use the agency's sign-in system."
+    "security": "Check-in values are encrypted and open with the PIN; the profile and the medication plan are not encrypted. The screen locks by itself after 5 minutes without use. In a real product, sign-in would use the agency's system."
   },
   "mission": {
     "title": "Mission and routine",
@@ -316,7 +316,7 @@
     "sections": {
       "stored": {
         "title": "What stays in this browser",
-        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, check-in values and symptoms, medical officer notes, typed messages, data access log, deletion requests, and preferences. Health data is encrypted and can only be opened with the PIN. Alerts, correlations, and baseline are calculated from the records."
+        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records."
       },
       "purpose": {
         "title": "Purpose",
@@ -337,6 +337,18 @@
       "rights": {
         "title": "Your rights",
         "text": "Article 18 of the LGPD provides rights such as access, correction, and, where legally applicable, deletion. The Your data screen offers a JSON copy and a way to register a deletion request for the team to review: crew members cannot delete their own health history. This app does not promise remote care or full LGPD compliance."
+      },
+      "medication": {
+        "title": "Medication and protection limits",
+        "text": "The medication plan contains names and scheduled times. If linked to a real person, it is sensitive health data. In this prototype, the plan stays in the profile without encryption, as do the profile data and the indicator list. Anyone with access to the browser storage can read them without a PIN. Daily marks for medication taken, stress, workload, and exercise times are encrypted with the other check-in values. Use only fictional data."
+      },
+      "missionContext": {
+        "title": "Calculated mission context",
+        "text": "The mission profile and environment stay in the device's shared preferences, without encryption. The bone estimate and the sum of recorded radiation doses are calculated on screen, without creating a new measurement. The JSON copy includes the recorded daily doses, but not these calculations or the shared mission preferences. The demo data is simulated."
+      },
+      "reactionAndSource": {
+        "title": "Reaction test and declared source",
+        "text": "The check-in can store the average reaction time in milliseconds, short or full mode, completion, duration, number of valid responses, and anticipations. This data and the declared source of values are encrypted with the check-in and appear readable in the JSON copy. We do not store each tap, recordings, or device identification. Selecting wearable sensor or dosimeter only states where you copied the number from; the app does not read devices. Weekly goals and readaptation notices are calculated on screen, without diagnosis."
       }
     }
   },
@@ -344,9 +356,9 @@
     "eyebrow": "Privacy · {{name}}",
     "title": "Your data",
     "intro": "The actions below apply only to your data, for the profile you used to sign in.",
-    "encryption": "Your data is encrypted with a key that belongs to you and can be opened with your PIN and the medical officer's PIN. A crewmate's PIN cannot open your data. Prototype limitation: someone who copies the database may discover the short PIN.",
+    "encryption": "Check-in values, notes, and message text are encrypted with one key per crew member, opened by your PIN and by the medical officer's. The profile and the medication plan are not encrypted. Prototype limit: the short PIN can be guessed by anyone who copies the database.",
     "actions": "Copy and deletion request",
-    "copyIncludes": "The copy includes your profile, check-ins, medical officer notes, messages, access log, and deletion request. It does not include other crew members' data. This copy is for review only; it does not support import or regulated portability.",
+    "copyIncludes": "The copy includes the profile and the medication plan, the check-ins (including medication taken, stress, workload, exercise, reaction test result and details, and declared source, when recorded), the medical officer's notes, messages, the access log, and the deletion request. It does not include other crew members' data. The downloaded JSON file is readable, not encrypted; store it carefully. It is a copy for reference, without import or regulated portability.",
     "export": "Export my data as JSON",
     "request": "Register deletion request",
     "requestRecorded": "Request recorded locally",
@@ -379,7 +391,7 @@
     "messages": "Messages to show the team",
     "none": "No messages saved for this profile.",
     "local": "Saved locally — not sent",
-    "export": "Export or delete these messages in Your data →"
+    "export": "Export data or record a deletion request in Your data →"
   },
   "disclaimer": {
     "lead": "Prototype, not a medical device.",
@@ -391,15 +403,16 @@
     "dayCount_one": "{{count}} day",
     "dayCount_other": "{{count}} days",
     "boneLoss": {
-      "estimate": "Estimate, not a measurement: after {{days}} without gravity, loss in weight-bearing bones is around {{min}}% to {{max}}%. The calculation uses the NASA average ({{rateMin}}% to {{rateMax}}% per month, in missions of {{monthsMin}} to {{monthsMax}} months), a group value, not yours.",
-      "beyondStudied": "After {{months}} months, NASA does not yet know whether the loss continues at the same rate.",
+      "estimate": "Estimate, not a measurement: for {{days}} in microgravity, the illustrative calculation is around {{min}}% to {{max}}%. It multiplies by time an average published by NASA for weight-bearing bones ({{rateMin}}% to {{rateMax}}% per month, in missions of {{monthsMin}} to {{monthsMax}} months). It does not measure or predict your bone loss; exercise, diet, and individual differences affect the result.",
+      "beyondStudied": "After {{months}} months, do not assume the loss continues at the same rate; linear extrapolation has not been validated.",
       "partial_one": "{{count}} day was in partial gravity (Moon or Mars), where the loss rate is unknown; that day is not counted.",
-      "partial_other": "{{count}} days were in partial gravity (Moon or Mars), where the loss rate is unknown; those days are not counted."
+      "partial_other": "{{count}} days were in partial gravity (Moon or Mars), where the loss rate is unknown; those days are not counted.",
+      "shortPeriod": "This period is shorter than the {{monthsMin}} to {{monthsMax}} months cited in the source: extrapolating the average to a short mission has not been validated."
     },
     "radiation": {
-      "total": "Accumulated dose recorded during the mission: {{dose}}, adding up {{days}} with a dosimeter reading.",
-      "missing_one": "{{count}} day without a reading is not in the sum, so the real total is higher.",
-      "missing_other": "{{count}} days without a reading are not in the sum, so the real total is higher.",
+      "total": "Accumulated dose recorded during the mission: {{dose}}, adding up {{days}} with an entered value. The demo data is simulated; the app is not connected to a dosimeter.",
+      "missing_one": "{{count}} day without a valid reading is not in the sum. The recorded total is incomplete; the exposure on that day cannot be determined.",
+      "missing_other": "{{count}} days without a valid reading are not in the sum. The recorded total is incomplete; the exposure on those days cannot be determined.",
       "notLimit": "This is context, not a limit: the app does not assess career dose limits or intense radiation events."
     }
   },
