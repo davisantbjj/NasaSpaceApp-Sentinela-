@@ -53,9 +53,6 @@
     "excludedDays_other": "{{count}} excluded"
   },
   "dashboard": {
-    "modelPicker": "Illustrative body model",
-    "model": { "female": "Female", "male": "Male" },
-    "modelNote": "Illustrative model; this choice does not change the profile or indicators.",
     "dayLabel": "Day",
     "ofDays": "of {{total}}",
     "environmentLabel": "Environment",

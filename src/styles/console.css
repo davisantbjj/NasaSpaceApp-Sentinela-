@@ -69,11 +69,6 @@
 .console-body { grid-area: body; display: grid; gap: 12px; }
 .console-figure { position: relative; display: grid; place-items: center; margin-top: 6px; padding: 18px 12px; border: 1px solid var(--ring); border-radius: var(--radius-lg); background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 7%, var(--surface)), var(--surface) 62%); }
 .console-figure .bodymap { width: min(100%, 380px); max-width: none; box-shadow: none; border-radius: 0; background: transparent; }
-.body-model-picker { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px; border: 1px solid var(--ring); border-radius: 999px; background: var(--bg); }
-.body-model-picker button { min-height: 40px; display: inline-flex; align-items: center; gap: 8px; padding: 6px 15px; border: 1px solid transparent; border-radius: 999px; color: var(--text-muted); background: transparent; cursor: pointer; }
-.body-model-picker button[aria-pressed='true'] { color: var(--text); border-color: color-mix(in srgb, var(--accent) 48%, var(--ring)); background: color-mix(in srgb, var(--accent) 13%, var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent); }
-.body-model-picker button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.body-model-note { text-align: center; font-size: 0.75rem; color: var(--text-faint); }
 .console-figure-note { font-size: 0.8125rem; color: var(--text-faint); }
 .console-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; padding-top: 4px; }
 .console-legend .level-badge { font-size: 0.75rem; }

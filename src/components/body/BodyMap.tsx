@@ -92,8 +92,8 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
       <image href={imageSrc(image.file)} width={image.width} height={image.height} aria-hidden="true" />
       <g className="bodymap-scanner" clipPath={`url(#${scannerId})`} aria-hidden="true"
         style={{ '--scan-height': `${viewHeight}px` } as CSSProperties}>
-        <rect x={viewX} y={viewY} width={viewWidth} height={viewHeight * 0.075} />
         <line x1={viewX} x2={viewX + viewWidth} y1={viewY} y2={viewY} />
+        <line className="bodymap-scanner-trail" x1={viewX} x2={viewX + viewWidth} y1={viewY + 5} y2={viewY + 5} />
       </g>
       {regions.map((def) => {
         const { id, shapes, marker, padHit, outline } = def;
