@@ -32,7 +32,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [ ] **D4. Predição:** projeção linear simples na tela de tendências, com o rótulo "projeção, não previsão", ou o app só mede e compara? Recomendação (14/11): só medir e comparar, como já diz `docs/apresentacao.md`.
 - [ ] **D5. Dados novos da fase 12:** aprovar massa corporal, alimentação e água, CO2 da cabine e qualidade do sono (N11 a N14)?
 - [ ] **D6. Cadência:** a frequência por indicador proposta em N18 serve, ou mantemos tudo diário na demonstração?
-- [ ] **D7. Mudança de método:** grade de Amsler (N15) e exercício por sessão (N16) entram no hackathon ou ficam como trabalho futuro?
+- [x] **D7. Mudança de método:** grade de Amsler (N15) e exercício por sessão (N16) entram no hackathon como protótipos demonstrativos; a cadência detalhada segue N18.
 - [ ] **D8. Revisão das propostas:** quem revisa os limites marcados como proposta (massa corporal, cadência semanal e perguntas do bloco mensal)?
 - [ ] **Revisão das faixas** (vem da fase 2): as faixas verdes de pressão, frequência, glicemia, temperatura e sono vêm de `docs/pesquisa/`. Estas foram escolhidas para a demonstração e precisam de confirmação:
   - todas as faixas amarelas;
@@ -119,9 +119,9 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [ ] **N12.** Alimentação e água: refeições completas (0 a 3 ou mais) e água suficiente (sim ou não), sem calorias. Entra na migração v12 do Davi. Depende de D5. Esforço pequeno
 - [ ] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico. Entra na migração v12. Depende de D5. Esforço pequeno
 - [ ] **N21.** Atualizar "Como a NASA mede" em `docs/apresentacao.md` com o que a pesquisa de 15/11 trouxe e com o que a NASA não faz. Combinar com a Larissa, que tem a tarefa parecida dos aparelhos reais
-- [ ] **N16.** Exercício por sessão: tipo, minutos e frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
+- [x] **N16.** Exercício por sessão: tipo, minutos e frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
 - [ ] **N19.** Bloco mensal de sono e equipe, visível só para o próprio tripulante e para o oficial médico, com perguntas próprias marcadas como demonstração. Depende de D6. Esforço médio
-- [ ] **N15.** Visão com grade de Amsler, um olho de cada vez, três perguntas, com opção de pular e aviso de que não diagnostica SANS. Depende de D7. Esforço grande
+- [x] **N15.** Visão com grade de Amsler, um olho de cada vez, três perguntas, com opção de pular e aviso de que não diagnostica SANS. A cadência específica dos dias de missão fica em N18. Depende de D7. Esforço grande
 
 **Alarmes.** Usar a mesma função dos lembretes da Lorena.
 

@@ -54,6 +54,27 @@ export interface ReactionTestDetails {
   anticipations: number;
 }
 
+export interface AmslerEyeResult {
+  distortedLines: boolean;
+  missingAreas: boolean;
+  nearReadingWorse: boolean;
+}
+
+export interface AmslerVisionResult {
+  left?: AmslerEyeResult;
+  right?: AmslerEyeResult;
+}
+
+export type ExerciseSessionType = 'aerobic' | 'resistance' | 'both';
+export type ResistanceStatus = 'completed' | 'partial' | 'notDone';
+
+export interface ExerciseSession {
+  type: ExerciseSessionType;
+  durationMinutes: number;
+  averageHeartRate?: number;
+  resistanceStatus?: ResistanceStatus;
+}
+
 export interface DailyValues {
   bloodPressure?: { systolic: number; diastolic: number };
   heartRate?: number;
@@ -67,12 +88,14 @@ export interface DailyValues {
   reactionTest?: ReactionTestDetails; // protocolo e qualidade; registros antigos podem não ter
   exerciseMinutes?: number; // total do dia (aeróbico + resistido)
   resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
+  exerciseSession?: ExerciseSession; // N16; sessão registrada no dia
   radiationDose?: number;
   bodyMassKg?: number;
   mealsCompleted?: number; // preparado para N12: refeições completas no dia
   waterSufficient?: boolean; // preparado para N12: água suficiente no dia
   sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
   vision?: 0 | 1 | 2;
+  visionAmsler?: AmslerVisionResult; // N15; o resumo vision continua para histórico
   symptoms?: string[]; // ids de sintomas definidos em rules.json
   medication?: MedicationDose[]; // doses previstas no dia
   sources?: Partial<Record<IndicatorId, DataSource>>; // origem dos valores; ausente = digitado (M10)

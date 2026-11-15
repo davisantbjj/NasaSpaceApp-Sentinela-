@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
+import { AmslerStep } from '../components/checkin/AmslerStep';
+import { ExerciseSessionStep } from '../components/checkin/ExerciseSessionStep';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
 import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
 import { SourcePicker } from '../components/checkin/SourcePicker';
@@ -14,11 +16,11 @@ import i18n from '../i18n';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, CrewMember, DailyValues, DataSource, IndicatorId, ReactionTestDetails } from '../types';
+import type { Alert, AmslerVisionResult, CrewMember, DailyValues, DataSource, IndicatorId, ReactionTestDetails, ExerciseSession } from '../types';
 import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
-const SCALE_IDS = ['mood', 'stress', 'workload', 'vision'] as const;
+const SCALE_IDS = ['mood', 'stress', 'workload'] as const;
 type ScaleId = (typeof SCALE_IDS)[number];
 const isScale = (id: IndicatorId): id is ScaleId => (SCALE_IDS as readonly IndicatorId[]).includes(id);
 
@@ -30,6 +32,8 @@ interface Draft {
   medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
   reactionTime?: number; // resultado do teste de reação, em ms (M4)
   reactionTest?: ReactionTestDetails;
+  amsler?: AmslerVisionResult;
+  exerciseSession?: ExerciseSession;
   sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
@@ -56,7 +60,17 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     : member?.medications?.length ? [] : undefined;
   const scale: Draft['scale'] = {};
   for (const id of SCALE_IDS) scale[id] = values?.[id];
-  return { text, scale, symptoms: values?.symptoms, medicationTaken, reactionTime: values?.reactionTime, reactionTest: values?.reactionTest, sources: { ...values?.sources } };
+  return {
+    text,
+    scale,
+    amsler: values?.visionAmsler,
+    exerciseSession: values?.exerciseSession,
+    symptoms: values?.symptoms,
+    medicationTaken,
+    reactionTime: values?.reactionTime,
+    reactionTest: values?.reactionTest,
+    sources: { ...values?.sources },
+  };
 }
 
 // Quem acompanha treino resistido digita o exercício em dois campos (M3).
@@ -84,7 +98,22 @@ function fieldsFor(indicator: IndicatorId, draft: Draft, member: CrewMember): Nu
 function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): DailyValues {
   const values: DailyValues = {};
   for (const indicator of steps) {
-    if (isScale(indicator)) {
+    if (indicator === 'exerciseMinutes' && draft.exerciseSession) {
+      const session = draft.exerciseSession;
+      const resistanceDone = session.resistanceStatus !== 'notDone';
+      values.exerciseSession = session;
+      values.exerciseMinutes = session.durationMinutes;
+      values.resistanceMinutes = resistanceDone && (session.type === 'resistance' || session.type === 'both')
+        ? session.durationMinutes
+        : 0;
+    } else if (indicator === 'vision') {
+      if (draft.amsler) {
+        const eyes = [draft.amsler.left, draft.amsler.right].filter((eye): eye is NonNullable<typeof eye> => eye !== undefined);
+        const concerns = eyes.reduce((sum, eye) => sum + Object.values(eye).filter(Boolean).length, 0);
+        values.visionAmsler = draft.amsler;
+        values.vision = concerns >= 2 ? 2 : concerns > 0 ? 1 : 0;
+      }
+    } else if (isScale(indicator)) {
       const chosen = draft.scale[indicator];
       if (chosen !== undefined) Object.assign(values, { [indicator]: chosen });
     } else if (indicator === 'symptoms') {
@@ -191,6 +220,8 @@ function OwnCheckin() {
         medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
         reactionTime: indicator === 'reactionTime' ? undefined : d.reactionTime,
         reactionTest: indicator === 'reactionTime' ? undefined : d.reactionTest,
+        amsler: indicator === 'vision' ? undefined : d.amsler,
+        exerciseSession: indicator === 'exerciseMinutes' ? undefined : d.exerciseSession,
         sources: { ...d.sources, [indicator]: undefined },
       };
     });
@@ -311,7 +342,14 @@ function OwnCheckin() {
       >
         {content.input && (
           <>
-            <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
+            {indicator === 'exerciseMinutes' ? (
+              <ExerciseSessionStep
+                value={draft.exerciseSession}
+                onChange={(exerciseSession) => setDraft((d) => ({ ...d, exerciseSession }))}
+              />
+            ) : (
+              <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
+            )}
             {partialBp && <p className="small muted">{i18n.t('checkin:partialPressure')}</p>}
             {partialExercise && <p className="small muted">{i18n.t('checkin:partialExercise')}</p>}
             {content.sources && (
@@ -324,13 +362,19 @@ function OwnCheckin() {
             )}
           </>
         )}
-        {content.scale && (
+        {content.scale && indicator !== 'vision' && (
           <ScaleStep
             name={indicator}
             legend={content.label}
             options={content.scale}
             value={isScale(indicator) ? draft.scale[indicator] : undefined}
             onChange={(value) => setDraft((d) => ({ ...d, scale: { ...d.scale, [indicator]: value } }))}
+          />
+        )}
+        {indicator === 'vision' && (
+          <AmslerStep
+            value={draft.amsler}
+            onChange={(amsler) => setDraft((d) => ({ ...d, amsler }))}
           />
         )}
         {indicator === 'reactionTime' && (

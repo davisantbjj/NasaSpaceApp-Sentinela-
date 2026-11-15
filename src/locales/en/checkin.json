@@ -37,6 +37,31 @@
   "resistancePart": "({{value}} resistance)",
   "partialExercise": "Enter both times (use 0 if you skipped one), or skip the step.",
   "sourceQuestion": "Where did the value come from?",
+  "amsler": {
+    "instructions": "Cover one eye at a time and view the Amsler grid at your usual reading distance. Record only what you noticed.",
+    "eye": "Eye being tested",
+    "left": "Left eye",
+    "right": "Right eye",
+    "grid": "Amsler grid",
+    "questions": "Noticed changes",
+    "distorted": "Did any lines look bent or wavy?",
+    "missing": "Was any area or part of the grid missing?",
+    "near": "Did near reading seem worse?",
+    "disclaimer": "Demonstration self-test: it does not diagnose SANS or replace medical evaluation. You may skip this step."
+  },
+  "exerciseSession": {
+    "type": "Session type",
+    "aerobic": "Aerobic",
+    "resistance": "Resistance",
+    "both": "Aerobic and resistance",
+    "minutes": "Session duration",
+    "heartRate": "Average heart rate",
+    "resistanceStatus": "Resistance training",
+    "completed": "Completed",
+    "partial": "Partial",
+    "notDone": "Not done",
+    "disclaimer": "Record one session from today. The prototype stores type, duration, average aerobic heart rate, and resistance status; it does not assess performance."
+  },
   "reaction": {
     "saved": "Result saved today: {{value}} ms. {{details}}",
     "tooFew": "Too few valid responses ({{valid}}). Retake the test or skip the step.",

@@ -35,7 +35,7 @@ São os 16 valores de `IndicatorId`. A coluna "linha de base" diz se o valor tam
 | `resistanceMinutes` | min | número, 0 a 600 | sem faixa geral | sem faixa geral | sim, para baixo | ossos e músculos |
 | `radiationDose` | µSv | número, 0 a 100000 | sem faixa geral | sem faixa geral | sim, para cima | corpo inteiro |
 | `bodyMassKg` | kg | número, 20 a 300 | até 5% de perda | acima de 5%; vermelho acima de 10% | não | corpo inteiro |
-| `vision` | escala | 0 a 2 | 0 | 1 | não | olhos |
+| `vision` | resumo da Amsler | 0 a 2, derivado das respostas | 0 | 1 | não | olhos |
 | `symptoms` | lista | caixas de marcar | nenhum marcado | ver tabela de sintomas | não | corpo inteiro |
 | `medication` | lista | tomou ou não, por dose prevista | todas tomadas | dose esquecida | não | corpo inteiro |
 
@@ -61,12 +61,17 @@ interface DailyValues {
   reactionTest?: ReactionTestDetails;
   exerciseMinutes?: number;        // total do dia
   resistanceMinutes?: number;      // parte do total feita em treino resistido
+  exerciseSession?: ExerciseSession; // sessão do dia (N16)
   radiationDose?: number;
   bodyMassKg?: number;             // massa periódica, comparada ao início da missão
   mealsCompleted?: number;         // preparado para N12
   waterSufficient?: boolean;       // preparado para N12
   sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
-  vision?: 0 | 1 | 2;
+  vision?: 0 | 1 | 2;              // resumo derivado, para histórico/alertas
+  visionAmsler?: {                  // N15, um olho por vez
+    left?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
+    right?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
+  };
   symptoms?: string[];             // ids definidos em rules.json
   medication?: MedicationDose[];
   sources?: Partial<Record<IndicatorId, DataSource>>;
@@ -77,7 +82,7 @@ Detalhes que valem explicar:
 
 - Pressão é o único indicador com dois números. Cada um tem faixa e linha de base próprias, e o pior dos dois decide o nível.
 - Escalas de 1 a 5 são números, não texto. Os rótulos ("muito mal", "neutro") vivem nas traduções, e os símbolos em `indicators.ts`. Estresse e carga são invertidos em relação ao humor: 5 é ruim.
-- Exercício guarda o total do dia e, dentro dele, quantos minutos foram de treino resistido. `resistanceMinutes` nunca deve passar de `exerciseMinutes`.
+- Exercício guarda a sessão do dia (tipo, duração, frequência média do aeróbico e estado do resistido). Os totais `exerciseMinutes` e `resistanceMinutes` continuam derivados para histórico e regras antigas; a tela de missão compara o volume da semana com o plano demonstrativo e a linha de base.
 - Sintomas é uma lista de identificadores, nunca texto livre. Texto livre viraria dado clínico não estruturado e não poderia ser traduzido.
 
 ### Sintomas
@@ -137,6 +142,12 @@ interface ReactionTestDetails {
 ```
 
 O valor que entra no motor é só `reactionTime`, a média em milissegundos. O resto serve para julgar a qualidade: um teste interrompido ou com muitas antecipações não vale o mesmo que um completo. Registros antigos podem não ter esse objeto.
+
+### Visão e exercício da fase 3
+
+O passo de visão usa uma grade de Amsler demonstrativa, com o olho esquerdo e o direito registrados separadamente. Para cada olho, a pessoa responde sobre linhas tortas, áreas faltando e piora na leitura de perto. `vision` é apenas um resumo numérico derivado dessas respostas para manter gráficos e alertas legados; o autoteste não diagnostica SANS e pode ser pulado.
+
+O exercício é registrado como uma sessão por check-in em `exerciseSession`. A comparação semanal usa os últimos sete dias: o plano demonstrativo usa o mínimo da faixa verde em cinco dias, e a linha de base usa a média dos registros anteriores disponíveis. Esses números são contexto de demonstração, não prescrição.
 
 ### Origem do dado
 

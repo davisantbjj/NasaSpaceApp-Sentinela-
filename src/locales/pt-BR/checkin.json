@@ -37,6 +37,31 @@
   "resistancePart": "({{value}} de resistido)",
   "partialExercise": "Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.",
   "sourceQuestion": "De onde veio o valor?",
+  "amsler": {
+    "instructions": "Cubra um olho por vez e observe a grade de Amsler à distância habitual de leitura. Registre somente o que percebeu.",
+    "eye": "Olho em teste",
+    "left": "Olho esquerdo",
+    "right": "Olho direito",
+    "grid": "Grade de Amsler",
+    "questions": "Alterações percebidas",
+    "distorted": "As linhas pareceram tortas ou onduladas?",
+    "missing": "Faltou alguma área ou parte da grade?",
+    "near": "A leitura de perto pareceu pior?",
+    "disclaimer": "Autoteste demonstrativo: não diagnostica SANS nem substitui avaliação médica. Você pode pular este passo."
+  },
+  "exerciseSession": {
+    "type": "Tipo de sessão",
+    "aerobic": "Aeróbico",
+    "resistance": "Resistido",
+    "both": "Aeróbico e resistido",
+    "minutes": "Duração da sessão",
+    "heartRate": "Frequência cardíaca média",
+    "resistanceStatus": "Treino resistido",
+    "completed": "Feito",
+    "partial": "Parcial",
+    "notDone": "Não feito",
+    "disclaimer": "Registre uma sessão de hoje. O protótipo guarda o tipo, a duração, a frequência média do aeróbico e o estado do resistido; não avalia desempenho."
+  },
   "reaction": {
     "saved": "Resultado salvo hoje: {{value}} ms. {{details}}",
     "tooFew": "Poucas respostas válidas ({{valid}}). Refaça o teste ou pule o passo.",
