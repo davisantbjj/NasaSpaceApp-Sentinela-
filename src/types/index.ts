@@ -27,6 +27,7 @@ export interface CrewMember {
   trackedIndicators: IndicatorId[]; // o check-in só pede estes
   sex?: 'female' | 'male'; // figura e contexto educativo; não muda nenhuma faixa
   medications?: PlannedMedication[]; // medicação prevista; sem lista, o check-in não pergunta
+  priorCareerDoseMsv?: number; // dose acumulada em missões anteriores em mSv (N2)
 }
 
 // Medicação prevista para o tripulante. Na demonstração os nomes são fictícios.
@@ -296,7 +297,7 @@ export interface Rules {
       sourceUrl: string;
       demo: boolean;
     };
-    radiationTotal?: { sourceUrl: string }; // M6: soma das doses do dia, só contexto
+    radiationTotal?: { careerLimitMsv?: number; sourceUrl: string }; // M6 e N2: soma das doses do dia e percentual dos 600 mSv de carreira
     weeklyGoals?: { windowDays: number; targetDays: number; indicators: IndicatorId[]; demo: boolean }; // M9
     readaptation?: { noticeDaysBefore: number }; // M11: quantos dias antes da mudança de gravidade destacar
   };

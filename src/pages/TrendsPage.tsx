@@ -4,6 +4,7 @@ import { IndicatorChart, type ChartBand, type ChartSeries } from '../components/
 import { displayText } from '../content/format';
 import { indicatorContent } from '../content/indicators';
 import { formatDate } from '../lib/dates';
+import { radiationTotal } from '../lib/radiationTotal';
 import { formatNumber, hasHistoryChart, rangesFor, seriesValue } from '../lib/series';
 import { findBaseline, isBaselineReady } from '../rules/baseline';
 import { rules } from '../rules/rules';
@@ -107,9 +108,25 @@ export function TrendsPage() {
 
         {baselineNote(indicator, baselines) &&         <p className="small muted">{baselineNote(indicator, baselines)}.</p>}
         {indicator === 'radiationDose' && (
-          <p className="small muted">
-            {i18n.t('trends.radiationNote')}
-          </p>
+          <div className="stack" style={{ gap: 8 }}>
+            {(() => {
+              const rad = radiationTotal(records, last?.missionDay ?? records.length, rules, member.priorCareerDoseMsv);
+              return rad ? (
+                <p className="notice">
+                  <span className="notice-icon" aria-hidden="true">i</span>
+                  <span>
+                    {rad.text}{' '}
+                    <a href={rad.sourceUrl} target="_blank" rel="noreferrer">
+                      {i18n.t('regionPanel.nasaSource')}
+                    </a>
+                  </span>
+                </p>
+              ) : null;
+            })()}
+            <p className="small muted">
+              {i18n.t('trends.radiationNote')}
+            </p>
+          </div>
         )}
 
         <details>

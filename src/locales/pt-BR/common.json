@@ -410,10 +410,11 @@
       "shortPeriod": "Este período é menor que os {{monthsMin}} a {{monthsMax}} meses citados na fonte: extrapolar a média para uma missão curta não foi validado."
     },
     "radiation": {
-      "total": "Dose acumulada registrada na missão: {{dose}}, somando {{days}} com valor informado. Os dados da demonstração são simulados; o app não está conectado a um dosímetro.",
+      "total": "Estimativa, não medida: {{dose}} acumulados nesta missão, {{percent}}% do limite de carreira da NASA de {{limit}} mSv{{priorNote}} (somando {{days}} com valor informado). Os dados da demonstração são simulados; o app não está conectado a um dosímetro.",
+      "prior": " (incluindo {{prior}} mSv de missões anteriores)",
       "missing_one": "{{count}} dia sem leitura válida não entra na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.",
       "missing_other": "{{count}} dias sem leitura válida não entram na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.",
-      "notLimit": "É contexto, não limite: o app não avalia limites de dose da carreira nem eventos de radiação intensa."
+      "notLimit": "É contexto e estimativa, não limite oficial: o cálculo institucional da NASA usa dose efetiva e avaliação clínica especializada."
     }
   },
   "missionProfiles": {

@@ -2,12 +2,17 @@ import type { DailyRecord, Rules } from '../types';
 import i18n from '../i18n';
 import { formatNumber } from './series';
 
-// Radiação ACUMULADA na missão (M6). É contexto, não alerta e não limite: soma as doses do dia
-// digitadas pelo tripulante. Dias sem registro não entram, e o texto diz isso.
+// Radiação ACUMULADA na missão (M6 e N2). É contexto, não alerta e não limite: soma as doses do dia
+// digitadas pelo tripulante e compara com o limite de carreira da NASA (600 mSv).
+// Dias sem registro não entram, e o texto diz isso.
 
 export interface RadiationTotal {
   text: string;
   sourceUrl: string;
+  missionDoseMsv: number;
+  totalCareerDoseMsv: number;
+  careerPercent: number;
+  careerLimitMsv: number;
 }
 
 // µSv até 999; a partir de 1.000 µSv, em mSv (1 mSv = 1.000 µSv).
@@ -16,7 +21,12 @@ function doseText(microsieverts: number): string {
   return `${formatNumber(Math.round(microsieverts / 100) / 10)} mSv`;
 }
 
-export function radiationTotal(records: DailyRecord[], missionDay: number, rules: Rules): RadiationTotal | undefined {
+export function radiationTotal(
+  records: DailyRecord[],
+  missionDay: number,
+  rules: Rules,
+  priorCareerDoseMsv = 0,
+): RadiationTotal | undefined {
   const context = rules.context?.radiationTotal;
   if (!context) return undefined;
   const doses = records
@@ -26,10 +36,33 @@ export function radiationTotal(records: DailyRecord[], missionDay: number, rules
 
   const total = doses.reduce((sum, dose) => sum + dose, 0);
   const missing = Math.max(0, missionDay - doses.length);
+  const careerLimitMsv = context.careerLimitMsv ?? 600;
+  const missionDoseMsv = Math.round((total / 1000) * 10) / 10;
+  const totalCareerDoseMsv = Math.round((missionDoseMsv + priorCareerDoseMsv) * 10) / 10;
+  const careerPercent = Math.round((totalCareerDoseMsv / careerLimitMsv) * 100);
+
+  const priorNote = priorCareerDoseMsv > 0
+    ? i18n.t('context.radiation.prior', { prior: formatNumber(priorCareerDoseMsv) })
+    : '';
+
   const parts = [
-    i18n.t('context.radiation.total', { dose: doseText(total), days: i18n.t('context.dayCount', { count: doses.length }) }),
+    i18n.t('context.radiation.total', {
+      dose: doseText(total),
+      percent: formatNumber(careerPercent),
+      limit: formatNumber(careerLimitMsv),
+      priorNote,
+      days: i18n.t('context.dayCount', { count: doses.length }),
+    }),
   ];
   if (missing > 0) parts.push(i18n.t('context.radiation.missing', { count: missing }));
   parts.push(i18n.t('context.radiation.notLimit'));
-  return { text: parts.join(' '), sourceUrl: context.sourceUrl };
+
+  return {
+    text: parts.join(' '),
+    sourceUrl: context.sourceUrl,
+    missionDoseMsv,
+    totalCareerDoseMsv,
+    careerPercent,
+    careerLimitMsv,
+  };
 }

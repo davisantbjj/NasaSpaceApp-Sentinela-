@@ -499,6 +499,7 @@
       "demo": true
     },
     "radiationTotal": {
+      "careerLimitMsv": 600,
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"
     },
     "weeklyGoals": {

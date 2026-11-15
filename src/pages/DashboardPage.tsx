@@ -67,9 +67,9 @@ export function DashboardPage() {
   const bone = region === 'musculoskeletal'
     ? estimateBoneLoss(day, profile ? daysByEnvironment(profile, day) : { [settings.environment]: day }, rules)
     : undefined;
-  // Radiação acumulada (M6): só para quem acompanha a dose.
+  // Radiação acumulada (M6 e N2): só para quem acompanha a dose, comparando com 600 mSv de carreira.
   const radiation = region === 'wholeBody' && member.trackedIndicators.includes('radiationDose')
-    ? radiationTotal(records, latest?.missionDay ?? day, rules) // até o último registro: hoje pode estar pendente
+    ? radiationTotal(records, latest?.missionDay ?? day, rules, member.priorCareerDoseMsv) // até o último registro: hoje pode estar pendente
     : undefined;
 
   const togetherNotes = correlations
