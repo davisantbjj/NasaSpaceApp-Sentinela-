@@ -6,7 +6,7 @@ Explicação completa do aplicativo: o que ele faz, como cada indicador é medid
 
 ## 1. Ideia geral
 
-O astronauta faz um **check-in diário**: informa até treze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
+O astronauta faz um **check-in diário**: informa até catorze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
 
 - numa **figura humana** em que cada sistema do corpo fica verde, amarelo ou vermelho;
 - numa **lista de alertas**, cada um explicando o que mudou e o que fazer;
@@ -29,7 +29,7 @@ Tudo roda no navegador, sem servidor e sem internet. Os dados ficam no próprio 
 
 Os alertas e as linhas de base não são gravados. São recalculados a partir dos registros sempre que a tela abre. Assim, mudar uma regra no `rules.json` muda o resultado na hora, sem dado velho guardado.
 
-## 3. Os treze indicadores e como medir
+## 3. Os catorze indicadores e como medir
 
 | Indicador | Unidade | Região do corpo | Como medir (texto mostrado no app) |
 | --- | --- | --- | --- |
@@ -41,7 +41,8 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Humor | escala de 1 a 5 | Mente e sono | Escolha o rosto que melhor descreve como você se sentiu na maior parte do dia. |
 | Estresse | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o seu estresse na maior parte do dia. |
 | Carga de trabalho | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o volume de trabalho de hoje. |
-| Exercício | minutos | Ossos e músculos | Some os minutos de esteira, bicicleta e treino resistido feitos hoje. |
+| Exercício | minutos | Ossos e músculos | Digite os minutos de aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência), com o equipamento da nave. O app soma os dois. Não depende de um aparelho específico: vale para a esteira, a bicicleta e o aparelho resistido da estação e para o aparelho compacto da Orion. |
+| Treino resistido | minutos | Ossos e músculos | É o segundo campo do passo de exercício, sem passo próprio. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
 | Visão | 0, 1 ou 2 | Olhos e visão | Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão. 0 = sem mudança, 1 = mudança leve, 2 = mudança clara. |
 | Medicação | lista de marcar | Corpo inteiro | Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada. Só aparece para quem tem medicação prevista. |
@@ -69,6 +70,7 @@ Cada pessoa tem o seu normal. Uma frequência de 58 bpm pode ser ótima para um 
 | Glicemia | Sim | Para cima ou para baixo |
 | Sono | Sim | Só para baixo (dormir menos) |
 | Exercício | Sim | Só para baixo (treinar menos) |
+| Treino resistido | Sim, e só ela (sem faixa geral) | Só para baixo (menos treino resistido) |
 | Radiação | Sim | Só para cima (dose maior) |
 | Temperatura | Não | Só a faixa geral |
 | Humor | Não | Só a faixa geral |
@@ -102,6 +104,7 @@ Os limites contam como dentro da faixa: 7 h de sono é verde, e 6,9 h é amarelo
 | Estresse | 1 a 3 | 4 e 5 | Nunca |
 | Carga de trabalho | 1 a 3 | 4 e 5 | Nunca |
 | Exercício | 60 a 150 min | 30 a 59 ou 151 a 180 | abaixo de 30 ou acima de 180 |
+| Treino resistido | Sem faixa geral | Só por desvio do padrão pessoal | Nunca |
 | Visão | 0 (sem mudança) | 1 (mudança leve) | 2 (mudança clara) |
 | Radiação | sem faixa geral | só por desvio pessoal | nunca fica vermelha |
 

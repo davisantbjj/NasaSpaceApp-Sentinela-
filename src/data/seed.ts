@@ -14,7 +14,7 @@ const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload',
-  'exerciseMinutes', 'radiationDose', 'vision', 'symptoms',
+  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'symptoms',
 ];
 
 // Gerador pseudoaleatório com semente, para a demonstração ser sempre igual.
@@ -78,6 +78,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
   for (const profile of PROFILES) {
     const random = mulberry32(profile.seed);
     const mindRandom = mulberry32(profile.seed + 1000); // estresse e carga de trabalho (M2)
+    const resistanceRandom = mulberry32(profile.seed + 2000); // treino resistido (M3)
     // Variação em torno do valor de base, limitada a ±spread.
     const around = (center: number, spread: number, decimals = 0) => {
       const factor = 10 ** decimals;
@@ -105,6 +106,9 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         // valores simulados. Não mudam os casos preparados da demonstração.
         stress: mindRandom() < 0.7 ? 2 : 3,
         workload: mindRandom() < 0.6 ? 3 : 2,
+        // Parte resistida do exercício: perto de 40 min, sem passar do total. Gerador próprio, para não
+        // mudar os outros valores simulados.
+        resistanceMinutes: Math.round(40 + (resistanceRandom() * 2 - 1) * 3),
       };
       profile.story?.(all, SEED_DAYS - 1 - i);
 

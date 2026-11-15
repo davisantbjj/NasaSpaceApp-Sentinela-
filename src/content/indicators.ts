@@ -17,10 +17,11 @@ export interface IndicatorContent {
   scale?: ScaleOption[];
 }
 
-// Ordem dos passos do check-in (docs/diagramas/05-navegacao-telas.md).
+// Ordem dos passos do check-in (docs/diagramas/05-navegacao-telas.md). `resistanceMinutes` não tem passo
+// próprio: é o segundo campo do passo de exercício.
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'stress', 'workload', 'exerciseMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
+  'mood', 'stress', 'workload', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
 ];
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
@@ -101,8 +102,15 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
   exerciseMinutes: {
     label: 'Exercício',
     unit: 'min',
-    howToMeasure: 'Some os minutos de esteira, bicicleta e treino resistido feitos hoje.',
-    whyMeasure: 'Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção.',
+    howToMeasure: 'Digite os minutos de exercício aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência, como agachamento) feitos hoje, com o equipamento da sua nave. O app soma os dois. Use 0 se não fez um deles.',
+    whyMeasure: 'Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção, e o treino resistido é o que mais protege os ossos.',
+    input: { min: 0, max: 600, step: 1 },
+  },
+  resistanceMinutes: {
+    label: 'Treino resistido',
+    unit: 'min',
+    howToMeasure: 'Minutos de treino contra carga ou resistência, digitados no passo de exercício.',
+    whyMeasure: 'O treino resistido é o que mais protege os ossos no voo. Sozinho, ele reduz a perda óssea, mas não a impede.',
     input: { min: 0, max: 600, step: 1 },
   },
   radiationDose: {
@@ -143,7 +151,7 @@ export const REGIONS: Record<BodyRegion, { label: string; description: string }>
   heart: { label: 'Coração', description: 'Pressão arterial e frequência cardíaca' },
   immune: { label: 'Defesas do corpo', description: 'Temperatura' },
   metabolism: { label: 'Metabolismo', description: 'Glicemia' },
-  musculoskeletal: { label: 'Ossos e músculos', description: 'Exercício' },
+  musculoskeletal: { label: 'Ossos e músculos', description: 'Exercício e treino resistido' },
   wholeBody: { label: 'Corpo inteiro', description: 'Radiação, sintomas e medicação' },
 };
 

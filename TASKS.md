@@ -216,7 +216,7 @@ Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente m
 
 - [x] **M1. Medicação**: indicador "tomei a medicação prevista", com lista por tripulante e lembrete. A página do evento de Kuala Lumpur cita medicação entre o que as agências monitoram, e a ISS usa o app Dose Tracker. Esforço baixo
 - [x] **M2. Estresse e carga de trabalho**: duas escalas de 1 a 5 no check-in, na região "Mente e sono". São as perguntas do Reaction Self Test da NASA. Esforço baixo
-- [ ] **M3. Tipo de exercício**: separar aeróbico de resistido (musculação). O resistido é o que protege o osso, e o alerta já recomenda priorizá-lo. Esforço baixo
+- [x] **M3. Tipo de exercício**: separar aeróbico de resistido (musculação). O resistido é o que protege o osso, e o alerta já recomenda priorizá-lo. Esforço baixo
 - [ ] **M4. Teste de reação de 3 minutos**: tocar a tela assim que o sinal aparece, como no Reaction Self Test (ISS, desde 2009). Entra como indicador com linha de base pessoal. Esforço médio; é o maior ganho em saúde mental
 
 ### Avaliar

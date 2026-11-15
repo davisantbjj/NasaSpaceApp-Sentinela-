@@ -44,7 +44,8 @@ export function MissionPage() {
 
   if (!member) return null;
   const today = todayISO();
-  const tracked = trackedInOrder(member);
+  // O treino resistido é digitado no passo de exercício: o lembrete de exercício vale para os dois.
+  const tracked = trackedInOrder(member).filter((id) => id !== 'resistanceMinutes');
   const healthContext = crewHealthContext(member.sex);
 
   return (

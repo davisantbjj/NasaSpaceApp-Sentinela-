@@ -4,7 +4,7 @@ export type Level = 'green' | 'yellow' | 'red';
 
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
-  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'exerciseMinutes' | 'radiationDose'
+  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
   | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
@@ -47,7 +47,8 @@ export interface DailyValues {
   mood?: 1 | 2 | 3 | 4 | 5;
   stress?: 1 | 2 | 3 | 4 | 5; // 1 = muito baixo, 5 = muito alto
   workload?: 1 | 2 | 3 | 4 | 5; // 1 = muito leve, 5 = excessiva
-  exerciseMinutes?: number;
+  exerciseMinutes?: number; // total do dia (aeróbico + resistido)
+  resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
   radiationDose?: number;
   vision?: 0 | 1 | 2;
   symptoms?: string[]; // ids de sintomas definidos em rules.json

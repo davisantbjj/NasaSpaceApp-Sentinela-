@@ -35,6 +35,13 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     for (const id of ['heartRate', 'temperature', 'glucose', 'sleepHours', 'exerciseMinutes', 'radiationDose'] as const) {
       text[id] = str(values[id]);
     }
+    // Exercício em dois campos: o aeróbico é o total menos o resistido.
+    if (values.resistanceMinutes !== undefined) {
+      text.resistanceMinutes = str(values.resistanceMinutes);
+      if (values.exerciseMinutes !== undefined) text.exerciseAerobic = str(values.exerciseMinutes - values.resistanceMinutes);
+    } else if (values.exerciseMinutes !== undefined) {
+      text.exerciseAerobic = str(values.exerciseMinutes);
+    }
   }
   // Medicação começa sem nada marcado: avançar sem marcar registra as doses como não tomadas.
   const medicationTaken = values?.medication
@@ -45,9 +52,18 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
   return { text, scale, symptoms: values?.symptoms, medicationTaken };
 }
 
-function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
+// Quem acompanha treino resistido digita o exercício em dois campos (M3).
+const splitsExercise = (member: CrewMember) => member.trackedIndicators.includes('resistanceMinutes');
+
+function fieldsFor(indicator: IndicatorId, draft: Draft, member: CrewMember): NumberField[] {
   const content = INDICATORS[indicator];
   const input = content.input!;
+  if (indicator === 'exerciseMinutes' && splitsExercise(member)) {
+    return [
+      { id: 'exerciseAerobic', label: 'Aeróbico (correr, pedalar, remar)', unit: content.unit, value: draft.text.exerciseAerobic ?? '', ...input },
+      { id: 'resistanceMinutes', label: 'Resistido (com carga)', unit: content.unit, value: draft.text.resistanceMinutes ?? '', ...input },
+    ];
+  }
   if (indicator === 'bloodPressure') {
     return [
       { id: 'systolic', label: 'Sistólica (máxima)', unit: content.unit, value: draft.text.systolic ?? '', ...input },
@@ -72,12 +88,15 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
         values.medication = member.medications.map((m) => ({ id: m.id, label: m.label, taken: taken.includes(m.id) }));
       }
     } else {
-      const fields = fieldsFor(indicator, draft);
+      const fields = fieldsFor(indicator, draft, member);
       if (fields.some((f) => fieldError(f))) continue;
       const numbers = fields.map((f) => parseNumber(f.value));
       if (numbers.some((n) => n === undefined)) continue;
       if (indicator === 'bloodPressure') values.bloodPressure = { systolic: numbers[0]!, diastolic: numbers[1]! };
-      else Object.assign(values, { [indicator]: numbers[0] });
+      else if (indicator === 'exerciseMinutes' && fields.length === 2) {
+        values.exerciseMinutes = numbers[0]! + numbers[1]!;
+        values.resistanceMinutes = numbers[1]!;
+      } else Object.assign(values, { [indicator]: numbers[0] });
     }
   }
   return values;
@@ -115,7 +134,10 @@ function OwnCheckin() {
 
   // Medicação só entra no check-in de quem tem medicação prevista.
   const steps = useMemo(
-    () => trackedInOrder(member).filter((id) => id !== 'medication' || (member?.medications?.length ?? 0) > 0),
+    () =>
+      trackedInOrder(member)
+        .filter((id) => id !== 'resistanceMinutes') // é o segundo campo do passo de exercício
+        .filter((id) => id !== 'medication' || (member?.medications?.length ?? 0) > 0),
     [member],
   );
   const [index, setIndex] = useState(0);
@@ -139,6 +161,10 @@ function OwnCheckin() {
       if (indicator === 'bloodPressure') {
         text.systolic = '';
         text.diastolic = '';
+      } else if (indicator === 'exerciseMinutes') {
+        text.exerciseMinutes = '';
+        text.exerciseAerobic = '';
+        text.resistanceMinutes = '';
       } else text[indicator] = '';
       return {
         text,
@@ -215,6 +241,7 @@ function OwnCheckin() {
                 </button>
                 <span className={values[indicator] === undefined ? 'muted' : 'num'}>
                   {displayText(values, indicator, SYMPTOM_LABELS) ?? 'Pulado'}
+                  {indicator === 'exerciseMinutes' && values.resistanceMinutes !== undefined && ` (${displayText(values, 'resistanceMinutes')} de resistido)`}
                 </span>
               </li>
             ))}
@@ -234,8 +261,11 @@ function OwnCheckin() {
 
   const indicator = steps[index];
   const content = INDICATORS[indicator];
-  const fields = content.input ? fieldsFor(indicator, draft) : [];
-  const partialBp = indicator === 'bloodPressure' && fields.filter((f) => f.value.trim() !== '').length === 1;
+  const fields = content.input ? fieldsFor(indicator, draft, member) : [];
+  // Passo com dois campos (pressão ou exercício dividido) com só um preenchido.
+  const partial = fields.length === 2 && fields.filter((f) => f.value.trim() !== '').length === 1;
+  const partialBp = indicator === 'bloodPressure' && partial;
+  const partialExercise = indicator === 'exerciseMinutes' && partial;
 
   return (
     <div className="page checkin">
@@ -255,12 +285,13 @@ function OwnCheckin() {
         onSkip={skip}
         onNext={next}
         nextLabel={index === steps.length - 1 ? 'Revisar' : 'Avançar'}
-        nextDisabled={fields.some((f) => fieldError(f)) || partialBp}
+        nextDisabled={fields.some((f) => fieldError(f)) || partial}
       >
         {content.input && (
           <>
             <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
             {partialBp && <p className="small muted">Digite os dois números da pressão, ou pule o passo.</p>}
+            {partialExercise && <p className="small muted">Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.</p>}
           </>
         )}
         {content.scale && (

@@ -141,6 +141,13 @@ export class SentinelaDB extends Dexie {
         }
       }),
     );
+    // v10: treino resistido (M3) para quem já acompanha exercício. Os dias antigos ficam só com o total.
+    this.version(10).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const tracked = member.trackedIndicators;
+        if (tracked.includes('exerciseMinutes') && !tracked.includes('resistanceMinutes')) tracked.push('resistanceMinutes');
+      }),
+    );
   }
 }
 

@@ -284,6 +284,34 @@
       },
       "demo": true
     },
+    "resistanceMinutes": {
+      "label": "Treino resistido",
+      "region": "musculoskeletal",
+      "unit": "min",
+      "useBaseline": true,
+      "deviationDirection": "below",
+      "nasaRisk": "Spaceflight-Induced Bone Changes",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "O treino resistido é o que mais protege os ossos no voo. Um estudo da NASA na estação mostrou que o treino resistido reduz a perda óssea, mas sozinho não a impede.",
+        "whatToDo": {
+          "yellow": "Reponha a sessão de treino resistido conforme o seu plano individual.",
+          "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+          "https://www.nasa.gov/news-release/nasa-study-provides-new-findings-on-protecting-astronauts-bones-through-diet-and-exercise"
+        ],
+        "green": "Sem faixa geral: o tempo de treino resistido depende do plano individual. Só a comparação com o padrão pessoal é usada.",
+        "yellow": "Desvio pessoal para baixo: algoritmo de demonstração (7 amostras, mais de 15% por 3 registros), não prescrição de treino.",
+        "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
+      },
+      "demo": true
+    },
     "radiationDose": {
       "label": "Radiação",
       "region": "wholeBody",

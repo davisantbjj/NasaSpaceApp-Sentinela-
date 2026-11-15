@@ -148,6 +148,21 @@ describe('evaluateRecord', () => {
     expect(alerts[0].whatChanged).toBe('Estresse está em 5 na escala de 1 a 5 (muito alto)');
   });
 
+  it('treino resistido: sem faixa geral, só o desvio pessoal para baixo gera amarelo', () => {
+    // Um dia isolado com pouco treino resistido não gera alerta: não há faixa geral.
+    expect(evaluateLast([{ exerciseMinutes: 90, resistanceMinutes: 5 }])).toEqual([]);
+
+    const normal = repeat({ exerciseMinutes: 90, resistanceMinutes: 40 }, 7);
+    const less = repeat({ exerciseMinutes: 90, resistanceMinutes: 20 }, 3);
+    const alerts = evaluateLast([...normal, ...less]);
+    expect(alerts.map((a) => [a.indicator, a.level, a.trigger])).toEqual([['resistanceMinutes', 'yellow', 'baselineDeviation']]);
+    expect(alerts[0].region).toBe('musculoskeletal');
+
+    // Mais treino resistido que o habitual não é risco.
+    const more = repeat({ exerciseMinutes: 90, resistanceMinutes: 60 }, 3);
+    expect(evaluateLast([...normal, ...more])).toEqual([]);
+  });
+
   it('medicação: alerta só quando uma dose prevista não foi tomada', () => {
     const vitaminD = { id: 'vitaminD', label: 'Suplemento de vitamina D' };
     const eyeDrops = { id: 'eyeDrops', label: 'Colírio lubrificante' };

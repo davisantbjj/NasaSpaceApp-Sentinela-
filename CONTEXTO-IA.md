@@ -56,7 +56,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | `docs/pesquisa/` | Pesquisa e proposta originais, de onde saem os números e as fontes |
 | `docs/pesquisa/riscos-nasa-links-completo.md` | As 17 páginas de risco da NASA, as fichas do Human Research Roadmap, o Human System Risk Board e os artigos linkados. Comece pela tabela "O que mais importa para o Sentinela" |
 
-## Os treze indicadores
+## Os catorze indicadores
 
 | Id | Indicador | Unidade | Região do corpo |
 | --- | --- | --- | --- |
@@ -68,7 +68,8 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | `mood` | Humor | escala de 1 a 5 | `mind` |
 | `stress` | Estresse | escala de 1 a 5 (5 = muito alto) | `mind` |
 | `workload` | Carga de trabalho | escala de 1 a 5 (5 = excessiva) | `mind` |
-| `exerciseMinutes` | Exercício | minutos por dia | `musculoskeletal` |
+| `exerciseMinutes` | Exercício | minutos por dia (total: aeróbico + resistido) | `musculoskeletal` |
+| `resistanceMinutes` | Treino resistido | minutos por dia, digitados no passo de exercício | `musculoskeletal` |
 | `radiationDose` | Radiação | microsieverts por dia | `wholeBody` |
 | `vision` | Visão | autoteste (0 = sem mudança, 1 = leve, 2 = clara) | `head` |
 | `medication` | Medicação | lista das doses previstas no dia, marcadas como tomadas ou não | `wholeBody` |
