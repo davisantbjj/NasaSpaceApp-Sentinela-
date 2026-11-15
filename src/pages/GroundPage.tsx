@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
-import { displayValue, exerciseSummary, sleepQualityText, sourceLabel } from '../content/format';
+import { displayValue, exerciseSummary, sleepQualityText } from '../content/format';
 import { CHECKIN_ORDER, environmentContent, indicatorContent } from '../content/indicators';
 import { translateText } from '../content/localize';
 import { MISSION_PROFILES } from '../content/missions';
@@ -43,7 +43,7 @@ export function GroundPage() {
     const member = crew.find((c) => c.id === crewId);
     const packets = delivered.filter((p) => p.crewId === crewId);
     return (
-      <div className="page">
+      <div className="page ground-page">
         <Link className="link-arrow" to="/ground">{i18n.t('ground.allCrew')}</Link>
         <header className="page-header">
           <span className="eyebrow">{i18n.t('ground.title')}</span>
@@ -61,7 +61,7 @@ export function GroundPage() {
   }
 
   return (
-    <div className="page">
+    <div className="page ground-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('ground.physician')}</span>
         <h1>{i18n.t('ground.title')}</h1>
@@ -148,7 +148,6 @@ function GroundPacketDetail({ packet, history }: { packet: GroundPacket; history
                 {value!.text}{value!.unit && <span className="muted"> {value!.unit}</span>}
                 {id === 'sleepHours' && sleepQualityText(payload.values) && ` · ${sleepQualityText(payload.values)}`}
                 {id === 'exerciseMinutes' && payload.values.exerciseSession && ` · ${exerciseSummary(payload.values.exerciseSession)}`}
-                {sourceLabel(payload.values, id) && <span className="muted"> · {sourceLabel(payload.values, id)}</span>}
               </span>
             </li>
           ))}

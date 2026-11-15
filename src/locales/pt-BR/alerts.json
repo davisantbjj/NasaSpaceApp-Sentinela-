@@ -4,7 +4,8 @@
     "baselineDeviation": "Desvio do padrão pessoal",
     "symptom": "Sintoma relatado",
     "missedMedication": "Dose não tomada",
-    "missedMeals": "Refeições não feitas"
+    "missedMeals": "Refeições não feitas",
+    "lowWater": "Pouca água"
   },
   "change": {
     "general": "{{name}} está em {{value}}",
@@ -12,8 +13,9 @@
     "symptoms": "Sintomas relatados: {{symptoms}}",
     "missedMedication": "Dose não tomada hoje: {{doses}}",
     "bodyMassLoss": "Massa corporal: {{percent}}% abaixo do início ({{value}} kg agora; {{start}} kg no início)",
-    "conditioning": "{{name}} está em {{value}} do valor antes do voo",
-    "missedMeals": "Nenhuma refeição completa há {{days}} dias seguidos"
+    "missedMeals": "Nenhuma refeição completa há {{days}} dias seguidos",
+    "lowWater": "Água: {{value}} mL hoje, abaixo da referência de {{reference}} mL",
+    "missedMealsAndWater": "Nenhuma refeição completa há {{days}} dias seguidos e água abaixo da referência ({{value}} de {{reference}} mL)"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -36,8 +38,8 @@
     "noSymptoms": "Esperado: nenhum sintoma",
     "medication": "Esperado: todas as doses previstas no dia",
     "bodyMass": "Valor inicial: {{start}} {{unit}} · amarelo acima de {{yellow}}% de perda · vermelho acima de {{red}}%",
-    "conditioning": "Referência: pelo menos {{min}}{{unit}} do valor antes do voo",
-    "meals": "Esperado: pelo menos uma refeição completa por dia; o alerta sai com {{days}} dias seguidos sem nenhuma"
+    "meals": "Esperado: pelo menos uma refeição completa por dia; o alerta sai com {{days}} dias seguidos sem nenhuma",
+    "water": "Referência de demonstração: {{reference}} mL ({{perKg}} mL por kg de massa corporal, no mínimo 2 L por dia)"
   },
   "confidence": {
     "baselineForming": "Linha de base em formação ({{sampleDays}} de {{baselineDays}} dias)",
@@ -103,6 +105,11 @@
       "whyItMatters": "A falta de gravidade altera a circulação e o funcionamento do coração.",
       "yellow": "Repita a medida após 10 minutos de repouso e registre de novo.",
       "red": "Descanse e avise o médico de bordo."
+    },
+    "oxygenSaturation": {
+      "whyItMatters": "Saturação baixa pode indicar pouco oxigênio no sangue. O oxímetro de dedo erra com mão fria, movimento ou esmalte, por isso repita a medida antes de agir.",
+      "yellow": "Descanse, aqueça a mão e meça de novo em 5 minutos. Se continuar abaixo de 95%, avise o oficial médico e confira os indicadores de oxigênio da cabine.",
+      "red": "Meça de novo agora. Se continuar abaixo de 90%, avise o oficial médico imediatamente e siga o protocolo de atmosfera da missão."
     },
     "glucose": {
       "whyItMatters": "A glicemia está no Sentinela porque o desafio cita açúcar no sangue e só é acompanhada pelos perfis selecionados. Não encontramos rotina de monitoramento de glicemia em voo nas fontes NASA consultadas. Isso não exclui pesquisas ou indicações individuais, nem torna a glicemia uma medida de alimentação adequada.",
@@ -177,11 +184,6 @@
       "whyItMatters": "A massa corporal é um indicador de nutrição durante o voo. A comparação é com o valor inicial desta missão, não com uma faixa universal.",
       "yellow": "Revise alimentação, hidratação e o plano com o oficial médico.",
       "red": "Avise o oficial médico agora para revisar nutrição e o plano da missão."
-    },
-    "conditioning": {
-      "whyItMatters": "O condicionamento físico ajuda a preservar a capacidade de trabalho durante a missão e a readaptação após o voo.",
-      "yellow": "Repita a avaliação conforme o plano e converse com o oficial médico antes de alterar o treino.",
-      "red": "Não é gerado por este critério."
     },
     "mealsCompleted": {
       "whyItMatters": "Em voo, a tripulação costuma comer menos do que precisa, e a perda de massa corporal se concentra no primeiro mês. Dias seguidos sem refeição completa entram no resumo do oficial médico.",

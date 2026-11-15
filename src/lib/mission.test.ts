@@ -1,5 +1,4 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { sourceLabel } from '../content/format';
 import i18n from '../i18n';
 import { daysByEnvironment, MISSION_PROFILES, nextGravityChange, phaseOnDay } from '../content/missions';
 import { rules } from '../rules/rules';
@@ -161,22 +160,13 @@ describe('readaptação à gravidade (M11)', () => {
   });
 });
 
-describe('origem do dado (M10)', () => {
-  it('mostra o aparelho só quando o valor não foi digitado', () => {
-    expect(sourceLabel({ sleepHours: 7, sources: { sleepHours: 'wearable' } }, 'sleepHours')).toBe('Sensor vestível');
-    expect(sourceLabel({ sleepHours: 7, sources: { sleepHours: 'manual' } }, 'sleepHours')).toBeUndefined();
-    expect(sourceLabel({ sleepHours: 7 }, 'sleepHours')).toBeUndefined();
-  });
-});
-
 describe('contexto da fase 11 em inglês', () => {
-  it('perda óssea, radiação e origem do dado seguem o idioma escolhido', async () => {
+  it('perda óssea e radiação seguem o idioma escolhido', async () => {
     await i18n.changeLanguage('en');
     expect(estimateBoneLoss(60, { station: 60 }, rules)!.text).toContain('for 60 days in microgravity');
     expect(estimateBoneLoss(200, { transit: 180, mars: 20 }, rules)!.text).toContain('20 days were in partial gravity');
     const day = { id: 'x', crewId: 'c1', date: '2026-01-01', missionDay: 1, values: { radiationDose: 1300 }, createdAt: '' };
     expect(radiationTotal([day], 1, rules)!.text).toContain('1.3 mSv');
-    expect(sourceLabel({ sleepHours: 7, sources: { sleepHours: 'wearable' } }, 'sleepHours')).toBe('Wearable sensor');
     await i18n.changeLanguage('pt-BR');
   });
 });

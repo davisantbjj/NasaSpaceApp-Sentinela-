@@ -2,27 +2,27 @@
 :root {
   color-scheme: dark;
 
-  --level-green: #4ade80;
-  --level-yellow: #facc15;
-  --level-red: #f87171;
-  --level-none: #8494b0; /* região sem dados; contraste de 4,5:1 ou mais em todos os fundos */
+  --level-green: #70c99a;
+  --level-yellow: #e3a93c;
+  --level-red: #ec7076;
+  --level-none: #7c8ca4;
 
-  --bg: #070b14;
-  --surface: #101827;
-  --surface-2: #17213a;
-  --surface-3: #1f2c4a;
-  --ring: rgba(148, 170, 220, 0.14);
-  --ring-strong: rgba(148, 170, 220, 0.3);
-  --text: #eef3fb;
-  --text-muted: #a3b1c9;
-  --text-faint: #8f9dba; /* contraste de 4,5:1 ou mais em todos os fundos (WCAG 1.4.3) */
-  --accent: #7cc4ff;
+  --bg: #0a0e14;
+  --surface: #121923;
+  --surface-2: #19222f;
+  --surface-3: #202b3a;
+  --ring: #26313f;
+  --ring-strong: #3b4b60;
+  --text: #e9eef6;
+  --text-muted: #9caabf;
+  --text-faint: #8c9cb2;
+  --accent: #6fa8e0;
   --accent-strong: #3987e5;
   --on-accent: #06101f;
 
   /* Séries dos gráficos: par validado para fundo escuro (azul e laranja). */
-  --chart-1: #3987e5;
-  --chart-2: #d95926;
+  --chart-1: #6fa8e0;
+  --chart-2: #e3a93c;
   --chart-band: rgba(163, 177, 201, 0.12);
   --chart-grid: rgba(163, 177, 201, 0.14);
 
@@ -30,8 +30,10 @@
   --radius-md: 12px;
   --radius-sm: 8px;
   --space: 16px;
-  --max-w: 1080px;
-  --shadow: 0 0 0 1px var(--ring), 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 32px -12px rgba(0, 0, 0, 0.6);
+  --max-w: 1320px;
+  --shadow: 0 0 0 1px var(--ring);
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Fontes locais: números e rótulos continuam disponíveis sem conexão. */
+  --font-mono: 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
 }

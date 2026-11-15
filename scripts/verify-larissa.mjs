@@ -67,7 +67,7 @@ try {
     Object.getOwnPropertyDescriptor(prototype, 'value').set.call(field, ${JSON.stringify(value)});
     field.dispatchEvent(new Event('input', { bubbles: true }));
   })()`);
-  // Perfis de demonstração entram só com o toque em Entrar, sem campo de PIN (aviso 2026-11-15-v8).
+  // Perfis de demonstração entram só com o toque em Entrar, sem campo de PIN (desde o aviso 2026-11-15-v8).
   // O PIN só é digitado se o campo aparecer, como nos perfis fora da demonstração.
   async function login(id, pin) {
     await waitFor("!!document.querySelector('input[name=profile]')");
@@ -129,12 +129,12 @@ try {
   await click('Bloquear e trocar de perfil');
   await login('lia', '3333');
   await evaluate("location.hash = '#/'");
-  await waitFor("!!document.querySelector('.region-button')");
-  await evaluate("[...document.querySelectorAll('.region-button')].find(b => b.textContent.includes('Ossos e músculos')).click()");
+  await waitFor("!!document.querySelector('.console-region-row')");
+  await evaluate(`document.querySelector('.console-region-row[data-region="musculoskeletal"]').click()`);
   await waitFor("document.body.innerText.includes('Estimativa, não medida')");
   assert.ok(await evaluate("document.body.innerText.includes('Não mede nem prevê')"));
   assert.ok(await evaluate("document.body.innerText.includes('missão curta não foi validado')"));
-  await evaluate("[...document.querySelectorAll('.region-button')].find(b => b.textContent.includes('Corpo inteiro')).click()");
+  await evaluate(`document.querySelector('.console-region-row[data-region="wholeBody"]').click()`);
   await waitFor("document.body.innerText.includes('acumulados nesta missão')");
   assert.ok(await evaluate("document.body.innerText.includes('não está conectado a um dosímetro')"));
   console.log('PASS: perfil lunar M8 e contexto ósseo/radiação M5–M6 sem promessa de medição individual');
@@ -178,16 +178,26 @@ try {
       await waitFor("document.querySelector('form.step').textContent.includes('modo curto;')");
     } else if (await evaluate("!!document.querySelector('#heartRate')")) {
       await fill('#heartRate', '70');
-      await evaluate("[...document.querySelectorAll('form.step label')].find(l => l.textContent.includes('Sensor vestível')).querySelector('input').click()");
     } else if (await evaluate("!!document.querySelector('#radiationDose')")) {
       await fill('#radiationDose', '400');
-      await evaluate("[...document.querySelectorAll('form.step label')].find(l => l.textContent.includes('Dosímetro pessoal')).querySelector('input').click()");
     } else if (await evaluate("!!document.querySelector('input[name=stress]')")) {
       await evaluate(`document.querySelector('input[name=stress][value="4"]').click()`);
     } else if (await evaluate("!!document.querySelector('input[name=workload]')")) {
       await evaluate(`document.querySelector('input[name=workload][value="3"]').click()`);
-    } else if (await evaluate("!!document.querySelector('#exerciseAerobic')")) {
-      await fill('#exerciseAerobic', '30'); await fill('#resistanceMinutes', '20');
+    } else if (await evaluate("!!document.querySelector('input[name=exercise-session-type]')")) {
+      // Tipo "aeróbico e resistido", esteira 30 min e aparelho resistido 20 min (N16).
+      await evaluate("document.querySelectorAll('input[name=exercise-session-type]')[2].click()");
+      await waitFor("document.querySelectorAll('fieldset.apparatus-list').length === 2");
+      await evaluate(`(() => {
+        const [aerobic, resistance] = document.querySelectorAll('fieldset.apparatus-list');
+        const pick = (set, text) => [...set.querySelectorAll('label.option')].find((l) => l.textContent.includes(text)).querySelector('input').click();
+        pick(aerobic, 'Esteira');
+        pick(resistance, 'Aparelho resistido');
+      })()`);
+      await waitFor("!!document.querySelector('#exercise-aerobic-treadmill') && !!document.querySelector('#exercise-resistance-resistive')");
+      await fill('#exercise-aerobic-treadmill', '30');
+      await fill('#exercise-resistance-resistive', '20');
+      await waitFor("document.body.innerText.includes('Duração total: 50 min')");
     } else if (await evaluate("document.querySelector('form.step legend')?.textContent === 'Doses de hoje'")) {
       // Vitamina tomada, colírio não tomado. O app não registra cada dose/horário.
       await evaluate("document.querySelector('form.step input[type=checkbox]').click()");
@@ -201,7 +211,7 @@ try {
   await waitFor("document.body.innerText.includes('Confira antes de salvar')");
   await click('Salvar check-in');
   await waitFor("document.body.innerText.toLowerCase().includes('check-in salvo')");
-  console.log('PASS: check-in M1–M3 pela interface, com exercício em dois campos');
+  console.log('PASS: check-in M1–M3 pela interface, com exercício por tipo, aparelho e minutos');
 
   await evaluate("location.hash = '#/medical-contact'");
   await waitFor("!!document.querySelector('textarea')");
@@ -252,13 +262,14 @@ try {
   assert.ok(today, 'Valores novos ausentes na exportação');
   assert.equal(today.values.exerciseMinutes, 50);
   assert.equal(today.values.resistanceMinutes, 20);
+  assert.deepEqual(today.values.exerciseSession.apparatus.map((u) => `${u.part}:${u.apparatus}:${u.minutes}`), ['aerobic:treadmill:30', 'resistance:resistive:20']);
   assert.ok(today.values.reactionTime >= 100);
   assert.equal(today.values.reactionTest.mode, 'short');
   assert.equal(today.values.reactionTest.completed, true);
   assert.ok(today.values.reactionTest.elapsedSeconds >= 30);
   assert.ok(today.values.reactionTest.validResponses >= 3);
-  assert.equal(today.values.sources.heartRate, 'wearable');
-  assert.equal(today.values.sources.radiationDose, 'dosimeter');
+  // Só registro manual: nenhum valor guarda origem de aparelho.
+  assert.equal('sources' in today.values, false);
   assert.ok(await inspect(`const { seriesPoints, hasValue } = await import('/src/lib/series.ts');
     const values = (await privacy.exportCrewData('lia')).records.find(r => r.id === ${JSON.stringify(today.id)}).values;
     return hasValue(values, 'reactionTime') && seriesPoints(values, 'reactionTime').length === 0;`));
@@ -272,7 +283,7 @@ try {
       && await db.records.where('crewId').equals('kenji').count() === 60;`));
   await command('Emulation.setDeviceMetricsOverride', { width: 1280, height: 1000, deviceScaleFactor: 1, mobile: false });
   await screenshot('seus-dados-desktop');
-  console.log('PASS: JSON isolado com resultado/modo de reação e origens declaradas; teste curto fora da série pessoal; mensagens e pedido preservados');
+  console.log('PASS: JSON isolado com resultado/modo de reação, sem origem de aparelho; teste curto fora da série pessoal; mensagens e pedido preservados');
 
   await command('Page.reload');
   await ptBR();

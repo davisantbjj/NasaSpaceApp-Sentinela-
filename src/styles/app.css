@@ -8,29 +8,13 @@ html.text-large { font-size: 125%; }
 body {
   margin: 0;
   min-height: 100dvh;
-  background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(57, 135, 229, 0.16), transparent 60%),
-    radial-gradient(900px 500px at -10% 20%, rgba(124, 196, 255, 0.07), transparent 60%),
-    var(--bg);
-  background-attachment: fixed;
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font);
   font-size: 1rem; /* em rem: o "Texto maior" muda o tamanho do <html> e tudo acompanha */
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Campo de estrelas bem discreto, só decoração (não afeta o contraste do texto). */
-body::before {
-  content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: 0.55;
-  background-image:
-    radial-gradient(1px 1px at 20px 30px, rgba(238, 243, 251, 0.55), transparent),
-    radial-gradient(1px 1px at 110px 90px, rgba(238, 243, 251, 0.35), transparent),
-    radial-gradient(1.5px 1.5px at 190px 40px, rgba(124, 196, 255, 0.45), transparent),
-    radial-gradient(1px 1px at 70px 150px, rgba(238, 243, 251, 0.3), transparent),
-    radial-gradient(1px 1px at 240px 170px, rgba(238, 243, 251, 0.4), transparent);
-  background-size: 280px 200px;
 }
 
 h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; letter-spacing: -0.01em; }
@@ -40,10 +24,10 @@ h3 { font-size: 1rem; font-weight: 600; }
 p { margin: 0; text-wrap: pretty; }
 a { color: var(--accent); text-underline-offset: 3px; }
 button, input, select { font: inherit; color: inherit; }
-.num { font-variant-numeric: tabular-nums; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .muted { color: var(--text-muted); }
 .small { font-size: 0.875rem; }
-.eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 
@@ -77,8 +61,7 @@ button, input, select { font: inherit; color: inherit; }
   position: sticky; top: 0; z-index: 10;
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
   padding: 10px max(var(--space), calc((100% - var(--max-w)) / 2 + var(--space)));
-  background: rgba(10, 16, 28, 0.86);
-  backdrop-filter: blur(14px);
+  background: var(--bg);
   box-shadow: 0 1px 0 var(--ring);
 }
 .navbar-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; letter-spacing: -0.01em; }
@@ -180,10 +163,10 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
   color: var(--text); font-weight: 600; text-decoration: none; cursor: pointer;
   transition: transform 0.12s var(--ease), background-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
 }
-.btn:hover { background: #283760; }
+.btn:hover { background: #2b3b4e; }
 .btn:active { transform: scale(0.97); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-.btn-primary { background: var(--accent); color: var(--on-accent); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.35) inset, 0 8px 20px -8px rgba(124, 196, 255, 0.6); }
+.btn-primary { background: var(--accent); color: var(--on-accent); box-shadow: none; }
 .btn-primary:hover { background: #9bd2ff; }
 .btn-ghost { background: transparent; box-shadow: none; color: var(--text-muted); }
 .btn-ghost:hover { background: rgba(148, 170, 220, 0.08); color: var(--text); }
@@ -297,8 +280,6 @@ select.input { font-size: 1rem; font-weight: 600; max-width: 100%; padding-right
 .link-button { border: 0; background: none; padding: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font: inherit; }
 
 /* "De onde veio o valor?": pergunta e nota em cima, opções lado a lado embaixo. */
-.source-picker { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
-.source-picker > legend { padding: 0; margin-bottom: 4px; }
 
 /* Exercício: aparelho marcado e minutos ao lado. */
 .apparatus-list { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; }
@@ -473,7 +454,6 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 
 /* Alarmes: banner fixo abaixo da barra, sem animação (WCAG 2.3.1). Cor, ícone e texto juntos. */
 .alarm-stack { display: grid; gap: 8px; margin-bottom: 20px; }
-.alarm-stack[data-sticky='true'] { position: sticky; top: calc(var(--navbar-h, 64px) + 8px); z-index: 9; }
 .alarm-banner {
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px;
   border-radius: var(--radius-md); background: var(--surface-2);

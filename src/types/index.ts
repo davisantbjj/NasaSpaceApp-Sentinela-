@@ -3,9 +3,9 @@
 export type Level = 'green' | 'yellow' | 'red';
 
 export type IndicatorId =
-  | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
+  | 'bloodPressure' | 'heartRate' | 'oxygenSaturation' | 'glucose' | 'temperature'
   | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'reactionTime' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
-  | 'bodyMassKg' | 'mealsCompleted' | 'vision' | 'conditioning' | 'symptoms' | 'medication';
+  | 'bodyMassKg' | 'mealsCompleted' | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
   | 'head' | 'heart' | 'musculoskeletal' | 'immune'
@@ -14,7 +14,6 @@ export type BodyRegion =
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
 
 // Origem de um valor (M10): digitado pela pessoa ou lido de um aparelho. O app não lê aparelhos.
-export type DataSource = 'manual' | 'wearable' | 'dosimeter';
 
 // Perfis de missão de referência (src/content/missions.ts, M8).
 export type MissionProfileId = 'station' | 'lunarFlyby' | 'mars';
@@ -86,22 +85,16 @@ export type ExercisePart = 'aerobic' | 'resistance';
 
 export interface ExerciseApparatusUse {
   part: ExercisePart;
-  apparatus: ConditioningApparatus;
+  apparatus: ExerciseApparatus;
   minutes: number;
 }
 
-export type ConditioningApparatus = 'treadmill' | 'cycle' | 'rower' | 'resistive' | 'flywheel' | 'other';
-
-export interface ConditioningAssessment {
-  aerobicPercent: number;
-  strengthPercent: number;
-  aerobicApparatus: ConditioningApparatus;
-  strengthApparatus: ConditioningApparatus;
-}
+export type ExerciseApparatus = 'treadmill' | 'cycle' | 'rower' | 'resistive' | 'flywheel' | 'other';
 
 export interface DailyValues {
   bloodPressure?: { systolic: number; diastolic: number };
   heartRate?: number;
+  oxygenSaturation?: number; // SpO2 do oxímetro de dedo, em %
   glucose?: number;
   temperature?: number;
   sleepHours?: number;
@@ -116,14 +109,13 @@ export interface DailyValues {
   radiationDose?: number;
   bodyMassKg?: number;
   mealsCompleted?: number; // N12: refeições completas no dia (0 a 3; 3 = 3 ou mais)
-  waterSufficient?: boolean; // N12: água suficiente no dia, no mesmo passo das refeições
+  waterSufficient?: boolean; // N12 (registros antigos): água suficiente sim/não; substituído por waterIntakeMl
+  waterIntakeMl?: number; // água bebida no dia, em mL; comparada com a referência por peso (context.hydration)
   sleepQuality?: 1 | 2 | 3 | 4 | 5; // N14: qualidade relatada, no mesmo passo das horas de sono
   vision?: 0 | 1 | 2;
   visionAmsler?: AmslerVisionResult; // N15; o resumo vision continua para histórico
-  conditioning?: ConditioningAssessment; // N17; avaliação periódica comparada ao pré-voo
   symptoms?: string[]; // ids de sintomas definidos em rules.json
   medication?: MedicationDose[]; // doses previstas no dia
-  sources?: Partial<Record<IndicatorId, DataSource>>; // origem dos valores; ausente = digitado (M10)
 }
 
 export interface DailyRecord {
@@ -226,7 +218,7 @@ export interface Alert {
   indicator: IndicatorId;
   region: BodyRegion;
   level: Level;
-  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication' | 'missedMeals';
+  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication' | 'missedMeals' | 'lowWater';
   whatChanged: LocalizedText;
   reference: LocalizedText;
   whyItMatters: string;
@@ -364,5 +356,7 @@ export interface Rules {
     radiationTotal?: { careerLimitMsv?: number; sourceUrl: string }; // M6 e N2: soma das doses do dia e percentual dos 600 mSv de carreira
     weeklyGoals?: { windowDays: number; targetDays: number; indicators: IndicatorId[]; demo: boolean }; // M9
     readaptation?: { noticeDaysBefore: number }; // M11: quantos dias antes da mudança de gravidade destacar
+    // Água: referência = mlPerKg × massa corporal, nunca abaixo de minimumMl; acima de highMlPerKg × massa é "bem acima".
+    hydration?: { mlPerKg: number; minimumMl: number; highMlPerKg: number; demo: boolean; evidence: string };
   };
 }

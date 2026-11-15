@@ -5,6 +5,9 @@ import { useNow } from '../hooks/useNow';
 import { ROLE_LABELS } from '../lib/access';
 import { useAppStore } from '../store/useAppStore';
 import i18n from '../i18n';
+import { BrandMark } from '../components/layout/BrandMark';
+import { LanguageSelect } from '../components/layout/LanguageSelect';
+import { TextSizeToggle } from '../components/layout/TextSizeToggle';
 
 const MAX_ATTEMPTS = 5;
 const WAIT_MS = 30_000;
@@ -93,9 +96,24 @@ export function LoginPage() {
 
   return (
     <div className="page login">
+      <aside className="login-introduction">
+        <div className="login-brand"><BrandMark /><span>Sentinela</span></div>
+        <div className="login-presentation">
+          <span className="eyebrow">{i18n.t('login.onboard')}</span>
+          <h2>{i18n.t('login.headline')}</h2>
+          <p>{i18n.t('login.overview')}</p>
+        </div>
+        <ul className="login-features">
+          <li><span className="num" aria-hidden="true">01</span><span>{i18n.t('login.featureRecords')}</span></li>
+          <li><span className="num" aria-hidden="true">02</span><span>{i18n.t('login.featureAlerts')}</span></li>
+          <li><span className="num" aria-hidden="true">03</span><span>{i18n.t('login.featureProfiles')}</span></li>
+        </ul>
+        <div className="login-preferences"><LanguageSelect /><TextSizeToggle /></div>
+      </aside>
+      <section className="login-access" aria-labelledby="login-title">
       <header className="page-header">
-        <span className="eyebrow">Sentinela</span>
-        <h1>{i18n.t('login.title')}</h1>
+        <span className="eyebrow">{i18n.t('login.profile')}</span>
+        <h1 id="login-title">{i18n.t('login.title')}</h1>
         <p className="muted">{i18n.t('login.intro')}</p>
       </header>
 
@@ -119,11 +137,12 @@ export function LoginPage() {
                 onChange={() => { setProfileId(p.id); setGuardState(readGuard(p.id)); setError(undefined); setPin(''); }}
               />
               <span className="option-face login-face">
-                <span className="avatar" aria-hidden="true">{p.name.slice(0, 1)}</span>
+                <span className="avatar" aria-hidden="true">{p.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}</span>
                 <span className="stack" style={{ gap: 0 }}>
                   {p.name}
                   <span className="small muted" style={{ fontWeight: 400 }}>{i18n.t(ROLE_LABELS[p.role])}</span>
                 </span>
+                <span className="login-profile-check" aria-hidden="true">✓</span>
               </span>
             </label>
           ))}
@@ -170,6 +189,7 @@ export function LoginPage() {
       <p className="small muted">
         {i18n.t('login.security')}
       </p>
+      </section>
     </div>
   );
 }

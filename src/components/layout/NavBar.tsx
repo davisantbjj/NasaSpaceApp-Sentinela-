@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { environmentContent } from '../../content/indicators';
 import i18n from '../../i18n';
 import type { CrewMember, Environment, Session } from '../../types';
 import { CrewSwitcher } from './CrewSwitcher';
 import { UserMenu } from './UserMenu';
+import { BrandMark } from './BrandMark';
 
 interface Props {
   session: Session;
@@ -63,36 +63,35 @@ function NavIcon({ to }: { to: string }) {
   );
 }
 
-function Logo() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
-      <rect width="64" height="64" rx="16" fill="#17213a" />
-      <circle cx="32" cy="32" r="18" fill="none" stroke="#4ade80" strokeWidth="3.5" />
-      <path d="M14 33h10l4-9 6 17 4-8h12" fill="none" stroke="#eef3fb" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-export function NavBar({ session, crew, activeCrewId, environment, alertCount, hasRedAlert = false, pendingSync, onSwitchCrew, onLock }: Props) {
+export function NavBar({ session, crew, activeCrewId, alertCount, hasRedAlert = false, pendingSync, onSwitchCrew, onLock }: Props) {
   const onBoard = session.role !== 'groundSurgeon';
   const home = onBoard ? '/' : '/ground';
-  const environmentText = environmentContent(environment);
   // Altura real da barra (muda com o texto maior e com o seletor de tripulante): o banner de
   // alarme e as âncoras usam --navbar-h para ficar logo abaixo dela.
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const header = ref.current;
     if (!header || typeof ResizeObserver === 'undefined') return undefined;
-    const update = () => document.documentElement.style.setProperty('--navbar-h', `${header.offsetHeight}px`);
+    const nav = header.querySelector<HTMLElement>('.navbar-links');
+    const update = () => {
+      document.documentElement.style.setProperty('--navbar-h', `${header.offsetHeight}px`);
+      const bottomHeight = nav && getComputedStyle(nav).position === 'fixed' ? nav.offsetHeight : 0;
+      document.documentElement.style.setProperty('--bottom-nav-h', `${bottomHeight}px`);
+    };
     update();
     const observer = new ResizeObserver(update);
     observer.observe(header);
-    return () => observer.disconnect();
+    if (nav) observer.observe(nav);
+    return () => {
+      observer.disconnect();
+      document.documentElement.style.removeProperty('--navbar-h');
+      document.documentElement.style.removeProperty('--bottom-nav-h');
+    };
   }, []);
   return (
     <header ref={ref} className={session.role === 'medicalOfficer' ? 'navbar navbar-crowded' : 'navbar'}>
       <Link to={home} className="navbar-brand" style={{ color: 'var(--text)', textDecoration: 'none' }}>
-        <Logo />
+        <BrandMark />
         Sentinela
       </Link>
       <nav className="navbar-links" aria-label={i18n.t('nav.main')}>
@@ -107,13 +106,6 @@ export function NavBar({ session, crew, activeCrewId, environment, alertCount, h
         ))}
       </nav>
       <div className="navbar-tools">
-        {onBoard && (
-          <Link to="/mission" className="chip" title={i18n.t('nav.missionEnvironment')}>
-            <span aria-hidden="true">◎</span>{' '}
-            <span className="chip-prefix">{i18n.t('nav.environmentPrefix')} </span>
-            {environmentText.label}
-          </Link>
-        )}
         {session.role === 'medicalOfficer' && crew.length > 0 && (
           <CrewSwitcher crew={crew} activeId={activeCrewId} onChange={onSwitchCrew} />
         )}

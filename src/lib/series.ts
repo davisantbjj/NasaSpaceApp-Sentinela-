@@ -13,7 +13,7 @@ export const BP_COMPONENTS: BpComponent[] = ['systolic', 'diastolic'];
 
 // Indicadores que não são um número só (listas ou avaliações com várias partes):
 // não têm série, linha de base nem gráfico.
-const LIST_INDICATORS: IndicatorId[] = ['symptoms', 'medication', 'conditioning'];
+const LIST_INDICATORS: IndicatorId[] = ['symptoms', 'medication'];
 
 export function hasHistoryChart(indicator: IndicatorId): boolean {
   return !LIST_INDICATORS.includes(indicator);

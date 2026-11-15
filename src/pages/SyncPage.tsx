@@ -53,7 +53,7 @@ export function SyncPage() {
   const inTransit = sync.packets.some((p) => packetStatus(p, now) === 'inTransit');
 
   return (
-    <div className="page">
+    <div className="page sync-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('sync.communication')}</span>
         <h1>{i18n.t('sync.title')}</h1>

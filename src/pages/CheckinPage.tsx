@@ -3,23 +3,22 @@ import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { AmslerStep } from '../components/checkin/AmslerStep';
 import { ExerciseSessionStep } from '../components/checkin/ExerciseSessionStep';
-import { ConditioningStep } from '../components/checkin/ConditioningStep';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
-import { NutritionStep } from '../components/checkin/NutritionStep';
+import { NutritionStep, parseWaterMl } from '../components/checkin/NutritionStep';
 import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
-import { SourcePicker } from '../components/checkin/SourcePicker';
 import { fieldError, NumberStep, parseNumber, type NumberField } from '../components/checkin/NumberStep';
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
-import { displayText, exerciseSummary, sleepQualityText, sourceLabel } from '../content/format';
+import { displayText, exerciseSummary, sleepQualityText } from '../content/format';
 import { indicatorContent, sleepQualityOptions } from '../content/indicators';
 import { translateText } from '../content/localize';
 import i18n from '../i18n';
 import { AMSLER_NO_CHANGE, resistancePart, visionSummary } from '../lib/checkinSummary';
 import { todayISO } from '../lib/dates';
+import { hydrationReferenceMl, referenceBodyMass } from '../lib/hydration';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, AmslerVisionResult, ConditioningAssessment, CrewMember, DailyValues, DataSource, IndicatorId, ReactionTestDetails, ExerciseSession } from '../types';
+import type { Alert, AmslerVisionResult, CrewMember, DailyValues, IndicatorId, ReactionTestDetails, ExerciseSession } from '../types';
 import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
@@ -37,11 +36,9 @@ interface Draft {
   reactionTest?: ReactionTestDetails;
   amsler?: AmslerVisionResult;
   exerciseSession?: ExerciseSession;
-  conditioning?: ConditioningAssessment;
   meals?: number; // refeições completas (N12)
-  water?: boolean; // água suficiente (N12)
+  water: string; // água bebida no dia, em mL digitados (N12)
   sleepQuality?: number; // qualidade do sono, no passo de sono (N14)
-  sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
 function draftFrom(values: DailyValues | undefined, member: CrewMember | undefined): Draft {
@@ -50,7 +47,7 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
   if (values) {
     text.systolic = str(values.bloodPressure?.systolic);
     text.diastolic = str(values.bloodPressure?.diastolic);
-    for (const id of ['heartRate', 'temperature', 'glucose', 'sleepHours', 'exerciseMinutes', 'radiationDose', 'bodyMassKg'] as const) {
+    for (const id of ['heartRate', 'oxygenSaturation', 'temperature', 'glucose', 'sleepHours', 'exerciseMinutes', 'radiationDose', 'bodyMassKg'] as const) {
       text[id] = str(values[id]);
     }
     // Exercício em dois campos: o aeróbico é o total menos o resistido.
@@ -72,15 +69,13 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     scale,
     amsler: values?.visionAmsler,
     exerciseSession: values?.exerciseSession,
-    conditioning: values?.conditioning,
     meals: values?.mealsCompleted,
-    water: values?.waterSufficient,
+    water: values?.waterIntakeMl === undefined ? '' : String(values.waterIntakeMl),
     sleepQuality: values?.sleepQuality,
     symptoms: values?.symptoms,
     medicationTaken,
     reactionTime: values?.reactionTime,
     reactionTest: values?.reactionTest,
-    sources: { ...values?.sources },
   };
 }
 
@@ -114,15 +109,14 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
     }
     if (indicator === 'mealsCompleted') {
       if (draft.meals !== undefined) values.mealsCompleted = draft.meals;
-      if (draft.water !== undefined) values.waterSufficient = draft.water;
+      const water = parseWaterMl(draft.water);
+      if (typeof water === 'number') values.waterIntakeMl = water;
     } else if (indicator === 'exerciseMinutes' && draft.exerciseSession) {
       const session = draft.exerciseSession;
       values.exerciseSession = session;
       values.exerciseMinutes = session.durationMinutes;
       // A parte resistida só é guardada para quem acompanha treino resistido (M3).
       if (splitsExercise(member)) values.resistanceMinutes = resistancePart(session);
-    } else if (indicator === 'conditioning') {
-      if (draft.conditioning) values.conditioning = draft.conditioning;
     } else if (indicator === 'vision') {
       if (draft.amsler) {
         values.visionAmsler = draft.amsler;
@@ -161,12 +155,6 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       } else Object.assign(values, { [indicator]: numbers[0] });
     }
   }
-  // Origem só dos valores registrados e vindos de um aparelho.
-  const sources: Partial<Record<IndicatorId, DataSource>> = {};
-  for (const [indicator, source] of Object.entries(draft.sources) as [IndicatorId, DataSource][]) {
-    if (source !== 'manual' && values[indicator] !== undefined) sources[indicator] = source;
-  }
-  if (Object.keys(sources).length > 0) values.sources = sources;
   return values;
 }
 
@@ -217,7 +205,7 @@ function OwnCheckin() {
   if (!member || steps.length === 0) return null;
 
   const values = toValues(steps, draft, member);
-  const filled = Object.keys(values).filter((key) => key !== 'sources' && key !== 'reactionTest').length;
+  const filled = Object.keys(values).filter((key) => key !== 'reactionTest').length;
 
   const advance = () => {
     if (index < steps.length - 1) setIndex(index + 1);
@@ -252,11 +240,9 @@ function OwnCheckin() {
         reactionTest: indicator === 'reactionTime' ? undefined : d.reactionTest,
         amsler: indicator === 'vision' ? undefined : d.amsler,
         exerciseSession: indicator === 'exerciseMinutes' ? undefined : d.exerciseSession,
-        conditioning: indicator === 'conditioning' ? undefined : d.conditioning,
         meals: indicator === 'mealsCompleted' ? undefined : d.meals,
-        water: indicator === 'mealsCompleted' ? undefined : d.water,
+        water: indicator === 'mealsCompleted' ? '' : d.water,
         sleepQuality: indicator === 'sleepHours' ? undefined : d.sleepQuality,
-        sources: { ...d.sources, [indicator]: undefined },
       };
     });
     advance();
@@ -330,7 +316,6 @@ function OwnCheckin() {
                   {indicator === 'sleepHours' && sleepQualityText(values) && ` · ${sleepQualityText(values)}`}
                   {indicator === 'exerciseMinutes' && values.resistanceMinutes !== undefined && ` ${i18n.t('checkin:resistancePart', { value: displayText(values, 'resistanceMinutes') })}`}
                   {indicator === 'exerciseMinutes' && values.exerciseSession && ` · ${exerciseSummary(values.exerciseSession)}`}
-                  {sourceLabel(values, indicator) && ` · ${sourceLabel(values, indicator)}`}
                 </span>
               </li>
             ))}
@@ -355,12 +340,17 @@ function OwnCheckin() {
   const partial = fields.length === 2 && fields.filter((f) => f.value.trim() !== '').length === 1;
   const partialBp = indicator === 'bloodPressure' && partial;
   const partialExercise = indicator === 'exerciseMinutes' && partial;
+  // Água (N12): referência pelo peso de hoje (se já digitado), senão o último registrado ou o do início.
+  const typedMass = parseNumber(draft.text.bodyMassKg ?? '');
+  const earlier = records.filter((r) => r.date < todayISO()).sort((a, b) => a.date.localeCompare(b.date));
+  const waterMass = typedMass ?? referenceBodyMass(undefined, earlier, member.startBodyMassKg);
+  const waterReference = hydrationReferenceMl(waterMass, rules);
+  const waterInvalid = indicator === 'mealsCompleted' && parseWaterMl(draft.water) === 'invalid';
 
   return (
     <div className="page checkin">
       <header className="page-header">
-        {/* Título da página para leitor de tela; mantém o visual do rótulo pequeno. */}
-        <h1 className="eyebrow">{i18n.t('checkin:title')} · {member.name}</h1>
+        <h1>{i18n.t('checkin:title')} · {member.name}</h1>
         <p className="small muted">{i18n.t('checkin:trackedOnly')}</p>
       </header>
 
@@ -375,7 +365,7 @@ function OwnCheckin() {
         onSkip={skip}
         onNext={next}
         nextLabel={index === steps.length - 1 ? i18n.t('checkin:review') : i18n.t('checkin:next')}
-        nextDisabled={fields.some((f) => fieldError(f)) || partial}
+        nextDisabled={fields.some((f) => fieldError(f)) || partial || waterInvalid}
       >
         {content.input && (
           <>
@@ -389,14 +379,6 @@ function OwnCheckin() {
             )}
             {partialBp && <p className="small muted">{i18n.t('checkin:partialPressure')}</p>}
             {partialExercise && <p className="small muted">{i18n.t('checkin:partialExercise')}</p>}
-            {content.sources && (
-              <SourcePicker
-                name={indicator}
-                options={content.sources}
-                value={draft.sources[indicator] ?? 'manual'}
-                onChange={(source) => setDraft((d) => ({ ...d, sources: { ...d.sources, [indicator]: source } }))}
-              />
-            )}
             {indicator === 'sleepHours' && (
               <div className="stack" style={{ gap: 8 }}>
                 <p className="small muted" aria-hidden="true">{i18n.t('indicators:sleepQuality.question')}</p>
@@ -416,6 +398,9 @@ function OwnCheckin() {
             mealOptions={content.scale}
             meals={draft.meals}
             water={draft.water}
+            referenceMl={waterReference}
+            bodyMassKg={waterMass}
+            perKg={rules.context?.hydration?.mlPerKg}
             onMeals={(meals) => setDraft((d) => ({ ...d, meals }))}
             onWater={(water) => setDraft((d) => ({ ...d, water }))}
           />
@@ -433,12 +418,6 @@ function OwnCheckin() {
           <AmslerStep
             value={draft.amsler}
             onChange={(amsler) => setDraft((d) => ({ ...d, amsler }))}
-          />
-        )}
-        {indicator === 'conditioning' && (
-          <ConditioningStep
-            value={draft.conditioning}
-            onChange={(conditioning) => setDraft((d) => ({ ...d, conditioning }))}
           />
         )}
         {indicator === 'reactionTime' && (

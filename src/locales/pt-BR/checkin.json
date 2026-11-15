@@ -36,7 +36,6 @@
   "resistance": "Resistido (com carga)",
   "resistancePart": "({{value}} de resistido)",
   "partialExercise": "Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.",
-  "sourceQuestion": "De onde veio o valor?",
   "amsler": {
     "instructions": "Faça um olho de cada vez, à distância habitual de leitura, olhando sempre para o ponto central. Toque nas áreas onde as linhas pareceram tortas ou sumiram.",
     "eye": "Olho em teste",
@@ -89,15 +88,7 @@
     },
     "apparatusMinutes": "Minutos em {{name}}",
     "total": "Duração total: {{minutes}} min",
-    "pickApparatus": "Marque cada aparelho usado e informe por quantos minutos."
-  },
-  "conditioning": {
-    "invalid": "Use um percentual de 0 a 200.",
-    "apparatusFor": "Aparelho usado: {{part}}",
-    "instructions": "Informe o resultado da avaliação periódica como percentual do valor medido antes do voo e selecione o aparelho usado em cada parte.",
-    "aerobic": "Capacidade aeróbica",
-    "strength": "Força",
-    "disclaimer": "O limite de acompanhamento é {{min}}% do valor antes do voo. A frequência da avaliação é definida pela equipe médica; este registro não é um teste automático.",
+    "pickApparatus": "Marque cada aparelho usado e informe por quantos minutos.",
     "apparatus": {
       "treadmill": "Esteira",
       "cycle": "Bicicleta ergométrica",
@@ -128,6 +119,5 @@
     "interrupted": ", interrompido",
     "howToRespond": "Responda tocando na área, clicando ou apertando espaço (ou Enter) assim que o sinal aparecer. Funciona mesmo se o foco sair da área.",
     "skipHint": "Não pode fazer um teste visual agora? Use \"Pular\": o passo fica sem resultado e isso não conta como piora."
-  },
-  "sourceNote": "Origem declarada por você. O app não se conecta ao aparelho; copie o valor e informe a origem."
+  }
 }

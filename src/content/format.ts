@@ -1,7 +1,7 @@
 import { formatNumber } from '../lib/series';
 import type { DailyValues, ExerciseSession, IndicatorId } from '../types';
 import i18n from '../i18n';
-import { indicatorContent, sleepQualityOptions, sourceContent } from './indicators';
+import { indicatorContent, sleepQualityOptions } from './indicators';
 
 export interface DisplayValue {
   text: string; // "118/76", "7,4", "Bem"
@@ -45,19 +45,13 @@ export function displayValue(
     const meals = values.mealsCompleted;
     const parts = [
       meals === undefined ? undefined : content.scale?.find((o) => o.value === Math.min(meals, 3))?.label ?? formatNumber(meals),
-      values.waterSufficient === undefined
-        ? undefined
-        : i18n.t(values.waterSufficient ? 'indicators:display.waterSufficient' : 'indicators:display.waterInsufficient'),
+      values.waterIntakeMl !== undefined
+        ? i18n.t('indicators:display.waterMl', { value: formatNumber(values.waterIntakeMl) })
+        : values.waterSufficient === undefined // registros antigos: só sim/não
+          ? undefined
+          : i18n.t(values.waterSufficient ? 'indicators:display.waterSufficient' : 'indicators:display.waterInsufficient'),
     ].filter((part): part is string => part !== undefined);
     return parts.length > 0 ? { text: parts.join('; '), unit: '' } : undefined;
-  }
-  if (indicator === 'conditioning') {
-    const assessment = values.conditioning;
-    if (!assessment) return undefined;
-    return {
-      text: `${i18n.t('indicators:conditioning.aerobic')}: ${formatNumber(assessment.aerobicPercent)}%; ${i18n.t('indicators:conditioning.strength')}: ${formatNumber(assessment.strengthPercent)}%`,
-      unit: '',
-    };
   }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
@@ -81,7 +75,7 @@ export function displayValue(
 export function exerciseSummary(session: ExerciseSession): string {
   const type = i18n.t(`checkin:exerciseSession.${session.type}`);
   const uses = (session.apparatus ?? []).map(
-    (use) => `${i18n.t(`checkin:conditioning.apparatus.${use.apparatus}`)} ${use.minutes} min`,
+    (use) => `${i18n.t(`checkin:exerciseSession.apparatus.${use.apparatus}`)} ${use.minutes} min`,
   );
   return uses.length ? `${type}: ${uses.join(', ')}` : type;
 }
@@ -98,11 +92,6 @@ export function sleepAidsTaken(values: DailyValues): string[] {
   return (values.medication ?? []).filter((dose) => dose.sleepAid && dose.taken).map((dose) => dose.label);
 }
 
-// "Sensor vestível" quando o valor veio de um aparelho; nada quando foi digitado (M10).
-export function sourceLabel(values: DailyValues, indicator: IndicatorId): string | undefined {
-  const source = values.sources?.[indicator];
-  return source && source !== 'manual' ? sourceContent(source).label : undefined;
-}
 
 export function displayText(
   values: DailyValues,

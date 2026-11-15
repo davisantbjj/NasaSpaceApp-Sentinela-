@@ -2,7 +2,7 @@
 
 Descreve todo dado que o Sentinela guarda: o que é cada campo, o tipo, a unidade, de onde vem, quem pode ver, onde fica gravado e como vira alerta. Escrito em 15/11/2026 a partir do código, então descreve o que existe hoje e marca separadamente o que ainda não existe.
 
-As faixas do protótipo não passaram por validação clínica. A maioria carrega `demo: true`; N17 tem `demo: false` por usar a referência oficial de 80%, sem que isso valide a avaliação inserida ou a classificação de alerta do app. Evidências e limites em [revisão das faixas](pesquisa/revisao-faixas.md).
+As faixas do protótipo não passaram por validação clínica. Todas carregam `demo: true`. Evidências e limites em [revisão das faixas](pesquisa/revisao-faixas.md).
 
 Relacionados: [arquitetura](arquitetura.md), [como funciona](como-funciona.md), [privacidade](privacidade.md), [tarefas da pesquisa de 15/11](tarefas-nasa-2026-11-15.md).
 
@@ -24,6 +24,7 @@ São os 18 valores de `IndicatorId`. Qualidade do sono e água são campos adici
 | --- | --- | --- | --- | --- | --- | --- |
 | `bloodPressure` | mmHg | dois números, 40 a 250 | sist. 100–130, diast. 60–85 | sist. 90–140, diast. 55–90 | sim, nos dois sentidos | coração |
 | `heartRate` | bpm | número, 20 a 250 | 60–100 | 50–120 | sim, nos dois sentidos | coração |
+| `oxygenSaturation` | % | número, 50 a 100 | 95 a 100 | 90 a 94; vermelho abaixo de 90 | não | coração |
 | `glucose` | mg/dL | número, 20 a 600 | 70–99 | 60–125 | sim, nos dois sentidos | metabolismo |
 | `temperature` | °C | número, 30 a 45, passo 0,1 | 36,1–37,2 | 35,5–37,9 | sim, para cima, desvio específico de 1% | defesas |
 | `sleepHours` | h | número, 0 a 24, passo 0,1 | 7–9 | 5–10 | sim, para baixo | mente |
@@ -35,8 +36,7 @@ São os 18 valores de `IndicatorId`. Qualidade do sono e água são campos adici
 | `resistanceMinutes` | min | número, 0 a 600 | sem faixa geral | sem faixa geral | sim, para baixo | ossos e músculos |
 | `radiationDose` | µSv | número, 0 a 100000 | sem faixa geral | sem faixa geral | sim, para cima | corpo inteiro |
 | `bodyMassKg` | kg | número, 20 a 300 | até 5% de perda | acima de 5%; vermelho acima de 10% | não | corpo inteiro |
-| `mealsCompleted` | contagem | 0 a 3; 3 = 3 ou mais | sem sequência de dois dias zerados | zero refeições em dois dias consecutivos | não | corpo inteiro |
-| `conditioning` | % pré-voo | capacidade aeróbica e força, com aparelho declarado | ambos ≥80% | qualquer componente <80%; sem vermelho | não | ossos e músculos |
+| `mealsCompleted` | contagem | 0 a 3; 3 = 3 ou mais | sem sequência de dois dias zerados | zero refeições em dois dias consecutivos, ou água abaixo de 35 mL/kg (mínimo 2 L) | não | corpo inteiro |
 | `vision` | resumo da Amsler | 0 a 2, derivado das respostas | 0 | 1 | não | olhos |
 | `symptoms` | lista | caixas de marcar | nenhum marcado | ver tabela de sintomas | não | corpo inteiro |
 | `medication` | lista | tomou ou não, por dose prevista | todas tomadas | dose esquecida | não | corpo inteiro |
@@ -53,6 +53,7 @@ Tudo de um dia cabe em `DailyValues`. Todos os campos são opcionais: um dia pod
 interface DailyValues {
   bloodPressure?: { systolic: number; diastolic: number };
   heartRate?: number;
+  oxygenSaturation?: number;       // SpO2 do oxímetro de dedo, em %
   glucose?: number;
   temperature?: number;
   sleepHours?: number;
@@ -74,18 +75,13 @@ interface DailyValues {
   radiationDose?: number;
   bodyMassKg?: number;             // massa periódica, comparada ao início da missão
   mealsCompleted?: number;         // N12: refeições completas (0 a 3; 3 = 3 ou mais)
-  waterSufficient?: boolean;       // N12: segunda pergunta do passo de alimentação
+  waterIntakeMl?: number;          // água bebida no dia, em mL (0 a 10000); referência pelo peso
+  waterSufficient?: boolean;       // registros antigos: sim/não da água, antes do campo em mL
   sleepQuality?: 1 | 2 | 3 | 4 | 5; // N14: segunda pergunta do passo de sono
   vision?: 0 | 1 | 2;              // resumo derivado, para histórico/alertas
   visionAmsler?: {                  // N15, um olho por vez
     left?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean; areas?: number[] };
     right?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean; areas?: number[] };  // areas: células 0–99 da grade 10×10 tocadas
-  };
-  conditioning?: {                 // N17, avaliação periódica
-    aerobicPercent: number;         // percentual do valor pré-voo
-    strengthPercent: number;        // percentual do valor pré-voo
-    aerobicApparatus: string;
-    strengthApparatus: string;
   };
   symptoms?: string[];             // ids definidos em rules.json
   medication?: MedicationDose[];
@@ -172,11 +168,7 @@ O exercício é registrado como uma sessão por check-in em `exerciseSession`: o
 
 ### Origem do dado
 
-```ts
-type DataSource = 'manual' | 'wearable' | 'dosimeter';
-```
-
-Fica em `values.sources`, um por indicador. Campo ausente significa digitado. Hoje o app não lê aparelho nenhum: o campo registra o que a pessoa declara ter usado. É a base para a leitura automática no futuro, e serve para o médico saber como o número chegou ali.
+Não há campo de origem: todos os valores são digitados no check-in. O campo `values.sources` (M10, origem declarada) foi retirado em 15/11. Registros antigos que ainda o tenham no navegador continuam legíveis; o app só ignora o campo.
 
 ## O registro do dia
 
@@ -332,7 +324,7 @@ O que fica aberto é o mínimo para a central conseguir ordenar e mover as caixa
 
 ## As tabelas do banco
 
-O banco se chama `sentinela` e está na versão 14. A v12 acrescenta massa inicial fictícia, indicador de massa e CO₂ de demonstração. A v13 inclui alimentação e a medicação fictícia de sono; a v14 acrescenta condicionamento e concilia cadastros atualizados por versões paralelas. Não preenchem retrospectivamente os valores diários antigos.
+O banco se chama `sentinela` e está na versão 15. A v15 tira o condicionamento (N17) e acrescenta o oxímetro aos cadastros. A v12 acrescenta massa inicial fictícia, indicador de massa e CO₂ de demonstração. A v13 inclui alimentação e a medicação fictícia de sono; a v14 acrescenta condicionamento e concilia cadastros atualizados por versões paralelas. Não preenchem retrospectivamente os valores diários antigos.
 
 | Tabela | Chave | Guarda |
 | --- | --- | --- |
@@ -489,10 +481,10 @@ Os quatro dados abaixo já têm interface na base `2769fb5`. Isso não conclui v
 
 | Dado | Implementação atual |
 | --- | --- |
-| Alimentação e água | refeições completas no dia e água suficiente; só refeições geram alerta próprio |
+| Alimentação e água | refeições completas no dia e água em mL, comparada com 35 mL/kg (mínimo 2 L); refeições e água geram o mesmo alerta amarelo |
+| Oxigenação (oxímetro) | SpO2 em %; verde 95–100, amarelo 90–94, vermelho abaixo de 90 |
 | Qualidade do sono | escala 1–5 ao lado das horas, sem alerta próprio |
 | Grade de Amsler | áreas tocadas e perguntas por olho; resumo 0–2; não diagnostica SANS |
-| Condicionamento | percentuais aeróbico/força e aparelhos; abaixo de 80% gera amarelo |
 
 N7 (novos sintomas), N18 (cadência) e N19 (bloco mensal) permanecem pendentes. Massa/dose anterior ficam no cadastro aberto e exportado; valores diários ficam cifrados. CO₂ fica compartilhado em `settings` e fora da cópia individual. Ver [privacidade](privacidade.md).
 
@@ -505,6 +497,6 @@ Valem como lista de verificação para quem for mexer no modelo:
 3. O que o comandante vê nunca contém valor nem nome de indicador.
 4. Alerta, linha de base e correlação são derivados, nunca gravados.
 5. Todo texto visível é chave de tradução, nunca frase pronta no código.
-6. Toda regra nova precisa de `rangeEvidence` preenchido; escolhas do protótipo usam `demo: true`. Em N17, `demo: false` identifica o corte oficial de 80%, sem certificar o método do app.
+6. Toda regra nova precisa de `rangeEvidence` preenchido; escolhas do protótipo usam `demo: true`. 
 7. Indicador fora de `trackedIndicators` não é perguntado nem avaliado.
 8. Campo novo em `DailyValues` entra como opcional, e os dias antigos continuam válidos sem ele.

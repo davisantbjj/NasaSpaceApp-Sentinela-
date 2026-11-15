@@ -12,7 +12,6 @@ export interface RegionItem {
   value?: DisplayValue; // ausente quando não foi medido no último registro
   level?: Level;
   baselineNote?: string;
-  sourceNote?: string; // "Origem: sensor vestível" (M10)
 }
 
 interface Props {
@@ -65,7 +64,6 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes, conte
               </p>
             )}
             {item.baselineNote && <p className="small muted">{item.baselineNote}</p>}
-            {item.sourceNote && <p className="small muted">{item.sourceNote}</p>}
             <div className="row">
               {alert && <Link className="link-arrow" to="/alerts">{i18n.t('regionPanel.viewAlert')}</Link>}
               {hasHistoryChart(item.indicator) && (

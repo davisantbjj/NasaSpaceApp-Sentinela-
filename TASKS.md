@@ -63,7 +63,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] **Migração v12** do banco, uma só, com os campos de N11 a N14, e recriar a demonstração. Depende de D5
 - [x] **N11.** Massa corporal comparada com `startBodyMassKg`; demonstração com amarelo acima de 5% de perda e vermelho acima de 10%. Depende de D5. Esforço médio
 - [x] **N13.** CO2 da cabine em mmHg na tela de Missão; acima de 3 mmHg, aviso geral e orientação no alerta de dor de cabeça. Depende de D5. Esforço médio
-- [x] **N17.** Condicionamento periódico em percentual do valor de antes do voo; capacidade aeróbica e força separadas, com aparelho registrado; abaixo de 80% gera alerta. A frequência detalhada fica na N18. Depende de D7. Esforço médio
+- [x] ~~**N17.** Condicionamento periódico~~: **retirado em 15/11**, porque não há como medir essa avaliação a bordo. A migração v15 tira o indicador dos cadastros; os nomes dos aparelhos ficaram no passo de exercício
 
 **Fase 10 e 11**
 
@@ -154,25 +154,22 @@ Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam p
 - [ ] Ligar "O que muda entre ambientes" ao perfil de missão (M8): missões de exemplo (ISS, Artemis II e Marte como referência, não missão real) e as fases
 - [ ] Acrescentar em "O que podemos afirmar": perda óssea estimada e radiação acumulada são estimativa e contexto, não medidas nem limites; metas semanais não são prescrição
 - [ ] Texto dos recursos da NASA usados, exigido para o Prêmio Global (rascunho em inglês já preparado na conversa com a Talita)
-- [ ] Ajustar os textos à entrada sem PIN da demonstração (`a86ab60`): o roteiro ainda diz "entrar como Ana (PIN 1111)" (`docs/roteiro-demonstracao.md`, 6:00–6:45); `docs/apresentacao.md` (seção de privacidade), `README.md` e `docs/como-funciona.md` (mensagens e privacidade) ainda dizem que a entrada é por perfil e PIN
-- [ ] Terminar `scripts/verify-larissa.mjs`. Em 15/11 já foram corrigidos o login sem PIN, a troca de perfil da missão (agora como oficial médico) e o texto da radiação; passam as 3 primeiras etapas. A 4ª (exercício) falha porque o script ainda espera o exercício em dois campos, e o passo agora tem tipo, aparelhos e minutos
+- [x] Textos ajustados à entrada sem PIN da demonstração (`a86ab60`): roteiro, `docs/apresentacao.md`, `README.md` e `docs/como-funciona.md` (15/11)
+- [x] `scripts/verify-larissa.mjs` atualizado em 15/11: login sem PIN, troca de perfil da missão como oficial médico, exercício por tipo/aparelho/minutos, painel novo (`.console-region-row`) e só registro manual. Passa inteiro (6 etapas)
+- [x] Revisão da refatoração do frontend (`feat/ui-ux-responsive-review`), 15/11: sem rolagem horizontal nem palavra partida em 320, 390, 768, 1280 e 1920 px, pt-BR/EN, com e sem "Texto maior". Corrigidos: rótulo "Tendências" quebrando na barra do celular, tabela de pacotes partindo data e selo, painel da região escondido atrás do alarme vermelho fixo, seletor de idioma colado no rótulo. Conferidos à mão: Amsler por setas, scanner do corpo por teclado, confirmação do alarme, telas do Kenji e Visão do solo
+- [x] Alarme vermelho em faixa compacta (15/11): o bloco completo rola com a página e, ao sair da tela, aparece abaixo da barra uma linha só com o vermelho, "+N mais", Silenciar e Confirmar (51 px em vez de cerca de 290 px em 768 px com texto maior)
+- [x] Idioma lembrado (15/11): a escolha fica no `localStorage` e vale na próxima abertura; sem escolha, abre em inglês
+- [x] Oxímetro (SpO2) no check-in, logo depois da frequência cardíaca, na região Coração: verde 95–100%, amarelo 90–94%, vermelho abaixo de 90% (proposta de demonstração; Larissa revisa a fonte). Entra para todos pela migração v15 (15/11)
+- [x] Água em mL no passo de alimentação, comparada com a referência pelo peso (35 mL/kg, mínimo 2 L; `context.hydration`). Abaixo da referência gera o alerta amarelo de alimentação (gatilho `lowWater`). O passo mostra a referência da pessoa antes de salvar (15/11)
+- [x] Como medir a pressão: costas apoiadas, pés retos e apoiados sem cruzar (no chão ou, em microgravidade, no apoio de pés), braço apoiado com o manguito na altura do peito (15/11)
+- [x] Scanner do corpo refeito: uma faixa luminosa percorre a silhueta inteira a cada 4,5 s sobre uma grade fina; sem piscar e parado com "reduzir movimento" (15/11)
 - [ ] Ensaiar o roteiro de novo, porque o check-in tem mais passos. Cenas sugeridas: perfil Artemis II em Missão; a Lia desmarcando o colírio (alerta "Dose não tomada", ligado ao caso de visão dela); o teste de reação em **modo curto**. Refazer as capturas das telas que mudaram
 - [ ] Capturas de tela e link do app publicado no `README.md` (depois da publicação do Davi)
 - [ ] Slides (a equipe decidiu entregar **7 slides**), vídeo e envio no site do Space Apps. Falta escolher quem faz e confirmar no guia do participante se o envio precisa estar em inglês
 
-## Futuro: leitura automática dos aparelhos
+## Fora do escopo: leitura de aparelhos
 
-Hoje a origem do dado (M10) é **declarada** pela pessoa: o app não lê aparelhos. Para ler sem digitar, faltaria:
-
-- [ ] **Acesso aos dados:** autorização da agência e uma interface com o sistema de dados da nave (como o CHP-IDSP da NASA). Os aparelhos das missões (Bio-Monitor, pulseira de actigrafia, dosímetro ativo) não têm API pública. Alternativas técnicas: importar o arquivo exportado pelo aparelho (CSV ou JSON) ou Bluetooth direto (Web Bluetooth; só sensores com perfil padrão, como frequência cardíaca, e não funciona no Safari do iPhone)
-- [ ] **Camada de leitura:** interface única por aparelho (ex.: `DeviceSource.read(desde)`, no estilo do `SyncAdapter`), com uma versão simulada para a demonstração
-- [ ] **Conversão e resumo do dia:** unidades (segundos de sono em horas, mSv em µSv) e muitas leituras num valor diário (sono que atravessa a meia-noite, frequência "em repouso" em leitura contínua)
-- [ ] **Modelo de dados:** tabela cifrada de medições brutas, com hora, aparelho e qualidade da leitura (tempo de uso, falhas); o valor do dia passa a ser calculado delas. Hora oficial da missão (a ISS usa UTC)
-- [ ] **Conflito entre fontes:** regra para quando há valor digitado e valor do aparelho no mesmo dia
-- [ ] **Check-in pré-preenchido:** campos vindos do aparelho, marcados como tal, que a pessoa confirma ou corrige
-- [ ] **Regras de alerta:** linha de base separada por origem (pulseira e digitado podem diferir), frequência de avaliação sem excesso de alertas e validação da precisão dos aparelhos em microgravidade
-- [ ] **Segurança e privacidade:** pareamento só de aparelhos autorizados, integridade da leitura e atualização de `docs/privacidade.md` para leituras contínuas
-- [ ] **Passo possível no hackathon:** importar um arquivo de exemplo fictício de sensor vestível (sono) e preencher o check-in com a origem marcada
+Decidido em 15/11: o Sentinela fica **só com registro manual**. A pergunta "De onde veio o valor?" (M10) saiu do check-in, do painel, da Visão do solo e da demonstração, e o aviso de privacidade foi para a v9. A leitura automática de aparelhos (acesso aos dados da nave, pareamento, conversão de leituras contínuas) não faz parte do projeto.
 
 ## Limitações conhecidas
 

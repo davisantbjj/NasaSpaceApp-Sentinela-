@@ -26,7 +26,7 @@ export function CrewStatusPage() {
   }, [load]);
 
   return (
-    <div className="page">
+    <div className="page crew-page commander-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('crewStatus.commander')}</span>
         <h1>{i18n.t('crewStatus.title')}</h1>

@@ -53,6 +53,24 @@
     "excludedDays_other": "{{count}} excluded"
   },
   "dashboard": {
+    "dayLabel": "Day",
+    "ofDays": "of {{total}}",
+    "environmentLabel": "Environment",
+    "lastRecordLabel": "Latest record",
+    "todayDone": "Today's check-in complete",
+    "todayPending": "Today's check-in pending",
+    "startCheckin": "Complete check-in",
+    "redo": "Redo",
+    "needsAttention": "Needs attention",
+    "regionsAttention": "Regions to monitor",
+    "regionsCount_one": "{{count}} region",
+    "regionsCount_other": "{{count}} regions",
+    "mapHint": "Markers show where to look. Select a region to review all its indicators.",
+    "fullAlert": "View full alert",
+    "history": "View history",
+    "noAlerts": "No alerts in the latest measurements. Review the indicators by region below.",
+    "noRecords": "Complete your first check-in to view your indicators and track changes.",
+    "closeRegion": "Close region details",
     "eyebrow": "Crew dashboard",
     "allExpected": "Everything is within the expected range",
     "alerts_one": "{{count}} alert",
@@ -63,7 +81,6 @@
     "checkinOwnPending": "Today's check-in is pending. The dashboard shows the record from {{date}}.",
     "systems": "Body systems",
     "regionHint": "Select a region to view its indicators.",
-    "sourceNote": "Source: {{source}}",
     "summary": {
       "allGreen": "All regions as expected",
       "red_one": "{{count}} region with a warning",
@@ -139,6 +156,12 @@
     "footerContact": "Text communication"
   },
   "login": {
+    "onboard": "Onboard monitoring",
+    "headline": "Health indicators for the mission.",
+    "overview": "Daily records, alerts and crew history in one place.",
+    "featureRecords": "Check-ins and history available on the device",
+    "featureAlerts": "Alerts with references and guidance",
+    "featureProfiles": "Access based on each person's role",
     "title": "Who is using the app?",
     "intro": "Choose your profile and tap Sign in. Each role only sees what it needs.",
     "profile": "Profile",
@@ -359,7 +382,7 @@
     "sections": {
       "stored": {
         "title": "What stays in this browser",
-        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records. Daily values also include body mass, meals, water, sleep quality, visual responses for each eye, exercise session, and conditioning assessment, when recorded."
+        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records. Daily values also include body mass, meals, water intake (in mL), pulse oximeter oxygen saturation, sleep quality, visual responses for each eye, and exercise session (type, equipment, and minutes), when recorded."
       },
       "purpose": {
         "title": "Purpose",
@@ -390,8 +413,8 @@
         "text": "The mission profile and environment stay in the device's shared preferences, without encryption. The bone estimate and the sum of recorded radiation doses are calculated on screen, without creating a new measurement. The JSON copy includes the recorded daily doses, but not these calculations or the shared mission preferences. The demo data is simulated. Initial body mass and prior mission dose are stored unencrypted in the profile and included in the individual copy; only the medical officer can edit them through the interface. Cabin CO₂ is shared in unencrypted settings and excluded from that copy. There is no continuous device monitoring."
       },
       "reactionAndSource": {
-        "title": "Reaction test and declared source",
-        "text": "The check-in can store the average reaction time in milliseconds, short or full mode, completion, duration, number of valid responses, and anticipations. This data and the declared source of values are encrypted with the check-in and appear readable in the JSON copy. We do not store each tap, recordings, or device identification. Selecting wearable sensor or dosimeter only states where you copied the number from; the app does not read devices. Weekly goals and readaptation notices are calculated on screen, without diagnosis."
+        "title": "Reaction test and manual entry",
+        "text": "The check-in can store the average reaction time in milliseconds, short or full mode, completion, duration, number of valid responses, and anticipations. This data is encrypted with the check-in and appears readable in the JSON copy. We do not store each tap, recordings, or device identification. Every value is typed in by you: the app does not connect to devices or read sensors. Weekly goals and readaptation notices are calculated on screen, without diagnosis."
       }
     }
   },
@@ -401,8 +424,27 @@
     "intro": "The actions below apply only to your data, for the profile you used to sign in.",
     "encryption": "Check-in values, notes, and message text are encrypted with one key per crew member, opened by your PIN and by the medical officer's. The profile and the medication plan are not encrypted. Prototype limit: the short PIN can be guessed by anyone who copies the database.",
     "actions": "Copy and deletion request",
-    "copyIncludes": "The copy includes the profile and the medication plan, the check-ins (including medication taken, stress, workload, exercise, reaction test result and details, and declared source, when recorded), the medical officer's notes, messages, the access log, and the deletion request. It does not include other crew members' data. The downloaded JSON file is readable, not encrypted; store it carefully. It is a copy for reference, without import or regulated portability.",
+    "copyIncludes": "The copy includes the profile and the medication plan, the check-ins (including medication taken, stress, workload, exercise, reaction test result and details, when recorded), the medical officer's notes, messages, the access log, and the deletion request. It does not include other crew members' data. The downloaded JSON file is readable, not encrypted; store it carefully. It is a copy for reference, without import or regulated portability.",
     "export": "Export my data as JSON",
+    "pdf": "Prepare a PDF report for the medical team on Earth",
+    "pdfHint": "Creates a readable report you can save as PDF or share yourself. The app does not send the file.",
+    "pdfBlocked": "Allow the report window to open and try again.",
+    "pdfReady": "The report opened in a new tab. Choose Print, then Save as PDF.",
+    "pdfTitle": "Health report — {{name}}",
+    "pdfSubtitle": "Check-in history for the signed-in profile",
+    "pdfEyebrow": "Individual report",
+    "pdfName": "Crew member",
+    "pdfRole": "Role",
+    "pdfMissionStart": "Mission start",
+    "pdfExported": "Generated",
+    "pdfNotice": "This file contains only the signed-in profile's data. Share it with the medical team on Earth through a channel you choose. Sentinela does not send this report.",
+    "pdfHistory": "Mission records",
+    "pdfDate": "Date",
+    "pdfDay": "Mission day",
+    "pdfIndicators": "Recorded indicators",
+    "pdfNoMeasures": "No indicators recorded on this day.",
+    "pdfDisclaimer": "Prototype with simulated data. Not a medical device; it does not diagnose or replace professional care. This export is readable and unencrypted; store and share it carefully.",
+    "pdfPrint": "Print or save as PDF",
     "request": "Register deletion request",
     "requestRecorded": "Request recorded locally",
     "exportDone": "JSON file prepared for download. It contains only this profile's data.",
@@ -501,6 +543,7 @@
       "red": "Warning"
     },
     "details": "View alerts and actions →",
+    "more": "+{{count}} more",
     "silence": "Silence",
     "silenced": "Sound silenced. The notice stays until someone confirms.",
     "confirm": "Confirm",

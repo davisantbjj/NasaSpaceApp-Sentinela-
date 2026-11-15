@@ -33,8 +33,8 @@ export function PrivacyNotice() {
         <h1 id="privacy-title">{i18n.t('privacy.title')}</h1>
         <p>{i18n.t('privacy.intro')}</p>
       </header>
-      <div className="card stack">
-        <div className="row">
+      <div className="card stack privacy-document">
+        <div className="row privacy-preferences">
           <LanguageSelect />
           <TextSizeToggle />
         </div>

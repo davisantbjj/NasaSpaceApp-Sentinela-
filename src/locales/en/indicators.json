@@ -13,18 +13,24 @@
     "reactionUnknownMode": "mode not recorded",
     "asNeededTaken": "as needed, taken: {{doses}}",
     "waterSufficient": "enough water",
+    "waterMl": "{{value}} mL of water",
     "waterInsufficient": "not enough water",
     "sleepQuality": "quality: {{quality}}"
   },
   "bloodPressure": {
     "label": "Blood pressure",
-    "howToMeasure": "Sit secured to your seat, rest for 5 minutes, and use the arm monitor. Enter both numbers.",
+    "howToMeasure": "Sit with your back supported by the backrest (on the spacecraft, strapped to the seat) and rest for 5 minutes. Keep your feet flat and supported, legs uncrossed and feet not floating: soles on the floor or, in microgravity, on the foot rail or restraint. Rest your arm on a surface so it is not floating, with the cuff at chest (heart) level. Use the arm monitor and enter both numbers.",
     "whyMeasure": "Without gravity, body fluids shift toward the head. In eight astronauts, all men, average 24-hour inflight blood pressure was 8 mmHg lower systolic and 9 mmHg lower diastolic than on the ground, with unchanged heart rate. The study does not define a safe range for an individual."
   },
   "heartRate": {
     "label": "Heart rate",
     "howToMeasure": "Measure at rest, before exercising. Use the finger oximeter, a wearable sensor, or count your pulse for 1 minute.",
     "whyMeasure": "Microgravity changes circulation. Resting heart rate is a simple sign of how your heart is responding."
+  },
+  "oxygenSaturation": {
+    "label": "Oxygen (pulse oximeter)",
+    "howToMeasure": "Place the finger pulse oximeter on your index or middle finger, at rest, with your hand still, warm, and without nail polish. Wait for the number to settle (about 30 seconds) and enter the saturation (SpO2) in %.",
+    "whyMeasure": "Saturation shows how much oxygen your blood is carrying. Cabin air is controlled, but a life support failure or the reduced-pressure atmospheres studied for exploration missions can lower oxygen. The finger pulse oximeter is quick and simple."
   },
   "temperature": {
     "label": "Temperature",
@@ -115,7 +121,7 @@
   "regions": {
     "mind": { "label": "Mind and sleep", "description": "Sleep, mood, stress, workload, and reaction time" },
     "head": { "label": "Eyes and vision", "description": "Vision self-test" },
-    "heart": { "label": "Heart", "description": "Blood pressure and heart rate" },
+    "heart": { "label": "Heart", "description": "Blood pressure, heart rate, and oxygen" },
     "immune": { "label": "Body defenses", "description": "Temperature" },
     "metabolism": { "label": "Metabolism", "description": "Blood glucose" },
     "musculoskeletal": { "label": "Bones and muscles", "description": "Exercise and resistance training" },
@@ -148,47 +154,24 @@
     "howToMeasure": "Take the test somewhere quiet. When the signal appears, tap the area or press Space as fast as you can. Do not respond before the signal. The full test takes 3 minutes.",
     "whyMeasure": "NASA's Reaction Self Test tracks attention and performance. This test is a demo and has not been validated as equivalent; the time also depends on the device and the interaction. A single result does not diagnose fatigue or prove fitness."
   },
-  "conditioning": {
-    "label": "Physical conditioning",
-    "aerobic": "Aerobic capacity",
-    "strength": "Strength",
-    "howToMeasure": "Complete the periodic assessment defined by the medical team and enter the result as a percentage of the preflight value, along with the apparatus used.",
-    "whyMeasure": "NASA operational guidance recommends maintaining at least 80% of preflight aerobic capacity and strength. This record does not replace a fitness assessment."
-  },
   "resistanceMinutes": {
     "label": "Resistance training",
     "howToMeasure": "Minutes of training against a load or resistance, entered in the exercise step.",
     "whyMeasure": "Resistance training protects bones the most in flight. On its own, it reduces bone loss but does not prevent it."
   },
-  "sources": {
-    "manual": {
-      "label": "Typed in",
-      "example": "measured or counted by you"
-    },
-    "wearable": {
-      "label": "Wearable sensor",
-      "example": "e.g. an actigraphy wristband, like the one used on Artemis II"
-    },
-    "dosimeter": {
-      "label": "Personal dosimeter",
-      "example": "e.g. an active dosimeter carried in a pocket, as on Artemis II"
-    }
-  },
   "mealsCompleted": {
     "label": "Food and water",
     "meals": "Complete meals today",
-    "water": "Did you drink enough water today?",
-    "howToMeasure": "Count the meals you ate in full today and say whether you drank enough water. No calorie counting needed.",
+    "water": "How much water did you drink today?",
+    "howToMeasure": "Count the meals you ate in full today and add up the water you drank, in mL (the drink bag shows the volume). No calorie counting needed.",
+    "waterReference": "Your reference: {{reference}} mL ({{perKg}} mL per kg × {{mass}} kg). Demo value.",
+    "waterReferenceMinimum": "Reference: at least {{reference}} mL a day. Demo value.",
     "whyMeasure": "Astronauts log what they eat in a tablet app. Eating less than needed is common in flight and leads to body mass loss.",
     "scale": {
       "0": "None",
       "1": "1 meal",
       "2": "2 meals",
       "3": "3 or more"
-    },
-    "waterOptions": {
-      "yes": "Yes",
-      "no": "No"
     }
   },
   "sleepQuality": {

@@ -43,7 +43,7 @@ Tecnologias: React 18, TypeScript, Vite, React Router, Zustand, Dexie, Recharts,
 
 ## Documentação
 
-As tarefas de Larissa incluem o aviso de primeira entrada, a tela **Seus dados** (cópia JSON, pedido de exclusão e registro de quem abriu os dados), comunicação por texto para mostrar à equipe de bordo e contexto educativo de readaptação à gravidade em **Missão**. Acesse as telas pelo menu do avatar, por Missão ou pelo rodapé; comunicação também está em Alertas. O tripulante não apaga o próprio histórico de saúde. A entrada é por perfil e PIN de demonstração; use apenas dados fictícios.
+As tarefas de Larissa incluem o aviso de primeira entrada, a tela **Seus dados** (cópia JSON, pedido de exclusão e registro de quem abriu os dados), comunicação por texto para mostrar à equipe de bordo e contexto educativo de readaptação à gravidade em **Missão**. Acesse as telas pelo menu do avatar, por Missão ou pelo rodapé; comunicação também está em Alertas. O tripulante não apaga o próprio histórico de saúde. Na demonstração, os perfis de exemplo entram com um toque, sem digitar o PIN; use apenas dados fictícios.
 
 O [roteiro da demonstração](docs/roteiro-demonstracao.md) e a [base de conteúdo da apresentação](docs/apresentacao.md) estão no repositório, sem slides ou vídeo. A [revisão documental das faixas](docs/pesquisa/revisao-faixas.md) distingue referências gerais e escolhas de demonstração; a aprovação clínica permanece pendente. Consulte também os [fluxos de privacidade](docs/privacidade.md).
 

@@ -13,18 +13,24 @@
     "reactionUnknownMode": "modo não registrado",
     "asNeededTaken": "quando necessário, tomado: {{doses}}",
     "waterSufficient": "água suficiente",
+    "waterMl": "{{value}} mL de água",
     "waterInsufficient": "água insuficiente",
     "sleepQuality": "qualidade: {{quality}}"
   },
   "bloodPressure": {
     "label": "Pressão arterial",
-    "howToMeasure": "Sente-se preso ao assento, descanse 5 minutos e use o medidor de braço. Digite os dois números.",
+    "howToMeasure": "Sente-se com as costas apoiadas no encosto (na nave, preso ao assento) e descanse 5 minutos. Deixe os pés retos e apoiados, sem cruzar as pernas e sem deixar os pés soltos: com a sola no chão ou, em microgravidade, no apoio ou na presilha de pés. Apoie o braço numa superfície para ele não ficar solto, com o manguito na altura do peito (do coração). Use o medidor de braço e digite os dois números.",
     "whyMeasure": "Sem gravidade, os líquidos do corpo se deslocam para a cabeça. Em oito astronautas, todos homens, a pressão média de 24 horas em voo foi 8 mmHg menor na sistólica e 9 mmHg menor na diastólica que em solo, sem mudança da frequência cardíaca. O estudo não define uma faixa segura individual."
   },
   "heartRate": {
     "label": "Frequência cardíaca",
     "howToMeasure": "Meça em repouso, antes do exercício. Use o oxímetro de dedo, um sensor vestível ou conte os batimentos por 1 minuto.",
     "whyMeasure": "A falta de gravidade muda a circulação. O ritmo em repouso é um sinal simples de como o coração está respondendo."
+  },
+  "oxygenSaturation": {
+    "label": "Oxigenação (oxímetro)",
+    "howToMeasure": "Coloque o oxímetro de dedo no indicador ou no dedo médio, em repouso, com a mão parada, aquecida e sem esmalte. Espere o número estabilizar (cerca de 30 segundos) e digite a saturação (SpO2), em %.",
+    "whyMeasure": "A saturação mostra quanto oxigênio o sangue está levando. A atmosfera da cabine é controlada, mas uma falha no suporte de vida ou as atmosferas de pressão reduzida estudadas para missões de exploração podem baixar o oxigênio. O oxímetro de dedo é rápido e simples."
   },
   "temperature": {
     "label": "Temperatura",
@@ -115,7 +121,7 @@
   "regions": {
     "mind": { "label": "Mente e sono", "description": "Sono, humor, estresse, carga de trabalho e tempo de reação" },
     "head": { "label": "Olhos e visão", "description": "Autoteste de visão" },
-    "heart": { "label": "Coração", "description": "Pressão arterial e frequência cardíaca" },
+    "heart": { "label": "Coração", "description": "Pressão arterial, frequência cardíaca e oxigenação" },
     "immune": { "label": "Defesas do corpo", "description": "Temperatura" },
     "metabolism": { "label": "Metabolismo", "description": "Glicemia" },
     "musculoskeletal": { "label": "Ossos e músculos", "description": "Exercício e treino resistido" },
@@ -148,47 +154,24 @@
     "howToMeasure": "Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.",
     "whyMeasure": "O Reaction Self Test da NASA acompanha atenção e desempenho. Este teste é demonstrativo e não foi validado como equivalente; o tempo também depende do aparelho e da interação. Um resultado isolado não diagnostica fadiga nem comprova aptidão."
   },
-  "conditioning": {
-    "label": "Condicionamento físico",
-    "aerobic": "Capacidade aeróbica",
-    "strength": "Força",
-    "howToMeasure": "Faça a avaliação periódica definida pela equipe médica e informe o percentual do resultado em relação ao valor antes do voo, junto com o aparelho utilizado.",
-    "whyMeasure": "A referência operacional da NASA recomenda manter pelo menos 80% da capacidade aeróbica e da força de antes da missão. Este registro não substitui a avaliação física."
-  },
   "resistanceMinutes": {
     "label": "Treino resistido",
     "howToMeasure": "Minutos de treino contra carga ou resistência, digitados no passo de exercício.",
     "whyMeasure": "O treino resistido é o que mais protege os ossos no voo. Sozinho, ele reduz a perda óssea, mas não a impede."
   },
-  "sources": {
-    "manual": {
-      "label": "Digitado",
-      "example": "medido ou contado por você"
-    },
-    "wearable": {
-      "label": "Sensor vestível",
-      "example": "ex.: pulseira de actigrafia, como a usada no Artemis II"
-    },
-    "dosimeter": {
-      "label": "Dosímetro pessoal",
-      "example": "ex.: dosímetro ativo levado no bolso, como no Artemis II"
-    }
-  },
   "mealsCompleted": {
     "label": "Alimentação e água",
     "meals": "Refeições completas hoje",
-    "water": "Bebeu água suficiente hoje?",
-    "howToMeasure": "Conte as refeições que você comeu por inteiro hoje e diga se bebeu água suficiente. Não é preciso contar calorias.",
+    "water": "Quanto de água você bebeu hoje?",
+    "howToMeasure": "Conte as refeições que você comeu por inteiro hoje e some a água que bebeu, em mL (a bolsa de bebida mostra o volume). Não é preciso contar calorias.",
+    "waterReference": "Referência para você: {{reference}} mL ({{perKg}} mL por kg × {{mass}} kg). Valor de demonstração.",
+    "waterReferenceMinimum": "Referência: pelo menos {{reference}} mL por dia. Valor de demonstração.",
     "whyMeasure": "Os astronautas registram o que comem num aplicativo de tablet. Comer menos do que o necessário é comum em voo e leva à perda de massa corporal.",
     "scale": {
       "0": "Nenhuma",
       "1": "1 refeição",
       "2": "2 refeições",
       "3": "3 ou mais"
-    },
-    "waterOptions": {
-      "yes": "Sim",
-      "no": "Não"
     }
   },
   "sleepQuality": {

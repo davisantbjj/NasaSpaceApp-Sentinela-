@@ -5,6 +5,8 @@ import { App } from './App';
 import './i18n';
 import './styles/tokens.css';
 import './styles/app.css';
+import './styles/console.css';
+import './styles/workspace.css';
 
 // HashRouter: funciona em Vercel e em GitHub Pages sem configurar redirecionamento.
 createRoot(document.getElementById('root')!).render(
