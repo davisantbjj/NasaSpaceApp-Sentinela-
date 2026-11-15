@@ -81,6 +81,18 @@ O código conta, nos últimos sete dias incluindo hoje, quantos registros de son
 
 O [brief NASA sobre intolerância ortostática](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-019-orthostatic-intolerance.pdf) sustenta orientar sobre dificuldades ao voltar à gravidade. O app destaca a nota nos sete dias anteriores e no dia de um pouso previsto ou retorno à Terra; esse intervalo é escolha de interface, não limiar clínico. Usa fases planejadas, não detecção de pouso ou sintoma. Após a data, não garante acompanhamento: pode deixar de haver próxima mudança. Não mede pressão ao levantar, não diagnostica intolerância nem define tratamento; não muda níveis. Dias em Lua/Marte são contexto de missão, sem extrapolar incidência humana observada no retorno à Terra.
 
+## Revisão NASA N3–N6 e N8 — Larissa, 15/11/2026
+
+Textos do app corrigidos em português e inglês, com referências no rangeEvidence. Faixas, níveis e algoritmos preservados.
+
+- **N3 — visão:** [Greenwald et al., NASA, 2022](https://ntrs.nasa.gov/citations/20220005320) descrevem sinais precoces por OCT em cerca de 70% nas missões longas. O [OCHMO-TB-033 Rev C, 2023, p. 5](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf) informa edema do disco óptico em 16% durante/após missões longas. Critérios diferentes: não apresentar como uma única taxa nem probabilidade individual. O autorrelato 0–2 não detecta esses achados nem diagnostica SANS.
+- **N4 — pressão:** [Norsk et al., 2015](https://pmc.ncbi.nlm.nih.gov/articles/PMC4324706/): oito astronautas, todos homens; médias ambulatoriais de 24 h em voo reduzidas em 8 mmHg na sistólica e 9 mmHg na diastólica, sem mudança da frequência cardíaca. Amostra pequena: não subtrair esses valores de cada pessoa nem alterar faixas.
+- **N5 — sono:** [Jones et al., 2022](https://doi.org/10.1093/sleep/zsac006): 24 astronautas; associação de sono ≤6 h com pior desempenho e maior estresse. Não valida a faixa amarela 5–10 h, o vermelho, causalidade ou limite de urgência. O app continua sem regra específica de seis horas.
+- **N6 — sintomas:** [OCHMO-TB-033 Rev C, p. 4 e 9](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf): adaptação espacial em 50–70%, congestão em mais de 50%, dor lombar de adaptação em 52% e uso de auxiliares do sono em cerca de 71%. Frequências descritivas, não pesos de alerta nem validação da triagem.
+- **N8 — glicemia:** incluída pelo desafio; não encontramos rotina de monitoramento em voo nas fontes NASA consultadas. Isso não prova inexistência de pesquisas ou indicações individuais. Removidas a promessa de avaliar alimentação pela glicemia e sua atribuição direta ao risco de nutrição. Massa corporal mantém esse vínculo; alimentação continua proposta em N12. As limitações das referências NIDDK permanecem.
+
+**N10 permanece parcial:** esta revisão cobre N3–N6/N8. N7 ainda não está implementada. N1 já usa desvio específico de 1% em °C por três registros: escolha demonstrativa, dependente da escala, não um limiar clínico derivado de Stahn et al. A média inicial permanece fixa; a mudança não elimina alertas da faixa geral durante adaptação lenta. N2 já tem implementação e exige conciliar a descrição anterior de M6 antes de encerrar a revisão completa.
+
 ## O que ainda depende da equipe
 
 Antes de mudar faixas ou retirar `demo`, obter revisão de profissional qualificado: população, condição de repouso/jejum, método de medida, referências, limites de ação, exceções e conduta para cada nível. Registrar a decisão e atualizar testes, `rules.json` e `docs/como-funciona.md` juntos. Essa aprovação clínica continua pendente no `TASKS.md`.

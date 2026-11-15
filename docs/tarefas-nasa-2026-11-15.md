@@ -6,6 +6,10 @@ Os identificadores N1 a N21 não conflitam com os M1 a M11 da fase 11. O modelo 
 
 Toda faixa nova entra como demonstração, com `demo: true` e `rangeEvidence`, e precisa da mesma revisão documental que a Larissa fez nas faixas atuais.
 
+## Andamento da Larissa — 15/11
+
+N3–N6 e N8 concluídas como revisão documental e dos textos do app em português/inglês. Faixas e níveis preservados; ver [revisão das faixas](pesquisa/revisao-faixas.md). N10 parcial: N7 pendente e descrição anterior de M6 a conciliar com N2. Apresentação final, roteiro e capturas continuam para o encerramento do escopo. A descrição de conflitos em N0 é histórica; não há arquivos não mesclados nem marcadores de conflito na base conferida.
+
 ## Resumo
 
 | # | Tarefa | Prioridade | Esforço | Área |
@@ -65,23 +69,23 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 
 ### N3. Corrigir o texto da visão
 
-- [ ] **N3.** O app diz que cerca de 70% dos astronautas "têm inchaço no fundo do olho". Trocar por: cerca de 70% mostram sinais iniciais no exame de tomografia; 16% chegam a ter inchaço do nervo óptico.
+- [x] **N3.** O app diz que cerca de 70% dos astronautas "têm inchaço no fundo do olho". Trocar por: cerca de 70% mostram sinais iniciais no exame de tomografia; 16% chegam a ter inchaço do nervo óptico.
   - **Por quê:** 16% é o número da NASA para edema do disco óptico ([OCHMO](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf)). Os 70% das nossas fontes são sinais iniciais na tomografia, que é outra coisa.
   - **Arquivos:** `src/content/indicators.ts`, `src/rules/rules.json`, traduções, `docs/apresentacao.md`.
 
 ### N4. Evidência da pressão arterial em voo
 
-- [ ] **N4.** Acrescentar ao `rangeEvidence` e ao `whyItMatters` da pressão: em 24 horas de medição no espaço, a sistólica ficou 8 mmHg e a diastólica 9 mmHg abaixo do valor em solo, com frequência cardíaca igual ([Norsk et al., 2015](https://pmc.ncbi.nlm.nih.gov/articles/4324706/)). Foram 8 astronautas, todos homens.
+- [x] **N4.** Acrescentar ao `rangeEvidence` e ao `whyItMatters` da pressão: em 24 horas de medição no espaço, a sistólica ficou 8 mmHg e a diastólica 9 mmHg abaixo do valor em solo, com frequência cardíaca igual ([Norsk et al., 2015](https://pmc.ncbi.nlm.nih.gov/articles/4324706/)). Foram 8 astronautas, todos homens.
   - **Não fazer:** mudar a faixa. O estudo é pequeno e de um só sexo.
 
 ### N5. Evidência do corte de 6 horas de sono
 
-- [ ] **N5.** Acrescentar ao `rangeEvidence` do sono: em 24 astronautas, dormir 6 horas ou menos esteve ligado a reação mais lenta e mais estresse ([Jones et al., 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197)).
-  - É a única faixa do app com apoio direto em dado de astronauta. Vale citar na apresentação.
+- [x] **N5.** Acrescentar ao `rangeEvidence` do sono: em 24 astronautas, dormir 6 horas ou menos esteve ligado a reação mais lenta e mais estresse ([Jones et al., 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197)).
+  - A associação observacional não valida as faixas de alerta do app nem um limiar de urgência.
 
 ### N6. Evidência dos sintomas com percentuais
 
-- [ ] **N6.** Acrescentar ao `rangeEvidence` dos sintomas: síndrome de adaptação em 50% a 70% da tripulação, congestão em mais de 50%, dor nas costas em 52% ([OCHMO](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf)). Cerca de 71% usa remédio para dormir.
+- [x] **N6.** Acrescentar ao `rangeEvidence` dos sintomas: síndrome de adaptação em 50% a 70% da tripulação, congestão em mais de 50%, dor nas costas em 52% ([OCHMO](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf)). Cerca de 71% usa remédio para dormir.
 
 ### N7. Dois sintomas novos
 
@@ -92,7 +96,7 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 
 ### N8. Glicemia: dizer que está fora da rotina da NASA
 
-- [ ] **N8.** Acrescentar ao texto da glicemia: não é rotina da NASA em voo; está no app porque o desafio cita açúcar no sangue. Tirar a ligação da glicemia com o risco de nutrição, que passa para massa corporal e alimentação (N11 e N12).
+- [x] **N8.** Acrescentar ao texto da glicemia: não é rotina da NASA em voo; está no app porque o desafio cita açúcar no sangue. Tirar a ligação da glicemia com o risco de nutrição, que passa para massa corporal e alimentação (N11 e N12).
   - **Por quê:** não encontramos monitoramento rotineiro de glicemia em voo. O primeiro monitoramento contínuo na estação foi em 2025, num estudo privado ([Axiom](https://www.collectspace.com/ubb/Forum38/HTML/002658.html)). A NASA faz exame de sangue no dia 30 de voo e 30 dias antes do retorno.
 
 ### N9. Comandante sem vermelho de saúde mental

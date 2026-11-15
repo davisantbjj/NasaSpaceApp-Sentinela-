@@ -29,9 +29,10 @@
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://medlineplus.gov/ency/article/002341.htm"
+          "https://medlineplus.gov/ency/article/002341.htm",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC4324706/"
         ],
-        "green": "Sistólica 100–130 e diastólica 60–85: escolha de demonstração. A referência geral informa 90/60–120/80 em repouso e não valida estes cortes separados.",
+        "green": "Sistólica 100–130 e diastólica 60–85: escolha de demonstração. A referência geral informa 90/60–120/80 em repouso e não valida estes cortes separados. Norsk et al. (2015): oito astronautas, todos homens; média ambulatorial de 24 h em voo reduzida em 8 mmHg na sistólica e 9 mmHg na diastólica, com frequência cardíaca inalterada. Amostra pequena; não valida nem altera os cortes.",
         "yellow": "Sistólica 90–140 e diastólica 55–90: escolha de demonstração, sem validação clínica.",
         "red": "Fora da amarela: lógica de demonstração, não um limiar de emergência validado."
       },
@@ -74,7 +75,7 @@
       "yellow": { "min": 60, "max": 125 },
       "useBaseline": true,
       "deviationDirection": "both",
-      "nasaRisk": "Inadequate Food and Nutrition",
+      "nasaRisk": "Not assigned: challenge indicator; routine inflight monitoring not established",
       "hazards": ["distance", "hostileEnvironment"],
       "messages": {
         "whyItMatters": "alerts:rules.glucose.whyItMatters",
@@ -83,14 +84,14 @@
           "red": "alerts:rules.glucose.red"
         }
       },
-      "sourceUrl": "https://www.nasa.gov/reference/risk-of-inadequate-food-and-nutrition/",
+      "sourceUrl": "https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis",
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
           "https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis",
           "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/low-blood-glucose-hypoglycemia"
         ],
-        "green": "70–99 mg/dL combina referências distintas: limite de hipoglicemia em contexto de diabetes e glicemia plasmática de jejum até 99. Não valida medidor capilar nem astronautas.",
+        "green": "70–99 mg/dL combina referências distintas: limite de hipoglicemia em contexto de diabetes e glicemia plasmática de jejum até 99. Não valida medidor capilar nem astronautas. Incluído pelo desafio. Não foi encontrada rotina de monitoramento de glicemia em voo nas fontes NASA consultadas; ausência de fonte não prova inexistência de uso clínico ou de pesquisa. Não substitui massa corporal ou registro alimentar.",
         "yellow": "60–125 mg/dL: escolha de demonstração. O intervalo plasmático 100–125 citado pelo NIDDK não define urgência nem valida o limite inferior 60.",
         "red": "Fora da amarela: demonstração. Não confundir classificação diagnóstica de laboratório com urgência de medida capilar."
       },
@@ -148,10 +149,11 @@
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://www.nichd.nih.gov/health/topics/factsheets/sleep"
+          "https://www.nichd.nih.gov/health/topics/factsheets/sleep",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/"
         ],
         "green": "7–9 horas: referência geral de sono para a maioria dos adultos, sem validar triagem de astronautas.",
-        "yellow": "5–10 horas: escolha de demonstração, sem validação clínica.",
+        "yellow": "5–10 horas: escolha de demonstração, sem validação clínica. Jones et al. (2022), 24 astronautas: sono de 6 h ou menos associado a pior desempenho e maior estresse. Associação observacional, sem validar as faixas 5–10 h, um limite de urgência ou regra específica de 6 h no app.",
         "red": "Menos de 5 ou mais de 10: escolha de demonstração, não critério clínico universal."
       },
       "demo": true
@@ -432,10 +434,12 @@
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/"
+          "https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/",
+          "https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf",
+          "https://ntrs.nasa.gov/citations/20220005320"
         ],
         "green": "0 = sem mudança: escala própria de demonstração; a fonte SANS não valida um autoteste 0–2.",
-        "yellow": "1 = mudança leve: classificação de demonstração, sem validação clínica.",
+        "yellow": "1 = mudança leve: classificação de demonstração, sem validação clínica. Sinais precoces por OCT em cerca de 70% nas missões longas (Greenwald et al., 2022) não equivalem ao edema do disco óptico descrito em 16% no OCHMO-TB-033 Rev C (2023). Critérios distintos; nenhum percentual valida esta escala.",
         "red": "2 = mudança clara: classificação de demonstração, não diagnóstico de SANS."
       },
       "demo": true
@@ -487,10 +491,11 @@
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://www.nasa.gov/hrp/risks/"
+          "https://www.nasa.gov/hrp/risks/",
+          "https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf"
         ],
         "green": "Nenhum sintoma marcado: não é atestado de saúde.",
-        "yellow": "headache, nausea, dizziness, fatigue, backPain, congestion, skinRash: níveis fixos de demonstração, não validados pela página de riscos.",
+        "yellow": "headache, nausea, dizziness, fatigue, backPain, congestion, skinRash: níveis fixos de demonstração, não validados pela página de riscos. OCHMO-TB-033 Rev C (2023), p. 4: adaptação espacial em 50–70%, congestão em mais de 50% e dor lombar de adaptação em 52%; p. 9: uso de auxiliares do sono em cerca de 71%. Frequências descritivas, não probabilidades individuais nem validação dos níveis.",
         "red": "chestPain e shortBreath: prioridade de demonstração. A página de riscos não valida este protocolo de triagem."
       },
       "demo": true

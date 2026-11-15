@@ -90,7 +90,7 @@
   },
   "rules": {
     "bloodPressure": {
-      "whyItMatters": "Sem gravidade, os líquidos do corpo sobem para a cabeça e o coração trabalha de outro jeito. A pressão pode variar com o contexto da missão.",
+      "whyItMatters": "Sem gravidade, os líquidos do corpo se deslocam para a cabeça. Em oito astronautas, todos homens, a pressão média de 24 horas em voo foi 8 mmHg menor na sistólica e 9 mmHg menor na diastólica que em solo, sem mudança da frequência cardíaca. O estudo não define uma faixa segura individual.",
       "yellow": "Repita a medida após 10 minutos de repouso e registre de novo.",
       "red": "Repita a medida, fique em repouso e avise o médico de bordo."
     },
@@ -100,7 +100,7 @@
       "red": "Descanse e avise o médico de bordo."
     },
     "glucose": {
-      "whyItMatters": "A alimentação de bordo é limitada e precisa sustentar a tripulação por toda a missão. A glicemia em jejum ajuda a acompanhar a nutrição.",
+      "whyItMatters": "A glicemia está no Sentinela porque o desafio cita açúcar no sangue e só é acompanhada pelos perfis selecionados. Não encontramos rotina de monitoramento de glicemia em voo nas fontes NASA consultadas. Isso não exclui pesquisas ou indicações individuais, nem torna a glicemia uma medida de alimentação adequada.",
       "yellow": "Registre o que comeu e quando, e meça de novo em jejum conforme o protocolo.",
       "red": "Meça de novo agora e avise o médico de bordo."
     },
@@ -140,7 +140,7 @@
       "red": "Vá para a área de abrigo e avise o médico de bordo."
     },
     "vision": {
-      "whyItMatters": "Cerca de 70% dos astronautas da estação têm inchaço no fundo do olho. Um autoteste não diagnostica nada, mas mostra quando pedir um exame.",
+      "whyItMatters": "Em missões longas na ISS, cerca de 70% apresentam sinais precoces detectáveis por tomografia de coerência óptica. O resumo NASA de 2023 informa edema do disco óptico em 16% durante ou após missões longas; os critérios diferem. Este autorrelato não diagnostica SANS nem substitui exame.",
       "yellow": "Registre o que mudou e repita o autoteste amanhã no mesmo horário.",
       "red": "Avise o médico de bordo e peça uma avaliação ocular."
     },

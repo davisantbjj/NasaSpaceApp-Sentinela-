@@ -90,7 +90,7 @@
   },
   "rules": {
     "bloodPressure": {
-      "whyItMatters": "Without gravity, body fluids shift toward the head and the heart works differently. Blood pressure can vary with mission context.",
+      "whyItMatters": "Without gravity, body fluids shift toward the head. In eight astronauts, all men, average 24-hour inflight blood pressure was 8 mmHg lower systolic and 9 mmHg lower diastolic than on the ground, with unchanged heart rate. The study does not define a safe range for an individual.",
       "yellow": "Rest for 10 minutes, repeat the measurement, and record it again.",
       "red": "Repeat the measurement, rest, and notify the onboard medical officer."
     },
@@ -100,7 +100,7 @@
       "red": "Rest and notify the onboard medical officer."
     },
     "glucose": {
-      "whyItMatters": "Onboard food is limited and must sustain the crew for the whole mission. Fasting glucose helps track nutrition.",
+      "whyItMatters": "Sentinela includes glucose because the challenge mentions blood sugar, and only selected profiles track it. We found no routine inflight glucose monitoring in the NASA sources reviewed. This does not rule out research or individual indications, or make glucose a measure of adequate nutrition.",
       "yellow": "Record what and when you ate, then measure again while fasting according to the protocol.",
       "red": "Measure again now and notify the onboard medical officer."
     },
@@ -140,7 +140,7 @@
       "red": "Go to the shelter area and notify the onboard medical officer."
     },
     "vision": {
-      "whyItMatters": "About 70% of station astronauts experience swelling at the back of the eye. A self-test is not a diagnosis, but can show when to ask for an exam.",
+      "whyItMatters": "On long ISS missions, about 70% show early signs detectable by optical coherence tomography. A 2023 NASA brief reports optic disc edema in 16% during or after long missions; the criteria differ. This self-report does not diagnose SANS or replace an eye examination.",
       "yellow": "Record what changed and repeat the self-test tomorrow at the same time.",
       "red": "Notify the onboard medical officer and request an eye evaluation."
     },

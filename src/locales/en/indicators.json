@@ -15,7 +15,7 @@
   "bloodPressure": {
     "label": "Blood pressure",
     "howToMeasure": "Sit secured to your seat, rest for 5 minutes, and use the arm monitor. Enter both numbers.",
-    "whyMeasure": "Without gravity, body fluids shift toward the head and the heart adapts. Blood pressure helps show how that adaptation is going."
+    "whyMeasure": "Without gravity, body fluids shift toward the head. In eight astronauts, all men, average 24-hour inflight blood pressure was 8 mmHg lower systolic and 9 mmHg lower diastolic than on the ground, with unchanged heart rate. The study does not define a safe range for an individual."
   },
   "heartRate": {
     "label": "Heart rate",
@@ -30,7 +30,7 @@
   "glucose": {
     "label": "Blood glucose",
     "howToMeasure": "Measure while fasting with the finger-stick meter, before your first meal.",
-    "whyMeasure": "Onboard food is limited and must last the whole mission. Glucose helps track nutrition for people who have been asked to measure it."
+    "whyMeasure": "Sentinela includes glucose because the challenge mentions blood sugar, and only selected profiles track it. We found no routine inflight glucose monitoring in the NASA sources reviewed. This does not rule out research or individual indications, or make glucose a measure of adequate nutrition."
   },
   "sleepHours": {
     "label": "Sleep",
@@ -91,7 +91,7 @@
   "vision": {
     "label": "Vision",
     "howToMeasure": "Read the near-vision card with one eye at a time and compare it with what you saw at the start of the mission.",
-    "whyMeasure": "About 70% of station astronauts experience swelling at the back of the eye. This self-test is not a diagnosis, but can show when to ask for an exam.",
+    "whyMeasure": "On long ISS missions, about 70% show early signs detectable by optical coherence tomography. A 2023 NASA brief reports optic disc edema in 16% during or after long missions; the criteria differ. This self-report does not diagnose SANS or replace an eye examination.",
     "scale": {
       "0": "No change",
       "1": "Slight change",

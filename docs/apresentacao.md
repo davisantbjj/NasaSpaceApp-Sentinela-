@@ -24,6 +24,8 @@ Cada tripulante acompanha só a sua lista: na demonstração, só o Kenji mede g
 
 Limites: as escalas de estresse e carga são da demonstração, não escalas psicológicas validadas. O teste de reação do app segue a ideia do Reaction Self Test (esperar o sinal e responder rápido, por 3 minutos), mas não é o teste da NASA nem usa os critérios dele; na demonstração existe uma versão curta de 30 s. A medicação é autorrelato, sem conferência do estoque de bordo, e os nomes dos remédios da demonstração são fictícios.
 
+Correção factual N3/N8 (15/11): sinais precoces por OCT em cerca de 70% nas missões longas ([NASA, 2022](https://ntrs.nasa.gov/citations/20220005320)) não equivalem aos 16% de edema do disco óptico do [OCHMO-TB-033 Rev C, p. 5](https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf). Os critérios diferem; o autorrelato não diagnostica SANS. A glicemia está no desafio; não encontramos rotina de monitoramento em voo nas fontes NASA consultadas, o que não exclui pesquisa ou indicações individuais. Não substitui massa corporal ou registro alimentar. Esta correção não encerra a revisão final da apresentação.
+
 ## Por que usamos dados simulados
 
 Os três perfis e os 60 dias são gerados por código com semente fixa; nenhum registro foi extraído de astronauta real. Isso permite demonstrar os mesmos casos sem expor informações pessoais.

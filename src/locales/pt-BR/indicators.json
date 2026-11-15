@@ -15,7 +15,7 @@
   "bloodPressure": {
     "label": "Pressão arterial",
     "howToMeasure": "Sente-se preso ao assento, descanse 5 minutos e use o medidor de braço. Digite os dois números.",
-    "whyMeasure": "Sem gravidade, os líquidos do corpo sobem para a cabeça e o coração se adapta. A pressão mostra como essa adaptação está indo."
+    "whyMeasure": "Sem gravidade, os líquidos do corpo se deslocam para a cabeça. Em oito astronautas, todos homens, a pressão média de 24 horas em voo foi 8 mmHg menor na sistólica e 9 mmHg menor na diastólica que em solo, sem mudança da frequência cardíaca. O estudo não define uma faixa segura individual."
   },
   "heartRate": {
     "label": "Frequência cardíaca",
@@ -30,7 +30,7 @@
   "glucose": {
     "label": "Glicemia",
     "howToMeasure": "Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição.",
-    "whyMeasure": "A comida de bordo é limitada e precisa durar a missão toda. A glicemia ajuda a acompanhar a nutrição de quem tem indicação para medir."
+    "whyMeasure": "A glicemia está no Sentinela porque o desafio cita açúcar no sangue e só é acompanhada pelos perfis selecionados. Não encontramos rotina de monitoramento de glicemia em voo nas fontes NASA consultadas. Isso não exclui pesquisas ou indicações individuais, nem torna a glicemia uma medida de alimentação adequada."
   },
   "sleepHours": {
     "label": "Sono",
@@ -91,7 +91,7 @@
   "vision": {
     "label": "Visão",
     "howToMeasure": "Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão.",
-    "whyMeasure": "Cerca de 70% dos astronautas da estação têm inchaço no fundo do olho. O autoteste não diagnostica, mas mostra quando pedir um exame.",
+    "whyMeasure": "Em missões longas na ISS, cerca de 70% apresentam sinais precoces detectáveis por tomografia de coerência óptica. O resumo NASA de 2023 informa edema do disco óptico em 16% durante ou após missões longas; os critérios diferem. Este autorrelato não diagnostica SANS nem substitui exame.",
     "scale": {
       "0": "Sem mudança",
       "1": "Mudança leve",
