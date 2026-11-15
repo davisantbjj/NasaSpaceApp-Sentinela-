@@ -13,11 +13,15 @@ import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStor
 import type { Alert, CrewMember, DailyValues, IndicatorId } from '../types';
 import { latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
 
+// Indicadores respondidos numa escala (passo ScaleStep).
+const SCALE_IDS = ['mood', 'stress', 'workload', 'vision'] as const;
+type ScaleId = (typeof SCALE_IDS)[number];
+const isScale = (id: IndicatorId): id is ScaleId => (SCALE_IDS as readonly IndicatorId[]).includes(id);
+
 // Rascunho do formulário: números como texto (aceita vírgula), escalas e sintomas já prontos.
 interface Draft {
   text: Record<string, string>;
-  mood?: number;
-  vision?: number;
+  scale: Partial<Record<ScaleId, number>>;
   symptoms?: string[];
   medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
 }
@@ -36,7 +40,9 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
   const medicationTaken = values?.medication
     ? values.medication.filter((dose) => dose.taken).map((dose) => dose.id)
     : member?.medications?.length ? [] : undefined;
-  return { text, mood: values?.mood, vision: values?.vision, symptoms: values?.symptoms, medicationTaken };
+  const scale: Draft['scale'] = {};
+  for (const id of SCALE_IDS) scale[id] = values?.[id];
+  return { text, scale, symptoms: values?.symptoms, medicationTaken };
 }
 
 function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
@@ -55,10 +61,9 @@ function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
 function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): DailyValues {
   const values: DailyValues = {};
   for (const indicator of steps) {
-    if (indicator === 'mood') {
-      if (draft.mood !== undefined) values.mood = draft.mood as DailyValues['mood'];
-    } else if (indicator === 'vision') {
-      if (draft.vision !== undefined) values.vision = draft.vision as DailyValues['vision'];
+    if (isScale(indicator)) {
+      const chosen = draft.scale[indicator];
+      if (chosen !== undefined) Object.assign(values, { [indicator]: chosen });
     } else if (indicator === 'symptoms') {
       if (draft.symptoms !== undefined) values.symptoms = draft.symptoms;
     } else if (indicator === 'medication') {
@@ -137,8 +142,7 @@ function OwnCheckin() {
       } else text[indicator] = '';
       return {
         text,
-        mood: indicator === 'mood' ? undefined : d.mood,
-        vision: indicator === 'vision' ? undefined : d.vision,
+        scale: isScale(indicator) ? { ...d.scale, [indicator]: undefined } : d.scale,
         symptoms: indicator === 'symptoms' ? undefined : d.symptoms,
         medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
       };
@@ -264,8 +268,8 @@ function OwnCheckin() {
             name={indicator}
             legend={content.label}
             options={content.scale}
-            value={indicator === 'mood' ? draft.mood : draft.vision}
-            onChange={(value) => setDraft((d) => ({ ...d, [indicator]: value }))}
+            value={isScale(indicator) ? draft.scale[indicator] : undefined}
+            onChange={(value) => setDraft((d) => ({ ...d, scale: { ...d.scale, [indicator]: value } }))}
           />
         )}
         {indicator === 'medication' && (

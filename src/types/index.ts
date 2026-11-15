@@ -4,7 +4,7 @@ export type Level = 'green' | 'yellow' | 'red';
 
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
-  | 'sleepHours' | 'mood' | 'exerciseMinutes' | 'radiationDose'
+  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'exerciseMinutes' | 'radiationDose'
   | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
@@ -45,6 +45,8 @@ export interface DailyValues {
   temperature?: number;
   sleepHours?: number;
   mood?: 1 | 2 | 3 | 4 | 5;
+  stress?: 1 | 2 | 3 | 4 | 5; // 1 = muito baixo, 5 = muito alto
+  workload?: 1 | 2 | 3 | 4 | 5; // 1 = muito leve, 5 = excessiva
   exerciseMinutes?: number;
   radiationDose?: number;
   vision?: 0 | 1 | 2;

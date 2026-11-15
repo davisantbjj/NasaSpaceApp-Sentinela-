@@ -140,6 +140,14 @@ describe('evaluateRecord', () => {
     expect(red.whatChanged).toBe('Sintomas relatados: dor de cabeça, dor no peito');
   });
 
+  it('estresse e carga de trabalho: 1 a 3 é verde, 4 e 5 são amarelos e nunca vermelhos', () => {
+    expect(evaluateLast([{ stress: 3, workload: 3 }])).toEqual([]);
+    const alerts = evaluateLast([{ stress: 5, workload: 4 }]);
+    expect(alerts.map((a) => [a.indicator, a.level])).toEqual([['stress', 'yellow'], ['workload', 'yellow']]);
+    expect(alerts.every((a) => a.region === 'mind')).toBe(true);
+    expect(alerts[0].whatChanged).toBe('Estresse está em 5 na escala de 1 a 5 (muito alto)');
+  });
+
   it('medicação: alerta só quando uma dose prevista não foi tomada', () => {
     const vitaminD = { id: 'vitaminD', label: 'Suplemento de vitamina D' };
     const eyeDrops = { id: 'eyeDrops', label: 'Colírio lubrificante' };

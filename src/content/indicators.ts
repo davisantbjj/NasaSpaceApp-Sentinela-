@@ -20,7 +20,7 @@ export interface IndicatorContent {
 // Ordem dos passos do check-in (docs/diagramas/05-navegacao-telas.md).
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'exerciseMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
+  'mood', 'stress', 'workload', 'exerciseMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
 ];
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
@@ -72,6 +72,32 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
       { value: 5, label: 'Muito bem', symbol: '😄' },
     ],
   },
+  stress: {
+    label: 'Estresse',
+    unit: 'de 5',
+    howToMeasure: 'Escolha o número que melhor descreve o seu estresse na maior parte do dia.',
+    whyMeasure: 'Na estação, a NASA pede aos astronautas notas de estresse no Reaction Self Test. Um estudo com 24 astronautas ligou dormir 6 horas ou menos a mais estresse.',
+    scale: [
+      { value: 1, label: 'Muito baixo', symbol: '1' },
+      { value: 2, label: 'Baixo', symbol: '2' },
+      { value: 3, label: 'Moderado', symbol: '3' },
+      { value: 4, label: 'Alto', symbol: '4' },
+      { value: 5, label: 'Muito alto', symbol: '5' },
+    ],
+  },
+  workload: {
+    label: 'Carga de trabalho',
+    unit: 'de 5',
+    howToMeasure: 'Escolha o número que melhor descreve o volume de trabalho de hoje.',
+    whyMeasure: 'Excesso de trabalho faz parte do risco de sono ruim e horários irregulares da NASA. Acompanhar a carga ajuda o comandante a redistribuir tarefas antes do cansaço acumular.',
+    scale: [
+      { value: 1, label: 'Muito leve', symbol: '1' },
+      { value: 2, label: 'Leve', symbol: '2' },
+      { value: 3, label: 'Adequada', symbol: '3' },
+      { value: 4, label: 'Pesada', symbol: '4' },
+      { value: 5, label: 'Excessiva', symbol: '5' },
+    ],
+  },
   exerciseMinutes: {
     label: 'Exercício',
     unit: 'min',
@@ -112,7 +138,7 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
 };
 
 export const REGIONS: Record<BodyRegion, { label: string; description: string }> = {
-  mind: { label: 'Mente e sono', description: 'Sono e humor' },
+  mind: { label: 'Mente e sono', description: 'Sono, humor, estresse e carga de trabalho' },
   head: { label: 'Olhos e visão', description: 'Autoteste de visão' },
   heart: { label: 'Coração', description: 'Pressão arterial e frequência cardíaca' },
   immune: { label: 'Defesas do corpo', description: 'Temperatura' },

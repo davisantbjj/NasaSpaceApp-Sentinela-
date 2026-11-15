@@ -35,7 +35,7 @@ export function displayValue(
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
   const option = content.scale?.find((o) => o.value === value);
-  if (option) return { text: option.label, unit: indicator === 'mood' ? `(${value} ${content.unit})` : '' };
+  if (option) return { text: option.label, unit: content.unit === 'de 5' ? `(${value} ${content.unit})` : '' };
   return { text: formatNumber(value), unit: content.unit };
 }
 

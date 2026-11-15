@@ -132,6 +132,15 @@ export class SentinelaDB extends Dexie {
         if (!member.trackedIndicators.includes('medication')) member.trackedIndicators.push('medication');
       }),
     );
+    // v9: estresse e carga de trabalho (M2) passam a ser acompanhados por todos os tripulantes já gravados.
+    // Os dias antigos ficam sem esses valores.
+    this.version(9).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        for (const id of ['stress', 'workload'] as const) {
+          if (!member.trackedIndicators.includes(id)) member.trackedIndicators.push(id);
+        }
+      }),
+    );
   }
 }
 

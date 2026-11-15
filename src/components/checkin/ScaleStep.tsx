@@ -8,7 +8,7 @@ interface Props {
   onChange: (value: number) => void;
 }
 
-// Passo de escala: humor (1 a 5) e visão (0 a 2).
+// Passo de escala: humor, estresse e carga de trabalho (1 a 5) e visão (0 a 2).
 export function ScaleStep({ name, legend, options, value, onChange }: Props) {
   return (
     <fieldset className="options">

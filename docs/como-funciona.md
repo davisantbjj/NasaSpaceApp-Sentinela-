@@ -6,7 +6,7 @@ Explicação completa do aplicativo: o que ele faz, como cada indicador é medid
 
 ## 1. Ideia geral
 
-O astronauta faz um **check-in diário**: informa até onze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
+O astronauta faz um **check-in diário**: informa até treze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
 
 - numa **figura humana** em que cada sistema do corpo fica verde, amarelo ou vermelho;
 - numa **lista de alertas**, cada um explicando o que mudou e o que fazer;
@@ -29,7 +29,7 @@ Tudo roda no navegador, sem servidor e sem internet. Os dados ficam no próprio 
 
 Os alertas e as linhas de base não são gravados. São recalculados a partir dos registros sempre que a tela abre. Assim, mudar uma regra no `rules.json` muda o resultado na hora, sem dado velho guardado.
 
-## 3. Os onze indicadores e como medir
+## 3. Os treze indicadores e como medir
 
 | Indicador | Unidade | Região do corpo | Como medir (texto mostrado no app) |
 | --- | --- | --- | --- |
@@ -39,6 +39,8 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Glicemia | mg/dL | Metabolismo | Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição. |
 | Sono | horas | Mente e sono | Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. |
 | Humor | escala de 1 a 5 | Mente e sono | Escolha o rosto que melhor descreve como você se sentiu na maior parte do dia. |
+| Estresse | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o seu estresse na maior parte do dia. |
+| Carga de trabalho | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o volume de trabalho de hoje. |
 | Exercício | minutos | Ossos e músculos | Some os minutos de esteira, bicicleta e treino resistido feitos hoje. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
 | Visão | 0, 1 ou 2 | Olhos e visão | Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão. 0 = sem mudança, 1 = mudança leve, 2 = mudança clara. |
@@ -70,6 +72,8 @@ Cada pessoa tem o seu normal. Uma frequência de 58 bpm pode ser ótima para um 
 | Radiação | Sim | Só para cima (dose maior) |
 | Temperatura | Não | Só a faixa geral |
 | Humor | Não | Só a faixa geral |
+| Estresse | Não | Só a faixa geral |
+| Carga de trabalho | Não | Só a faixa geral |
 | Visão | Não | Só a faixa geral |
 | Medicação | Não | Amarelo quando uma dose prevista não foi tomada |
 | Sintomas | Não | Cada sintoma tem nível fixo |
@@ -95,6 +99,8 @@ Os limites contam como dentro da faixa: 7 h de sono é verde, e 6,9 h é amarelo
 | Temperatura | 36,1 a 37,2 °C | 35,5 a 36,0 ou 37,3 a 37,9 | abaixo de 35,5 ou acima de 37,9 |
 | Sono | 7 a 9 h | 5 a 6,9 ou 9,1 a 10 | abaixo de 5 ou acima de 10 |
 | Humor | 4 e 5 | 3 | 1 e 2 |
+| Estresse | 1 a 3 | 4 e 5 | Nunca |
+| Carga de trabalho | 1 a 3 | 4 e 5 | Nunca |
 | Exercício | 60 a 150 min | 30 a 59 ou 151 a 180 | abaixo de 30 ou acima de 180 |
 | Visão | 0 (sem mudança) | 1 (mudança leve) | 2 (mudança clara) |
 | Radiação | sem faixa geral | só por desvio pessoal | nunca fica vermelha |
@@ -239,7 +245,7 @@ Missão mostra uma nota educativa de readaptação à gravidade, com contexto pe
 - As faixas são de demonstração e ainda precisam de revisão da equipe (ver `TASKS.md`).
 - Os dados ficam no navegador onde o app foi aberto, cifrados com uma chave por tripulante: o PIN de um tripulante não abre os dados de outro. Limites: o PIN curto (4 a 6 dígitos) pode ser descoberto testando todas as combinações por quem copiar o banco; e, como tudo roda num navegador só, a chave privada do solo fica no mesmo aparelho, cifrada no PIN do solo.
 - O aviso ao solo é só uma marcação, e os lembretes aparecem só dentro do app.
-- Humor, visão e sintomas são autorrelato. O app não substitui exame médico.
+- Humor, estresse, carga de trabalho, visão, medicação e sintomas são autorrelato. O app não substitui exame médico.
 
 ## 14. Fontes
 

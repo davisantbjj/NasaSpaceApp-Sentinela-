@@ -13,7 +13,7 @@ import { sealRecord } from './recordsRepo';
 const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
-  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood',
+  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload',
   'exerciseMinutes', 'radiationDose', 'vision', 'symptoms',
 ];
 
@@ -77,6 +77,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
 
   for (const profile of PROFILES) {
     const random = mulberry32(profile.seed);
+    const mindRandom = mulberry32(profile.seed + 1000); // estresse e carga de trabalho (M2)
     // Variação em torno do valor de base, limitada a ±spread.
     const around = (center: number, spread: number, decimals = 0) => {
       const factor = 10 ** decimals;
@@ -100,6 +101,10 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         symptoms: [],
         // Histórico com todas as doses tomadas: a medicação não muda os casos preparados da demonstração.
         medication: profile.member.medications?.map((m) => ({ id: m.id, label: m.label, taken: true })),
+        // Estresse e carga dentro da faixa verde (1 a 3), com gerador próprio para não mudar os outros
+        // valores simulados. Não mudam os casos preparados da demonstração.
+        stress: mindRandom() < 0.7 ? 2 : 3,
+        workload: mindRandom() < 0.6 ? 3 : 2,
       };
       profile.story?.(all, SEED_DAYS - 1 - i);
 

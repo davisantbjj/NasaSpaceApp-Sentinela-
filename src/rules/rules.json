@@ -182,6 +182,79 @@
       },
       "demo": true
     },
+    "stress": {
+      "label": "Estresse",
+      "region": "mind",
+      "unit": "na escala de 1 a 5",
+      "green": { "min": 1, "max": 3 },
+      "yellow": { "min": 1, "max": 5 },
+      "valueLabels": {
+        "1": "muito baixo",
+        "2": "baixo",
+        "3": "moderado",
+        "4": "alto",
+        "5": "muito alto"
+      },
+      "useBaseline": false,
+      "nasaRisk": "Behavioral Conditions and Psychiatric Disorders",
+      "hazards": ["isolation", "distance"],
+      "messages": {
+        "whyItMatters": "Isolamento, confinamento e distância da Terra aumentam o estresse ao longo da missão. Num estudo com 24 astronautas na estação, dormir 6 horas ou menos veio junto com mais estresse.",
+        "whatToDo": {
+          "yellow": "Reserve um tempo de descanso hoje e converse com alguém da tripulação ou da família no próximo contato.",
+          "red": "Converse com o médico de bordo ou com o apoio psicológico da missão."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
+        ],
+        "green": "1–3 em escala própria de 1–5: escolha de demonstração. O Reaction Self Test da NASA usa escalas visuais de estresse e carga de trabalho, mas não valida estes cortes.",
+        "yellow": "4–5: escolha de demonstração, não escala psicológica validada.",
+        "red": "Não é gerado: a faixa amarela vai até 5. Uma nota alta pede conversa, não acionamento imediato."
+      },
+      "demo": true
+    },
+    "workload": {
+      "label": "Carga de trabalho",
+      "region": "mind",
+      "unit": "na escala de 1 a 5",
+      "green": { "min": 1, "max": 3 },
+      "yellow": { "min": 1, "max": 5 },
+      "valueLabels": {
+        "1": "muito leve",
+        "2": "leve",
+        "3": "adequada",
+        "4": "pesada",
+        "5": "excessiva"
+      },
+      "useBaseline": false,
+      "nasaRisk": "Sleep Loss, Circadian Desynchronization and Work Overload",
+      "hazards": ["isolation", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "Excesso de trabalho é um dos fatores do risco de sono ruim e horários irregulares da NASA. Carga pesada por vários dias reduz a atenção e o desempenho.",
+        "whatToDo": {
+          "yellow": "Veja com o comandante se dá para redistribuir tarefas e proteja o horário de sono de hoje.",
+          "red": "Avise o comandante e o médico de bordo para rever a escala de trabalho."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf"
+        ],
+        "green": "1–3 em escala própria de 1–5: escolha de demonstração. O Reaction Self Test da NASA usa escalas visuais de estresse e carga de trabalho, mas não valida estes cortes.",
+        "yellow": "4–5: escolha de demonstração, não escala psicológica validada.",
+        "red": "Não é gerado: a faixa amarela vai até 5. Uma nota alta pede conversa, não acionamento imediato."
+      },
+      "demo": true
+    },
     "exerciseMinutes": {
       "label": "Exercício",
       "region": "musculoskeletal",
