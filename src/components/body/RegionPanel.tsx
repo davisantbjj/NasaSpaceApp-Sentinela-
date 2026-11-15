@@ -18,10 +18,11 @@ interface Props {
   items: RegionItem[];
   alerts: Alert[];
   togetherNotes: string[]; // "mudaram juntos"
+  contextNotes?: { text: string; sourceUrl: string }[]; // contexto que não é alerta (ex.: perda óssea estimada)
 }
 
 // Detalhe da região selecionada na figura humana.
-export function RegionPanel({ region, level, items, alerts, togetherNotes }: Props) {
+export function RegionPanel({ region, level, items, alerts, togetherNotes, contextNotes = [] }: Props) {
   return (
     <section className="card stack" style={{ gap: 16 }} aria-live="polite">
       <div className="row-between">
@@ -69,6 +70,16 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
           </div>
         );
       })}
+
+      {contextNotes.map((note) => (
+        <p key={note.text} className="notice">
+          <span className="notice-icon" aria-hidden="true">i</span>
+          <span>
+            {note.text}{' '}
+            <a href={note.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA (abre outro site)</a>
+          </span>
+        </p>
+      ))}
 
       {togetherNotes.map((note) => (
         <p key={note} className="notice">

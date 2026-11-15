@@ -441,6 +441,16 @@
       "mars": "Fora da magnetosfera e com resposta do solo de até 20 minutos."
     }
   },
+  "context": {
+    "boneLoss": {
+      "minPercentPerMonth": 1,
+      "maxPercentPerMonth": 1.5,
+      "daysPerMonth": 30,
+      "studiedMonths": { "min": 4, "max": 6 },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "demo": false
+    }
+  },
   "correlationPairs": [
     ["sleepHours", "mood"],
     ["exerciseMinutes", "mood"],

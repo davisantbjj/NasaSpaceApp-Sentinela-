@@ -5,6 +5,8 @@ import { BodyMap } from '../components/body/BodyMap';
 import { RegionPanel, type RegionItem } from '../components/body/RegionPanel';
 import { displayValue } from '../content/format';
 import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
+import { daysByEnvironment, MISSION_PROFILES } from '../content/missions';
+import { estimateBoneLoss } from '../lib/boneEstimate';
 import { formatDate, missionDay, todayISO } from '../lib/dates';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { rules } from '../rules/rules';
@@ -53,6 +55,13 @@ export function DashboardPage() {
         baselineNote: baselineNote(indicator, baselines),
       };
     });
+
+  // Perda óssea estimada (M5): com perfil, conta os dias de cada fase; sem perfil, todos no ambiente atual.
+  const day = missionDay(member.missionStart, today);
+  const profile = settings.missionProfile ? MISSION_PROFILES[settings.missionProfile] : undefined;
+  const bone = region === 'musculoskeletal'
+    ? estimateBoneLoss(day, profile ? daysByEnvironment(profile, day) : { [settings.environment]: day }, rules)
+    : undefined;
 
   const togetherNotes = correlations
     .filter((c) => c.indicators.some((id) => rules.indicators[id]?.region === region))
@@ -125,6 +134,7 @@ export function DashboardPage() {
           items={items}
           alerts={alerts}
           togetherNotes={togetherNotes}
+          contextNotes={bone ? [bone] : []}
         />
         </div>
       </div>

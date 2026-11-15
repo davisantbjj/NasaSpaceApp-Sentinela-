@@ -131,7 +131,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
   return {
     crew,
     records,
-    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [] },
+    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [], missionProfile: 'station', environmentManual: false },
   };
 }
 

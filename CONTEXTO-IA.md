@@ -18,12 +18,13 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 4. Cada indicador é comparado com duas referências: a faixa geral e a linha de base pessoal do astronauta. O nível final é sempre o pior dos dois, então a linha de base nunca deixa verde um valor fora da faixa geral.
 5. Todo alerta tem seis partes: o que mudou, em relação a qual referência, por que importa, o que fazer, a confiança do dado e a fonte.
 6. Só existem três níveis: `green`, `yellow` e `red`.
-7. O ambiente da missão (estação, trânsito, Lua, Marte) muda a explicação do alerta, nunca o nível. Não existem faixas diferentes por ambiente.
+7. O ambiente da missão (estação, trânsito, Lua, Marte) muda a explicação do alerta, nunca o nível. Não existem faixas diferentes por ambiente. Com um perfil de missão (`src/content/missions.ts`), a fase de hoje define o ambiente; trocar à mão continua possível.
 8. Cada tripulante tem a sua lista de indicadores acompanhados. Nem todo mundo mede glicemia todo dia.
 9. Textos da interface em português. Nomes de código (variáveis, arquivos, tipos) em inglês.
 10. Papéis: tripulante vê só os próprios dados; comandante é tripulante e, dos outros, vê só se o check-in de hoje foi feito e se há alerta vermelho (nada clínico); oficial médico de bordo vê todos; médico do solo vê só os pacotes que chegaram à Terra. Abrir dados de outra pessoa fica no registro de acesso dela.
 11. A sincronização é automática, nunca uma opção do usuário. Alerta vermelho passa na frente da fila para a Terra. O alerta nunca espera a Terra.
 12. Cada tripulante tem a própria chave de dados, aberta só pelo PIN do dono e pelo do oficial médico. O pacote para a Terra é selado para o solo e o resumo do comandante é selado para o comandante, na hora do check-in (`src/sync/compose.ts`); a central só move caixas seladas. Limites do protótipo, que não podem ser escondidos na apresentação: o PIN curto (4 a 6 dígitos) pode ser descoberto testando todas as combinações por quem copiar o banco; e, como tudo roda num navegador só, a chave privada do solo fica no mesmo aparelho, cifrada no PIN do solo.
+13. O app serve para qualquer nave. Textos, perfis e explicações descrevem o tipo de missão ou de atividade; uma nave ou um aparelho específico aparece só como exemplo.
 
 ## Tecnologias
 
