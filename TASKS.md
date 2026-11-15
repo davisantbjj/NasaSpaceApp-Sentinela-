@@ -132,11 +132,11 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 **Acessibilidade e layout.**
 
 - [x] Teste de reação acessível: responder com toque, clique **ou** tecla (espaço); o passo pode ser pulado por quem não pode fazer um teste visual; o sinal aparece uma vez por tentativa, sem piscar mais de 3 vezes por segundo (WCAG 2.3.1). Espaço e Enter funcionam mesmo com o foco fora da área de resposta
-- [ ] Botão "Texto maior", que aumenta a escala base da fonte
-- [ ] Testar com zoom de 200%, largura de 320 px e espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12), incluindo os passos novos do check-in, o teste de reação, o perfil de missão e as metas semanais
-- [ ] Passada com leitor de tela e só teclado em todas as telas (fase 9)
-- [ ] Layout no desktop: lista de regiões alinhada ao topo; chip "Estação" vira "Ambiente: Estação"
-- [ ] Layout no celular: figura menor ou resumo antes dela ("1 região para acompanhar"); nome do tripulante sem corte (cargo na segunda linha); cabeçalho com fundo opaco
+- [x] Botão "Texto maior", que aumenta a escala base da fonte. No menu do usuário e no aviso inicial; 125%, guardado como preferência do aparelho (`src/lib/textSize.ts`)
+- [x] Testar com zoom de 200%, largura de 320 px e espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12), incluindo os passos novos do check-in, o teste de reação, o perfil de missão e as metas semanais. Feito com Edge automatizado em todas as telas e perfis; corrigidos: tela de Missão mais larga que a tela, selos e cartões cortados em 320 px, horários do solo, abas da barra escondidas entre 721 e 1300 px. Fica de propósito: a faixa de abas de Tendências rola na horizontal no desktop
+- [ ] Passada com leitor de tela e só teclado em todas as telas (fase 9). **Teclado: feito** (Tab em todas as telas, foco sempre visível e sem ficar sob a barra ou o alarme). Árvore de acessibilidade conferida (nenhum controle sem nome, sem id repetido, um h1 por tela; o check-in ganhou h1). **Falta a passada manual com NVDA** no Windows ou VoiceOver no celular
+- [x] Layout no desktop: lista de regiões alinhada ao topo; chip "Estação" vira "Ambiente: Estação" (na barra até 1100 px o "Ambiente:" fica só para leitor de tela, para as abas caberem)
+- [x] Layout no celular: figura menor ou resumo antes dela ("1 região para acompanhar"); nome do tripulante sem corte (cargo na segunda linha); cabeçalho com fundo opaco. Escolhido o resumo antes da figura, sem mudar a figura
 
 ## Larissa: pesquisa, LGPD e apresentação
 

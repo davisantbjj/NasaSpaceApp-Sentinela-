@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { environmentContent } from '../../content/indicators';
 import i18n from '../../i18n';
@@ -76,8 +77,20 @@ export function NavBar({ session, crew, activeCrewId, environment, alertCount, h
   const onBoard = session.role !== 'groundSurgeon';
   const home = onBoard ? '/' : '/ground';
   const environmentText = environmentContent(environment);
+  // Altura real da barra (muda com o texto maior e com o seletor de tripulante): o banner de
+  // alarme e as âncoras usam --navbar-h para ficar logo abaixo dela.
+  const ref = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const header = ref.current;
+    if (!header || typeof ResizeObserver === 'undefined') return undefined;
+    const update = () => document.documentElement.style.setProperty('--navbar-h', `${header.offsetHeight}px`);
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(header);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <header className="navbar">
+    <header ref={ref} className={session.role === 'medicalOfficer' ? 'navbar navbar-crowded' : 'navbar'}>
       <Link to={home} className="navbar-brand" style={{ color: 'var(--text)', textDecoration: 'none' }}>
         <Logo />
         Sentinela
@@ -96,7 +109,9 @@ export function NavBar({ session, crew, activeCrewId, environment, alertCount, h
       <div className="navbar-tools">
         {onBoard && (
           <Link to="/mission" className="chip" title={i18n.t('nav.missionEnvironment')}>
-            <span aria-hidden="true">◎</span> {environmentText.label}
+            <span aria-hidden="true">◎</span>{' '}
+            <span className="chip-prefix">{i18n.t('nav.environmentPrefix')} </span>
+            {environmentText.label}
           </Link>
         )}
         {session.role === 'medicalOfficer' && crew.length > 0 && (

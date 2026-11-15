@@ -3,6 +3,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; }
+html.text-large { font-size: 125%; }
 
 body {
   margin: 0;
@@ -14,7 +15,7 @@ body {
   background-attachment: fixed;
   color: var(--text);
   font-family: var(--font);
-  font-size: 16px;
+  font-size: 1rem; /* em rem: o "Texto maior" muda o tamanho do <html> e tudo acompanha */
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -60,7 +61,9 @@ button, input, select { font: inherit; color: inherit; }
   background: var(--accent); color: var(--on-accent); font-weight: 700; text-decoration: none;
 }
 .skip-link:focus { top: 12px; }
-.page { display: grid; gap: 20px; animation: rise 0.35s var(--ease) both; }
+.page { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; animation: rise 0.35s var(--ease) both; }
+/* Itens de grade podem encolher: uma tabela larga rola dentro do .table-wrap em vez de alargar a página (WCAG 1.4.10). */
+.page > *, .stack > * { min-width: 0; }
 .page-header { display: grid; gap: 6px; }
 .stack { display: grid; gap: 12px; }
 .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
@@ -101,13 +104,14 @@ button, input, select { font: inherit; color: inherit; }
 
 /* Celular: a navegação vira barra fixa embaixo, ao alcance do polegar, com as cinco telas sempre visíveis. */
 @media (max-width: 720px) {
-  .navbar { backdrop-filter: none; justify-content: space-between; flex-wrap: nowrap; padding-block: 8px; }
+  /* Fundo opaco: o conteúdo rolando por baixo não aparece através da barra. */
+  .navbar { backdrop-filter: none; background: #0a101c; justify-content: space-between; flex-wrap: nowrap; padding-block: 8px; }
   .navbar-tools { flex: 1; justify-content: flex-end; }
   .navbar-tools .select { max-width: 190px; padding-right: 30px; }
   .navbar-links {
     position: fixed; inset: auto 0 0 0; z-index: 20; flex: none; gap: 0; overflow: visible;
     padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
-    background: rgba(10, 16, 28, 0.96); box-shadow: 0 -1px 0 var(--ring-strong);
+    background: #0a101c; box-shadow: 0 -1px 0 var(--ring-strong);
   }
   .navbar-links a {
     flex: 1; min-width: 0; flex-direction: column; justify-content: center; gap: 2px;
@@ -123,6 +127,8 @@ button, input, select { font: inherit; color: inherit; }
   .navbar-tools .chip { display: none; } /* o ambiente continua no painel e na tela de missão */
   /* Cinco abas em tela estreita: 12 px é o mínimo, para "Tendências" caber sem corte. */
   .navbar-links a { font-size: 0.75rem; }
+  /* Com texto maior, "Tendências" pode não caber: quebra a palavra em vez de sair da aba. */
+  .nav-label { max-width: 100%; text-align: center; overflow-wrap: anywhere; hyphens: auto; }
 }
 
 .select {
@@ -138,6 +144,27 @@ button, input, select { font: inherit; color: inherit; }
   display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px;
   border-radius: 999px; background: var(--surface-2); box-shadow: 0 0 0 1px var(--ring);
   color: var(--text-muted); font-size: 0.8125rem; font-weight: 500; text-decoration: none; white-space: nowrap;
+  max-width: 100%;
+}
+/* Em tela estreita, com zoom ou texto maior, o selo quebra a linha em vez de cortar. */
+@media (max-width: 720px) { .chip, .level-badge { white-space: normal; overflow-wrap: anywhere; } }
+html.text-large .chip, html.text-large .level-badge { white-space: normal; overflow-wrap: anywhere; }
+.navbar-tools .chip { white-space: nowrap; }
+/* "Ambiente:" visível no desktop largo; em telas médias fica só para leitor de tela, para as abas caberem. */
+@media (max-width: 1100px) {
+  .navbar .chip-prefix { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+/* Texto maior fora do celular: as abas ganham uma linha própria, para nenhuma sumir. */
+@media (min-width: 721px) {
+  html.text-large .navbar-links { order: 3; flex-basis: 100%; }
+}
+/* O oficial médico tem também o seletor de tripulante: até 1300 px as abas não cabem na mesma linha. */
+@media (min-width: 721px) and (max-width: 1300px) {
+  .navbar-crowded .navbar-links { order: 3; flex-basis: 100%; }
+}
+/* Tablet: entre 721 e 900 px as cinco abas não cabem ao lado da marca e das ferramentas. */
+@media (min-width: 721px) and (max-width: 900px) {
+  .navbar-links { order: 3; flex-basis: 100%; }
 }
 a.chip { min-height: 40px; padding: 0 14px; transition: color 0.15s var(--ease), box-shadow 0.15s var(--ease); }
 a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
@@ -168,7 +195,7 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 .level-badge {
   display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 0 10px 0 4px;
   border-radius: 999px; background: color-mix(in srgb, currentColor 12%, transparent);
-  font-size: 0.8125rem; font-weight: 650; white-space: nowrap;
+  font-size: 0.8125rem; font-weight: 650; white-space: nowrap; max-width: 100%;
 }
 .level-badge .level-icon {
   width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center;
@@ -191,7 +218,7 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
    e o selo de cada região ("OK", "Acompanhar") descia para baixo do nome. */
 @media (max-width: 1100px) { .dashboard { grid-template-columns: 1fr; } }
 
-.body-layout { display: grid; gap: 20px; grid-template-columns: minmax(180px, 280px) minmax(150px, 1fr); align-items: center; }
+.body-layout { display: grid; gap: 20px; grid-template-columns: minmax(180px, 280px) minmax(150px, 1fr); align-items: start; }
 .body-layout .bodymap { justify-self: center; }
 /* Celular: figura grande em cima, lista embaixo. */
 @media (max-width: 560px) {
@@ -200,7 +227,14 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
   .region-list { gap: 4px; }
   .card { padding: 16px; }
 }
-.region-panel-anchor { scroll-margin-top: 72px; min-width: 0; }
+.region-panel-anchor { scroll-margin-top: calc(var(--navbar-h, 64px) + 8px); min-width: 0; }
+
+/* Resumo antes da figura: só no celular, onde a figura ocupa a tela toda. */
+.region-summary { display: none; align-items: center; gap: 8px; font-weight: 600; }
+.region-summary[data-level='yellow'] .level-icon { color: var(--level-yellow); }
+.region-summary[data-level='red'] .level-icon { color: var(--level-red); }
+.region-summary[data-level='green'] .level-icon { color: var(--level-green); }
+@media (max-width: 560px) { .region-summary { display: flex; } }
 
 /* O mapa do corpo tem os próprios estilos em components/body/BodyMap.css. */
 
@@ -282,6 +316,9 @@ a.chip:hover { color: var(--text); box-shadow: 0 0 0 1px var(--ring-strong); }
 
 /* Tendências */
 .tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px; scrollbar-width: thin; }
+/* Celular, zoom e texto maior: as abas quebram linha, para nenhuma ficar escondida fora da tela. */
+@media (max-width: 720px) { .tabs { flex-wrap: wrap; overflow-x: visible; } }
+html.text-large .tabs { flex-wrap: wrap; overflow-x: visible; }
 .tab {
   flex: none; min-height: 40px; padding: 0 14px; border-radius: 999px; display: inline-flex; align-items: center;
   background: var(--surface-2); box-shadow: 0 0 0 1px var(--ring); color: var(--text-muted);
@@ -355,7 +392,7 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
   display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 0 10px;
   border-radius: var(--radius-sm); color: var(--text); text-decoration: none; font-weight: 500;
 }
-.user-menu-panel .btn { justify-content: flex-start; font-weight: 500; color: var(--text-muted); }
+.user-menu-panel .btn { justify-content: flex-start; font-weight: 500; color: var(--text-muted); text-align: left; }
 .user-menu-panel a:hover { background: rgba(148, 170, 220, 0.08); }
 
 /* Aviso de quem está vendo dados de outra pessoa */
@@ -367,7 +404,7 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 .crew-card { position: relative; overflow: hidden; padding-left: 26px; align-content: start; }
 .crew-card::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 6px; background: currentColor; }
 .crew-card:not([data-level])::before { background: var(--level-none); }
-.ground-times { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.ground-times { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 7rem), 1fr)); gap: 8px; margin: 0; }
 .ground-times div { display: grid; gap: 2px; }
 .ground-times dt { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); }
 .ground-times dd { margin: 0; color: var(--text); font-size: 0.9375rem; }
@@ -401,7 +438,7 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 }
 
 /* Alarmes: banner fixo abaixo da barra, sem animação (WCAG 2.3.1). Cor, ícone e texto juntos. */
-.alarm-stack { position: sticky; top: 76px; z-index: 9; display: grid; gap: 8px; margin-bottom: 20px; }
+.alarm-stack { position: sticky; top: calc(var(--navbar-h, 64px) + 8px); z-index: 9; display: grid; gap: 8px; margin-bottom: 20px; }
 .alarm-banner {
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px;
   border-radius: var(--radius-md); background: var(--surface-2);
@@ -414,4 +451,13 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 .alarm-text { flex: 1; min-width: 200px; display: grid; gap: 2px; }
 .alarm-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .alarm-volume input[type='range'] { flex: 1; min-width: 140px; max-width: 320px; accent-color: var(--accent); }
-@media (max-width: 720px) { .alarm-stack { top: 60px; } }
+
+/* Seletor de tripulante: nome no seletor, cargo na segunda linha (nada cortado no celular). */
+.crew-switcher { display: grid; gap: 0; min-width: 0; }
+.crew-switcher-role { font-size: 0.75rem; color: var(--text-muted); padding-left: 12px; line-height: 1.3; overflow-wrap: anywhere; }
+
+/* Botão "Texto maior" */
+.text-size-toggle { justify-content: flex-start; gap: 8px; flex-wrap: wrap; }
+.text-size-toggle[aria-pressed='true'] { color: var(--text); box-shadow: 0 0 0 1px var(--accent); }
+.text-size-icon { font-weight: 700; font-size: 0.8125rem; }
+.text-size-icon span { font-size: 1.125rem; }

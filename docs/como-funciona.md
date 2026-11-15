@@ -175,6 +175,10 @@ Os sons são gerados com Web Audio, sem arquivos. A confirmação vale para aque
 
 A função é uma só, `raiseAlarm(level, text, options)` em `src/lib/alarm.ts`, para os lembretes (horário do check-in, doses, metas) usarem o mesmo banner e o mesmo som.
 
+### Texto maior e telas pequenas
+
+O botão **Texto maior**, no menu do usuário e no aviso inicial, aumenta o texto do app inteiro para 125%. Todo o CSS usa `rem`, então nada se sobrepõe. A escolha fica guardada no aparelho e vale para todos os perfis. Em 320 px de largura, em 200% de zoom e com espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12), nenhuma tela rola na horizontal. Os selos quebram linha em vez de cortar, e a barra de abas ganha uma linha própria quando não cabe ao lado da marca. No celular, o painel mostra antes da figura um resumo como "2 regiões para acompanhar".
+
 ## 7. Sintomas
 
 Cada sintoma marcado tem um nível fixo, definido em `rules.json`. O alerta de sintomas fica com o pior nível entre os marcados.

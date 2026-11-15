@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { LevelBadge } from '../components/alerts/LevelBadge';
+import { LevelBadge, LevelIcon } from '../components/alerts/LevelBadge';
 import { BodyMap } from '../components/body/BodyMap';
 import { RegionPanel, type RegionItem } from '../components/body/RegionPanel';
 import { displayValue, sourceLabel } from '../content/format';
@@ -72,6 +72,18 @@ export function DashboardPage() {
     ? radiationTotal(records, latest?.missionDay ?? day, rules, member.priorCareerDoseMsv) // até o último registro: hoje pode estar pendente
     : undefined;
 
+  // Resumo antes da figura, para o celular: quantas regiões pedem atenção.
+  const redRegions = REGION_ORDER.filter((r) => regionLevels[r] === 'red').length;
+  const yellowRegions = REGION_ORDER.filter((r) => regionLevels[r] === 'yellow').length;
+  const regionSummary = !latest
+    ? undefined
+    : redRegions + yellowRegions === 0
+      ? i18n.t('dashboard.summary.allGreen')
+      : [
+          redRegions > 0 ? i18n.t('dashboard.summary.red', { count: redRegions }) : undefined,
+          yellowRegions > 0 ? i18n.t('dashboard.summary.yellow', { count: yellowRegions }) : undefined,
+        ].filter(Boolean).join(' · ');
+
   const togetherNotes = correlations
     .filter((c) => c.indicators.some((id) => rules.indicators[id]?.region === region))
     .map((c) => c.description);
@@ -85,7 +97,7 @@ export function DashboardPage() {
           <div className="hero-meta">
             <span className="chip">{member.role}</span>
             <span className="chip num">{i18n.t('status.missionDay', { day: missionDay(member.missionStart, today) })}</span>
-            <span className="chip">{environmentContent(settings.environment).label}</span>
+            <span className="chip">{i18n.t('nav.environmentChip', { environment: environmentContent(settings.environment).label })}</span>
             {latest && <span className="chip num">{i18n.t('status.lastRecord', { date: formatDate(latest.date) })}</span>}
           </div>
         </div>
@@ -116,6 +128,11 @@ export function DashboardPage() {
             <h2>{i18n.t('dashboard.systems')}</h2>
             <p className="small muted">{i18n.t('dashboard.regionHint')}</p>
           </div>
+          {regionSummary && (
+            <p className="region-summary" data-level={overall}>
+              <LevelIcon level={overall} /> {regionSummary}
+            </p>
+          )}
           <div className="body-layout">
             <BodyMap
               levels={latest ? regionLevels : {}}

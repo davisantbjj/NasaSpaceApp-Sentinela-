@@ -7,6 +7,7 @@ import { NavBar } from './components/layout/NavBar';
 import { PrivacyNotice } from './components/layout/PrivacyNotice';
 import { useHealthAlarms } from './hooks/useHealthAlarms';
 import { useIdleLock } from './hooks/useIdleLock';
+import { loadTextSize } from './lib/textSize';
 import { AlertsPage } from './pages/AlertsPage';
 import { CheckinPage } from './pages/CheckinPage';
 import { CrewOverviewPage } from './pages/CrewOverviewPage';
@@ -87,6 +88,7 @@ export function App() {
 
   useEffect(() => {
     void loadCrew();
+    void loadTextSize();
   }, [loadCrew]);
 
   // Bloqueio por inatividade.

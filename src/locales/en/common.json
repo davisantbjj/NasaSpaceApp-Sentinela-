@@ -25,7 +25,9 @@
     "main": "Main navigation",
     "alert_one": "alert",
     "alert_other": "alerts",
-    "missionEnvironment": "Mission environment"
+    "missionEnvironment": "Mission environment",
+    "environmentChip": "Environment: {{environment}}",
+    "environmentPrefix": "Environment:"
   },
   "level": {
     "green": "Within expected range",
@@ -61,7 +63,14 @@
     "checkinOwnPending": "Today's check-in is pending. The dashboard shows the record from {{date}}.",
     "systems": "Body systems",
     "regionHint": "Select a region to view its indicators.",
-    "sourceNote": "Source: {{source}}"
+    "sourceNote": "Source: {{source}}",
+    "summary": {
+      "allGreen": "All regions as expected",
+      "red_one": "{{count}} region needs immediate attention",
+      "red_other": "{{count}} regions need immediate attention",
+      "yellow_one": "{{count}} region to monitor",
+      "yellow_other": "{{count}} regions to monitor"
+    }
   },
   "regionPanel": {
     "selected": "Selected region",
@@ -498,5 +507,10 @@
       "yellow": "Sentinela caution.",
       "red": "Sentinela warning. Check the screen."
     }
+  },
+  "textSize": {
+    "label": "Larger text",
+    "on": "on ({{percent}}%)",
+    "off": "off"
   }
 }

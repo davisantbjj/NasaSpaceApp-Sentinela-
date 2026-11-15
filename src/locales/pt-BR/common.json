@@ -25,7 +25,9 @@
     "main": "Navegação principal",
     "alert_one": "alerta",
     "alert_other": "alertas",
-    "missionEnvironment": "Ambiente da missão"
+    "missionEnvironment": "Ambiente da missão",
+    "environmentChip": "Ambiente: {{environment}}",
+    "environmentPrefix": "Ambiente:"
   },
   "level": {
     "green": "Dentro do esperado",
@@ -61,7 +63,14 @@
     "checkinOwnPending": "O check-in de hoje está pendente. O painel mostra o registro de {{date}}.",
     "systems": "Sistemas do corpo",
     "regionHint": "Toque numa região para ver os indicadores.",
-    "sourceNote": "Origem: {{source}}"
+    "sourceNote": "Origem: {{source}}",
+    "summary": {
+      "allGreen": "Todas as regiões dentro do esperado",
+      "red_one": "{{count}} região com atenção imediata",
+      "red_other": "{{count}} regiões com atenção imediata",
+      "yellow_one": "{{count}} região para acompanhar",
+      "yellow_other": "{{count}} regiões para acompanhar"
+    }
   },
   "regionPanel": {
     "selected": "Região selecionada",
@@ -498,5 +507,10 @@
       "yellow": "Aviso amarelo no Sentinela.",
       "red": "Alerta vermelho no Sentinela. Veja a tela."
     }
+  },
+  "textSize": {
+    "label": "Texto maior",
+    "on": "ligado ({{percent}}%)",
+    "off": "desligado"
   }
 }

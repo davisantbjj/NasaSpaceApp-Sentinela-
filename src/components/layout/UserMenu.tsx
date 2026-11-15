@@ -4,6 +4,7 @@ import { ROLE_LABELS } from '../../lib/access';
 import type { Session } from '../../types';
 import i18n from '../../i18n';
 import { LanguageSelect } from './LanguageSelect';
+import { TextSizeToggle } from './TextSizeToggle';
 
 interface Props {
   session: Session;
@@ -48,6 +49,7 @@ export function UserMenu({ session, pendingSync, onLock }: Props) {
           <span className="small muted">{i18n.t(ROLE_LABELS[session.role])}</span>
         </div>
         <LanguageSelect />
+        <TextSizeToggle />
         {onBoard && (
           <>
             <Link to="/mission" onClick={close}>{i18n.t('menu.mission')}</Link>

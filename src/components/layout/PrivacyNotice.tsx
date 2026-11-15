@@ -3,6 +3,7 @@ import { LGPD_URL, PRIVACY_SECTIONS } from '../../content/privacy';
 import { useAppStore } from '../../store/useAppStore';
 import i18n from '../../i18n';
 import { LanguageSelect } from './LanguageSelect';
+import { TextSizeToggle } from './TextSizeToggle';
 
 export function PrivacyExplanation() {
   return <>
@@ -33,7 +34,10 @@ export function PrivacyNotice() {
         <p>{i18n.t('privacy.intro')}</p>
       </header>
       <div className="card stack">
-        <LanguageSelect />
+        <div className="row">
+          <LanguageSelect />
+          <TextSizeToggle />
+        </div>
         <PrivacyExplanation />
         {error && <p role="alert">{error}</p>}
         <button className="btn btn-primary" type="button" disabled={busy} onClick={proceed}>
