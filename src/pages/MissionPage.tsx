@@ -7,6 +7,8 @@ import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, nextGravityCha
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
 import { exerciseVolumeSummary, weeklyGoals, type WeeklyGoal } from '../lib/weeklyGoals';
+import { saveAlarmVolume } from '../data/alarmPrefsRepo';
+import { setAlarmVolume, testAlarmSound, useAlarmStore, type AlarmLevel } from '../lib/alarm';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { DailyRecord, IndicatorId, MissionProfileId } from '../types';
@@ -229,6 +231,8 @@ export function MissionPage() {
         </fieldset>
       </section>
 
+      <AlarmVolumeCard />
+
       <section className="card stack" style={{ gap: 14 }}>
         <div>
           <h2>{i18n.t('mission.reminders')}</h2>
@@ -291,5 +295,47 @@ export function MissionPage() {
         </div>}
       </section>
     </div>
+  );
+}
+
+// Volume dos alarmes por nível (WCAG 1.4.2). Preferência do aparelho, guardada sem dado de saúde.
+function AlarmVolumeCard() {
+  const volume = useAlarmStore((state) => state.volume);
+  const change = (level: AlarmLevel, percent: number) => {
+    setAlarmVolume({ [level]: percent / 100 });
+    void saveAlarmVolume(useAlarmStore.getState().volume);
+  };
+  return (
+    <section className="card stack" style={{ gap: 14 }}>
+      <div>
+        <h2>{i18n.t('mission.alarms.title')}</h2>
+        <p className="small muted">{i18n.t('mission.alarms.intro')}</p>
+      </div>
+      {(['yellow', 'red'] as const).map((level) => {
+        const percent = Math.round(volume[level] * 100);
+        return (
+          <div key={level} className="field alarm-volume">
+            <label htmlFor={`alarm-volume-${level}`}>{i18n.t(`mission.alarms.${level}`)}</label>
+            <div className="row" style={{ gap: 12, alignItems: 'center' }}>
+              <input
+                id={`alarm-volume-${level}`}
+                type="range"
+                min="0"
+                max="100"
+                step="10"
+                value={percent}
+                aria-valuetext={percent === 0 ? i18n.t('mission.alarms.off') : `${percent}%`}
+                onChange={(event) => change(level, Number(event.target.value))}
+              />
+              <span className="num small" style={{ minWidth: 72 }}>{percent === 0 ? i18n.t('mission.alarms.off') : `${percent}%`}</span>
+              <button type="button" className="btn btn-ghost" disabled={percent === 0} onClick={() => testAlarmSound(level)}>
+                {i18n.t('mission.alarms.test')}
+              </button>
+            </div>
+          </div>
+        );
+      })}
+      <p className="small muted">{i18n.t('mission.alarms.note')}</p>
+    </section>
   );
 }

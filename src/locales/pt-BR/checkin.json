@@ -99,7 +99,9 @@
     "modeFull": "Modo completo",
     "modeShortLower": "modo curto",
     "modeFullLower": "modo completo",
-    "interrupted": ", interrompido"
+    "interrupted": ", interrompido",
+    "howToRespond": "Responda tocando na área, clicando ou apertando espaço (ou Enter) assim que o sinal aparecer. Funciona mesmo se o foco sair da área.",
+    "skipHint": "Não pode fazer um teste visual agora? Use \"Pular\": o passo fica sem resultado e isso não conta como piora."
   },
   "sourceNote": "Origem declarada por você. O app não se conecta ao aparelho; copie o valor e informe a origem."
 }

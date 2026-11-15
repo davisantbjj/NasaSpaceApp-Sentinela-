@@ -238,6 +238,15 @@
       "source": "Fonte (abre outro site)",
       "offPhase": "Ambiente trocado à mão. Pela fase da missão, hoje seria {{environment}}.",
       "usePhase": "Usar o ambiente da fase"
+    },
+    "alarms": {
+      "title": "Volume dos alarmes",
+      "intro": "Amarelo toca um toque curto. Vermelho repete o som até alguém silenciar ou confirmar. Todo som aparece também como aviso fixo no alto da tela.",
+      "yellow": "Amarelo (acompanhar)",
+      "red": "Vermelho (atenção imediata)",
+      "off": "Sem som",
+      "test": "Testar som",
+      "note": "Silenciar para o som, mas o aviso só sai quando alguém confirma. No celular, o aviso também vibra quando o aparelho permite (o iPhone não permite). A voz diz só o nível do alerta, sem detalhes de saúde, porque todos na cabine ouvem."
     }
   },
   "crewOverview": {
@@ -473,6 +482,21 @@
         "surface": "Superfície de Marte",
         "return": "Volta"
       }
+    }
+  },
+  "alarm": {
+    "region": "Alarmes",
+    "title": {
+      "yellow": "Acompanhar",
+      "red": "Atenção imediata"
+    },
+    "details": "Ver alertas e ações →",
+    "silence": "Silenciar",
+    "silenced": "Som silenciado. O aviso continua até alguém confirmar.",
+    "confirm": "Confirmar",
+    "speech": {
+      "yellow": "Aviso amarelo no Sentinela.",
+      "red": "Alerta vermelho no Sentinela. Veja a tela."
     }
   }
 }

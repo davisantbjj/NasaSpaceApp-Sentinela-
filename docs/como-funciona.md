@@ -160,6 +160,21 @@ A **confiança** é baixa em três situações:
 
 Nas telas, o nível nunca é mostrado só pela cor. Verde aparece com "OK" e ✓, amarelo com "Atenção" e !, e vermelho com "Atenção imediata" e um triângulo.
 
+### Alarmes
+
+Quando o registro mais recente da própria pessoa tem alerta, o app levanta um **alarme**, um por nível:
+
+- **Amarelo:** dois bipes curtos, uma vez só.
+- **Vermelho:** três bipes repetidos a cada 2,5 s até alguém silenciar ou confirmar.
+- **Banner fixo** no alto da tela, abaixo da barra, com a cor, o ícone, o título do nível ("Acompanhar" ou "Atenção imediata"; em inglês, Caution ou Warning) e o que mudou. O título da aba ganha um contador, como "(1) Sentinela". Nada pisca nem se move (WCAG 2.3.1).
+- **Vibração** no celular, quando o aparelho permite. O iPhone não permite.
+- **Voz curta**, só com o nível ("Alerta vermelho no Sentinela"). Ela não diz o motivo, porque numa cabine compartilhada todos ouvem.
+- **Silenciar** para o som, mas o banner fica. O banner só sai com **Confirmar** (WCAG 1.4.2). O volume de cada nível se escolhe em **Missão → Volume dos alarmes**, com botão para testar o som.
+
+Os sons são gerados com Web Audio, sem arquivos. A confirmação vale para aquele registro: refazer o check-in gera um alarme novo. Ela fica só na memória da aba, porque guardar no aparelho revelaria, sem cifra, que houve um alerta de certo tipo num certo dia. Depois de recarregar a página, o alarme volta uma vez. O oficial médico que está vendo os dados de um colega não ouve o alarme do colega por aqui.
+
+A função é uma só, `raiseAlarm(level, text, options)` em `src/lib/alarm.ts`, para os lembretes (horário do check-in, doses, metas) usarem o mesmo banner e o mesmo som.
+
 ## 7. Sintomas
 
 Cada sintoma marcado tem um nível fixo, definido em `rules.json`. O alerta de sintomas fica com o pior nível entre os marcados.
@@ -224,6 +239,8 @@ No painel, a região **Corpo inteiro** mostra a soma dos valores diários inform
 
 ### Comparação do teste de reação
 
+Para responder, vale tocar, clicar ou apertar espaço (ou Enter), mesmo com o foco fora da área de resposta. O sinal aparece uma vez por tentativa, depois de 1 a 4 s de espera, e fica parado até a resposta. Quem não pode fazer um teste visual usa "Pular", e isso não conta como piora.
+
 O resultado identifica modo curto/completo, conclusão, duração, respostas válidas e antecipações. Só sessões completas de três minutos concluídas entram em série, gráfico, linha de base, alertas e correlações. Curto, interrompido e registros antigos sem modo ficam para consulta/exportação, sem comparação pessoal. Um teste com menos de três respostas válidas não salva resultado. A execução termina ao atingir a duração, mesmo sem nova resposta. Este teste não é uma reprodução clinicamente validada do RST NASA; latências do aparelho e forma de interação influenciam a média.
 
 ### Origem do dado
@@ -287,6 +304,7 @@ Roteiro sugerido para a apresentação:
 | `src/rules/correlation.ts` | "Mudaram juntos" |
 | `src/content/indicators.ts` | Textos de "como medir" e "por que medir" e limites de digitação |
 | `src/data/seed.ts` | Os três tripulantes e os 60 dias simulados |
+| `src/lib/alarm.ts` e `src/lib/alarmSound.ts` | Alarmes: `raiseAlarm`, silenciar, confirmar, volume e os sons em Web Audio |
 | `src/rules/engine.test.ts` | Testes do motor de regras (`npm test`) |
 
 O motor é feito de funções puras, sem banco e sem React. Por isso dá para testar com dados prontos.

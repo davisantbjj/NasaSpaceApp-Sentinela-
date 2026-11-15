@@ -399,3 +399,19 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
 }
+
+/* Alarmes: banner fixo abaixo da barra, sem animação (WCAG 2.3.1). Cor, ícone e texto juntos. */
+.alarm-stack { position: sticky; top: 76px; z-index: 9; display: grid; gap: 8px; margin-bottom: 20px; }
+.alarm-banner {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px;
+  border-radius: var(--radius-md); background: var(--surface-2);
+  box-shadow: 0 0 0 2px var(--level-yellow), 0 12px 32px -12px rgba(0, 0, 0, 0.7);
+  border-left: 6px solid var(--level-yellow);
+}
+.alarm-banner[data-level='red'] { box-shadow: 0 0 0 2px var(--level-red), 0 12px 32px -12px rgba(0, 0, 0, 0.7); border-left-color: var(--level-red); }
+.alarm-icon { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--surface-3); }
+.alarm-icon .level-icon svg { width: 16px; height: 16px; }
+.alarm-text { flex: 1; min-width: 200px; display: grid; gap: 2px; }
+.alarm-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.alarm-volume input[type='range'] { flex: 1; min-width: 140px; max-width: 320px; accent-color: var(--accent); }
+@media (max-width: 720px) { .alarm-stack { top: 60px; } }

@@ -8,6 +8,26 @@ O programa [Spaceflight Standard Measures](https://www.nasa.gov/humans-in-space/
 
 A exposição à radiação também é investigada com detectores: o [Radi-N2, da CSA](https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp), estudou a contribuição dos nêutrons na ISS. Não confundir esse componente com a dose total. O acompanhamento clínico inclui conversas privadas: no [relato da NASA sobre saúde de astronautas](https://www.nasa.gov/podcasts/houston-we-have-a-podcast/astronaut-health/), uma médica descreve conferências médicas semanais.
 
+### O que a pesquisa de 15/11 acrescentou
+
+A NASA não mede tudo todo dia. Cada medida tem uma frequência, porque o tempo da tripulação é contado ([análise de tempo médico](https://ntrs.nasa.gov/api/citations/20230015627/downloads/Med%20Crew%20Time%20Analysis.pdf)).
+
+| O que | Como e quando | Fonte |
+| --- | --- | --- |
+| Conferência médica privada | Semanal, entre a pessoa e o médico de voo. Informação médica e psicológica é comunicação privada. | [Podcast da NASA](https://www.nasa.gov/podcasts/houston-we-have-a-podcast/astronaut-health/); [NASA-STD-3001, operações médicas](https://www.nasa.gov/reference/6-0-medical-operations/) |
+| Conferência psicológica privada | Periódica. O levantamento de 15/11 anotou "a cada duas semanas", mas sem fonte primária anexada: **confirmar antes de citar o número**. | [NASA-STD-3001](https://www.nasa.gov/reference/6-0-medical-operations/) |
+| Bateria cognitiva | 10 testes no computador, de memória a decisão sob risco, dentro das Standard Measures. As fontes divergem sobre o calendário: uma fala em cerca do dia 30 e antes do retorno, outra em duas vezes por missão. | [Standard Measures](https://www.nasa.gov/humans-in-space/spaceflight-standard-measures-characterizing-how-humans-adapt-in-space/) |
+| Exame de visão | Acuidade de longe no laptop, cartão de perto e grade de Amsler, num calendário fixo ao longo da missão. | [NASA](https://ntrs.nasa.gov/api/citations/20170009173/downloads/20170009173.pdf); [OCHMO, acompanhamento longitudinal](https://www.nasa.gov/wp-content/uploads/2023/03/longitudinal-health-surveillance-technical-brief-ochmo.pdf) |
+| Dosímetro individual | Cada tripulante usa um dosímetro; há também dosímetros ativos que acompanham a exposição pela órbita e pelas erupções solares. | [NASA, tecnologia vestível](https://www.nasa.gov/missions/station/iss-research/wearable-tech-for-space-station-research/) |
+| Registro de alimentação | Os astronautas registram o que comem num aplicativo de tablet desde 2016. | [NASA](https://www.nasa.gov/?p=209742) |
+| Massa corporal | Medida em voo. Em 25 tripulantes, a perda média foi de 2,8% a 4,4% em relação ao pré-voo, concentrada no primeiro mês. A frequência varia entre as fontes (semanal ou quinzenal). | [Zwart et al., 2014](https://pubmed.ncbi.nlm.nih.gov/25197887/) |
+
+**O que a NASA não faz em voo:**
+
+- **Não mede densidade óssea em voo.** O exame é feito antes e depois da missão. A perda óssea que o Sentinela mostra é estimativa pelo tempo de missão, não medida ([riscos da NASA, ossos](https://www.nasa.gov/hrp/risks/)).
+- **Não faz glicemia de rotina em voo.** A glicemia está no app porque o desafio cita açúcar no sangue.
+- **Não encontrou queda sistemática do desempenho cognitivo** em 25 astronautas de missões de 6 meses ([NASA BHP](https://www.kbr.com/document/16756)). Por isso o teste de reação do app serve para acompanhar a pessoa, não para diagnosticar fadiga.
+
 **Onde o Sentinela entra:** a equipe propõe uma interface local que organiza check-ins, comparação com referências, histórico e explicações. Não substitui sensores, exames, avaliações psicológicas, conferências médicas ou protocolos de agência. Não integra dispositivos nem recebe dados da NASA na versão atual.
 
 ## De onde vêm os indicadores

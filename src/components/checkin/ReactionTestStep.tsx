@@ -4,8 +4,10 @@ import type { ReactionTestDetails } from '../../types';
 
 // Teste de reação (M4), na linha do Reaction Self Test da NASA: esperar o sinal e responder o mais
 // rápido possível, repetidas vezes. O resultado é a média, em milissegundos, das respostas válidas.
-// Acessibilidade: responde com toque, clique, espaço ou Enter; o sinal aparece uma vez por tentativa e
-// fica parado até a resposta (nada pisca); o passo pode ser pulado por quem não pode fazer teste visual.
+// Acessibilidade: responde com toque, clique, espaço ou Enter, mesmo com o foco fora da área de resposta;
+// o sinal aparece uma vez por tentativa, com pelo menos 1 s de espera entre sinais, e fica parado até a
+// resposta (nada pisca mais de 3 vezes por segundo, WCAG 2.3.1); o passo pode ser pulado por quem não
+// pode fazer um teste visual, e pular não conta como resultado ruim.
 
 const FULL_SECONDS = 180; // 3 minutos, como o teste da NASA
 const SHORT_SECONDS = 30; // versão curta, para a demonstração
@@ -139,6 +141,23 @@ export function ReactionTestStep({ value, details, onResult }: Props) {
 
   const running = phase === 'waiting' || phase === 'signal';
 
+  // Espaço ou Enter respondem em qualquer lugar da página enquanto o teste roda. Se o foco estiver
+  // em outro controle (ex.: "Encerrar agora"), a tecla continua acionando aquele controle.
+  useEffect(() => {
+    if (!running) return undefined;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== ' ' && event.key !== 'Enter') return;
+      const focused = event.target instanceof HTMLElement ? event.target : null;
+      const otherControl = focused && focused !== target.current
+        && focused.closest('button, a, input, select, textarea, [role=button]');
+      if (otherControl) return;
+      event.preventDefault();
+      if (!event.repeat) respond();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  });
+
   return (
     <div className="stack" style={{ gap: 12 }}>
       <p className="small muted">{i18n.t('checkin:reaction.disclaimer')}</p>
@@ -153,15 +172,11 @@ export function ReactionTestStep({ value, details, onResult }: Props) {
               event.preventDefault();
               respond();
             }}
-            onKeyDown={(event) => {
-              if (event.key === ' ' || event.key === 'Enter') {
-                event.preventDefault();
-                if (!event.repeat) respond();
-              }
-            }}
+            aria-describedby="reaction-how"
           >
             <span aria-live="assertive">{phase === 'signal' ? i18n.t('checkin:reaction.tapNow') : i18n.t('checkin:reaction.wait')}</span>
           </button>
+          <p id="reaction-how" className="small muted">{i18n.t('checkin:reaction.howToRespond')}</p>
           <div className="row-between">
             <span className="small muted num">{i18n.t('checkin:reaction.secondsLeft', { seconds: secondsLeft })}</span>
             <button type="button" className="btn btn-ghost" onClick={finish}>{i18n.t('checkin:reaction.stop')}</button>
@@ -170,6 +185,7 @@ export function ReactionTestStep({ value, details, onResult }: Props) {
       ) : (
         <>
           {summary && <p className="notice"><span className="notice-icon" aria-hidden="true">i</span><span>{i18n.t(summary.key, summary.params ?? {})}</span></p>}
+          <p className="small muted">{i18n.t('checkin:reaction.skipHint')}</p>
           <div className="row">
             <button type="button" className="btn btn-primary" onClick={() => start(FULL_SECONDS)}>
               {phase === 'done' ? i18n.t('checkin:reaction.retake') : i18n.t('checkin:reaction.start')}

@@ -99,7 +99,9 @@
     "modeFull": "Full mode",
     "modeShortLower": "short mode",
     "modeFullLower": "full mode",
-    "interrupted": ", interrupted"
+    "interrupted": ", interrupted",
+    "howToRespond": "Respond by tapping the area, clicking, or pressing Space (or Enter) as soon as the signal appears. It works even if focus leaves the area.",
+    "skipHint": "Can’t take a visual test right now? Use \"Skip\": the step stays without a result, and that does not count as a decline."
   },
   "sourceNote": "Source declared by you. The app does not connect to the device; copy the value and state the source."
 }
