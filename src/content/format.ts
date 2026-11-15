@@ -1,6 +1,6 @@
 import { formatNumber } from '../lib/series';
 import type { DailyValues, IndicatorId } from '../types';
-import { INDICATORS } from './indicators';
+import { DATA_SOURCES, INDICATORS } from './indicators';
 
 export interface DisplayValue {
   text: string; // "118/76", "7,4", "Bem"
@@ -25,11 +25,24 @@ export function displayValue(
     if (symptoms.length === 0) return { text: 'Nenhum', unit: '' };
     return { text: symptoms.map((id) => symptomLabels[id] ?? id).join(', '), unit: '' };
   }
+  if (indicator === 'medication') {
+    const doses = values.medication;
+    if (!doses) return undefined;
+    const missed = doses.filter((dose) => !dose.taken);
+    if (missed.length === 0) return { text: doses.length === 0 ? 'Nenhuma prevista' : 'Todas tomadas', unit: '' };
+    return { text: `Não tomada: ${missed.map((dose) => dose.label).join(', ')}`, unit: '' };
+  }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
   const option = content.scale?.find((o) => o.value === value);
-  if (option) return { text: option.label, unit: indicator === 'mood' ? `(${value} ${content.unit})` : '' };
+  if (option) return { text: option.label, unit: content.unit === 'de 5' ? `(${value} ${content.unit})` : '' };
   return { text: formatNumber(value), unit: content.unit };
+}
+
+// "Sensor vestível" quando o valor veio de um aparelho; nada quando foi digitado (M10).
+export function sourceLabel(values: DailyValues, indicator: IndicatorId): string | undefined {
+  const source = values.sources?.[indicator];
+  return source && source !== 'manual' ? DATA_SOURCES[source].label : undefined;
 }
 
 export function displayText(

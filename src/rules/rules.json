@@ -182,6 +182,107 @@
       },
       "demo": true
     },
+    "stress": {
+      "label": "Estresse",
+      "region": "mind",
+      "unit": "na escala de 1 a 5",
+      "green": { "min": 1, "max": 3 },
+      "yellow": { "min": 1, "max": 5 },
+      "valueLabels": {
+        "1": "muito baixo",
+        "2": "baixo",
+        "3": "moderado",
+        "4": "alto",
+        "5": "muito alto"
+      },
+      "useBaseline": false,
+      "nasaRisk": "Behavioral Conditions and Psychiatric Disorders",
+      "hazards": ["isolation", "distance"],
+      "messages": {
+        "whyItMatters": "Isolamento, confinamento e distância da Terra aumentam o estresse ao longo da missão. Num estudo com 24 astronautas na estação, dormir 6 horas ou menos veio junto com mais estresse.",
+        "whatToDo": {
+          "yellow": "Reserve um tempo de descanso hoje e converse com alguém da tripulação ou da família no próximo contato.",
+          "red": "Converse com o médico de bordo ou com o apoio psicológico da missão."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/",
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
+        ],
+        "green": "1–3 em escala própria de 1–5: escolha de demonstração. O Reaction Self Test da NASA usa escalas visuais de estresse e carga de trabalho, mas não valida estes cortes.",
+        "yellow": "4–5: escolha de demonstração, não escala psicológica validada.",
+        "red": "Não é gerado: a faixa amarela vai até 5. Uma nota alta pede conversa, não acionamento imediato."
+      },
+      "demo": true
+    },
+    "workload": {
+      "label": "Carga de trabalho",
+      "region": "mind",
+      "unit": "na escala de 1 a 5",
+      "green": { "min": 1, "max": 3 },
+      "yellow": { "min": 1, "max": 5 },
+      "valueLabels": {
+        "1": "muito leve",
+        "2": "leve",
+        "3": "adequada",
+        "4": "pesada",
+        "5": "excessiva"
+      },
+      "useBaseline": false,
+      "nasaRisk": "Sleep Loss, Circadian Desynchronization and Work Overload",
+      "hazards": ["isolation", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "Excesso de trabalho é um dos fatores do risco de sono ruim e horários irregulares da NASA. Carga pesada por vários dias reduz a atenção e o desempenho.",
+        "whatToDo": {
+          "yellow": "Veja com o comandante se dá para redistribuir tarefas e proteja o horário de sono de hoje.",
+          "red": "Avise o comandante e o médico de bordo para rever a escala de trabalho."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf"
+        ],
+        "green": "1–3 em escala própria de 1–5: escolha de demonstração. O Reaction Self Test da NASA usa escalas visuais de estresse e carga de trabalho, mas não valida estes cortes.",
+        "yellow": "4–5: escolha de demonstração, não escala psicológica validada.",
+        "red": "Não é gerado: a faixa amarela vai até 5. Uma nota alta pede conversa, não acionamento imediato."
+      },
+      "demo": true
+    },
+    "reactionTime": {
+      "label": "Tempo de reação",
+      "region": "mind",
+      "unit": "ms",
+      "useBaseline": true,
+      "deviationDirection": "above",
+      "nasaRisk": "Sleep Loss, Circadian Desynchronization and Work Overload",
+      "hazards": ["isolation", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "No Reaction Self Test usado na estação, uma reação mais lenta que o padrão da própria pessoa é sinal de fadiga. Num estudo com 24 astronautas, dormir 6 horas ou menos veio junto com reação mais lenta.",
+        "whatToDo": {
+          "yellow": "Priorize o próximo período de sono e repita o teste amanhã. Se continuar mais lento, converse com o oficial médico sobre medidas contra a fadiga.",
+          "red": "Avise o oficial médico agora."
+        }
+      },
+      "sourceUrl": "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
+        ],
+        "green": "Sem faixa geral: o tempo de reação varia entre pessoas e aparelhos. Só a comparação com o padrão pessoal é usada.",
+        "yellow": "Mais de 15% acima do padrão pessoal por 3 registros: algoritmo de demonstração, não o critério de corte do Reaction Self Test.",
+        "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
+      },
+      "demo": true
+    },
     "exerciseMinutes": {
       "label": "Exercício",
       "region": "musculoskeletal",
@@ -208,6 +309,34 @@
         "green": "60–150 min: escolha de demonstração. A NASA descreve média de cerca de duas horas por dia, não este intervalo nem uma meta universal.",
         "yellow": "30–180 min: escolha de demonstração; duração isolada não informa intensidade ou prescrição individual.",
         "red": "Fora da amarela: escolha de demonstração, sem validação clínica."
+      },
+      "demo": true
+    },
+    "resistanceMinutes": {
+      "label": "Treino resistido",
+      "region": "musculoskeletal",
+      "unit": "min",
+      "useBaseline": true,
+      "deviationDirection": "below",
+      "nasaRisk": "Spaceflight-Induced Bone Changes",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "O treino resistido é o que mais protege os ossos no voo. Um estudo da NASA na estação mostrou que o treino resistido reduz a perda óssea, mas sozinho não a impede.",
+        "whatToDo": {
+          "yellow": "Reponha a sessão de treino resistido conforme o seu plano individual.",
+          "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+          "https://www.nasa.gov/news-release/nasa-study-provides-new-findings-on-protecting-astronauts-bones-through-diet-and-exercise"
+        ],
+        "green": "Sem faixa geral: o tempo de treino resistido depende do plano individual. Só a comparação com o padrão pessoal é usada.",
+        "yellow": "Desvio pessoal para baixo: algoritmo de demonstração (7 amostras, mais de 15% por 3 registros), não prescrição de treino.",
+        "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
       },
       "demo": true
     },
@@ -267,6 +396,33 @@
       },
       "demo": true
     },
+    "medication": {
+      "label": "Medicação",
+      "region": "wholeBody",
+      "unit": "",
+      "useBaseline": false,
+      "missedLevel": "yellow",
+      "nasaRisk": "Risk of Ineffective or Toxic Medications During Long-Duration Exploration Spaceflight",
+      "hazards": ["distance", "radiation"],
+      "messages": {
+        "whyItMatters": "Longe da Terra não há reposição rápida e o corpo muda no voo, o que pode mudar o efeito dos remédios. Saber se cada dose prevista foi tomada ajuda o médico de bordo a avaliar o tratamento.",
+        "whatToDo": {
+          "yellow": "Veja no plano de medicação se ainda dá para tomar a dose hoje. Se tiver dúvida, fale com o oficial médico antes de tomar duas doses juntas.",
+          "red": "Avise o oficial médico agora."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight"
+        ],
+        "green": "Todas as doses previstas no dia marcadas como tomadas. Autorrelato, sem conferência do estoque.",
+        "yellow": "Uma ou mais doses previstas não tomadas: regra de demonstração. A fonte da NASA trata da estabilidade e do efeito dos remédios no voo, não da adesão ao tratamento.",
+        "red": "Não é gerado no motor atual. Um plano real definiria quais remédios exigem aviso imediato."
+      },
+      "demo": true
+    },
     "symptoms": {
       "label": "Sintomas",
       "region": "wholeBody",
@@ -313,7 +469,30 @@
       "mars": "Fora da magnetosfera e com resposta do solo de até 20 minutos."
     }
   },
+  "context": {
+    "boneLoss": {
+      "minPercentPerMonth": 1,
+      "maxPercentPerMonth": 1.5,
+      "daysPerMonth": 30,
+      "studiedMonths": { "min": 4, "max": 6 },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "demo": false
+    },
+    "radiationTotal": {
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"
+    },
+    "weeklyGoals": {
+      "windowDays": 7,
+      "targetDays": 5,
+      "indicators": ["sleepHours", "exerciseMinutes"],
+      "demo": true
+    },
+    "readaptation": {
+      "noticeDaysBefore": 7
+    }
+  },
   "correlationPairs": [
+    ["sleepHours", "reactionTime"],
     ["sleepHours", "mood"],
     ["exerciseMinutes", "mood"],
     ["sleepHours", "heartRate"]

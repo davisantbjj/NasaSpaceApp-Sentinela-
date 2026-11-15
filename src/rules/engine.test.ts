@@ -140,6 +140,58 @@ describe('evaluateRecord', () => {
     expect(red.whatChanged).toBe('Sintomas relatados: dor de cabeça, dor no peito');
   });
 
+  it('estresse e carga de trabalho: 1 a 3 é verde, 4 e 5 são amarelos e nunca vermelhos', () => {
+    expect(evaluateLast([{ stress: 3, workload: 3 }])).toEqual([]);
+    const alerts = evaluateLast([{ stress: 5, workload: 4 }]);
+    expect(alerts.map((a) => [a.indicator, a.level])).toEqual([['stress', 'yellow'], ['workload', 'yellow']]);
+    expect(alerts.every((a) => a.region === 'mind')).toBe(true);
+    expect(alerts[0].whatChanged).toBe('Estresse está em 5 na escala de 1 a 5 (muito alto)');
+  });
+
+  it('treino resistido: sem faixa geral, só o desvio pessoal para baixo gera amarelo', () => {
+    // Um dia isolado com pouco treino resistido não gera alerta: não há faixa geral.
+    expect(evaluateLast([{ exerciseMinutes: 90, resistanceMinutes: 5 }])).toEqual([]);
+
+    const normal = repeat({ exerciseMinutes: 90, resistanceMinutes: 40 }, 7);
+    const less = repeat({ exerciseMinutes: 90, resistanceMinutes: 20 }, 3);
+    const alerts = evaluateLast([...normal, ...less]);
+    expect(alerts.map((a) => [a.indicator, a.level, a.trigger])).toEqual([['resistanceMinutes', 'yellow', 'baselineDeviation']]);
+    expect(alerts[0].region).toBe('musculoskeletal');
+
+    // Mais treino resistido que o habitual não é risco.
+    const more = repeat({ exerciseMinutes: 90, resistanceMinutes: 60 }, 3);
+    expect(evaluateLast([...normal, ...more])).toEqual([]);
+  });
+
+  it('tempo de reação: sem faixa geral, só ficar mais lento que o padrão gera amarelo', () => {
+    expect(evaluateLast([{ reactionTime: 900 }])).toEqual([]);
+    const normal = repeat({ reactionTime: 300 }, 7);
+    const slower = evaluateLast([...normal, ...repeat({ reactionTime: 360 }, 3)]);
+    expect(slower.map((a) => [a.indicator, a.level, a.region])).toEqual([['reactionTime', 'yellow', 'mind']]);
+    // Mais rápido que o padrão não é risco.
+    expect(evaluateLast([...normal, ...repeat({ reactionTime: 240 }, 3)])).toEqual([]);
+  });
+
+  it('medicação: alerta só quando uma dose prevista não foi tomada', () => {
+    const vitaminD = { id: 'vitaminD', label: 'Suplemento de vitamina D' };
+    const eyeDrops = { id: 'eyeDrops', label: 'Colírio lubrificante' };
+    expect(evaluateLast([{ medication: [] }])).toEqual([]);
+    expect(evaluateLast([{ medication: [{ ...vitaminD, taken: true }] }])).toEqual([]);
+
+    const [alert] = evaluateLast([{ medication: [{ ...vitaminD, taken: false }, { ...eyeDrops, taken: true }] }]);
+    expect(alert.level).toBe('yellow');
+    expect(alert.region).toBe('wholeBody');
+    expect(alert.trigger).toBe('missedMedication');
+    expect(alert.whatChanged).toBe('Dose não tomada hoje: Suplemento de vitamina D');
+    expect(alert.confidence).toBe('low');
+    expect(alert.notifyGround).toBe(false);
+  });
+
+  it('medicação: o ambiente não muda o nível', () => {
+    const day = { medication: [{ id: 'vitaminD', label: 'Suplemento de vitamina D', taken: false }] };
+    expect(evaluateLast([day], 'mars')[0].level).toBe(evaluateLast([day], 'station')[0].level);
+  });
+
   it('ordena os alertas do mais grave para o menos grave', () => {
     const alerts = evaluateLast([{ heartRate: 110, temperature: 39, mood: 3 }]);
     expect(alerts.map((a) => a.level)).toEqual(['red', 'yellow', 'yellow']);

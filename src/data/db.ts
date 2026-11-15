@@ -1,7 +1,7 @@
 import Dexie, { type Table } from 'dexie';
 import type { Sealed } from '../lib/crypto';
 import type {
-  AccessLogEntry, AlertReview, CrewMember, DailyRecord, DeletionRequest, GroundPacket, MedicalMessage, Profile, Settings,
+  AccessLogEntry, AlertReview, CrewMember, DailyRecord, DeletionRequest, GroundPacket, MedicalMessage, PlannedMedication, Profile, Settings,
 } from '../types';
 
 export interface SettingsRow {
@@ -51,6 +51,15 @@ const DEMO_CREW_SEX: Record<string, NonNullable<CrewMember['sex']>> = {
   ana: 'female',
   lia: 'female',
   kenji: 'male',
+};
+
+// Medicação prevista FICTÍCIA da demonstração (seed.ts), usada também para atualizar o banco já gravado (v8).
+export const DEMO_MEDICATIONS: Record<string, PlannedMedication[]> = {
+  ana: [{ id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' }],
+  lia: [
+    { id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' },
+    { id: 'eyeDrops', label: 'Colírio lubrificante', schedule: '2 vezes ao dia' },
+  ],
 };
 
 // Tabelas com dados da demonstração. As preferências (aviso de privacidade lido) ficam fora.
@@ -113,6 +122,38 @@ export class SentinelaDB extends Dexie {
       .upgrade(async (tx) => {
         await Promise.all(DEMO_TABLES.map((name) => tx.table(name).clear()));
       });
+    // v8: medicação prevista (M1). Os tripulantes da demonstração já gravados ganham a lista e o
+    // indicador, sem apagar o histórico. Os dias antigos ficam sem registro de medicação.
+    this.version(8).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const planned = DEMO_MEDICATIONS[member.id];
+        if (!planned || member.medications) return;
+        member.medications = planned;
+        if (!member.trackedIndicators.includes('medication')) member.trackedIndicators.push('medication');
+      }),
+    );
+    // v9: estresse e carga de trabalho (M2) passam a ser acompanhados por todos os tripulantes já gravados.
+    // Os dias antigos ficam sem esses valores.
+    this.version(9).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        for (const id of ['stress', 'workload'] as const) {
+          if (!member.trackedIndicators.includes(id)) member.trackedIndicators.push(id);
+        }
+      }),
+    );
+    // v10: treino resistido (M3) para quem já acompanha exercício. Os dias antigos ficam só com o total.
+    this.version(10).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const tracked = member.trackedIndicators;
+        if (tracked.includes('exerciseMinutes') && !tracked.includes('resistanceMinutes')) tracked.push('resistanceMinutes');
+      }),
+    );
+    // v11: teste de reação (M4) para todos os tripulantes já gravados. Os dias antigos ficam sem esse valor.
+    this.version(11).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (!member.trackedIndicators.includes('reactionTime')) member.trackedIndicators.push('reactionTime');
+      }),
+    );
   }
 }
 

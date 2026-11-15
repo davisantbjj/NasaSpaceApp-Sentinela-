@@ -34,7 +34,9 @@ Fazer por último, no perfil do Kenji, depois de exportar: em Seus dados, abrir 
 
 **Como a NASA mede?** Actigrafia, autorrelatos e avaliações, amostras de sangue e urina, dosimetria e acompanhamento médico privado. São práticas distintas; o app não reproduz esses instrumentos. Fontes e limites em [apresentacao.md](apresentacao.md).
 
-**Por que simular?** Para repetir os casos e preservar privacidade. Não utilizamos uma série clínica pública adequada aos dez indicadores; dados humanos da NASA têm política de acesso e liberação. Não afirmar que nenhum dado público existe.
+**Por que simular?** Para repetir os casos e preservar privacidade. Não utilizamos uma série clínica pública adequada aos indicadores acompanhados; dados humanos da NASA têm política de acesso e liberação. Não afirmar que nenhum dado público existe.
+
+**Por que estes indicadores?** Não vêm de uma base de dados. Seis são citados no enunciado do desafio (pressão, frequência cardíaca, glicemia, temperatura, sono e humor), quatro vieram da pesquisa da NASA e da CSA (exercício, radiação, visão e sintomas) e três reforçam saúde mental e medicação: estresse e carga de trabalho, perguntas do Reaction Self Test usado na ISS, e medicação, ligada a um risco oficial da NASA. Fontes em [apresentacao.md](apresentacao.md#de-onde-vêm-os-indicadores).
 
 **E Lua e Marte?** Mudam gravidade, comunicação, exposição e opções de evacuação. Há pouca experiência humana de longa duração na Lua e nenhuma de superfície em Marte. As faixas do app não validam segurança nesses ambientes.
 

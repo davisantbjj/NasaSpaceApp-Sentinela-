@@ -4,14 +4,20 @@ export type Level = 'green' | 'yellow' | 'red';
 
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
-  | 'sleepHours' | 'mood' | 'exerciseMinutes' | 'radiationDose'
-  | 'vision' | 'symptoms';
+  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'reactionTime' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
+  | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
   | 'head' | 'heart' | 'musculoskeletal' | 'immune'
   | 'metabolism' | 'mind' | 'wholeBody';
 
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
+
+// Origem de um valor (M10): digitado pela pessoa ou lido de um aparelho. O app não lê aparelhos.
+export type DataSource = 'manual' | 'wearable' | 'dosimeter';
+
+// Perfis de missão de referência (src/content/missions.ts, M8).
+export type MissionProfileId = 'station' | 'lunarFlyby' | 'mars';
 
 export interface CrewMember {
   id: string;
@@ -20,6 +26,22 @@ export interface CrewMember {
   missionStart: string; // data ISO, AAAA-MM-DD
   trackedIndicators: IndicatorId[]; // o check-in só pede estes
   sex?: 'female' | 'male'; // figura e contexto educativo; não muda nenhuma faixa
+  medications?: PlannedMedication[]; // medicação prevista; sem lista, o check-in não pergunta
+}
+
+// Medicação prevista para o tripulante. Na demonstração os nomes são fictícios.
+export interface PlannedMedication {
+  id: string;
+  label: string; // "Suplemento de vitamina D"
+  schedule: string; // "1 vez ao dia"
+}
+
+// Uma dose prevista no dia e se foi tomada. Guarda o nome junto, para o registro continuar legível
+// mesmo se a lista prevista mudar depois.
+export interface MedicationDose {
+  id: string;
+  label: string;
+  taken: boolean;
 }
 
 export interface DailyValues {
@@ -29,10 +51,16 @@ export interface DailyValues {
   temperature?: number;
   sleepHours?: number;
   mood?: 1 | 2 | 3 | 4 | 5;
-  exerciseMinutes?: number;
+  stress?: 1 | 2 | 3 | 4 | 5; // 1 = muito baixo, 5 = muito alto
+  workload?: 1 | 2 | 3 | 4 | 5; // 1 = muito leve, 5 = excessiva
+  reactionTime?: number; // média do teste de reação, em ms (M4)
+  exerciseMinutes?: number; // total do dia (aeróbico + resistido)
+  resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
   radiationDose?: number;
   vision?: 0 | 1 | 2;
   symptoms?: string[]; // ids de sintomas definidos em rules.json
+  medication?: MedicationDose[]; // doses previstas no dia
+  sources?: Partial<Record<IndicatorId, DataSource>>; // origem dos valores; ausente = digitado (M10)
 }
 
 export interface DailyRecord {
@@ -133,7 +161,7 @@ export interface Alert {
   indicator: IndicatorId;
   region: BodyRegion;
   level: Level;
-  trigger: 'generalRange' | 'baselineDeviation' | 'symptom';
+  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication';
   whatChanged: string;
   reference: string;
   whyItMatters: string;
@@ -157,6 +185,8 @@ export interface Settings {
   environment: Environment;
   activeCrewId: string; // tripulante cujos dados estão na tela
   reminders: { indicator: IndicatorId; everyDays: number }[];
+  missionProfile?: MissionProfileId; // sem perfil, o ambiente é só o escolhido à mão
+  environmentManual?: boolean; // true quando alguém trocou o ambiente à mão, fora da fase da missão
 }
 
 // Resumo que o comandante pode ver de cada colega. Fica selado para o comandante.
@@ -226,6 +256,7 @@ export interface IndicatorRule {
   sourceUrl: string;
   demo: boolean;
   rangeEvidence?: RangeEvidence;
+  missedLevel?: 'yellow' | 'red'; // medicação: nível quando uma dose prevista não foi tomada
 }
 
 export interface Rules {
@@ -239,4 +270,18 @@ export interface Rules {
   symptoms: SymptomRule[];
   environmentNotes: Partial<Record<IndicatorId, Record<Environment, string>>>;
   correlationPairs: [IndicatorId, IndicatorId][];
+  // Contexto que não vira alerta (M5).
+  context?: {
+    boneLoss: {
+      minPercentPerMonth: number;
+      maxPercentPerMonth: number;
+      daysPerMonth: number;
+      studiedMonths: { min: number; max: number };
+      sourceUrl: string;
+      demo: boolean;
+    };
+    radiationTotal?: { sourceUrl: string }; // M6: soma das doses do dia, só contexto
+    weeklyGoals?: { windowDays: number; targetDays: number; indicators: IndicatorId[]; demo: boolean }; // M9
+    readaptation?: { noticeDaysBefore: number }; // M11: quantos dias antes da mudança de gravidade destacar
+  };
 }

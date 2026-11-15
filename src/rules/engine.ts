@@ -180,6 +180,38 @@ function evaluateSymptoms(
   };
 }
 
+// Medicação: alerta quando uma dose prevista no dia não foi marcada como tomada.
+// O nível vem de `missedLevel` no rules.json.
+function evaluateMedication(
+  rule: IndicatorRule,
+  record: DailyRecord,
+  rules: Rules,
+  environment: Environment,
+): Alert | undefined {
+  const missed = (record.values.medication ?? []).filter((dose) => !dose.taken);
+  if (missed.length === 0) return undefined;
+
+  const level = rule.missedLevel ?? 'yellow';
+  return {
+    id: `${record.id}_medication`,
+    crewId: record.crewId,
+    date: record.date,
+    indicator: 'medication',
+    region: rule.region,
+    level,
+    trigger: 'missedMedication',
+    whatChanged: `Dose não tomada hoje: ${missed.map((dose) => dose.label).join(', ')}`,
+    reference: 'Esperado: todas as doses previstas no dia',
+    whyItMatters: rule.messages.whyItMatters,
+    whatToDo: rule.messages.whatToDo[level],
+    environmentNote: rules.environmentNotes.medication?.[environment],
+    confidence: 'low',
+    confidenceNote: 'Autorrelato, sem conferência do estoque de bordo',
+    notifyGround: level === 'red',
+    sourceUrl: rule.sourceUrl,
+  };
+}
+
 // Avalia o registro de um dia e devolve os alertas (indicadores verdes não geram alerta).
 // Função pura: sem banco, sem React. O ambiente só acrescenta texto, nunca muda o nível.
 export function evaluateRecord(
@@ -201,7 +233,9 @@ export function evaluateRecord(
     const alert =
       indicator === 'symptoms'
         ? evaluateSymptoms(rule, record, rules, environment)
-        : evaluateIndicator(indicator, rule, record, previous, own, rules, environment);
+        : indicator === 'medication'
+          ? evaluateMedication(rule, record, rules, environment)
+          : evaluateIndicator(indicator, rule, record, previous, own, rules, environment);
     if (alert) alerts.push(alert);
   }
   return alerts.sort((a, b) => compareLevels(b.level, a.level));

@@ -2,7 +2,7 @@ import { addDays, missionDay, todayISO } from '../lib/dates';
 import { createDataKey, createKeyPair, exportPublicKey } from '../lib/crypto';
 import { composeForDay } from '../sync/compose';
 import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Profile, Settings } from '../types';
-import { db, DEMO_TABLES } from './db';
+import { db, DEMO_MEDICATIONS, DEMO_TABLES } from './db';
 import { clearSessionKeys, setSessionKeys } from './keyring';
 import { buildProfile } from './profilesRepo';
 import { sealRecord } from './recordsRepo';
@@ -13,8 +13,8 @@ import { sealRecord } from './recordsRepo';
 const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
-  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood',
-  'exerciseMinutes', 'radiationDose', 'vision', 'symptoms',
+  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
+  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'symptoms',
 ];
 
 // Gerador pseudoaleatório com semente, para a demonstração ser sempre igual.
@@ -39,16 +39,19 @@ interface SeedProfile {
 const PROFILES: SeedProfile[] = [
   {
     // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
-    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
+    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.ana },
     seed: 11,
     base: { systolic: 116, diastolic: 74, heartRate: 66, glucose: 88, temperature: 36.6, sleepHours: 7.5, exerciseMinutes: 88, radiationDose: 420 },
     story: (values, daysLeft) => {
       const sleep = [5.2, 5.3, 5.6, 5.9, 6.3, 6.7, 7.0];
       const mood = [3, 3, 3, 3, 4, 4, 4] as const;
+      // Nos dias com 6 h de sono ou menos, a reação fica mais lenta (M4 e M7).
+      const reaction = [372, 368, 364, 360];
       if (daysLeft < sleep.length) {
         values.sleepHours = sleep[daysLeft];
         values.mood = mood[daysLeft];
       }
+      if (daysLeft < reaction.length) values.reactionTime = reaction[daysLeft];
     },
   },
   {
@@ -59,7 +62,7 @@ const PROFILES: SeedProfile[] = [
   },
   {
     // Mudança leve na visão nos últimos dias, com dor de cabeça.
-    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
+    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.lia },
     seed: 37,
     base: { systolic: 112, diastolic: 72, heartRate: 74, glucose: 90, temperature: 36.7, sleepHours: 7.6, exerciseMinutes: 82, radiationDose: 425 },
     story: (values, daysLeft) => {
@@ -77,6 +80,9 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
 
   for (const profile of PROFILES) {
     const random = mulberry32(profile.seed);
+    const mindRandom = mulberry32(profile.seed + 1000); // estresse e carga de trabalho (M2)
+    const resistanceRandom = mulberry32(profile.seed + 2000); // treino resistido (M3)
+    const reactionRandom = mulberry32(profile.seed + 3000); // tempo de reação (M4)
     // Variação em torno do valor de base, limitada a ±spread.
     const around = (center: number, spread: number, decimals = 0) => {
       const factor = 10 ** decimals;
@@ -98,6 +104,17 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         radiationDose: around(base.radiationDose, 20),
         vision: 0,
         symptoms: [],
+        // Histórico com todas as doses tomadas: a medicação não muda os casos preparados da demonstração.
+        medication: profile.member.medications?.map((m) => ({ id: m.id, label: m.label, taken: true })),
+        // Estresse e carga dentro da faixa verde (1 a 3), com gerador próprio para não mudar os outros
+        // valores simulados. Não mudam os casos preparados da demonstração.
+        stress: mindRandom() < 0.7 ? 2 : 3,
+        workload: mindRandom() < 0.6 ? 3 : 2,
+        // Parte resistida do exercício: perto de 40 min, sem passar do total. Gerador próprio, para não
+        // mudar os outros valores simulados.
+        resistanceMinutes: Math.round(40 + (resistanceRandom() * 2 - 1) * 3),
+        // Tempo de reação perto de 300 ms, com gerador próprio.
+        reactionTime: Math.round(300 + (reactionRandom() * 2 - 1) * 12),
       };
       profile.story?.(all, SEED_DAYS - 1 - i);
 
@@ -105,6 +122,11 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
       for (const indicator of profile.member.trackedIndicators) {
         Object.assign(values, { [indicator]: all[indicator] });
       }
+      // Na demonstração, o sono vem de um sensor vestível e a dose do dosímetro pessoal (M10).
+      const sources: DailyValues['sources'] = {};
+      if (values.sleepHours !== undefined) sources.sleepHours = 'wearable';
+      if (values.radiationDose !== undefined) sources.radiationDose = 'dosimeter';
+      if (Object.keys(sources).length > 0) values.sources = sources;
       records.push({
         id: `${profile.member.id}_${date}`,
         crewId: profile.member.id,
@@ -120,7 +142,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
   return {
     crew,
     records,
-    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [] },
+    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [], missionProfile: 'station', environmentManual: false },
   };
 }
 

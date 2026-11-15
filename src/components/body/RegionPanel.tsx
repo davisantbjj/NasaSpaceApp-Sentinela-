@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { INDICATORS, REGIONS } from '../../content/indicators';
 import type { DisplayValue } from '../../content/format';
+import { hasHistoryChart } from '../../lib/series';
 import type { Alert, BodyRegion, IndicatorId, Level } from '../../types';
 import { LevelBadge } from '../alerts/LevelBadge';
 
@@ -9,6 +10,7 @@ export interface RegionItem {
   value?: DisplayValue; // ausente quando não foi medido no último registro
   level?: Level;
   baselineNote?: string;
+  sourceNote?: string; // "Origem: sensor vestível" (M10)
 }
 
 interface Props {
@@ -17,10 +19,11 @@ interface Props {
   items: RegionItem[];
   alerts: Alert[];
   togetherNotes: string[]; // "mudaram juntos"
+  contextNotes?: { text: string; sourceUrl: string }[]; // contexto que não é alerta (ex.: perda óssea estimada)
 }
 
 // Detalhe da região selecionada na figura humana.
-export function RegionPanel({ region, level, items, alerts, togetherNotes }: Props) {
+export function RegionPanel({ region, level, items, alerts, togetherNotes, contextNotes = [] }: Props) {
   return (
     <section className="card stack" style={{ gap: 16 }} aria-live="polite">
       <div className="row-between">
@@ -59,15 +62,26 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
               </p>
             )}
             {item.baselineNote && <p className="small muted">{item.baselineNote}</p>}
+            {item.sourceNote && <p className="small muted">{item.sourceNote}</p>}
             <div className="row">
               {alert && <Link className="link-arrow" to="/alerts">Ver alerta →</Link>}
-              {item.indicator !== 'symptoms' && (
+              {hasHistoryChart(item.indicator) && (
                 <Link className="link-arrow" to={`/trends/${item.indicator}`}>Ver histórico →</Link>
               )}
             </div>
           </div>
         );
       })}
+
+      {contextNotes.map((note) => (
+        <p key={note.text} className="notice">
+          <span className="notice-icon" aria-hidden="true">i</span>
+          <span>
+            {note.text}{' '}
+            <a href={note.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA (abre outro site)</a>
+          </span>
+        </p>
+      ))}
 
       {togetherNotes.map((note) => (
         <p key={note} className="notice">

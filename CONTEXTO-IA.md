@@ -18,12 +18,13 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 4. Cada indicador é comparado com duas referências: a faixa geral e a linha de base pessoal do astronauta. O nível final é sempre o pior dos dois, então a linha de base nunca deixa verde um valor fora da faixa geral.
 5. Todo alerta tem seis partes: o que mudou, em relação a qual referência, por que importa, o que fazer, a confiança do dado e a fonte.
 6. Só existem três níveis: `green`, `yellow` e `red`.
-7. O ambiente da missão (estação, trânsito, Lua, Marte) muda a explicação do alerta, nunca o nível. Não existem faixas diferentes por ambiente.
+7. O ambiente da missão (estação, trânsito, Lua, Marte) muda a explicação do alerta, nunca o nível. Não existem faixas diferentes por ambiente. Com um perfil de missão (`src/content/missions.ts`), a fase de hoje define o ambiente; trocar à mão continua possível.
 8. Cada tripulante tem a sua lista de indicadores acompanhados. Nem todo mundo mede glicemia todo dia.
 9. Textos da interface em português. Nomes de código (variáveis, arquivos, tipos) em inglês.
 10. Papéis: tripulante vê só os próprios dados; comandante é tripulante e, dos outros, vê só se o check-in de hoje foi feito e se há alerta vermelho (nada clínico); oficial médico de bordo vê todos; médico do solo vê só os pacotes que chegaram à Terra. Abrir dados de outra pessoa fica no registro de acesso dela.
 11. A sincronização é automática, nunca uma opção do usuário. Alerta vermelho passa na frente da fila para a Terra. O alerta nunca espera a Terra.
 12. Cada tripulante tem a própria chave de dados, aberta só pelo PIN do dono e pelo do oficial médico. O pacote para a Terra é selado para o solo e o resumo do comandante é selado para o comandante, na hora do check-in (`src/sync/compose.ts`); a central só move caixas seladas. Limites do protótipo, que não podem ser escondidos na apresentação: o PIN curto (4 a 6 dígitos) pode ser descoberto testando todas as combinações por quem copiar o banco; e, como tudo roda num navegador só, a chave privada do solo fica no mesmo aparelho, cifrada no PIN do solo.
+13. O app serve para qualquer nave. Textos, perfis e explicações descrevem o tipo de missão ou de atividade; uma nave ou um aparelho específico aparece só como exemplo.
 
 ## Tecnologias
 
@@ -56,7 +57,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | `docs/pesquisa/` | Pesquisa e proposta originais, de onde saem os números e as fontes |
 | `docs/pesquisa/riscos-nasa-links-completo.md` | As 17 páginas de risco da NASA, as fichas do Human Research Roadmap, o Human System Risk Board e os artigos linkados. Comece pela tabela "O que mais importa para o Sentinela" |
 
-## Os dez indicadores
+## Os quinze indicadores
 
 | Id | Indicador | Unidade | Região do corpo |
 | --- | --- | --- | --- |
@@ -66,9 +67,14 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | `temperature` | Temperatura | °C | `immune` |
 | `sleepHours` | Sono | horas por dia | `mind` |
 | `mood` | Humor | escala de 1 a 5 | `mind` |
-| `exerciseMinutes` | Exercício | minutos por dia | `musculoskeletal` |
+| `stress` | Estresse | escala de 1 a 5 (5 = muito alto) | `mind` |
+| `workload` | Carga de trabalho | escala de 1 a 5 (5 = excessiva) | `mind` |
+| `reactionTime` | Tempo de reação | ms, média do teste de reação do app | `mind` |
+| `exerciseMinutes` | Exercício | minutos por dia (total: aeróbico + resistido) | `musculoskeletal` |
+| `resistanceMinutes` | Treino resistido | minutos por dia, digitados no passo de exercício | `musculoskeletal` |
 | `radiationDose` | Radiação | microsieverts por dia | `wholeBody` |
 | `vision` | Visão | autoteste (0 = sem mudança, 1 = leve, 2 = clara) | `head` |
+| `medication` | Medicação | lista das doses previstas no dia, marcadas como tomadas ou não | `wholeBody` |
 | `symptoms` | Sintomas | lista de marcar | `wholeBody` |
 
 ## Regras para quem for gerar código
@@ -92,6 +98,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 - Não crie regra que mude o nível por ambiente da missão.
 - O valor de cerca de 150 microsieverts por dia (Radi-N2) é só de nêutrons, medido na estação espacial. Use como contexto em texto, nunca como faixa de alerta.
 - Correlações entre indicadores são mostradas como "mudaram juntos". Nunca escreva que um causou o outro.
+- A origem de um valor (`values.sources`: digitado, sensor vestível ou dosímetro) é informada pela pessoa. O app não lê aparelhos; não escreva que lê.
 - O motor de regras (`src/rules/engine.ts`) é feito de funções puras, sem acesso a banco nem a React.
 - Componentes não acessam o Dexie direto. Passam pelos repositórios em `src/data/`.
 - Toda tela que mostra nível de alerta usa cor e também texto ou ícone. A cor nunca é o único sinal.

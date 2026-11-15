@@ -10,11 +10,25 @@ A exposição à radiação também é investigada com detectores: o [Radi-N2, d
 
 **Onde o Sentinela entra:** a equipe propõe uma interface local que organiza check-ins, comparação com referências, histórico e explicações. Não substitui sensores, exames, avaliações psicológicas, conferências médicas ou protocolos de agência. Não integra dispositivos nem recebe dados da NASA na versão atual.
 
+## De onde vêm os indicadores
+
+Os indicadores **não vêm de uma base de dados**: os valores são simulados (veja a próxima seção). A escolha de quais acompanhar foi da equipe, em três etapas:
+
+| Etapa | Indicadores | Justificativa |
+| --- | --- | --- |
+| Citados no enunciado do desafio | Pressão arterial, frequência cardíaca, glicemia, temperatura, sono e humor | Pedido direto do desafio |
+| Acrescentados pela pesquisa da NASA e da CSA | Exercício (com o treino resistido separado), radiação, visão e sintomas | Ligados aos riscos de ossos e músculos, câncer por radiação e SANS ([riscos da NASA](https://www.nasa.gov/hrp/risks/)) |
+| Acrescentados para saúde mental e medicação | Estresse, carga de trabalho, tempo de reação e medicação | Estresse e carga são perguntas do [Reaction Self Test](https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf), usado na ISS; um [estudo com 24 astronautas](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197) ligou dormir 6 horas ou menos a mais estresse. Medicação se liga ao [risco de remédios ineficazes ou tóxicos em voos longos](https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight) |
+
+Cada tripulante acompanha só a sua lista: na demonstração, só o Kenji mede glicemia, e só a Ana e a Lia têm medicação prevista.
+
+Limites: as escalas de estresse e carga são da demonstração, não escalas psicológicas validadas. O teste de reação do app segue a ideia do Reaction Self Test (esperar o sinal e responder rápido, por 3 minutos), mas não é o teste da NASA nem usa os critérios dele; na demonstração existe uma versão curta de 30 s. A medicação é autorrelato, sem conferência do estoque de bordo, e os nomes dos remédios da demonstração são fictícios.
+
 ## Por que usamos dados simulados
 
 Os três perfis e os 60 dias são gerados por código com semente fixa; nenhum registro foi extraído de astronauta real. Isso permite demonstrar os mesmos casos sem expor informações pessoais.
 
-A [política de compartilhamento de dados humanos da NASA](https://www.nasa.gov/directorates/esdmd/hhp/human-health-and-performance-data-sharing/) prevê solicitação, análise e eventual liberação de dados médicos e de pesquisa. O projeto não identificou uma série pública diária adequada para reproduzir os dez indicadores por indivíduo. Essa constatação da pesquisa não prova que inexista qualquer conjunto público. Na fala, usar “não utilizamos uma série clínica pública adequada”, evitando afirmar inexistência absoluta.
+A [política de compartilhamento de dados humanos da NASA](https://www.nasa.gov/directorates/esdmd/hhp/human-health-and-performance-data-sharing/) prevê solicitação, análise e eventual liberação de dados médicos e de pesquisa. O projeto não identificou uma série pública diária adequada para reproduzir os indicadores acompanhados por indivíduo. Essa constatação da pesquisa não prova que inexista qualquer conjunto público. Na fala, usar “não utilizamos uma série clínica pública adequada”, evitando afirmar inexistência absoluta.
 
 ## O que muda entre ambientes
 
@@ -34,6 +48,7 @@ A experiência humana de longa duração vem principalmente da órbita baixa. Mi
 - O app registra e compara. Não prevê doença nem calcula probabilidade de adoecimento.
 - O pior nível entre faixa geral e desvio pessoal prevalece; o ambiente e o sexo não mudam o nível.
 - “Mudaram juntos” descreve coocorrência, sem afirmar causalidade.
+- Estresse, carga de trabalho e medicação são autorrelato. Uma dose não tomada gera alerta amarelo; estresse e carga altos também, nunca vermelho.
 - As faixas são demonstrativas e a [revisão documental](pesquisa/revisao-faixas.md) registra sua evidência e limitações. Não foram clinicamente aprovadas.
 - “Avisar o solo” é uma marcação local; mensagens também não são enviadas.
 - A entrada é por perfil e PIN de demonstração, com papéis (tripulante, comandante, oficial médico, médico do solo) e registro de acesso. Para operação real, a identidade deveria ser integrada ao sistema institucional da agência, com autorização e auditoria; cada tripulante tem a própria chave, e o PIN de um colega não abre os dados de outro. Limites do protótipo: o PIN curto pode ser descoberto por quem copiar o banco, e a chave do solo fica no mesmo navegador porque tudo roda num aparelho só.
