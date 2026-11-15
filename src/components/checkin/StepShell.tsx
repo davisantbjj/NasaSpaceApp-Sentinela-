@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import i18n from '../../i18n';
 
 interface Props {
@@ -20,6 +20,13 @@ export function StepShell({
   index, total, title, howToMeasure, whyMeasure, children, onBack, onSkip, onNext,
   nextLabel, nextDisabled,
 }: Props) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    const heading = headingRef.current;
+    if (!heading) return;
+    heading.focus({ preventScroll: true });
+    heading.scrollIntoView({ behavior: 'instant', block: 'start' });
+  }, [index]);
   return (
     <form
       className="card step checkin-step"
@@ -35,7 +42,7 @@ export function StepShell({
         <div className="progress" role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={index + 1} aria-label={i18n.t('checkin:progress')}>
           <div className="progress-bar" style={{ width: `${((index + 1) / total) * 100}%` }} />
         </div>
-        <h2 style={{ fontSize: '1.375rem' }}>{title}</h2>
+        <h2 ref={headingRef} tabIndex={-1} style={{ fontSize: '1.375rem' }}>{title}</h2>
       </div>
 
       <div className="step-fields">{children}</div>
