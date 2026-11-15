@@ -1,7 +1,7 @@
 import { formatNumber } from '../lib/series';
 import type { DailyValues, IndicatorId } from '../types';
 import i18n from '../i18n';
-import { indicatorContent } from './indicators';
+import { indicatorContent, sourceContent } from './indicators';
 
 export interface DisplayValue {
   text: string; // "118/76", "7,4", "Bem"
@@ -43,6 +43,12 @@ export function displayValue(
     return { text: option.label, unit };
   }
   return { text: formatNumber(value), unit: content.unit };
+}
+
+// "Sensor vestível" quando o valor veio de um aparelho; nada quando foi digitado (M10).
+export function sourceLabel(values: DailyValues, indicator: IndicatorId): string | undefined {
+  const source = values.sources?.[indicator];
+  return source && source !== 'manual' ? sourceContent(source).label : undefined;
 }
 
 export function displayText(

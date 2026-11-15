@@ -60,14 +60,16 @@
     "checkinOtherPending": "Today's check-in has not reached the onboard hub. The dashboard shows the record from {{date}}.",
     "checkinOwnPending": "Today's check-in is pending. The dashboard shows the record from {{date}}.",
     "systems": "Body systems",
-    "regionHint": "Select a region to view its indicators."
+    "regionHint": "Select a region to view its indicators.",
+    "sourceNote": "Source: {{source}}"
   },
   "regionPanel": {
     "selected": "Selected region",
     "noTracked": "This crew member does not track indicators in this region.",
     "viewAlert": "View alert →",
     "history": "View history →",
-    "togetherNote": "This does not mean one caused the other."
+    "togetherNote": "This does not mean one caused the other.",
+    "nasaSource": "Source: NASA (opens another site)"
   },
   "bodyMap": {
     "label": "Status of each body region",
@@ -174,6 +176,44 @@
     "gravityContext": {
       "female": "Dizziness when standing can occur after returning to gravity following a period in microgravity. Report symptoms to the onboard team and follow your individual readaptation protocol. NASA describes greater susceptibility to orthostatic intolerance among women in the cited studies; this does not determine individual risk or change this app's ranges.",
       "other": "Dizziness when standing can occur after returning to gravity following a period in microgravity. Report symptoms to the onboard team and follow your individual readaptation protocol. Responses vary between people; this note does not estimate individual risk or change this app's ranges."
+    },
+    "everyFourDays": "Every 4 days",
+    "dayOf": "of {{total}}",
+    "goals": {
+      "title": "Weekly goals",
+      "intro": "In how many of the last {{window}} days, counting today, each indicator stayed in the green range. The goal is {{target}} days, leaving room for days outside the routine. Demo goal, not a prescription: each crew member's plan comes from the medical team.",
+      "range": "{{min}} to {{max}} {{unit}}",
+      "progress": "{{days}} of the last {{window}} days in range · goal of {{target}} days",
+      "met": " ✓ met",
+      "missing_one": ", {{count}} to go",
+      "missing_other": ", {{count}} to go"
+    },
+    "gravityChange": {
+      "today": "today",
+      "tomorrow": "tomorrow",
+      "inDays": "in {{days}} days",
+      "soonAdvice": "Reread the guidance below and agree on the readaptation protocol with the medical officer.",
+      "next": "Next gravity change: {{label}}, on mission day {{day}} (in {{inDays}} days).",
+      "moonLanding": "Moon landing",
+      "marsLanding": "Mars landing",
+      "landing": "Landing",
+      "earthReturn": "Return to Earth"
+    },
+    "profile": {
+      "title": "Mission profile",
+      "intro": "Sentinela works for any spacecraft. The profile sets the mission type, length, and phases; today's phase sets the environment.",
+      "none": "No profile (environment chosen by hand)",
+      "vehicle": "Vehicle",
+      "crew": "Crew",
+      "duration": "Planned duration",
+      "durationDays": "{{days}} days",
+      "currentPhase": "Current phase: {{label}}",
+      "phase": "Phase: {{label}}",
+      "phaseDays": "days {{from}} to {{to}} · {{environment}}",
+      "pastEnd": "Today is day {{day}}, past the planned end ({{total}} days): the last phase applies. ",
+      "source": "Source (opens another site)",
+      "offPhase": "Environment changed by hand. Based on the mission phase, today it would be {{environment}}.",
+      "usePhase": "Use the phase environment"
     }
   },
   "crewOverview": {
@@ -346,5 +386,55 @@
     "details": "Decision support, no diagnosis. Simulated crew data and demo ranges. CosmoTI team · NASA Space Apps Challenge 2026.",
     "yourData": "Your data",
     "contact": "Text communication"
+  },
+  "context": {
+    "dayCount_one": "{{count}} day",
+    "dayCount_other": "{{count}} days",
+    "boneLoss": {
+      "estimate": "Estimate, not a measurement: after {{days}} without gravity, loss in weight-bearing bones is around {{min}}% to {{max}}%. The calculation uses the NASA average ({{rateMin}}% to {{rateMax}}% per month, in missions of {{monthsMin}} to {{monthsMax}} months), a group value, not yours.",
+      "beyondStudied": "After {{months}} months, NASA does not yet know whether the loss continues at the same rate.",
+      "partial_one": "{{count}} day was in partial gravity (Moon or Mars), where the loss rate is unknown; that day is not counted.",
+      "partial_other": "{{count}} days were in partial gravity (Moon or Mars), where the loss rate is unknown; those days are not counted."
+    },
+    "radiation": {
+      "total": "Accumulated dose recorded during the mission: {{dose}}, adding up {{days}} with a dosimeter reading.",
+      "missing_one": "{{count}} day without a reading is not in the sum, so the real total is higher.",
+      "missing_other": "{{count}} days without a reading are not in the sum, so the real total is higher.",
+      "notLimit": "This is context, not a limit: the app does not assess career dose limits or intense radiation events."
+    }
+  },
+  "missionProfiles": {
+    "station": {
+      "label": "Low Earth orbit station",
+      "example": "e.g. International Space Station",
+      "vehicle": "Space station",
+      "crewSize": "3 to 7 people",
+      "note": "A typical expedition lasts about 6 months. Some last up to about 1 year.",
+      "phases": {
+        "station": "Station"
+      }
+    },
+    "lunarFlyby": {
+      "label": "Short lunar flight, no landing",
+      "example": "e.g. Artemis II",
+      "vehicle": "Capsule",
+      "crewSize": "4 people",
+      "note": "Planned duration of 10 days, outside Earth's magnetosphere.",
+      "phases": {
+        "transit": "Transit around the Moon"
+      }
+    },
+    "mars": {
+      "label": "Mars mission (planning reference)",
+      "example": "NASA reference architecture, not a scheduled mission",
+      "vehicle": "Transit vehicle and surface habitat",
+      "crewSize": "6 people",
+      "note": "About 180 days outbound, 539 days on Mars, and the rest returning, 914 days in total.",
+      "phases": {
+        "outbound": "Outbound",
+        "surface": "Mars surface",
+        "return": "Return"
+      }
+    }
   }
 }

@@ -151,6 +151,16 @@
       "whyItMatters": "Far from Earth, recording a symptom early gives the crew time to act with onboard resources.",
       "yellow": "Note when it started and how it changes, then record it again tomorrow.",
       "red": "Notify the onboard medical officer now."
+    },
+    "reactionTime": {
+      "whyItMatters": "In the Reaction Self Test used on the station, a reaction slower than the person's own usual is a sign of fatigue. In a study of 24 astronauts, sleeping 6 hours or less came with slower reactions.",
+      "yellow": "Prioritize your next sleep period and retake the test tomorrow. If it stays slower, talk with the medical officer about fatigue countermeasures.",
+      "red": "Tell the medical officer now."
+    },
+    "resistanceMinutes": {
+      "whyItMatters": "Resistance training protects bones the most in flight. A NASA study on the station showed that resistance training reduces bone loss, but does not prevent it on its own.",
+      "yellow": "Make up the resistance training session according to your individual plan.",
+      "red": "Talk with the onboard medical officer before resuming or changing your exercise plan."
     }
   },
   "symptoms": {

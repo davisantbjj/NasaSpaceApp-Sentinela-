@@ -7,7 +7,8 @@ import ptAlerts from './pt-BR/alerts.json';
 import ptCheckin from './pt-BR/checkin.json';
 import ptCommon from './pt-BR/common.json';
 import ptIndicators from './pt-BR/indicators.json';
-import { ENVIRONMENTS, INDICATORS, REGIONS } from '../content/indicators';
+import { DATA_SOURCES, ENVIRONMENTS, INDICATORS, REGIONS } from '../content/indicators';
+import { MISSION_PROFILES } from '../content/missions';
 import rules from '../rules/rules.json';
 
 function leafPaths(value: Record<string, unknown>, prefix = ''): string[] {
@@ -37,7 +38,7 @@ describe('locale resources', () => {
   });
 
   it('every translation key referenced by indicator content and alert rules exists in both locales', () => {
-    const references = collectKeys([INDICATORS, REGIONS, ENVIRONMENTS, rules]);
+    const references = collectKeys([INDICATORS, REGIONS, ENVIRONMENTS, DATA_SOURCES, MISSION_PROFILES, rules]);
     for (const reference of references) {
       const separator = reference.indexOf(':');
       const namespace = reference.slice(0, separator) as keyof typeof resources;

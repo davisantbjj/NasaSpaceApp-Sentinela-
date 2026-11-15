@@ -31,5 +31,24 @@
   "symptomList": "Sintomas de hoje",
   "skipped": "Pulado",
   "typingError": "Digite só números.",
-  "rangeError": "Confira o valor: o campo aceita de {{min}} a {{max}} {{unit}}."
+  "rangeError": "Confira o valor: o campo aceita de {{min}} a {{max}} {{unit}}.",
+  "aerobic": "Aeróbico (correr, pedalar, remar)",
+  "resistance": "Resistido (com carga)",
+  "resistancePart": "({{value}} de resistido)",
+  "partialExercise": "Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.",
+  "sourceQuestion": "De onde veio o valor?",
+  "reaction": {
+    "saved": "Resultado salvo hoje: {{value}} ms.",
+    "tooFew": "Poucas respostas válidas ({{valid}}). Refaça o teste ou pule o passo.",
+    "result": "Resultado: {{mean}} ms (média de {{valid}} respostas{{early}}).",
+    "early_one": "; {{count}} antecipação fora da conta",
+    "early_other": "; {{count}} antecipações fora da conta",
+    "tapNow": "● Toque agora!",
+    "wait": "Aguarde o sinal…",
+    "secondsLeft": "Faltam {{seconds}} s",
+    "stop": "Encerrar agora",
+    "retake": "Refazer o teste (3 min)",
+    "start": "Começar o teste (3 min)",
+    "short": "Versão curta (30 s, para demonstração)"
+  }
 }

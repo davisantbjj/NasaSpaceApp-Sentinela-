@@ -31,5 +31,24 @@
   "symptomList": "Today's symptoms",
   "skipped": "Skipped",
   "typingError": "Enter numbers only.",
-  "rangeError": "Check the value: enter {{min}} to {{max}} {{unit}}."
+  "rangeError": "Check the value: enter {{min}} to {{max}} {{unit}}.",
+  "aerobic": "Aerobic (running, cycling, rowing)",
+  "resistance": "Resistance (with load)",
+  "resistancePart": "({{value}} resistance)",
+  "partialExercise": "Enter both times (use 0 if you skipped one), or skip the step.",
+  "sourceQuestion": "Where did the value come from?",
+  "reaction": {
+    "saved": "Result saved today: {{value}} ms.",
+    "tooFew": "Too few valid responses ({{valid}}). Retake the test or skip the step.",
+    "result": "Result: {{mean}} ms (average of {{valid}} responses{{early}}).",
+    "early_one": "; {{count}} early response not counted",
+    "early_other": "; {{count}} early responses not counted",
+    "tapNow": "● Tap now!",
+    "wait": "Wait for the signal…",
+    "secondsLeft": "{{seconds}} s left",
+    "stop": "Stop now",
+    "retake": "Retake the test (3 min)",
+    "start": "Start the test (3 min)",
+    "short": "Short version (30 s, for the demo)"
+  }
 }

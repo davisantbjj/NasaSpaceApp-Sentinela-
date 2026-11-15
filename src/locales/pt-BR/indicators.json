@@ -15,7 +15,7 @@
   },
   "heartRate": {
     "label": "Frequência cardíaca",
-    "howToMeasure": "Meça em repouso, antes do exercício. Use o oxímetro de dedo ou conte os batimentos por 1 minuto.",
+    "howToMeasure": "Meça em repouso, antes do exercício. Use o oxímetro de dedo, um sensor vestível ou conte os batimentos por 1 minuto.",
     "whyMeasure": "A falta de gravidade muda a circulação. O ritmo em repouso é um sinal simples de como o coração está respondendo."
   },
   "temperature": {
@@ -30,7 +30,7 @@
   },
   "sleepHours": {
     "label": "Sono",
-    "howToMeasure": "Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir.",
+    "howToMeasure": "Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. Se usa um sensor vestível de sono, copie as horas que ele registrou.",
     "whyMeasure": "Na estação a tripulação vê cerca de 16 nasceres do sol por dia, o que confunde o relógio do corpo. Dormir pouco reduz a atenção."
   },
   "mood": {
@@ -71,8 +71,8 @@
   },
   "exerciseMinutes": {
     "label": "Exercício",
-    "howToMeasure": "Some os minutos de esteira, bicicleta e treino resistido feitos hoje.",
-    "whyMeasure": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção."
+    "howToMeasure": "Digite os minutos de exercício aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência, como agachamento) feitos hoje, com o equipamento da sua nave. O app soma os dois. Use 0 se não fez um deles.",
+    "whyMeasure": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção, e o treino resistido é o que mais protege os ossos."
   },
   "radiationDose": {
     "label": "Radiação",
@@ -100,12 +100,12 @@
     "whyMeasure": "Longe da Terra, registrar um sintoma cedo dá tempo para agir com os recursos de bordo."
   },
   "regions": {
-    "mind": { "label": "Mente e sono", "description": "Sono, humor, estresse e carga de trabalho" },
+    "mind": { "label": "Mente e sono", "description": "Sono, humor, estresse, carga de trabalho e tempo de reação" },
     "head": { "label": "Olhos e visão", "description": "Autoteste de visão" },
     "heart": { "label": "Coração", "description": "Pressão arterial e frequência cardíaca" },
     "immune": { "label": "Defesas do corpo", "description": "Temperatura" },
     "metabolism": { "label": "Metabolismo", "description": "Glicemia" },
-    "musculoskeletal": { "label": "Ossos e músculos", "description": "Exercício" },
+    "musculoskeletal": { "label": "Ossos e músculos", "description": "Exercício e treino resistido" },
     "wholeBody": { "label": "Corpo inteiro", "description": "Radiação, sintomas e medicação" }
   },
   "environments": {
@@ -128,6 +128,30 @@
       "label": "Marte",
       "description": "Superfície de Marte, com resposta do solo de até 20 minutos.",
       "signalDelayLabel": "de 3 a 22 min (12 min na demonstração)"
+    }
+  },
+  "reactionTime": {
+    "label": "Tempo de reação",
+    "howToMeasure": "Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.",
+    "whyMeasure": "Na estação, os astronautas fazem um teste parecido, o Reaction Self Test, para perceber a fadiga cedo. Reação mais lenta que o seu padrão é um sinal para descansar."
+  },
+  "resistanceMinutes": {
+    "label": "Treino resistido",
+    "howToMeasure": "Minutos de treino contra carga ou resistência, digitados no passo de exercício.",
+    "whyMeasure": "O treino resistido é o que mais protege os ossos no voo. Sozinho, ele reduz a perda óssea, mas não a impede."
+  },
+  "sources": {
+    "manual": {
+      "label": "Digitado",
+      "example": "medido ou contado por você"
+    },
+    "wearable": {
+      "label": "Sensor vestível",
+      "example": "ex.: pulseira de actigrafia, como a usada no Artemis II"
+    },
+    "dosimeter": {
+      "label": "Dosímetro pessoal",
+      "example": "ex.: dosímetro ativo levado no bolso, como no Artemis II"
     }
   }
 }

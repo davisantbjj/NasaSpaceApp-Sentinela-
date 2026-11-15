@@ -12,6 +12,7 @@ export interface RegionItem {
   value?: DisplayValue; // ausente quando não foi medido no último registro
   level?: Level;
   baselineNote?: string;
+  sourceNote?: string; // "Origem: sensor vestível" (M10)
 }
 
 interface Props {
@@ -19,11 +20,12 @@ interface Props {
   level?: Level;
   items: RegionItem[];
   alerts: Alert[];
-  togetherNotes: LocalizedText[];
+  togetherNotes: LocalizedText[]; // "mudaram juntos"
+  contextNotes?: { text: string; sourceUrl: string }[]; // contexto que não é alerta (ex.: perda óssea estimada)
 }
 
 // Detalhe da região selecionada na figura humana.
-export function RegionPanel({ region, level, items, alerts, togetherNotes }: Props) {
+export function RegionPanel({ region, level, items, alerts, togetherNotes, contextNotes = [] }: Props) {
   const regionText = regionContent(region);
   return (
     <section className="card stack" style={{ gap: 16 }} aria-live="polite">
@@ -63,6 +65,7 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
               </p>
             )}
             {item.baselineNote && <p className="small muted">{item.baselineNote}</p>}
+            {item.sourceNote && <p className="small muted">{item.sourceNote}</p>}
             <div className="row">
               {alert && <Link className="link-arrow" to="/alerts">{i18n.t('regionPanel.viewAlert')}</Link>}
               {hasHistoryChart(item.indicator) && (
@@ -72,6 +75,16 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
           </div>
         );
       })}
+
+      {contextNotes.map((note) => (
+        <p key={note.text} className="notice">
+          <span className="notice-icon" aria-hidden="true">i</span>
+          <span>
+            {note.text}{' '}
+            <a href={note.sourceUrl} target="_blank" rel="noreferrer">{i18n.t('regionPanel.nasaSource')}</a>
+          </span>
+        </p>
+      ))}
 
       {togetherNotes.map((note) => (
         <p key={`${note.key}_${JSON.stringify(note.params)}`} className="notice">

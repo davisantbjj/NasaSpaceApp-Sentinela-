@@ -264,6 +264,34 @@
       },
       "demo": true
     },
+    "reactionTime": {
+      "labelKey": "indicators:reactionTime.label",
+      "region": "mind",
+      "unit": "ms",
+      "useBaseline": true,
+      "deviationDirection": "above",
+      "nasaRisk": "Sleep Loss, Circadian Desynchronization and Work Overload",
+      "hazards": ["isolation", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "alerts:rules.reactionTime.whyItMatters",
+        "whatToDo": {
+          "yellow": "alerts:rules.reactionTime.yellow",
+          "red": "alerts:rules.reactionTime.red"
+        }
+      },
+      "sourceUrl": "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
+        ],
+        "green": "Sem faixa geral: o tempo de reação varia entre pessoas e aparelhos. Só a comparação com o padrão pessoal é usada.",
+        "yellow": "Mais de 15% acima do padrão pessoal por 3 registros: algoritmo de demonstração, não o critério de corte do Reaction Self Test.",
+        "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
+      },
+      "demo": true
+    },
     "exerciseMinutes": {
       "labelKey": "indicators:exerciseMinutes.label",
       "region": "musculoskeletal",
@@ -290,6 +318,34 @@
         "green": "60–150 min: escolha de demonstração. A NASA descreve média de cerca de duas horas por dia, não este intervalo nem uma meta universal.",
         "yellow": "30–180 min: escolha de demonstração; duração isolada não informa intensidade ou prescrição individual.",
         "red": "Fora da amarela: escolha de demonstração, sem validação clínica."
+      },
+      "demo": true
+    },
+    "resistanceMinutes": {
+      "labelKey": "indicators:resistanceMinutes.label",
+      "region": "musculoskeletal",
+      "unit": "min",
+      "useBaseline": true,
+      "deviationDirection": "below",
+      "nasaRisk": "Spaceflight-Induced Bone Changes",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "alerts:rules.resistanceMinutes.whyItMatters",
+        "whatToDo": {
+          "yellow": "alerts:rules.resistanceMinutes.yellow",
+          "red": "alerts:rules.resistanceMinutes.red"
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+          "https://www.nasa.gov/news-release/nasa-study-provides-new-findings-on-protecting-astronauts-bones-through-diet-and-exercise"
+        ],
+        "green": "Sem faixa geral: o tempo de treino resistido depende do plano individual. Só a comparação com o padrão pessoal é usada.",
+        "yellow": "Desvio pessoal para baixo: algoritmo de demonstração (7 amostras, mais de 15% por 3 registros), não prescrição de treino.",
+        "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
       },
       "demo": true
     },
@@ -426,7 +482,30 @@
       "mars": "alerts:environmentNotes.radiationDose.mars"
     }
   },
+  "context": {
+    "boneLoss": {
+      "minPercentPerMonth": 1,
+      "maxPercentPerMonth": 1.5,
+      "daysPerMonth": 30,
+      "studiedMonths": { "min": 4, "max": 6 },
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "demo": false
+    },
+    "radiationTotal": {
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"
+    },
+    "weeklyGoals": {
+      "windowDays": 7,
+      "targetDays": 5,
+      "indicators": ["sleepHours", "exerciseMinutes"],
+      "demo": true
+    },
+    "readaptation": {
+      "noticeDaysBefore": 7
+    }
+  },
   "correlationPairs": [
+    ["sleepHours", "reactionTime"],
     ["sleepHours", "mood"],
     ["exerciseMinutes", "mood"],
     ["sleepHours", "heartRate"]

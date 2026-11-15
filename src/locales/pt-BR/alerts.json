@@ -151,6 +151,16 @@
       "whyItMatters": "Longe da Terra, um sintoma registrado cedo dá tempo para agir com os recursos de bordo.",
       "yellow": "Anote quando começou e como evolui, e registre de novo amanhã.",
       "red": "Avise o médico de bordo agora."
+    },
+    "reactionTime": {
+      "whyItMatters": "No Reaction Self Test usado na estação, uma reação mais lenta que o padrão da própria pessoa é sinal de fadiga. Num estudo com 24 astronautas, dormir 6 horas ou menos veio junto com reação mais lenta.",
+      "yellow": "Priorize o próximo período de sono e repita o teste amanhã. Se continuar mais lento, converse com o oficial médico sobre medidas contra a fadiga.",
+      "red": "Avise o oficial médico agora."
+    },
+    "resistanceMinutes": {
+      "whyItMatters": "O treino resistido é o que mais protege os ossos no voo. Um estudo da NASA na estação mostrou que o treino resistido reduz a perda óssea, mas sozinho não a impede.",
+      "yellow": "Reponha a sessão de treino resistido conforme o seu plano individual.",
+      "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
     }
   },
   "symptoms": {

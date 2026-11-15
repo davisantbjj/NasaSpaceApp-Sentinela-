@@ -60,14 +60,16 @@
     "checkinOtherPending": "O check-in de hoje ainda não chegou à central. O painel mostra o registro de {{date}}.",
     "checkinOwnPending": "O check-in de hoje está pendente. O painel mostra o registro de {{date}}.",
     "systems": "Sistemas do corpo",
-    "regionHint": "Toque numa região para ver os indicadores."
+    "regionHint": "Toque numa região para ver os indicadores.",
+    "sourceNote": "Origem: {{source}}"
   },
   "regionPanel": {
     "selected": "Região selecionada",
     "noTracked": "Este tripulante não acompanha indicadores desta região.",
     "viewAlert": "Ver alerta →",
     "history": "Ver histórico →",
-    "togetherNote": "Isso não quer dizer que um causou o outro."
+    "togetherNote": "Isso não quer dizer que um causou o outro.",
+    "nasaSource": "Fonte: NASA (abre outro site)"
   },
   "bodyMap": {
     "label": "Estado de cada região do corpo",
@@ -174,6 +176,44 @@
     "gravityContext": {
       "female": "Ao voltar a um ambiente com gravidade depois de um período em microgravidade, pode ocorrer tontura ao levantar. Relate sintomas à equipe de bordo e siga o protocolo individual de readaptação. A NASA descreve maior suscetibilidade à intolerância ortostática em mulheres nos estudos citados; isso não determina o risco individual nem altera as faixas deste app.",
       "other": "Ao voltar a um ambiente com gravidade depois de um período em microgravidade, pode ocorrer tontura ao levantar. Relate sintomas à equipe de bordo e siga o protocolo individual de readaptação. A resposta varia entre pessoas; esta nota não estima risco individual nem altera as faixas deste app."
+    },
+    "everyFourDays": "A cada 4 dias",
+    "dayOf": "de {{total}}",
+    "goals": {
+      "title": "Metas da semana",
+      "intro": "Em quantos dos últimos {{window}} dias, contando hoje, cada indicador ficou na faixa verde. A meta é de {{target}} dias, para deixar folga para dias fora da rotina. Meta de demonstração, não é prescrição: o plano de cada tripulante vem da equipe médica.",
+      "range": "{{min}} a {{max}} {{unit}}",
+      "progress": "{{days}} dos últimos {{window}} dias na faixa · meta de {{target}} dias",
+      "met": " ✓ atingida",
+      "missing_one": ", falta {{count}}",
+      "missing_other": ", faltam {{count}}"
+    },
+    "gravityChange": {
+      "today": "hoje",
+      "tomorrow": "amanhã",
+      "inDays": "em {{days}} dias",
+      "soonAdvice": "Releia a orientação abaixo e combine com o oficial médico o protocolo de readaptação.",
+      "next": "Próxima mudança de gravidade: {{label}}, no dia {{day}} da missão (em {{inDays}} dias).",
+      "moonLanding": "Pouso na Lua",
+      "marsLanding": "Pouso em Marte",
+      "landing": "Pouso",
+      "earthReturn": "Volta à Terra"
+    },
+    "profile": {
+      "title": "Perfil da missão",
+      "intro": "O Sentinela serve para qualquer nave. O perfil diz o tipo de missão, a duração e as fases; a fase de hoje define o ambiente.",
+      "none": "Sem perfil (ambiente escolhido à mão)",
+      "vehicle": "Veículo",
+      "crew": "Tripulação",
+      "duration": "Duração prevista",
+      "durationDays": "{{days}} dias",
+      "currentPhase": "Fase atual: {{label}}",
+      "phase": "Fase: {{label}}",
+      "phaseDays": "dias {{from}} a {{to}} · {{environment}}",
+      "pastEnd": "Hoje é o dia {{day}}, depois do fim previsto ({{total}} dias): vale a última fase. ",
+      "source": "Fonte (abre outro site)",
+      "offPhase": "Ambiente trocado à mão. Pela fase da missão, hoje seria {{environment}}.",
+      "usePhase": "Usar o ambiente da fase"
     }
   },
   "crewOverview": {
@@ -346,5 +386,55 @@
     "details": "Apoio à decisão, sem diagnóstico. Dados da tripulação simulados e faixas de demonstração. Equipe CosmoTI · NASA Space Apps Challenge 2026.",
     "yourData": "Seus dados",
     "contact": "Comunicação por texto"
+  },
+  "context": {
+    "dayCount_one": "{{count}} dia",
+    "dayCount_other": "{{count}} dias",
+    "boneLoss": {
+      "estimate": "Estimativa, não medida: depois de {{days}} sem gravidade, a perda nos ossos que sustentam peso fica em torno de {{min}}% a {{max}}%. A conta usa a média da NASA ({{rateMin}}% a {{rateMax}}% ao mês, em missões de {{monthsMin}} a {{monthsMax}} meses), um valor de grupo e não o seu.",
+      "beyondStudied": "Depois de {{months}} meses, a NASA ainda não sabe se a perda continua no mesmo ritmo.",
+      "partial_one": "{{count}} dia foi em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esse dia não entra na conta.",
+      "partial_other": "{{count}} dias foram em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esses dias não entram na conta."
+    },
+    "radiation": {
+      "total": "Dose acumulada registrada na missão: {{dose}}, somando {{days}} com leitura do dosímetro.",
+      "missing_one": "{{count}} dia sem leitura não entra na soma, então o total real é maior.",
+      "missing_other": "{{count}} dias sem leitura não entram na soma, então o total real é maior.",
+      "notLimit": "É contexto, não limite: o app não avalia limites de dose da carreira nem eventos de radiação intensa."
+    }
+  },
+  "missionProfiles": {
+    "station": {
+      "label": "Estação em órbita baixa",
+      "example": "ex.: Estação Espacial Internacional",
+      "vehicle": "Estação espacial",
+      "crewSize": "3 a 7 pessoas",
+      "note": "Expedição típica de cerca de 6 meses. Algumas duram até cerca de 1 ano.",
+      "phases": {
+        "station": "Estação"
+      }
+    },
+    "lunarFlyby": {
+      "label": "Voo lunar curto, sem pouso",
+      "example": "ex.: Artemis II",
+      "vehicle": "Cápsula",
+      "crewSize": "4 pessoas",
+      "note": "Duração planejada de 10 dias, fora da magnetosfera da Terra.",
+      "phases": {
+        "transit": "Trânsito ao redor da Lua"
+      }
+    },
+    "mars": {
+      "label": "Missão a Marte (referência de planejamento)",
+      "example": "arquitetura de referência da NASA, não é uma missão marcada",
+      "vehicle": "Nave de trânsito e habitat de superfície",
+      "crewSize": "6 pessoas",
+      "note": "Cerca de 180 dias de ida, 539 dias em Marte e o restante de volta, num total de 914 dias.",
+      "phases": {
+        "outbound": "Ida",
+        "surface": "Superfície de Marte",
+        "return": "Volta"
+      }
+    }
   }
 }

@@ -9,6 +9,7 @@ import { acknowledgePrivacyNotice, hasAcknowledgedPrivacyNotice } from '../data/
 import { listReviews, saveReview } from '../data/reviewsRepo';
 import { resetDemo, seedIfEmpty } from '../data/seed';
 import { loadSettings, saveSettings } from '../data/settingsRepo';
+import { MISSION_PROFILES, missionStartOf, phaseOnDay } from '../content/missions';
 import { currentReview } from '../lib/reviews';
 import { canViewCrew, canViewCrewStatus, crewStatus, isOwnData, visibleRecords, visibleReviews } from '../lib/access';
 import { missionDay, todayISO } from '../lib/dates';
@@ -23,7 +24,7 @@ import { composeForDay } from '../sync/compose';
 import { packetStatus } from '../sync/packets';
 import type {
   AccessLogEntry, Alert, AlertReview, Baseline, BodyRegion, Correlation, CrewMember, DailyRecord, DailyValues,
-  Environment, GroundPacket, IndicatorId, Level, Profile, Session, Settings,
+  Environment, GroundPacket, IndicatorId, Level, MissionProfileId, Profile, Session, Settings,
 } from '../types';
 
 interface Derived {
@@ -77,6 +78,8 @@ interface AppState extends Derived {
   lock: (notice?: string) => void;
   switchCrew: (crewId: string) => Promise<void>;
   setEnvironment: (environment: Environment) => Promise<void>;
+  setMissionProfile: (profile: MissionProfileId | undefined) => Promise<void>;
+  applyPhaseEnvironment: () => Promise<void>;
   saveCheckin: (values: DailyValues) => Promise<Alert[]>;
   setReminder: (indicator: IndicatorId, everyDays: number) => Promise<void>;
   reviewAlert: (alert: Alert, note: string) => Promise<void>;
@@ -101,6 +104,13 @@ function derive(crewId: string, records: DailyRecord[], environment: Environment
     correlations: findCorrelations(records, baselines, rules),
     regionLevels: levelByRegion(alerts),
   };
+}
+
+// Ambiente da fase de hoje no perfil de missão, contando do início da missão.
+function phaseEnvironment(profileId: MissionProfileId, crew: CrewMember[]): Environment {
+  const start = missionStartOf(crew);
+  const day = start ? missionDay(start, todayISO()) : 1;
+  return phaseOnDay(MISSION_PROFILES[profileId], day).environment;
 }
 
 const EMPTY_SETTINGS: Settings = { environment: 'station', activeCrewId: '', reminders: [] };
@@ -225,7 +235,15 @@ export const useAppStore = create<AppState>((set, get) => {
         }
         await seedIfEmpty();
         const [crew, profiles, saved] = await Promise.all([listCrew(), listProfiles(), loadSettings()]);
-        const settings: Settings = { ...EMPTY_SETTINGS, ...saved };
+        let settings: Settings = { ...EMPTY_SETTINGS, ...saved };
+        // A fase da missão define o ambiente, a não ser que alguém tenha trocado à mão.
+        if (settings.missionProfile && !settings.environmentManual) {
+          const environment = phaseEnvironment(settings.missionProfile, crew);
+          if (environment !== settings.environment) {
+            settings = { ...settings, environment };
+            await saveSettings(settings);
+          }
+        }
         set({ crew, profiles, settings, ready: true, privacyAcknowledged: true, error: undefined });
       } catch (error) {
         set({ error: error instanceof Error ? error.message : String(error) });
@@ -274,9 +292,21 @@ export const useAppStore = create<AppState>((set, get) => {
     },
 
     setEnvironment: async (environment) => {
-      const settings = await updateSettings({ environment });
+      // Com perfil de missão, trocar à mão vale até alguém voltar ao ambiente da fase.
+      const manual = !!get().settings.missionProfile;
+      const settings = await updateSettings({ environment, environmentManual: manual });
       const { records } = get();
       set({ settings, ...derive(settings.activeCrewId, records, environment) });
+    },
+
+    setMissionProfile: async (missionProfile) => {
+      const environment = missionProfile ? phaseEnvironment(missionProfile, get().crew) : get().settings.environment;
+      const settings = await updateSettings({ missionProfile, environment, environmentManual: false });
+      set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment) });
+    },
+
+    applyPhaseEnvironment: async () => {
+      await get().setMissionProfile(get().settings.missionProfile);
     },
 
     // O check-in é sempre do tripulante que entrou, mesmo que ele esteja vendo outro.

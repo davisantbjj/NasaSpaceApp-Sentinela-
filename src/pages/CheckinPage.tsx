@@ -2,17 +2,19 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
+import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
+import { SourcePicker } from '../components/checkin/SourcePicker';
 import { fieldError, NumberStep, parseNumber, type NumberField } from '../components/checkin/NumberStep';
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
-import { displayText } from '../content/format';
+import { displayText, sourceLabel } from '../content/format';
 import { indicatorContent } from '../content/indicators';
 import { translateText } from '../content/localize';
 import i18n from '../i18n';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, CrewMember, DailyValues, IndicatorId } from '../types';
+import type { Alert, CrewMember, DailyValues, DataSource, IndicatorId } from '../types';
 import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
@@ -26,6 +28,8 @@ interface Draft {
   scale: Partial<Record<ScaleId, number>>;
   symptoms?: string[];
   medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
+  reactionTime?: number; // resultado do teste de reação, em ms (M4)
+  sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
 function draftFrom(values: DailyValues | undefined, member: CrewMember | undefined): Draft {
@@ -37,6 +41,13 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     for (const id of ['heartRate', 'temperature', 'glucose', 'sleepHours', 'exerciseMinutes', 'radiationDose'] as const) {
       text[id] = str(values[id]);
     }
+    // Exercício em dois campos: o aeróbico é o total menos o resistido.
+    if (values.resistanceMinutes !== undefined) {
+      text.resistanceMinutes = str(values.resistanceMinutes);
+      if (values.exerciseMinutes !== undefined) text.exerciseAerobic = str(values.exerciseMinutes - values.resistanceMinutes);
+    } else if (values.exerciseMinutes !== undefined) {
+      text.exerciseAerobic = str(values.exerciseMinutes);
+    }
   }
   // Medicação começa sem nada marcado: avançar sem marcar registra as doses como não tomadas.
   const medicationTaken = values?.medication
@@ -44,12 +55,21 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     : member?.medications?.length ? [] : undefined;
   const scale: Draft['scale'] = {};
   for (const id of SCALE_IDS) scale[id] = values?.[id];
-  return { text, scale, symptoms: values?.symptoms, medicationTaken };
+  return { text, scale, symptoms: values?.symptoms, medicationTaken, reactionTime: values?.reactionTime, sources: { ...values?.sources } };
 }
 
-function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
+// Quem acompanha treino resistido digita o exercício em dois campos (M3).
+const splitsExercise = (member: CrewMember) => member.trackedIndicators.includes('resistanceMinutes');
+
+function fieldsFor(indicator: IndicatorId, draft: Draft, member: CrewMember): NumberField[] {
   const content = indicatorContent(indicator);
   const input = content.input!;
+  if (indicator === 'exerciseMinutes' && splitsExercise(member)) {
+    return [
+      { id: 'exerciseAerobic', label: i18n.t('checkin:aerobic'), unit: content.unit, value: draft.text.exerciseAerobic ?? '', ...input },
+      { id: 'resistanceMinutes', label: i18n.t('checkin:resistance'), unit: content.unit, value: draft.text.resistanceMinutes ?? '', ...input },
+    ];
+  }
   if (indicator === 'bloodPressure') {
     return [
       { id: 'systolic', label: i18n.t('checkin:systolic'), unit: content.unit, value: draft.text.systolic ?? '', ...input },
@@ -68,20 +88,31 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       if (chosen !== undefined) Object.assign(values, { [indicator]: chosen });
     } else if (indicator === 'symptoms') {
       if (draft.symptoms !== undefined) values.symptoms = draft.symptoms;
+    } else if (indicator === 'reactionTime') {
+      if (draft.reactionTime !== undefined) values.reactionTime = draft.reactionTime;
     } else if (indicator === 'medication') {
       const taken = draft.medicationTaken;
       if (taken !== undefined && member.medications?.length) {
         values.medication = member.medications.map((m) => ({ id: m.id, label: m.label, taken: taken.includes(m.id) }));
       }
     } else {
-      const fields = fieldsFor(indicator, draft);
+      const fields = fieldsFor(indicator, draft, member);
       if (fields.some((f) => fieldError(f))) continue;
       const numbers = fields.map((f) => parseNumber(f.value));
       if (numbers.some((n) => n === undefined)) continue;
       if (indicator === 'bloodPressure') values.bloodPressure = { systolic: numbers[0]!, diastolic: numbers[1]! };
-      else Object.assign(values, { [indicator]: numbers[0] });
+      else if (indicator === 'exerciseMinutes' && fields.length === 2) {
+        values.exerciseMinutes = numbers[0]! + numbers[1]!;
+        values.resistanceMinutes = numbers[1]!;
+      } else Object.assign(values, { [indicator]: numbers[0] });
     }
   }
+  // Origem só dos valores registrados e vindos de um aparelho.
+  const sources: Partial<Record<IndicatorId, DataSource>> = {};
+  for (const [indicator, source] of Object.entries(draft.sources) as [IndicatorId, DataSource][]) {
+    if (source !== 'manual' && values[indicator] !== undefined) sources[indicator] = source;
+  }
+  if (Object.keys(sources).length > 0) values.sources = sources;
   return values;
 }
 
@@ -117,7 +148,10 @@ function OwnCheckin() {
 
   // Medicação só entra no check-in de quem tem medicação prevista.
   const steps = useMemo(
-    () => trackedInOrder(member).filter((id) => id !== 'medication' || (member?.medications?.length ?? 0) > 0),
+    () =>
+      trackedInOrder(member)
+        .filter((id) => id !== 'resistanceMinutes') // é o segundo campo do passo de exercício
+        .filter((id) => id !== 'medication' || (member?.medications?.length ?? 0) > 0),
     [member],
   );
   const [index, setIndex] = useState(0);
@@ -129,7 +163,7 @@ function OwnCheckin() {
   if (!member || steps.length === 0) return null;
 
   const values = toValues(steps, draft, member);
-  const filled = Object.keys(values).length;
+  const filled = Object.keys(values).filter((key) => key !== 'sources').length;
 
   const next = () => (index < steps.length - 1 ? setIndex(index + 1) : setStage('review'));
   const back = index > 0 ? () => setIndex(index - 1) : undefined;
@@ -141,12 +175,18 @@ function OwnCheckin() {
       if (indicator === 'bloodPressure') {
         text.systolic = '';
         text.diastolic = '';
+      } else if (indicator === 'exerciseMinutes') {
+        text.exerciseMinutes = '';
+        text.exerciseAerobic = '';
+        text.resistanceMinutes = '';
       } else text[indicator] = '';
       return {
         text,
         scale: isScale(indicator) ? { ...d.scale, [indicator]: undefined } : d.scale,
         symptoms: indicator === 'symptoms' ? undefined : d.symptoms,
         medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
+        reactionTime: indicator === 'reactionTime' ? undefined : d.reactionTime,
+        sources: { ...d.sources, [indicator]: undefined },
       };
     });
     next();
@@ -217,6 +257,8 @@ function OwnCheckin() {
                 </button>
                 <span className={values[indicator] === undefined ? 'muted' : 'num'}>
                   {displayText(values, indicator, symptomLabels()) ?? i18n.t('checkin:skipped')}
+                  {indicator === 'exerciseMinutes' && values.resistanceMinutes !== undefined && ` ${i18n.t('checkin:resistancePart', { value: displayText(values, 'resistanceMinutes') })}`}
+                  {sourceLabel(values, indicator) && ` · ${sourceLabel(values, indicator)}`}
                 </span>
               </li>
             ))}
@@ -236,8 +278,11 @@ function OwnCheckin() {
 
   const indicator = steps[index];
   const content = indicatorContent(indicator);
-  const fields = content.input ? fieldsFor(indicator, draft) : [];
-  const partialBp = indicator === 'bloodPressure' && fields.filter((f) => f.value.trim() !== '').length === 1;
+  const fields = content.input ? fieldsFor(indicator, draft, member) : [];
+  // Passo com dois campos (pressão ou exercício dividido) com só um preenchido.
+  const partial = fields.length === 2 && fields.filter((f) => f.value.trim() !== '').length === 1;
+  const partialBp = indicator === 'bloodPressure' && partial;
+  const partialExercise = indicator === 'exerciseMinutes' && partial;
 
   return (
     <div className="page checkin">
@@ -257,12 +302,21 @@ function OwnCheckin() {
         onSkip={skip}
         onNext={next}
         nextLabel={index === steps.length - 1 ? i18n.t('checkin:review') : i18n.t('checkin:next')}
-        nextDisabled={fields.some((f) => fieldError(f)) || partialBp}
+        nextDisabled={fields.some((f) => fieldError(f)) || partial}
       >
         {content.input && (
           <>
             <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
             {partialBp && <p className="small muted">{i18n.t('checkin:partialPressure')}</p>}
+            {partialExercise && <p className="small muted">{i18n.t('checkin:partialExercise')}</p>}
+            {content.sources && (
+              <SourcePicker
+                name={indicator}
+                options={content.sources}
+                value={draft.sources[indicator] ?? 'manual'}
+                onChange={(source) => setDraft((d) => ({ ...d, sources: { ...d.sources, [indicator]: source } }))}
+              />
+            )}
           </>
         )}
         {content.scale && (
@@ -272,6 +326,12 @@ function OwnCheckin() {
             options={content.scale}
             value={isScale(indicator) ? draft.scale[indicator] : undefined}
             onChange={(value) => setDraft((d) => ({ ...d, scale: { ...d.scale, [indicator]: value } }))}
+          />
+        )}
+        {indicator === 'reactionTime' && (
+          <ReactionTestStep
+            value={draft.reactionTime}
+            onResult={(reactionTime) => setDraft((d) => ({ ...d, reactionTime }))}
           />
         )}
         {indicator === 'medication' && (

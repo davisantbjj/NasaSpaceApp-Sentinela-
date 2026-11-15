@@ -141,6 +141,19 @@ export class SentinelaDB extends Dexie {
         }
       }),
     );
+    // v10: treino resistido (M3) para quem já acompanha exercício. Os dias antigos ficam só com o total.
+    this.version(10).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const tracked = member.trackedIndicators;
+        if (tracked.includes('exerciseMinutes') && !tracked.includes('resistanceMinutes')) tracked.push('resistanceMinutes');
+      }),
+    );
+    // v11: teste de reação (M4) para todos os tripulantes já gravados. Os dias antigos ficam sem esse valor.
+    this.version(11).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (!member.trackedIndicators.includes('reactionTime')) member.trackedIndicators.push('reactionTime');
+      }),
+    );
   }
 }
 

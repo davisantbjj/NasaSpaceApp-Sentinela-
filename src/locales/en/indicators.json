@@ -15,7 +15,7 @@
   },
   "heartRate": {
     "label": "Heart rate",
-    "howToMeasure": "Measure at rest, before exercising. Use the finger oximeter or count your pulse for 1 minute.",
+    "howToMeasure": "Measure at rest, before exercising. Use the finger oximeter, a wearable sensor, or count your pulse for 1 minute.",
     "whyMeasure": "Microgravity changes circulation. Resting heart rate is a simple sign of how your heart is responding."
   },
   "temperature": {
@@ -30,7 +30,7 @@
   },
   "sleepHours": {
     "label": "Sleep",
-    "howToMeasure": "Enter how many hours you slept during your most recent rest period, not time spent awake in the sleeping bag.",
+    "howToMeasure": "Enter how many hours you slept during your most recent rest period, not time spent awake in the sleeping bag. If you use a wearable sleep sensor, copy the hours it recorded.",
     "whyMeasure": "The crew sees about 16 sunrises a day on the station, which can confuse the body clock. Too little sleep reduces alertness."
   },
   "mood": {
@@ -71,8 +71,8 @@
   },
   "exerciseMinutes": {
     "label": "Exercise",
-    "howToMeasure": "Add the minutes spent on the treadmill, bike, and resistance training today.",
-    "whyMeasure": "Without gravity, bones lose 1% to 1.5% of their density per month and muscles weaken. Exercise is the main protection."
+    "howToMeasure": "Enter today's minutes of aerobic exercise (running, cycling, rowing) and resistance training (against a load or resistance, such as squats), using your spacecraft's equipment. The app adds them up. Use 0 if you skipped one of them.",
+    "whyMeasure": "Without gravity, bones lose 1% to 1.5% of their density per month and muscles weaken. Exercise is the main protection, and resistance training protects bones the most."
   },
   "radiationDose": {
     "label": "Radiation",
@@ -100,12 +100,12 @@
     "whyMeasure": "Far from Earth, recording a symptom early gives the crew time to act with onboard resources."
   },
   "regions": {
-    "mind": { "label": "Mind and sleep", "description": "Sleep, mood, stress, and workload" },
+    "mind": { "label": "Mind and sleep", "description": "Sleep, mood, stress, workload, and reaction time" },
     "head": { "label": "Eyes and vision", "description": "Vision self-test" },
     "heart": { "label": "Heart", "description": "Blood pressure and heart rate" },
     "immune": { "label": "Body defenses", "description": "Temperature" },
     "metabolism": { "label": "Metabolism", "description": "Blood glucose" },
-    "musculoskeletal": { "label": "Bones and muscles", "description": "Exercise" },
+    "musculoskeletal": { "label": "Bones and muscles", "description": "Exercise and resistance training" },
     "wholeBody": { "label": "Whole body", "description": "Radiation, symptoms, and medication" }
   },
   "environments": {
@@ -128,6 +128,30 @@
       "label": "Mars",
       "description": "Martian surface, with ground response times of up to 20 minutes.",
       "signalDelayLabel": "3 to 22 min (12 min in this demo)"
+    }
+  },
+  "reactionTime": {
+    "label": "Reaction time",
+    "howToMeasure": "Take the test somewhere quiet. When the signal appears, tap the area or press Space as fast as you can. Do not respond before the signal. The full test takes 3 minutes.",
+    "whyMeasure": "On the station, astronauts take a similar test, the Reaction Self Test, to spot fatigue early. A reaction slower than your usual is a sign to rest."
+  },
+  "resistanceMinutes": {
+    "label": "Resistance training",
+    "howToMeasure": "Minutes of training against a load or resistance, entered in the exercise step.",
+    "whyMeasure": "Resistance training protects bones the most in flight. On its own, it reduces bone loss but does not prevent it."
+  },
+  "sources": {
+    "manual": {
+      "label": "Typed in",
+      "example": "measured or counted by you"
+    },
+    "wearable": {
+      "label": "Wearable sensor",
+      "example": "e.g. an actigraphy wristband, like the one used on Artemis II"
+    },
+    "dosimeter": {
+      "label": "Personal dosimeter",
+      "example": "e.g. an active dosimeter carried in a pocket, as on Artemis II"
     }
   }
 }

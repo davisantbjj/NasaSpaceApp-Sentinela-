@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, environmentContent, indicatorContent } from '../content/indicators';
+import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, nextGravityChange, phaseOnDay } from '../content/missions';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
+import { weeklyGoals, type WeeklyGoal } from '../lib/weeklyGoals';
+import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
-import type { DailyRecord, IndicatorId } from '../types';
+import type { DailyRecord, IndicatorId, MissionProfileId } from '../types';
 import { trackedInOrder } from './helpers';
 import i18n from '../i18n';
 
@@ -14,6 +17,7 @@ const REMINDER_OPTIONS = [
   { value: 1, label: 'everyDay' },
   { value: 2, label: 'everyTwoDays' },
   { value: 3, label: 'everyThreeDays' },
+  { value: 4, label: 'everyFourDays' }, // como o teste de reação na estação (M4)
   { value: 7, label: 'weekly' },
 ];
 
@@ -36,17 +40,42 @@ function lastMeasured(records: DailyRecord[], indicator: IndicatorId): string | 
   return undefined;
 }
 
+// "5 dos últimos 7 dias na faixa · meta de 5 dias ✓ atingida" ou "1 dos últimos 7 dias na faixa · meta de 5 dias, faltam 4".
+function goalText(goal: WeeklyGoal): string {
+  const missing = goal.targetDays - goal.daysInGreen;
+  const status = goal.met ? i18n.t('mission.goals.met') : i18n.t('mission.goals.missing', { count: missing });
+  return i18n.t('mission.goals.progress', { days: goal.daysInGreen, window: goal.windowDays, target: goal.targetDays }) + status;
+}
+
+// "hoje", "amanhã" ou "em 5 dias" (M11).
+function gravityWhen(inDays: number): string {
+  if (inDays === 0) return i18n.t('mission.gravityChange.today');
+  if (inDays === 1) return i18n.t('mission.gravityChange.tomorrow');
+  return i18n.t('mission.gravityChange.inDays', { days: inDays });
+}
+
 export function MissionPage() {
   const member = useActiveCrew();
-  const { settings, records, session, setEnvironment, setReminder, resetDemo } = useAppStore();
+  const { crew, settings, records, session, setEnvironment, setMissionProfile, applyPhaseEnvironment, setReminder, resetDemo } = useAppStore();
   // Só o oficial médico recria a demonstração: recriar apaga também o registro de acesso de todos.
   const canReset = session?.role === 'medicalOfficer';
   const [confirmReset, setConfirmReset] = useState(false);
 
   if (!member) return null;
   const today = todayISO();
-  const tracked = trackedInOrder(member);
+  // O treino resistido é digitado no passo de exercício: o lembrete de exercício vale para os dois.
+  const tracked = trackedInOrder(member).filter((id) => id !== 'resistanceMinutes');
   const healthContext = crewHealthContext(member.sex);
+  const day = missionDay(member.missionStart, today);
+  const profile = settings.missionProfile ? MISSION_PROFILES[settings.missionProfile] : undefined;
+  const missionStart = missionStartOf(crew) ?? member.missionStart;
+  const crewDay = missionDay(missionStart, today);
+  const phase = profile ? phaseOnDay(profile, crewDay) : undefined;
+  const offPhase = !!phase && settings.environment !== phase.environment;
+  const goals = weeklyGoals(records, today, rules).filter((g) => member.trackedIndicators.includes(g.indicator));
+  // Readaptação (M11): próxima mudança de gravidade e se já está perto.
+  const gravity = profile ? nextGravityChange(profile, crewDay) : undefined;
+  const gravitySoon = !!gravity && gravity.inDays <= (rules.context?.readaptation?.noticeDaysBefore ?? 0);
 
   return (
     <div className="page">
@@ -58,7 +87,7 @@ export function MissionPage() {
       <section className="card stat-row">
         <div className="metric">
           <span className="small muted">{i18n.t('mission.day')}</span>
-          <span className="metric-value">{missionDay(member.missionStart, today)}</span>
+          <span className="metric-value">{day}{profile && <span className="unit">{i18n.t('mission.dayOf', { total: profile.durationDays })}</span>}</span>
         </div>
         <div className="metric">
           <span className="small muted">{i18n.t('mission.start')}</span>
@@ -74,8 +103,39 @@ export function MissionPage() {
         </div>
       </section>
 
+      {goals.length > 0 && (
+        <section className="card stack">
+          <div>
+            <h2>{i18n.t('mission.goals.title')}</h2>
+            <p className="small muted">{i18n.t('mission.goals.intro', { window: goals[0].windowDays, target: goals[0].targetDays })}</p>
+          </div>
+          <ul className="summary-list">
+            {goals.map((goal) => (
+              <li key={goal.indicator}>
+                <span>{i18n.t(goal.labelKey)} ({goal.greenText})</span>
+                <span className="num">
+                  {goalText(goal)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="card stack">
         <h2>{i18n.t('mission.gravity')}</h2>
+        {gravity && gravitySoon && (
+          <p className="notice" style={{ color: 'var(--text)' }}>
+            <span className="notice-icon" aria-hidden="true">!</span>
+            <span>
+              <strong>{i18n.t(gravity.labelKey)} {gravityWhen(gravity.inDays)}.</strong>{' '}
+              {i18n.t('mission.gravityChange.soonAdvice')}
+            </span>
+          </p>
+        )}
+        {gravity && !gravitySoon && (
+          <p className="small muted">{i18n.t('mission.gravityChange.next', { label: i18n.t(gravity.labelKey), day: gravity.day, inDays: gravity.inDays })}</p>
+        )}
         <p>{healthContext.text}</p>
         <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">{i18n.t('mission.gravitySource')}</a>
       </section>
@@ -88,9 +148,56 @@ export function MissionPage() {
 
       <section className="card stack" style={{ gap: 14 }}>
         <div>
+          <h2>{i18n.t('mission.profile.title')}</h2>
+          <p className="small muted">{i18n.t('mission.profile.intro')}</p>
+        </div>
+        <select
+          className="select"
+          aria-label={i18n.t('mission.profile.title')}
+          value={settings.missionProfile ?? ''}
+          onChange={(event) => void setMissionProfile((event.target.value || undefined) as MissionProfileId | undefined)}
+        >
+          <option value="">{i18n.t('mission.profile.none')}</option>
+          {MISSION_PROFILE_ORDER.map((id) => (
+            <option key={id} value={id}>{i18n.t(MISSION_PROFILES[id].labelKey)} ({i18n.t(MISSION_PROFILES[id].exampleKey)})</option>
+          ))}
+        </select>
+        {profile && phase && (
+          <>
+            <ul className="summary-list">
+              <li><span>{i18n.t('mission.profile.vehicle')}</span><span>{i18n.t(profile.vehicleKey)}</span></li>
+              <li><span>{i18n.t('mission.profile.crew')}</span><span>{i18n.t(profile.crewSizeKey)}</span></li>
+              <li><span>{i18n.t('mission.profile.duration')}</span><span className="num">{i18n.t('mission.profile.durationDays', { days: profile.durationDays })}</span></li>
+              {profile.phases.map((p) => (
+                <li key={p.labelKey}>
+                  <span>{p === phase ? <strong>{i18n.t('mission.profile.currentPhase', { label: i18n.t(p.labelKey) })}</strong> : i18n.t('mission.profile.phase', { label: i18n.t(p.labelKey) })}</span>
+                  <span className="num">{i18n.t('mission.profile.phaseDays', { from: p.fromDay, to: p.toDay, environment: environmentContent(p.environment).label })}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="small muted">
+              {i18n.t(profile.noteKey)}{' '}
+              {crewDay > profile.durationDays && i18n.t('mission.profile.pastEnd', { day: crewDay, total: profile.durationDays })}
+              <a href={profile.sourceUrl} target="_blank" rel="noreferrer">{i18n.t('mission.profile.source')}</a>
+            </p>
+          </>
+        )}
+      </section>
+
+      <section className="card stack" style={{ gap: 14 }}>
+        <div>
           <h2>{i18n.t('mission.environment')}</h2>
           <p className="small muted">{i18n.t('mission.environmentIntro')}</p>
         </div>
+        {offPhase && (
+          <p className="notice">
+            <span className="notice-icon" aria-hidden="true">!</span>
+            <span>
+              {i18n.t('mission.profile.offPhase', { environment: environmentContent(phase!.environment).label })}{' '}
+              <button type="button" className="btn btn-ghost" onClick={() => void applyPhaseEnvironment()}>{i18n.t('mission.profile.usePhase')}</button>
+            </span>
+          </p>
+        )}
         <fieldset className="env-grid options">
           <legend className="visually-hidden">{i18n.t('mission.environment')}</legend>
           {ENVIRONMENT_ORDER.map((env) => (
