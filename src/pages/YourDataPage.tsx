@@ -44,14 +44,14 @@ export function YourDataPage() {
   }
 
   return (
-    <div className="page privacy-page">
+    <div className="page privacy-page data-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('yourData.eyebrow', { name: member.name })}</span>
         <h1>{i18n.t('yourData.title')}</h1>
         <p>{i18n.t('yourData.intro')}</p>
         <p className="small muted">{i18n.t('yourData.encryption')}</p>
       </header>
-      <section className="card stack"><PrivacyExplanation /></section>
+      <section className="card stack privacy-document"><PrivacyExplanation /></section>
       <section className="card stack" aria-labelledby="data-actions-title">
         <h2 id="data-actions-title">{i18n.t('yourData.actions')}</h2>
         <p>{i18n.t('yourData.copyIncludes')}</p>

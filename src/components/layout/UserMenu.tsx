@@ -5,6 +5,7 @@ import type { Session } from '../../types';
 import i18n from '../../i18n';
 import { LanguageSelect } from './LanguageSelect';
 import { TextSizeToggle } from './TextSizeToggle';
+import { BackgroundMotionToggle } from './AmbientBackground';
 
 interface Props {
   session: Session;
@@ -40,7 +41,12 @@ export function UserMenu({ session, pendingSync, onLock }: Props) {
   return (
     <details ref={ref} className="user-menu">
       <summary aria-label={`${session.name}, ${i18n.t(ROLE_LABELS[session.role])}. ${i18n.t('menu.open')}`}>
-        <span className="avatar" aria-hidden="true">{session.name.slice(0, 1)}</span>
+        <span className="avatar" aria-hidden="true">{session.name.split(' ').map((part) => part[0]).slice(0, 2).join('')}</span>
+        <span className="user-menu-identity">
+          <strong>{session.name}</strong>
+          <span>{i18n.t(ROLE_LABELS[session.role])}</span>
+        </span>
+        <svg className="user-menu-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m3 6 5 5 5-5" /></svg>
         {pendingSync > 0 && <span className="user-menu-dot" aria-hidden="true" />}
       </summary>
       <div className="user-menu-panel">
@@ -50,6 +56,7 @@ export function UserMenu({ session, pendingSync, onLock }: Props) {
         </div>
         <LanguageSelect />
         <TextSizeToggle />
+        <BackgroundMotionToggle />
         {onBoard && (
           <>
             <Link to="/mission" onClick={close}>{i18n.t('menu.mission')}</Link>

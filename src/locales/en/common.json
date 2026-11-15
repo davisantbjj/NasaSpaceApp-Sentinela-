@@ -1,4 +1,10 @@
 {
+  "background": {
+    "label": "Background animation",
+    "on": "on",
+    "off": "paused",
+    "reduced": "reduced motion on this device"
+  },
   "language": {
     "label": "Language",
     "en": "English",
@@ -53,6 +59,24 @@
     "excludedDays_other": "{{count}} excluded"
   },
   "dashboard": {
+    "dayLabel": "Day",
+    "ofDays": "of {{total}}",
+    "environmentLabel": "Environment",
+    "lastRecordLabel": "Latest record",
+    "todayDone": "Today's check-in complete",
+    "todayPending": "Today's check-in pending",
+    "startCheckin": "Complete check-in",
+    "redo": "Redo",
+    "needsAttention": "Needs attention",
+    "regionsAttention": "Regions to monitor",
+    "regionsCount_one": "{{count}} region",
+    "regionsCount_other": "{{count}} regions",
+    "mapHint": "Markers show where to look. Select a region to review all its indicators.",
+    "fullAlert": "View full alert",
+    "history": "View history",
+    "noAlerts": "No alerts in the latest measurements. Review the indicators by region below.",
+    "noRecords": "Complete your first check-in to view your indicators and track changes.",
+    "closeRegion": "Close region details",
     "eyebrow": "Crew dashboard",
     "allExpected": "Everything is within the expected range",
     "alerts_one": "{{count}} alert",
@@ -139,6 +163,12 @@
     "footerContact": "Text communication"
   },
   "login": {
+    "onboard": "Onboard monitoring",
+    "headline": "Health indicators for the mission.",
+    "overview": "Daily records, alerts and crew history in one place.",
+    "featureRecords": "Check-ins and history available on the device",
+    "featureAlerts": "Alerts with references and guidance",
+    "featureProfiles": "Access based on each person's role",
     "title": "Who is using the app?",
     "intro": "Choose your profile and tap Sign in. Each role only sees what it needs.",
     "profile": "Profile",

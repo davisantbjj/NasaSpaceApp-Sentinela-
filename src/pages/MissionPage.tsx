@@ -86,13 +86,13 @@ export function MissionPage() {
   const gravitySoon = !!gravity && gravity.inDays <= (rules.context?.readaptation?.noticeDaysBefore ?? 0);
 
   return (
-    <div className="page">
+    <div className="page mission-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('mission.title')}</span>
         <h1>{i18n.t('mission.of', { name: member.name.split(' ')[0] })}</h1>
       </header>
 
-      <section className="card stat-row">
+      <section className="card stat-row mission-stats">
         <div className="metric">
           <span className="small muted">{i18n.t('mission.day')}</span>
           <span className="metric-value">{day}{profile && <span className="unit">{i18n.t('mission.dayOf', { total: profile.durationDays })}</span>}</span>
@@ -163,7 +163,7 @@ export function MissionPage() {
         <div className="row"><Link className="btn" to="/your-data">{i18n.t('mission.yourData')}</Link><Link className="btn" to="/medical-contact">{i18n.t('mission.writeMedical')}</Link></div>
       </section>
 
-      <section className="card stack" style={{ gap: 14 }}>
+      <section className="card stack mission-wide" style={{ gap: 14 }}>
         <div>
           <h2>{i18n.t('mission.profile.title')}</h2>
           <p className="small muted">{i18n.t('mission.profile.intro')}</p>
@@ -206,7 +206,7 @@ export function MissionPage() {
 
       <CrewMissionDataCard member={member} />
 
-      <section className="card stack" style={{ gap: 14 }}>
+      <section className="card stack mission-wide" style={{ gap: 14 }}>
         <div>
           <h2>{i18n.t('mission.environment')}</h2>
           <p className="small muted">{i18n.t('mission.environmentIntro')}</p>
@@ -237,7 +237,7 @@ export function MissionPage() {
 
       <AlarmVolumeCard />
 
-      <section className="card stack" style={{ gap: 14 }}>
+      <section className="card stack mission-wide" style={{ gap: 14 }}>
         <div>
           <h2>{i18n.t('mission.reminders')}</h2>
           <p className="small muted">{i18n.t('mission.remindersIntro')}</p>
@@ -277,7 +277,7 @@ export function MissionPage() {
         </div>
       </section>
 
-      <section className="card stack">
+      <section className="card stack mission-wide demo-controls">
         <div>
           <h2>{i18n.t('mission.demoData')}</h2>
           <p className="small muted">

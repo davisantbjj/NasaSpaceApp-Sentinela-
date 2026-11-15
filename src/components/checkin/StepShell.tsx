@@ -22,13 +22,13 @@ export function StepShell({
 }: Props) {
   return (
     <form
-      className="card step"
+      className="card step checkin-step"
       onSubmit={(event) => {
         event.preventDefault();
         if (!nextDisabled) onNext();
       }}
     >
-      <div className="stack" style={{ gap: 10 }}>
+      <div className="stack step-heading" style={{ gap: 10 }}>
         <div className="row-between">
           <span className="eyebrow num">{i18n.t('checkin:step', { current: index + 1, total })}</span>
         </div>
@@ -38,10 +38,10 @@ export function StepShell({
         <h2 style={{ fontSize: '1.375rem' }}>{title}</h2>
       </div>
 
-      {children}
+      <div className="step-fields">{children}</div>
 
       {(howToMeasure || whyMeasure) && (
-        <div className="step-help card-inner">
+        <aside className="step-help card-inner">
           {howToMeasure && (
             <div>
               <span className="eyebrow">{i18n.t('checkin:howTo')}</span>
@@ -54,7 +54,7 @@ export function StepShell({
               <p className="small muted">{whyMeasure}</p>
             </div>
           )}
-        </div>
+        </aside>
       )}
 
       <div className="step-actions">

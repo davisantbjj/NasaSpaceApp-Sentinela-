@@ -359,8 +359,7 @@ function OwnCheckin() {
   return (
     <div className="page checkin">
       <header className="page-header">
-        {/* Título da página para leitor de tela; mantém o visual do rótulo pequeno. */}
-        <h1 className="eyebrow">{i18n.t('checkin:title')} · {member.name}</h1>
+        <h1>{i18n.t('checkin:title')} · {member.name}</h1>
         <p className="small muted">{i18n.t('checkin:trackedOnly')}</p>
       </header>
 

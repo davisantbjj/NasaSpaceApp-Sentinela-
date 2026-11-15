@@ -1,0 +1,40 @@
+/* Luz difusa e estrelas discretas, sem imagens externas nem eventos de ponteiro. */
+.app { position: relative; isolation: isolate; }
+.ambient-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 8% 15%, #17395766, transparent 55%),
+    radial-gradient(ellipse at 95% 80%, #173f4438, transparent 50%), var(--bg);
+}
+.ambient-background::before, .ambient-background::after {
+  content: '';
+  position: absolute;
+  inset: -8%;
+  animation: ambient-drift 32s ease-in-out infinite alternate;
+}
+.ambient-background::before {
+  background: radial-gradient(ellipse at 25% 40%, #2d70902e, transparent 45%),
+    radial-gradient(ellipse at 75% 65%, #38588f26, transparent 40%);
+}
+.ambient-background::after {
+  background-image: radial-gradient(circle, #a4c4df88 0.7px, transparent 1.3px),
+    radial-gradient(circle, #a4c4df66 0.6px, transparent 1.2px);
+  background-size: 173px 193px, 251px 283px;
+  background-position: 23px 41px, 112px 157px;
+  opacity: 0.45;
+  animation-duration: 48s;
+}
+@keyframes ambient-drift {
+  from { transform: translate3d(-1%, -1%, 0); }
+  to { transform: translate3d(2%, 3%, 0); }
+}
+.ambient-background[data-motion='off']::before,
+.ambient-background[data-motion='off']::after { animation-play-state: paused; }
+.motion-state { display: block; font-size: 0.75rem; font-weight: 400; }
+.background-motion-toggle { text-align: left; }
+@media (prefers-reduced-motion: reduce) {
+  .ambient-background::before, .ambient-background::after { animation: none; }
+}

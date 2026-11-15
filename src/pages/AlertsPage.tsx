@@ -16,7 +16,7 @@ export function AlertsPage() {
   const yellow = alerts.length - red;
 
   return (
-    <div className="page">
+    <div className="page alerts-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('alerts:page.title')}</span>
         <h1>{alerts.length === 0 ? i18n.t('alerts:page.none') : i18n.t('alerts:page.inLatest', { count: alerts.length })}</h1>
@@ -24,13 +24,13 @@ export function AlertsPage() {
           <p className="muted num">{i18n.t('alerts:page.record', { date: formatDate(latest.date), day: latest.missionDay })}</p>
         )}
         {alerts.length > 0 && (
-          <div className="row" style={{ marginTop: 6 }}>
+          <div className="row alert-counts" style={{ marginTop: 6 }}>
             {red > 0 && <LevelBadge level="red" label={i18n.t('alerts:page.redCount', { count: red })} />}
             {yellow > 0 && <LevelBadge level="yellow" label={i18n.t('alerts:page.yellowCount', { count: yellow })} />}
           </div>
         )}
       </header>
-      <p><Link to="/medical-contact">{i18n.t('alerts:page.contact')}</Link></p>
+      <p className="page-shortcut"><Link to="/medical-contact">{i18n.t('alerts:page.contact')} <span aria-hidden="true">↗</span></Link></p>
 
       {alerts.length === 0 ? (
         <section className="card empty">
@@ -39,7 +39,7 @@ export function AlertsPage() {
           <Link className="link-arrow" to="/">{i18n.t('alerts:page.back')}</Link>
         </section>
       ) : (
-        <div className="stack" style={{ gap: 16 }}>
+        <div className="stack alert-feed" style={{ gap: 16 }}>
           {alerts.map((alert) => (
             <AlertCard
               key={alert.id}

@@ -86,14 +86,15 @@ export function TrendsPage() {
   });
 
   return (
-    <div className="page">
+    <div className="page trends-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('trends.title')}</span>
         <h1>{content.label}</h1>
         <p className="muted">{content.whyMeasure}</p>
       </header>
 
-      <nav className="tabs" aria-label={i18n.t('trends.indicator')}>
+      <nav className="tabs trend-indicators" aria-label={i18n.t('trends.indicator')}>
+        <span className="eyebrow">{i18n.t('trends.indicator')}</span>
         {options.map((id) => (
           <Link key={id} to={`/trends/${id}`} className={`tab${id === indicator ? ' active' : ''}`} aria-current={id === indicator ? 'page' : undefined}>
             {indicatorContent(id).label}
@@ -101,7 +102,7 @@ export function TrendsPage() {
         ))}
       </nav>
 
-      <section className="card stack" style={{ gap: 18 }}>
+      <section className="card stack trend-detail" style={{ gap: 18 }}>
         <div className="row-between">
           <div className="stat-row" style={{ flex: 1 }}>
             <div className="metric">
@@ -115,7 +116,7 @@ export function TrendsPage() {
               </div>
             )}
           </div>
-          <div className="row" role="group" aria-label={i18n.t('trends.period')}>
+          <div className="row period-control" role="group" aria-label={i18n.t('trends.period')}>
             {PERIODS.map((p) => (
               <button key={p} type="button" className="tab num" aria-pressed={p === period} onClick={() => setPeriod(p)}>
                 {i18n.t('trends.days', { days: p })}

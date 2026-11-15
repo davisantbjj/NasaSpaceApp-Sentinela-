@@ -5,6 +5,7 @@ import { AlarmBanner } from './components/alerts/AlarmBanner';
 import { Disclaimer } from './components/layout/Disclaimer';
 import { NavBar } from './components/layout/NavBar';
 import { PrivacyNotice } from './components/layout/PrivacyNotice';
+import { AmbientBackground } from './components/layout/AmbientBackground';
 import { useHealthAlarms } from './hooks/useHealthAlarms';
 import { useIdleLock } from './hooks/useIdleLock';
 import { loadTextSize } from './lib/textSize';
@@ -113,6 +114,7 @@ export function App() {
 
   return (
     <div className="app">
+      <AmbientBackground />
       <a className="skip-link" href="#conteudo">{t('app.skipToContent')}</a>
       {session && (
         <NavBar

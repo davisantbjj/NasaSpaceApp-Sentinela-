@@ -37,7 +37,7 @@ export function CrewOverviewPage() {
   const today = todayISO();
 
   return (
-    <div className="page">
+    <div className="page crew-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('crewOverview.officer')}</span>
         <h1>{i18n.t('crewOverview.title')}</h1>

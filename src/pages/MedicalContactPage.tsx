@@ -36,7 +36,7 @@ export function MedicalContactPage() {
   }
 
   return (
-    <div className="page privacy-page">
+    <div className="page contact-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('medicalContact.eyebrow', { name: member.name })}</span>
         <h1>{i18n.t('medicalContact.title')}</h1>

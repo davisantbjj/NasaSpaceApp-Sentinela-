@@ -4,6 +4,7 @@ import { useAppStore } from '../../store/useAppStore';
 import i18n from '../../i18n';
 import { LanguageSelect } from './LanguageSelect';
 import { TextSizeToggle } from './TextSizeToggle';
+import { BackgroundMotionToggle } from './AmbientBackground';
 
 export function PrivacyExplanation() {
   return <>
@@ -33,10 +34,11 @@ export function PrivacyNotice() {
         <h1 id="privacy-title">{i18n.t('privacy.title')}</h1>
         <p>{i18n.t('privacy.intro')}</p>
       </header>
-      <div className="card stack">
-        <div className="row">
+      <div className="card stack privacy-document">
+        <div className="row privacy-preferences">
           <LanguageSelect />
           <TextSizeToggle />
+          <BackgroundMotionToggle />
         </div>
         <PrivacyExplanation />
         {error && <p role="alert">{error}</p>}

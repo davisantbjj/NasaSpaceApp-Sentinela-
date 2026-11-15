@@ -8,7 +8,7 @@ import i18n from '../../i18n';
 
 interface Props {
   levels: Partial<Record<BodyRegion, Level>>; // região ausente = sem dados
-  selected: BodyRegion;
+  selected: BodyRegion | null;
   onSelect: (region: BodyRegion) => void;
   figure?: BodyFigure; // padrão: masculina
 }

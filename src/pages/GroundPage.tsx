@@ -43,7 +43,7 @@ export function GroundPage() {
     const member = crew.find((c) => c.id === crewId);
     const packets = delivered.filter((p) => p.crewId === crewId);
     return (
-      <div className="page">
+      <div className="page ground-page">
         <Link className="link-arrow" to="/ground">{i18n.t('ground.allCrew')}</Link>
         <header className="page-header">
           <span className="eyebrow">{i18n.t('ground.title')}</span>
@@ -61,7 +61,7 @@ export function GroundPage() {
   }
 
   return (
-    <div className="page">
+    <div className="page ground-page">
       <header className="page-header">
         <span className="eyebrow">{i18n.t('ground.physician')}</span>
         <h1>{i18n.t('ground.title')}</h1>

@@ -1,4 +1,10 @@
 {
+  "background": {
+    "label": "Animação do fundo",
+    "on": "ativada",
+    "off": "pausada",
+    "reduced": "movimento reduzido neste dispositivo"
+  },
   "language": {
     "label": "Idioma",
     "en": "English",
@@ -53,6 +59,24 @@
     "excludedDays_other": "{{count}} descartados"
   },
   "dashboard": {
+    "dayLabel": "Dia",
+    "ofDays": "de {{total}}",
+    "environmentLabel": "Ambiente",
+    "lastRecordLabel": "Último registro",
+    "todayDone": "Check-in de hoje concluído",
+    "todayPending": "Check-in de hoje pendente",
+    "startCheckin": "Fazer check-in",
+    "redo": "Refazer",
+    "needsAttention": "Precisa de atenção",
+    "regionsAttention": "Regiões para acompanhar",
+    "regionsCount_one": "{{count}} região",
+    "regionsCount_other": "{{count}} regiões",
+    "mapHint": "Os marcadores mostram onde olhar. Selecione uma região para consultar todos os seus indicadores.",
+    "fullAlert": "Ver alerta completo",
+    "history": "Ver histórico",
+    "noAlerts": "Nenhum alerta nas medidas do último registro. Consulte os indicadores por região abaixo.",
+    "noRecords": "Faça o primeiro check-in para visualizar seus indicadores e acompanhar mudanças.",
+    "closeRegion": "Fechar detalhes da região",
     "eyebrow": "Painel do tripulante",
     "allExpected": "Tudo dentro do esperado",
     "alerts_one": "{{count}} alerta",
@@ -139,6 +163,12 @@
     "footerContact": "Comunicação por texto"
   },
   "login": {
+    "onboard": "Acompanhamento a bordo",
+    "headline": "Indicadores de saúde para a missão.",
+    "overview": "Registros diários, alertas e histórico da tripulação em um só lugar.",
+    "featureRecords": "Check-ins e histórico disponíveis no aparelho",
+    "featureAlerts": "Alertas com referência e orientação",
+    "featureProfiles": "Acesso de acordo com a função de cada pessoa",
     "title": "Quem está usando?",
     "intro": "Escolha o seu perfil e toque em Entrar. Cada papel vê só o que precisa.",
     "profile": "Perfil",
