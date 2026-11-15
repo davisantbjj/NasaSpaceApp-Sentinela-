@@ -1,6 +1,7 @@
 import { listPacketMeta, savePacket, saveStatus } from '../data/packetsRepo';
 import { listRecords } from '../data/recordsRepo';
 import { listReviews } from '../data/reviewsRepo';
+import { buildCrewStatusSummary } from '../lib/access';
 import { computeBaselines } from '../rules/baseline';
 import { evaluateRecord } from '../rules/engine';
 import { rules } from '../rules/rules';
@@ -45,7 +46,8 @@ export async function composeForDay(member: CrewMember, date: string, environmen
   await savePacket(packet);
 
   // O resumo do comandante vale para o registro mais recente.
+  // Não considera alertas de saúde mental nem medicação (N9).
   if (index === records.length - 1) {
-    await saveStatus({ crewId: member.id, lastCheckinDate: date, red: alerts.some((a) => a.level === 'red') }, date, [record.id]);
+    await saveStatus(buildCrewStatusSummary(member.id, date, alerts), date, [record.id]);
   }
 }

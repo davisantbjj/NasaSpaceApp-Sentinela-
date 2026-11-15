@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { buildCrewStatusSummary, crewStatus, hasCommanderRed, isCommanderAlert } from './access';
 import { addDays, diffDays, formatDate, formatDateTime, formatDuration, lastDays, missionDay } from './dates';
 import { formatNumber } from './format';
 import { worstLevel } from './levels';
+import type { Alert, DailyRecord, IndicatorId, Level } from '../types';
 import i18n from '../i18n';
 
 afterEach(async () => {
@@ -53,5 +55,64 @@ describe('levels', () => {
     expect(worstLevel('green', 'yellow')).toBe('yellow');
     expect(worstLevel('red', 'yellow', 'green')).toBe('red');
     expect(worstLevel()).toBe('green');
+  });
+});
+
+const mockAlert = (indicator: IndicatorId, level: Level = 'red'): Alert => ({
+  id: `c1_2026-11-15_${indicator}`,
+  crewId: 'c1',
+  date: '2026-11-15',
+  indicator,
+  region: 'mind',
+  level,
+  trigger: 'generalRange',
+  whatChanged: { key: 'test' },
+  reference: { key: 'test' },
+  whyItMatters: 'test',
+  whatToDo: 'test',
+  confidence: 'normal',
+  notifyGround: level === 'red',
+  sourceUrl: 'https://test',
+});
+
+describe('access: resumo do comandante (N9)', () => {
+  it('resumo do comandante sai com red: false quando o único alerta vermelho vem do humor', () => {
+    const alerts = [mockAlert('mood', 'red')];
+    const summary = buildCrewStatusSummary('c1', '2026-11-15', alerts);
+    expect(summary.red).toBe(false);
+  });
+
+  it('ignora alertas vermelhos de estresse, carga de trabalho e medicação', () => {
+    expect(isCommanderAlert(mockAlert('mood'))).toBe(false);
+    expect(isCommanderAlert(mockAlert('stress'))).toBe(false);
+    expect(isCommanderAlert(mockAlert('workload'))).toBe(false);
+    expect(isCommanderAlert(mockAlert('medication'))).toBe(false);
+    expect(isCommanderAlert(mockAlert('heartRate'))).toBe(true);
+
+    expect(hasCommanderRed([mockAlert('stress', 'red')])).toBe(false);
+    expect(hasCommanderRed([mockAlert('workload', 'red')])).toBe(false);
+    expect(hasCommanderRed([mockAlert('medication', 'red')])).toBe(false);
+    expect(buildCrewStatusSummary('c1', '2026-11-15', [mockAlert('stress', 'red'), mockAlert('medication', 'red')]).red).toBe(false);
+  });
+
+  it('considera alerta vermelho de outros indicadores', () => {
+    expect(hasCommanderRed([mockAlert('heartRate', 'red')])).toBe(true);
+    expect(buildCrewStatusSummary('c1', '2026-11-15', [mockAlert('heartRate', 'red')]).red).toBe(true);
+    expect(hasCommanderRed([mockAlert('mood', 'red'), mockAlert('bloodPressure', 'red')])).toBe(true);
+    expect(buildCrewStatusSummary('c1', '2026-11-15', [mockAlert('mood', 'red'), mockAlert('bloodPressure', 'red')]).red).toBe(true);
+  });
+
+  it('crewStatus com lista de Alert respeita exclusão de saúde mental', () => {
+    const records: DailyRecord[] = [
+      { id: 'c1_2026-11-15', crewId: 'c1', date: '2026-11-15', missionDay: 1, values: {}, createdAt: '2026-11-15' },
+    ];
+    expect(crewStatus(records, [mockAlert('mood', 'red')], '2026-11-15')).toEqual({
+      checkinToday: true,
+      hasRed: false,
+    });
+    expect(crewStatus(records, [mockAlert('heartRate', 'red')], '2026-11-15')).toEqual({
+      checkinToday: true,
+      hasRed: true,
+    });
   });
 });

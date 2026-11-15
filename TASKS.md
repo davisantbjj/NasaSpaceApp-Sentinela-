@@ -57,7 +57,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 **Fase 12 (novas)**
 
 - [x] **N0.** Resolver o merge em andamento. Conferido em 15/11: nenhum marcador de conflito em `src/` e repositório sem mudanças pendentes
-- [ ] **N9.** Comandante sem vermelho de saúde mental: o resumo do comandante não considera alertas de humor, estresse, carga de trabalho nem medicação. Prioridade alta, esforço pequeno
+- [x] **N9.** Comandante sem vermelho de saúde mental: o resumo do comandante não considera alertas de humor, estresse, carga de trabalho nem medicação. Prioridade alta, esforço pequeno
 - [ ] **N1.** Temperatura com linha de base (`useBaseline: true`, desvio para cima). Prioridade alta, esforço pequeno
 - [ ] **N2.** Radiação acumulada em mSv como percentual dos 600 mSv de carreira, com `priorCareerDoseMsv` opcional. Contexto, sem alerta. Esforço médio
 - [ ] **Migração v12** do banco, uma só, com os campos de N11 a N14, e recriar a demonstração. Depende de D5

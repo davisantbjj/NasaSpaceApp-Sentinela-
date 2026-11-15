@@ -97,7 +97,7 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 
 ### N9. Comandante sem vermelho de saúde mental
 
-- [ ] **N9.** O resumo que o comandante vê não deve considerar alertas vindos de humor, estresse, carga de trabalho nem medicação.
+- [x] **N9.** O resumo que o comandante vê não deve considerar alertas vindos de humor, estresse, carga de trabalho nem medicação.
   - **Por quê:** a NASA trata a informação psicológica como comunicação privada, igual à médica ([NASA-STD-3001](https://www.nasa.gov/reference/6-0-medical-operations/)). Hoje um vermelho de humor aparece como vermelho no painel do comandante, e o contexto deixa adivinhar a causa.
   - **Arquivos:** `src/lib/access.ts`, `src/sync/compose.ts`, `src/lib/lib.test.ts`.
   - **Aceite:** um teste em que o único alerta vermelho vem do humor e o resumo do comandante sai com `red: false`.

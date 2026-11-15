@@ -1,6 +1,6 @@
-import type { AlertReview, DailyRecord, Role, Session } from '../types';
+import type { Alert, AlertReview, CrewStatusSummary, DailyRecord, IndicatorId, Role, Session } from '../types';
 
-// Regras de quem vê o quê. Funções puras, testadas em lib.test.ts.
+// Regras de quem vê o quê. Funções puras, testadas em lib.test.ts e sync.test.ts.
 //
 // Tripulante: só os próprios dados.
 // Comandante: é tripulante; dos outros vê só o status de check-in e se há alerta vermelho.
@@ -13,6 +13,38 @@ export const ROLE_LABELS: Record<Role, string> = {
   medicalOfficer: 'roles.medicalOfficer',
   groundSurgeon: 'roles.groundSurgeon',
 };
+
+// Indicadores que o comandante não considera no resumo de vermelho (saúde mental e medicação privada).
+// Fonte: NASA-STD-3001 (privacidade médica e psicológica).
+export const COMMANDER_EXCLUDED_INDICATORS: readonly IndicatorId[] = [
+  'mood',
+  'stress',
+  'workload',
+  'medication',
+];
+
+export function isCommanderAlert(alert: Alert): boolean {
+  return !COMMANDER_EXCLUDED_INDICATORS.includes(alert.indicator);
+}
+
+export function hasCommanderRed(alerts: (Alert | string)[]): boolean {
+  return alerts.some((a) => {
+    if (typeof a === 'string') return a === 'red';
+    return a.level === 'red' && isCommanderAlert(a);
+  });
+}
+
+export function buildCrewStatusSummary(
+  crewId: string,
+  lastCheckinDate: string,
+  alerts: Alert[],
+): CrewStatusSummary {
+  return {
+    crewId,
+    lastCheckinDate,
+    red: hasCommanderRed(alerts),
+  };
+}
 
 export function isOnBoard(session: Session): boolean {
   return session.role !== 'groundSurgeon';
@@ -40,10 +72,10 @@ export interface CrewStatus {
 
 // Reduz um tripulante ao mínimo que o comandante pode ver. `records` já deve vir filtrado
 // por visibleRecords (só o que chegou à central).
-export function crewStatus(records: DailyRecord[], alertLevels: string[], today: string): CrewStatus {
+export function crewStatus(records: DailyRecord[], alerts: (Alert | string)[], today: string): CrewStatus {
   return {
     checkinToday: records.some((r) => r.date === today),
-    hasRed: alertLevels.includes('red'),
+    hasRed: hasCommanderRed(alerts),
   };
 }
 
