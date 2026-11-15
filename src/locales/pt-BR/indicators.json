@@ -144,6 +144,13 @@
     "howToMeasure": "Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.",
     "whyMeasure": "O Reaction Self Test da NASA acompanha atenção e desempenho. Este teste é demonstrativo e não foi validado como equivalente; o tempo também depende do aparelho e da interação. Um resultado isolado não diagnostica fadiga nem comprova aptidão."
   },
+  "conditioning": {
+    "label": "Condicionamento físico",
+    "aerobic": "Capacidade aeróbica",
+    "strength": "Força",
+    "howToMeasure": "Faça a avaliação periódica definida pela equipe médica e informe o percentual do resultado em relação ao valor antes do voo, junto com o aparelho utilizado.",
+    "whyMeasure": "A referência operacional da NASA recomenda manter pelo menos 80% da capacidade aeróbica e da força de antes da missão. Este registro não substitui a avaliação física."
+  },
   "resistanceMinutes": {
     "label": "Treino resistido",
     "howToMeasure": "Minutos de treino contra carga ou resistência, digitados no passo de exercício.",

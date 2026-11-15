@@ -159,7 +159,7 @@ Mexem em como se mede, não só no que se guarda. Precisam de decisão da equipe
 
 ### N17. Condicionamento periódico
 
-- [ ] **N17.** Indicador periódico: resultado da avaliação de condicionamento, em percentual do valor de antes do voo. Abaixo de 80% gera alerta.
+- [x] **N17.** Indicador periódico: resultado da avaliação de condicionamento, com capacidade aeróbica e força separadas em percentual do valor de antes do voo, aparelho registrado e alerta abaixo de 80%. A frequência exata permanece em N18.
   - **Por quê:** a norma exige manter em voo pelo menos 80% da capacidade aeróbica e 80% da força de antes da missão ([OCHMO](https://www.nasa.gov/?p=808462)).
   - Seria a primeira faixa do app que não é de demonstração: o número vem da norma. Marcar isso com destaque no `rangeEvidence`.
   - **Em aberto:** não encontramos a frequência dessa avaliação em voo. Chamar de periódica, não mensal.

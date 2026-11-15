@@ -11,6 +11,7 @@
     "symptoms": "Reported symptoms: {{symptoms}}",
     "missedMedication": "Dose not taken today: {{doses}}",
     "bodyMassLoss": "Body mass: {{percent}}% below the start ({{value}} kg now; {{start}} kg at start)"
+    ,"conditioning": "{{name}} is {{value}} of the preflight value"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -33,6 +34,7 @@
     "noSymptoms": "Expected: no symptoms",
     "medication": "Expected: all scheduled doses for the day",
     "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%"
+    ,"conditioning": "Reference: at least 80% of the preflight value"
   },
   "confidence": {
     "baselineForming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
@@ -172,6 +174,11 @@
       "whyItMatters": "Body mass is an indicator of nutrition during flight. The comparison is with this mission's starting value, not a universal range.",
       "yellow": "Review food, hydration, and the plan with the medical officer.",
       "red": "Notify the medical officer now to review nutrition and the mission plan."
+    },
+    "conditioning": {
+      "whyItMatters": "Physical conditioning helps preserve work capacity during the mission and readaptation after flight.",
+      "yellow": "Repeat the assessment as planned and discuss any training change with the medical officer.",
+      "red": "This criterion does not generate a red alert."
     }
   },
   "symptoms": {

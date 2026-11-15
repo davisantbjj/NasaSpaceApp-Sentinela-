@@ -63,7 +63,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] **Migração v12** do banco, uma só, com os campos de N11 a N14, e recriar a demonstração. Depende de D5
 - [x] **N11.** Massa corporal comparada com `startBodyMassKg`; demonstração com amarelo acima de 5% de perda e vermelho acima de 10%. Depende de D5. Esforço médio
 - [x] **N13.** CO2 da cabine em mmHg na tela de Missão; acima de 3 mmHg, aviso geral e orientação no alerta de dor de cabeça. Depende de D5. Esforço médio
-- [ ] **N17.** Condicionamento periódico em percentual do valor de antes do voo; abaixo de 80% gera alerta. Depende de D7. Esforço médio
+- [x] **N17.** Condicionamento periódico em percentual do valor de antes do voo; capacidade aeróbica e força separadas, com aparelho registrado; abaixo de 80% gera alerta. A frequência detalhada fica na N18. Depende de D7. Esforço médio
 
 **Fase 10 e 11**
 

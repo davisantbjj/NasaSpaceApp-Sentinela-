@@ -72,6 +72,12 @@ interface DailyValues {
     left?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
     right?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
   };
+  conditioning?: {                 // N17, avaliação periódica
+    aerobicPercent: number;         // percentual do valor pré-voo
+    strengthPercent: number;        // percentual do valor pré-voo
+    aerobicApparatus: string;
+    strengthApparatus: string;
+  };
   symptoms?: string[];             // ids definidos em rules.json
   medication?: MedicationDose[];
   sources?: Partial<Record<IndicatorId, DataSource>>;

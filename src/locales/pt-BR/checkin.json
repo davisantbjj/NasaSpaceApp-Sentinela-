@@ -62,6 +62,20 @@
     "notDone": "Não feito",
     "disclaimer": "Registre uma sessão de hoje. O protótipo guarda o tipo, a duração, a frequência média do aeróbico e o estado do resistido; não avalia desempenho."
   },
+  "conditioning": {
+    "instructions": "Informe o resultado da avaliação periódica como percentual do valor medido antes do voo e selecione o aparelho usado em cada parte.",
+    "aerobic": "Capacidade aeróbica",
+    "strength": "Força",
+    "disclaimer": "O limite de acompanhamento é 80% do valor antes do voo. A frequência da avaliação é definida pela equipe médica; este registro não é um teste automático.",
+    "apparatus": {
+      "treadmill": "Esteira",
+      "cycle": "Bicicleta ergométrica",
+      "rower": "Remo ergométrico",
+      "resistive": "Aparelho resistido",
+      "flywheel": "Flywheel da Orion",
+      "other": "Outro aparelho"
+    }
+  },
   "reaction": {
     "saved": "Resultado salvo hoje: {{value}} ms. {{details}}",
     "tooFew": "Poucas respostas válidas ({{valid}}). Refaça o teste ou pule o passo.",

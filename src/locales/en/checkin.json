@@ -62,6 +62,20 @@
     "notDone": "Not done",
     "disclaimer": "Record one session from today. The prototype stores type, duration, average aerobic heart rate, and resistance status; it does not assess performance."
   },
+  "conditioning": {
+    "instructions": "Enter the periodic assessment as a percentage of the preflight value and select the apparatus used for each part.",
+    "aerobic": "Aerobic capacity",
+    "strength": "Strength",
+    "disclaimer": "The monitoring threshold is 80% of the preflight value. The medical team sets the assessment frequency; this record is not an automated test.",
+    "apparatus": {
+      "treadmill": "Treadmill",
+      "cycle": "Cycle ergometer",
+      "rower": "Rowing ergometer",
+      "resistive": "Resistive exercise device",
+      "flywheel": "Orion flywheel",
+      "other": "Other apparatus"
+    }
+  },
   "reaction": {
     "saved": "Result saved today: {{value}} ms. {{details}}",
     "tooFew": "Too few valid responses ({{valid}}). Retake the test or skip the step.",
