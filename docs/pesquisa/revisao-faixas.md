@@ -47,11 +47,13 @@ Foi mantida a fórmula e reforçado o texto: não mede nem prevê perda individu
 
 Como estudo original complementar, [Gabel et al., Scientific Reports, 2022;12:9446](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/), doi:10.1038/s41598-022-13461-1, acompanhou 17 astronautas com tomografia de alta resolução de tíbia e rádio antes/depois do voo e durante a recuperação. Nove não recuperaram completamente a densidade total da tíbia em 12 meses. Isso reforça a variabilidade e a necessidade de medição direta; o estudo não valida a fórmula do Sentinela nem transforma a média NASA em prescrição ou diagnóstico.
 
-### Radiação acumulada (M6)
+### Radiação acumulada (M6/N2)
 
 A [NASA: risco de câncer induzido por radiação](https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/) sustenta acompanhar exposição e seus riscos, mas não valida os valores simulados, a qualidade do dado digitado ou um limite de carreira no app. O código soma valores finitos não negativos em µSv e apresenta mSv a partir de 1.000 µSv. Zero é valor válido; dados ausentes não recebem dose presumida.
 
-O resultado é **soma dos valores informados**, não medição direta da exposição total. Dias sem leitura tornam o registro incompleto: não é possível quantificar esses dias nem afirmar estritamente que a dose real seja maior. Não há conexão com dosímetro, correção por tipo de radiação ou comparação com limite ocupacional. Não misturar componentes distintos de dose nem aplicar os 150 µSv/dia de nêutrons do Radi-N2 como dose total universal. Os dados atuais são fictícios. Nenhum alerta é gerado pela soma.
+O resultado é **soma dos valores informados**, não medição direta da exposição total. A N2 também apresenta essa soma como estimativa e percentual do limite de carreira de 600 mSv, podendo incluir `priorCareerDoseMsv` informado para missões anteriores. Isso é contexto, não um alerta: o cálculo oficial da NASA usa dose efetiva e avaliação especializada, portanto o percentual não representa uma avaliação clínica ou ocupacional.
+
+Dias sem leitura tornam o registro incompleto: não é possível quantificar esses dias nem afirmar estritamente que a dose real seja maior. Não há conexão com dosímetro, correção por tipo de radiação ou cálculo de eventos solares. Não misturar componentes distintos de dose nem aplicar os 150 µSv/dia de nêutrons do Radi-N2 como dose total universal. Os dados atuais são fictícios. Nenhum alerta é gerado pela soma.
 
 ## Complemento após Talita `ec23abd`: M4, M7, M9, M10 e M11
 

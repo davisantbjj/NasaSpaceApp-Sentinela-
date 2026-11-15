@@ -57,7 +57,7 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 
 ### N2. Radiação acumulada contra o limite de carreira
 
-- [ ] **N2.** Somar a dose da missão e mostrar em mSv, como percentual dos 600 mSv de carreira. Campo opcional no tripulante para a dose de missões anteriores (`priorCareerDoseMsv`).
+- [x] **N2.** Somar a dose da missão e mostrar em mSv, como percentual dos 600 mSv de carreira. Campo opcional no tripulante para a dose de missões anteriores (`priorCareerDoseMsv`).
   - **Por quê:** o limite da NASA é 600 mSv na carreira, igual para todas as idades e sexos, e 250 mSv por evento solar ([OCHMO](https://www.nasa.gov/sites/default/files/atoms/files/radiation_protection_technical_brief_ochmo.pdf)). Hoje o `radiationTotal` (M6) soma as doses do dia e só mostra como contexto.
   - **Não fazer:** gerar alerta pelo acumulado. É contexto, e o cálculo oficial da NASA é de dose efetiva, mais complexo do que somar leituras de dosímetro.
   - **Arquivos:** `src/lib/radiationTotal.ts`, `src/types/index.ts`, `src/components/body/RegionPanel.tsx`, `src/pages/TrendsPage.tsx`.

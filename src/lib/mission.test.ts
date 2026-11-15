@@ -63,6 +63,21 @@ describe('perda óssea estimada (M5)', () => {
 describe('radiação acumulada (M6)', () => {
   const day = (radiationDose?: number) => ({ id: 'x', crewId: 'c1', date: '2026-01-01', missionDay: 1, values: { radiationDose }, createdAt: '' });
 
+  it('mostra a dose da missão como percentual do limite de carreira e inclui dose anterior (N2)', () => {
+    const total = radiationTotal(Array.from({ length: 12 }, () => day(4000)), 12, rules, 12)!;
+
+    expect(total.missionDoseMsv).toBe(48);
+    expect(total.totalCareerDoseMsv).toBe(60);
+    expect(total.careerPercent).toBe(10);
+    expect(total.careerLimitMsv).toBe(600);
+    expect(total.text).toContain('48 mSv');
+    expect(total.text).toContain('10%');
+    expect(total.text).toContain('600 mSv');
+    expect(total.text).toContain('12 mSv de missões anteriores');
+    expect(total.text).toContain('Estimativa, não medida');
+    expect(total.text).toContain('não limite oficial');
+  });
+
   it('soma as doses do dia e passa para mSv a partir de 1.000 µSv', () => {
     const total = radiationTotal([day(400), day(420), day(430)], 3, rules)!;
     expect(total.text).toContain('1,3 mSv');
