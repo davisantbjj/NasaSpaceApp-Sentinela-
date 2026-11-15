@@ -79,7 +79,7 @@
   },
   "exerciseMinutes": {
     "label": "Exercício",
-    "howToMeasure": "Digite os minutos de exercício aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência, como agachamento) feitos hoje, com o equipamento da sua nave. O app soma os dois. Use 0 se não fez um deles.",
+    "howToMeasure": "Escolha o tipo de exercício, marque cada aparelho usado (esteira, bicicleta, remo, aparelho resistido, flywheel) e informe os minutos em cada um. O app soma a duração total.",
     "whyMeasure": "A microgravidade afeta ossos e músculos. A NASA relata perda média de 1% a 1,5% ao mês nos ossos que sustentam peso em missões de 4 a 6 meses; isso não prevê a sua perda. Exercício aeróbico e resistido fazem parte das contramedidas, conforme o plano individual."
   },
   "radiationDose": {
@@ -94,7 +94,7 @@
   },
   "vision": {
     "label": "Visão",
-    "howToMeasure": "Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão.",
+    "howToMeasure": "Segure a tela à distância habitual de leitura. Cubra um olho, olhe o ponto central e toque nas áreas onde as linhas parecerem tortas ou sumirem. Depois repita com o outro olho.",
     "whyMeasure": "Em missões longas na ISS, cerca de 70% apresentam sinais precoces detectáveis por tomografia de coerência óptica. O resumo NASA de 2023 informa edema do disco óptico em 16% durante ou após missões longas; os critérios diferem. Este autorrelato não diagnostica SANS nem substitui exame.",
     "scale": {
       "0": "Sem mudança",

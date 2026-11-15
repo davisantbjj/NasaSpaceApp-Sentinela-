@@ -38,7 +38,7 @@
   "partialExercise": "Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.",
   "sourceQuestion": "De onde veio o valor?",
   "amsler": {
-    "instructions": "Cubra um olho por vez e observe a grade de Amsler à distância habitual de leitura. Registre somente o que percebeu.",
+    "instructions": "Faça um olho de cada vez, à distância habitual de leitura, olhando sempre para o ponto central. Toque nas áreas onde as linhas pareceram tortas ou sumiram.",
     "eye": "Olho em teste",
     "left": "Olho esquerdo",
     "right": "Olho direito",
@@ -48,10 +48,29 @@
     "distorted": "As linhas pareceram tortas ou onduladas?",
     "missing": "Faltou alguma área ou parte da grade?",
     "near": "A leitura de perto pareceu pior?",
-    "disclaimer": "Autoteste demonstrativo: não diagnostica SANS nem substitui avaliação médica. Você pode pular este passo."
+    "disclaimer": "Autoteste demonstrativo: não diagnostica SANS nem substitui avaliação médica. Você pode pular este passo.",
+    "notTested": "não testado",
+    "changed": "com alteração",
+    "noChange": "sem alteração",
+    "cover": {
+      "left": "Cubra o olho DIREITO e olhe o ponto central com o esquerdo.",
+      "right": "Cubra o olho ESQUERDO e olhe o ponto central com o direito."
+    },
+    "gridLabel": "Grade de Amsler, {{eye}}. Toque nas áreas alteradas.",
+    "cell": "Linha {{row}}, coluna {{col}}",
+    "marked_one": "{{count}} área marcada.",
+    "marked_other": "{{count}} áreas marcadas.",
+    "tapHint": "Nada marcado. Se todas as linhas parecerem retas e completas, siga em frente.",
+    "clear": "Limpar marcas",
+    "questionsFor": "Perguntas — {{eye}}",
+    "marksWithoutAnswer": "Você marcou áreas na grade. Diga acima se as linhas ficaram tortas ou se faltou parte.",
+    "next": {
+      "left": "Agora o olho esquerdo →",
+      "right": "Agora o olho direito →"
+    }
   },
   "exerciseSession": {
-    "type": "Tipo de sessão",
+    "type": "Tipo de exercício",
     "aerobic": "Aeróbico",
     "resistance": "Resistido",
     "both": "Aeróbico e resistido",
@@ -63,7 +82,14 @@
     "completed": "Feito",
     "partial": "Parcial",
     "notDone": "Não feito",
-    "disclaimer": "Registre uma sessão de hoje. O protótipo guarda o tipo, a duração, a frequência média do aeróbico e o estado do resistido; não avalia desempenho."
+    "disclaimer": "Registre uma sessão de hoje. O protótipo guarda o tipo, os aparelhos, os minutos em cada um, a frequência média do aeróbico e o estado do resistido; não avalia desempenho.",
+    "part": {
+      "aerobic": "Parte aeróbica: aparelhos usados",
+      "resistance": "Parte resistida: aparelhos usados"
+    },
+    "apparatusMinutes": "Minutos em {{name}}",
+    "total": "Duração total: {{minutes}} min",
+    "pickApparatus": "Marque cada aparelho usado e informe por quantos minutos."
   },
   "conditioning": {
     "invalid": "Use um percentual de 0 a 200.",

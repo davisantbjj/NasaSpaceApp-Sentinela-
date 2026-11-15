@@ -119,9 +119,9 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] **N12.** Alimentação e água: refeições completas (0 a 3 ou mais) e água suficiente (sim ou não), sem calorias. Dois dias seguidos sem refeição completa geram amarelo (`missedMealDays` em `rules.json`, proposta de demonstração). Campos da v12; a v13 só acrescenta o indicador ao cadastro já gravado
 - [x] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico: noites com remédio para dormir marcadas em Tendências → Sono. Remédio "só quando necessário" (`asNeeded`) não gera dose não tomada; a Ana tem um remédio para dormir fictício
 - [x] **N21.** Atualizar "Como a NASA mede" em `docs/apresentacao.md` com o que a pesquisa de 15/11 trouxe e com o que a NASA não faz. Feito na seção "O que a pesquisa de 15/11 acrescentou". Falta a Larissa revisar e confirmar a frequência da conferência psicológica ("a cada duas semanas" está sem fonte primária)
-- [x] **N16.** Exercício por sessão: tipo, minutos e frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
+- [x] **N16.** Exercício por sessão: tipo, aparelhos usados e minutos em cada um (a duração é a soma), frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
 - [ ] **N19.** Bloco mensal de sono e equipe, visível só para o próprio tripulante e para o oficial médico, com perguntas próprias marcadas como demonstração. Depende de D6. Esforço médio
-- [x] **N15.** Visão com grade de Amsler, um olho de cada vez, três perguntas, com opção de pular e aviso de que não diagnostica SANS. A cadência específica dos dias de missão fica em N18. Depende de D7. Esforço grande
+- [x] **N15.** Visão com grade de Amsler tocável (marca as áreas alteradas), um olho de cada vez, três perguntas, com opção de pular e aviso de que não diagnostica SANS. A cadência específica dos dias de missão fica em N18. Depende de D7. Esforço grande
 
 **Alarmes.** Usar a mesma função dos lembretes da Lorena.
 

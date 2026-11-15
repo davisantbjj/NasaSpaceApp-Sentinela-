@@ -13,6 +13,7 @@ export interface NumberField {
 
 interface Props {
   fields: NumberField[];
+  title?: string; // título do passo: um campo só com o mesmo nome não repete o rótulo na tela
   onChange: (id: string, value: string) => void;
 }
 
@@ -39,14 +40,15 @@ export function fieldError(field: NumberField): string | undefined {
 }
 
 // Passo de valor numérico. Pressão arterial usa dois campos.
-export function NumberStep({ fields, onChange }: Props) {
+export function NumberStep({ fields, title, onChange }: Props) {
+  const repeatsTitle = fields.length === 1 && fields[0].label === title;
   return (
     <div className="row" style={{ gap: 16, alignItems: 'flex-start' }}>
       {fields.map((field, i) => {
         const error = fieldError(field);
         return (
           <div key={field.id} className="field">
-            <label htmlFor={field.id}>{field.label}</label>
+            <label htmlFor={field.id} className={repeatsTitle ? 'visually-hidden' : undefined}>{field.label}</label>
             <div className="field-input">
               <input
                 id={field.id}

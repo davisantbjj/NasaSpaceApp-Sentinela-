@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { displayText } from '../content/format';
 import i18n from '../i18n';
-import { AMSLER_NO_CHANGE, resistancePart, visionSummary } from './checkinSummary';
+import { AMSLER_NO_CHANGE, eyeConcerns, resistancePart, visionSummary, withApparatusTotals } from './checkinSummary';
 import { parseBounded } from '../components/mission/MissionDataCards';
 import { hasHistoryChart, hasValue } from './series';
 
@@ -63,5 +63,47 @@ describe('campos numéricos da tela de Missão (N2, N11, N13)', () => {
     expect(parseBounded('-1', 0, 10)).toBeUndefined();
     expect(parseBounded('11', 0, 10)).toBeUndefined();
     expect(parseBounded('abc', 0, 10)).toBeUndefined();
+  });
+});
+
+describe('exercício por aparelho', () => {
+  it('soma a duração e separa a parte resistida em "aeróbico e resistido"', () => {
+    const session = withApparatusTotals({
+      type: 'both',
+      durationMinutes: 0,
+      apparatus: [
+        { part: 'aerobic', apparatus: 'treadmill', minutes: 30 },
+        { part: 'resistance', apparatus: 'resistive', minutes: 25 },
+        { part: 'resistance', apparatus: 'flywheel', minutes: 0 },
+      ],
+    });
+    expect(session.durationMinutes).toBe(55);
+    expect(session.resistanceMinutes).toBe(25);
+    expect(session.apparatus).toHaveLength(2);
+    expect(resistancePart(session)).toBe(25);
+  });
+
+  it('não guarda parte resistida em sessão só aeróbica', () => {
+    const session = withApparatusTotals({
+      type: 'aerobic',
+      durationMinutes: 0,
+      apparatus: [{ part: 'aerobic', apparatus: 'cycle', minutes: 40 }],
+    });
+    expect(session.durationMinutes).toBe(40);
+    expect(session.resistanceMinutes).toBeUndefined();
+  });
+});
+
+describe('grade de Amsler com áreas tocadas', () => {
+  const none = { distortedLines: false, missingAreas: false, nearReadingWorse: false };
+
+  it('área tocada sem pergunta marcada conta como uma alteração', () => {
+    expect(eyeConcerns({ ...none, areas: [44, 45] })).toBe(1);
+    expect(visionSummary({ left: { ...none, areas: [44] }, right: none })).toBe(1);
+  });
+
+  it('lista vazia de áreas não conta como alteração', () => {
+    expect(eyeConcerns({ ...none, areas: [] })).toBe(0);
+    expect(visionSummary({ left: { ...none, areas: [] }, right: none })).toBe(0);
   });
 });

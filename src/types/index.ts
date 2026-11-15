@@ -62,6 +62,7 @@ export interface AmslerEyeResult {
   distortedLines: boolean;
   missingAreas: boolean;
   nearReadingWorse: boolean;
+  areas?: number[]; // células da grade 10×10 tocadas como alteradas (0 a 99, linha a linha)
 }
 
 export interface AmslerVisionResult {
@@ -78,6 +79,15 @@ export interface ExerciseSession {
   resistanceMinutes?: number; // só em 'both': parte da duração feita em treino resistido
   averageHeartRate?: number;
   resistanceStatus?: ResistanceStatus;
+  apparatus?: ExerciseApparatusUse[]; // aparelhos usados e minutos em cada um; a duração é a soma
+}
+
+export type ExercisePart = 'aerobic' | 'resistance';
+
+export interface ExerciseApparatusUse {
+  part: ExercisePart;
+  apparatus: ConditioningApparatus;
+  minutes: number;
 }
 
 export type ConditioningApparatus = 'treadmill' | 'cycle' | 'rower' | 'resistive' | 'flywheel' | 'other';

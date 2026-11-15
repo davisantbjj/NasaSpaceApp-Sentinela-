@@ -79,7 +79,7 @@
   },
   "exerciseMinutes": {
     "label": "Exercise",
-    "howToMeasure": "Enter today's minutes of aerobic exercise (running, cycling, rowing) and resistance training (against a load or resistance, such as squats), using your spacecraft's equipment. The app adds them up. Use 0 if you skipped one of them.",
+    "howToMeasure": "Choose the exercise type, mark each piece of equipment you used (treadmill, cycle, rower, resistive device, flywheel), and enter the minutes on each. The app adds up the total.",
     "whyMeasure": "Microgravity affects bones and muscles. NASA reports an average loss of 1% to 1.5% per month in weight-bearing bones in 4- to 6-month missions; this does not predict your loss. Aerobic and resistance exercise are part of the countermeasures, according to your individual plan."
   },
   "radiationDose": {
@@ -94,7 +94,7 @@
   },
   "vision": {
     "label": "Vision",
-    "howToMeasure": "Read the near-vision card with one eye at a time and compare it with what you saw at the start of the mission.",
+    "howToMeasure": "Hold the screen at your usual reading distance. Cover one eye, look at the center dot, and tap any area where lines look bent or missing. Then repeat with the other eye.",
     "whyMeasure": "On long ISS missions, about 70% show early signs detectable by optical coherence tomography. A 2023 NASA brief reports optic disc edema in 16% during or after long missions; the criteria differ. This self-report does not diagnose SANS or replace an eye examination.",
     "scale": {
       "0": "No change",

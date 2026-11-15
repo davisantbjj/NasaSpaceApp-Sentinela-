@@ -38,7 +38,7 @@
   "partialExercise": "Enter both times (use 0 if you skipped one), or skip the step.",
   "sourceQuestion": "Where did the value come from?",
   "amsler": {
-    "instructions": "Cover one eye at a time and view the Amsler grid at your usual reading distance. Record only what you noticed.",
+    "instructions": "Test one eye at a time at your usual reading distance, always looking at the center dot. Tap the areas where lines looked bent or were missing.",
     "eye": "Eye being tested",
     "left": "Left eye",
     "right": "Right eye",
@@ -48,10 +48,29 @@
     "distorted": "Did any lines look bent or wavy?",
     "missing": "Was any area or part of the grid missing?",
     "near": "Did near reading seem worse?",
-    "disclaimer": "Demonstration self-test: it does not diagnose SANS or replace medical evaluation. You may skip this step."
+    "disclaimer": "Demonstration self-test: it does not diagnose SANS or replace medical evaluation. You may skip this step.",
+    "notTested": "not tested",
+    "changed": "change noted",
+    "noChange": "no change",
+    "cover": {
+      "left": "Cover your RIGHT eye and look at the center dot with your left eye.",
+      "right": "Cover your LEFT eye and look at the center dot with your right eye."
+    },
+    "gridLabel": "Amsler grid, {{eye}}. Tap the affected areas.",
+    "cell": "Row {{row}}, column {{col}}",
+    "marked_one": "{{count}} area marked.",
+    "marked_other": "{{count}} areas marked.",
+    "tapHint": "Nothing marked. If every line looks straight and complete, move on.",
+    "clear": "Clear marks",
+    "questionsFor": "Questions — {{eye}}",
+    "marksWithoutAnswer": "You marked areas on the grid. Say above whether lines looked bent or part was missing.",
+    "next": {
+      "left": "Now the left eye →",
+      "right": "Now the right eye →"
+    }
   },
   "exerciseSession": {
-    "type": "Session type",
+    "type": "Exercise type",
     "aerobic": "Aerobic",
     "resistance": "Resistance",
     "both": "Aerobic and resistance",
@@ -63,7 +82,14 @@
     "completed": "Completed",
     "partial": "Partial",
     "notDone": "Not done",
-    "disclaimer": "Record one session from today. The prototype stores type, duration, average aerobic heart rate, and resistance status; it does not assess performance."
+    "disclaimer": "Record one session from today. The prototype stores type, equipment, minutes on each, average aerobic heart rate, and resistance status; it does not assess performance.",
+    "part": {
+      "aerobic": "Aerobic part: equipment used",
+      "resistance": "Resistance part: equipment used"
+    },
+    "apparatusMinutes": "Minutes on {{name}}",
+    "total": "Total duration: {{minutes}} min",
+    "pickApparatus": "Mark each piece of equipment you used and enter how many minutes."
   },
   "conditioning": {
     "invalid": "Use a percentage from 0 to 200.",

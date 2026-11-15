@@ -63,7 +63,14 @@ interface DailyValues {
   reactionTest?: ReactionTestDetails;
   exerciseMinutes?: number;        // total do dia
   resistanceMinutes?: number;      // parte do total feita em treino resistido
-  exerciseSession?: ExerciseSession; // sessão do dia (N16)
+  exerciseSession?: {              // sessão do dia (N16)
+    type: 'aerobic' | 'resistance' | 'both';
+    durationMinutes: number;        // soma dos minutos dos aparelhos
+    resistanceMinutes?: number;     // só em 'both': soma da parte resistida
+    averageHeartRate?: number;      // só com parte aeróbica
+    resistanceStatus?: 'completed' | 'partial' | 'notDone';
+    apparatus?: { part: 'aerobic' | 'resistance'; apparatus: string; minutes: number }[];
+  };
   radiationDose?: number;
   bodyMassKg?: number;             // massa periódica, comparada ao início da missão
   mealsCompleted?: number;         // N12: refeições completas (0 a 3; 3 = 3 ou mais)
@@ -71,8 +78,8 @@ interface DailyValues {
   sleepQuality?: 1 | 2 | 3 | 4 | 5; // N14: segunda pergunta do passo de sono
   vision?: 0 | 1 | 2;              // resumo derivado, para histórico/alertas
   visionAmsler?: {                  // N15, um olho por vez
-    left?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
-    right?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
+    left?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean; areas?: number[] };
+    right?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean; areas?: number[] };  // areas: células 0–99 da grade 10×10 tocadas
   };
   conditioning?: {                 // N17, avaliação periódica
     aerobicPercent: number;         // percentual do valor pré-voo
@@ -157,9 +164,9 @@ O valor que entra no motor é só `reactionTime`, a média em milissegundos. O r
 
 ### Visão e exercício da fase 3
 
-O passo de visão usa uma grade de Amsler demonstrativa, com o olho esquerdo e o direito registrados separadamente. Para cada olho, a pessoa responde sobre linhas tortas, áreas faltando e piora na leitura de perto. `vision` é apenas um resumo numérico derivado dessas respostas para manter gráficos e alertas legados; o autoteste não diagnostica SANS e pode ser pulado.
+O passo de visão usa uma grade de Amsler demonstrativa, com o olho esquerdo e o direito registrados separadamente. Para cada olho, a pessoa olha o ponto central, toca nas células da grade 10×10 onde as linhas pareceram tortas ou sumiram (`areas`, de 0 a 99, linha a linha) e responde sobre linhas tortas, áreas faltando e piora na leitura de perto. Uma área tocada sem pergunta marcada conta como uma alteração. Avançar sem marcar nada grava "sem alteração"; pular não grava nada. `vision` é apenas um resumo numérico derivado dessas respostas para manter gráficos e alertas legados; o autoteste não diagnostica SANS e pode ser pulado.
 
-O exercício é registrado como uma sessão por check-in em `exerciseSession`. A comparação semanal usa os últimos sete dias: o plano demonstrativo usa o mínimo da faixa verde em cinco dias, e a linha de base usa a média dos registros anteriores disponíveis. Esses números são contexto de demonstração, não prescrição.
+O exercício é registrado como uma sessão por check-in em `exerciseSession`: o tipo (aeróbico, resistido ou os dois), os aparelhos usados em cada parte e os minutos em cada aparelho. Na parte aeróbica: esteira, bicicleta ergométrica, remo ergométrico, flywheel da Orion ou outro; na resistida: aparelho resistido, flywheel ou outro. `durationMinutes` é a soma dos aparelhos e `resistanceMinutes`, a soma da parte resistida. Sessões gravadas antes dos aparelhos não têm `apparatus`; ao reabrir, a duração aparece como "outro aparelho". A comparação semanal usa os últimos sete dias: o plano demonstrativo usa o mínimo da faixa verde em cinco dias, e a linha de base usa a média dos registros anteriores disponíveis. Esses números são contexto de demonstração, não prescrição.
 
 ### Origem do dado
 
@@ -471,7 +478,7 @@ Os quatro dados abaixo já têm interface na base `2769fb5`. Isso não conclui v
 | --- | --- |
 | Alimentação e água | refeições completas no dia e água suficiente; só refeições geram alerta próprio |
 | Qualidade do sono | escala 1–5 ao lado das horas, sem alerta próprio |
-| Grade de Amsler | perguntas por olho e resumo 0–2; não diagnostica SANS |
+| Grade de Amsler | áreas tocadas e perguntas por olho; resumo 0–2; não diagnostica SANS |
 | Condicionamento | percentuais aeróbico/força e aparelhos; abaixo de 80% gera amarelo |
 
 N7 (novos sintomas), N18 (cadência) e N19 (bloco mensal) permanecem pendentes. Massa/dose anterior ficam no cadastro aberto e exportado; valores diários ficam cifrados. CO₂ fica compartilhado em `settings` e fora da cópia individual. Ver [privacidade](privacidade.md).

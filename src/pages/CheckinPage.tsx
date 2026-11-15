@@ -27,6 +27,15 @@ const SCALE_IDS = ['mood', 'stress', 'workload'] as const;
 type ScaleId = (typeof SCALE_IDS)[number];
 const isScale = (id: IndicatorId): id is ScaleId => (SCALE_IDS as readonly IndicatorId[]).includes(id);
 
+// Revisão do exercício: tipo da sessão e minutos em cada aparelho.
+function exerciseSummary(session: ExerciseSession): string {
+  const type = i18n.t(`checkin:exerciseSession.${session.type}`);
+  const uses = (session.apparatus ?? []).map(
+    (use) => `${i18n.t(`checkin:conditioning.apparatus.${use.apparatus}`)} ${use.minutes} min`,
+  );
+  return uses.length ? `${type}: ${uses.join(', ')}` : type;
+}
+
 // Rascunho do formulário: números como texto (aceita vírgula), escalas e sintomas já prontos.
 interface Draft {
   text: Record<string, string>;
@@ -219,12 +228,15 @@ function OwnCheckin() {
   const values = toValues(steps, draft, member);
   const filled = Object.keys(values).filter((key) => key !== 'sources' && key !== 'reactionTest').length;
 
-  const next = () => {
-    // Avançar na grade de Amsler sem marcar nada é responder "sem alteração" (N15).
-    // Para não registrar, a pessoa usa "Pular".
-    if (steps[index] === 'vision') setDraft((d) => (d.amsler ? d : { ...d, amsler: AMSLER_NO_CHANGE }));
+  const advance = () => {
     if (index < steps.length - 1) setIndex(index + 1);
     else setStage('review');
+  };
+  const next = () => {
+    // Avançar na grade de Amsler sem marcar nada é responder "sem alteração" (N15).
+    // Para não registrar, a pessoa usa "Pular", que avança sem preencher.
+    if (steps[index] === 'vision') setDraft((d) => (d.amsler ? d : { ...d, amsler: AMSLER_NO_CHANGE }));
+    advance();
   };
   const back = index > 0 ? () => setIndex(index - 1) : undefined;
 
@@ -256,7 +268,7 @@ function OwnCheckin() {
         sources: { ...d.sources, [indicator]: undefined },
       };
     });
-    next();
+    advance();
   };
 
   const save = async () => {
@@ -326,6 +338,7 @@ function OwnCheckin() {
                   {displayText(values, indicator, symptomLabels()) ?? i18n.t('checkin:skipped')}
                   {indicator === 'sleepHours' && sleepQualityText(values) && ` · ${sleepQualityText(values)}`}
                   {indicator === 'exerciseMinutes' && values.resistanceMinutes !== undefined && ` ${i18n.t('checkin:resistancePart', { value: displayText(values, 'resistanceMinutes') })}`}
+                  {indicator === 'exerciseMinutes' && values.exerciseSession && ` · ${exerciseSummary(values.exerciseSession)}`}
                   {sourceLabel(values, indicator) && ` · ${sourceLabel(values, indicator)}`}
                 </span>
               </li>
@@ -381,7 +394,7 @@ function OwnCheckin() {
                 onChange={(exerciseSession) => setDraft((d) => ({ ...d, exerciseSession }))}
               />
             ) : (
-              <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
+              <NumberStep fields={fields} title={content.label} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
             )}
             {partialBp && <p className="small muted">{i18n.t('checkin:partialPressure')}</p>}
             {partialExercise && <p className="small muted">{i18n.t('checkin:partialExercise')}</p>}
