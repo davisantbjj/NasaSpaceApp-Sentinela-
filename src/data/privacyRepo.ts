@@ -4,7 +4,7 @@ import { listMedicalMessages } from './messagesRepo';
 import { listRecords } from './recordsRepo';
 import { listReviews } from './reviewsRepo';
 
-export const PRIVACY_NOTICE_VERSION = '2026-11-14-v3';
+export const PRIVACY_NOTICE_VERSION = '2026-11-15-v4';
 
 export async function hasAcknowledgedPrivacyNotice(): Promise<boolean> {
   return (await db.preferences.get('privacyNotice'))?.value === PRIVACY_NOTICE_VERSION;

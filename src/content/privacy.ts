@@ -3,7 +3,11 @@ export const LGPD_URL = 'https://www2.camara.leg.br/legin/fed/lei/2018/lei-13709
 export const PRIVACY_SECTIONS = [
   {
     title: 'O que fica neste navegador',
-    text: 'Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, valores e sintomas registrados no check-in, anotações do oficial médico, mensagens digitadas, registro de quem abriu os dados, pedidos de exclusão e preferências. Os dados de saúde ficam cifrados e só abrem com o PIN. Alertas, correlações e linha de base são calculados a partir dos registros.',
+    text: 'Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros.',
+  },
+  {
+    title: 'Medicação e limites da proteção',
+    text: 'O plano de medicação contém nomes e horários previstos. Se vinculado a uma pessoa real, é dado de saúde sensível. Neste protótipo, esse plano fica no cadastro sem criptografia, assim como os dados do perfil e a lista de indicadores. Quem acessa o armazenamento do navegador pode lê-los sem PIN. As marcações diárias de medicação tomada, estresse, carga de trabalho e tempos de exercício ficam cifradas com os demais valores do check-in. Use somente dados fictícios.',
   },
   {
     title: 'Para quê',

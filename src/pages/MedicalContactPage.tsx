@@ -58,7 +58,7 @@ export function MedicalContactPage() {
             <p className="message-body">{message.body}</p>
           </article>
         ))}
-        <Link to="/your-data">Exportar ou excluir estas mensagens em Seus dados →</Link>
+        <Link to="/your-data">Exportar dados ou registrar pedido de exclusão em Seus dados →</Link>
       </section>
     </div>
   );

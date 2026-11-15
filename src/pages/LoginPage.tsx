@@ -160,7 +160,8 @@ export function LoginPage() {
       </form>
 
       <p className="small muted">
-        Os dados ficam cifrados neste aparelho e só abrem com o PIN. A tela bloqueia sozinha depois de 5 minutos sem uso.
+        Os valores dos check-ins ficam cifrados e abrem com o PIN; o cadastro e o plano de medicação ficam sem criptografia.
+        A tela bloqueia sozinha depois de 5 minutos sem uso.
         Num produto real, a entrada seria a do sistema da agência.
       </p>
     </div>

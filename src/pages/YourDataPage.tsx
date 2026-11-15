@@ -49,14 +49,15 @@ export function YourDataPage() {
         <h1>Seus dados</h1>
         <p>As ações abaixo valem só para os seus dados, do perfil com que você entrou.</p>
         <p className="small muted">
-          Seus dados ficam cifrados com uma chave só sua, que abre com o seu PIN e com o do oficial médico. O PIN de um
-          colega não abre os seus dados. Limite do protótipo: o PIN curto pode ser descoberto por quem copiar o banco.
+          Os valores dos check-ins, as anotações e o texto das mensagens ficam cifrados com uma chave por tripulante,
+          aberta pelo seu PIN e pelo do oficial médico. O cadastro e o plano de medicação ficam sem criptografia.
+          Limite do protótipo: o PIN curto pode ser descoberto por quem copiar o banco.
         </p>
       </header>
       <section className="card stack"><PrivacyExplanation /></section>
       <section className="card stack" aria-labelledby="data-actions-title">
         <h2 id="data-actions-title">Cópia e pedido de exclusão</h2>
-        <p>A cópia inclui o perfil, os check-ins, as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. É uma cópia para consulta, sem importação nem portabilidade regulamentada.</p>
+        <p>A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho e tempos de exercício, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.</p>
         <div className="row">
           <button type="button" className="btn" disabled={busy} onClick={() => void run(download)}>Exportar meus dados em JSON</button>
           <button type="button" className="btn" disabled={busy || !!request} onClick={() => void run(async () => {

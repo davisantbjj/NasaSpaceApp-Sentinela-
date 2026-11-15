@@ -2,7 +2,7 @@
 
 Estado do projeto: o que já foi feito e o que falta. As fases seguem a ordem de implementação de `docs/estrutura-do-projeto.md`.
 
-Atualizado em 2026-11-14.
+Atualizado em 2026-11-15.
 
 | Fase | Assunto | Estado |
 | --- | --- | --- |
@@ -149,7 +149,7 @@ Revisado em 15/11 considerando a fase 11 inteira (M1 a M11) como feita. Tarefas 
 - [ ] Decidir quem pode mudar o **perfil e a fase da missão** (hoje qualquer tripulante muda o ambiente para todos). Com a M8, o ambiente passa a vir da fase da missão; sugestão: só o comandante e o oficial médico
 - [ ] O perfil do médico do solo roda o ciclo de bordo, porque tudo está num navegador só. Num produto real o solo não teria a chave de bordo
 - [ ] Buscar pacotes do servidor para recuperar dados num aparelho novo (a rota já existe; falta o app usar e resolver como a chave chega ao aparelho novo)
-- [ ] Larissa: `scripts/verify-larissa.mjs` foi escrito antes do login por PIN e precisa entrar com um perfil (ex.: Lia, PIN 3333) antes de testar "Seus dados" e a mensagem. Também precisa percorrer os passos novos do check-in da fase 11 (estresse, carga, exercício em dois campos, medicação, teste de reação)
+- [x] Larissa: adaptar `scripts/verify-larissa.mjs` ao login por PIN, pedido de exclusão sem apagar histórico e check-in já implementado (M1–M3: estresse, carga, exercício em dois campos e medicação). Teste de reação permanece pendente até M4 existir
 - [ ] Entregar as mensagens ao oficial médico pela central de bordo (hoje ficam só no aparelho do tripulante, cifradas). Fazer junto com a Larissa, que tem a mesma tarefa
 - [ ] **(fase 11)** Levar o perfil de missão (M8) para o pacote do solo e para a "Visão do solo": nave, dia da missão de N e fase. O atraso mostrado passa a vir da fase
 - [ ] **(fase 11)** Conferir se os valores novos (medicação, estresse, carga, treino resistido, teste de reação, origem do dado) chegam legíveis na "Visão do solo" e se o resumo do comandante continua sem nenhum dado clínico
@@ -202,13 +202,16 @@ Revisado em 14/11 depois das melhorias M1 e M2 e dos papéis do Davi, que já es
 
 ### Larissa: pesquisa, LGPD e apresentação
 
-Revisado em 15/11 considerando a fase 11 inteira (M1 a M11) como feita. Tarefas novas marcadas com **(fase 11)**.
+Revisado em 15/11 sobre o código real da branch da Talita: só M1–M3 estão feitas. Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`.
 
 - [x] Revisão **documental** das faixas, com referências e limites de evidência por nível em `rules.json` (`rangeEvidence`) e `docs/pesquisa/revisao-faixas.md`. Aprovação clínica da fase 2 continua pendente; nenhum corte numérico foi alterado
-- [ ] **(fase 11)** Revisão documental, em `docs/pesquisa/revisao-faixas.md`, dos cortes novos escritos no `rangeEvidence`: medicação (amarelo se faltar dose, nunca vermelho), estresse e carga de trabalho (verde de 1 a 3, amarelo em 4 e 5), treino resistido (só desvio pessoal), teste de reação (M4), regra de fadiga (M7) e os números das metas semanais (M9). Conferir também o uso do 1% a 1,5% ao mês na M5: a NASA dá esse valor como média em missões de 4 a 6 meses
+- [x] **(fase 11, M1–M3)** Revisão documental de medicação, estresse, carga e treino resistido em `docs/pesquisa/revisao-faixas.md`, com NASA e estudos originais, limites de evidência e referências no `rangeEvidence`. Cortes mantidos; não constitui aprovação clínica
+- [ ] **(fase 11, depende de implementação)** Completar revisão de teste de reação (M4), fadiga (M7), metas semanais (M9) e estimativa óssea (M5), incluindo população e duração das missões da fonte. Nenhuma destas melhorias foi validada nesta etapa
 - [x] Nota educativa pelo sexo em Missão, com fonte NASA e orientação de readaptação à gravidade. Não muda faixas nem níveis; sem `sex`, usa texto geral
 - [x] Texto e tela "Seus dados": finalidade, acesso real no protótipo, retenção, cópia JSON por perfil e pedido local de exclusão. O tripulante não exclui o próprio histórico (decisão da equipe em 14/11). Limites em `docs/privacidade.md`
-- [ ] **(fase 11)** Privacidade dos dados novos em `docs/privacidade.md` e na tela "Seus dados": o plano de medicação é dado de saúde sensível e fica no cadastro do tripulante **sem cifra**; resultados do teste de reação; origem do dado. Conferir se a exportação JSON mostra os valores novos de forma legível
+- [x] **(fase 11, M1–M3)** Privacidade em `docs/privacidade.md`, aviso versionado e "Seus dados": plano de medicação sem cifra, valores diários cifrados e JSON baixado legível sem cifra. Corrigida a promessa de exclusão imediata de mensagens
+- [ ] **(fase 11, depende de implementação)** Rever privacidade e exportação para teste de reação (M4) e origem do dado (M10), quando existirem
+- [x] Corrigir e executar `scripts/verify-larissa.mjs`: login por PIN, check-in M1–M3, download JSON legível e restrito ao perfil, pedido sem exclusão, persistência e reset pelo oficial médico. M4 ainda pendente
 - [x] Aviso antes da primeira entrada: finalidade e limites da base legal (art. 11, II, f), sem presumir tutela da saúde ou consentimento genérico para o hackathon
 - [x] Composição e histórico local de mensagem para **mostrar** ao oficial médico, com indicação de não enviada, validação, exportação e exclusão
 - [ ] Entrega da mensagem ao oficial médico. Não está mais bloqueada: os papéis e a central de bordo do Davi já existem. Fazer junto com o Davi, que tem a mesma tarefa
@@ -223,7 +226,7 @@ Revisado em 15/11 considerando a fase 11 inteira (M1 a M11) como feita. Tarefas 
 - [ ] **(fase 11)** Acrescentar em "O que podemos afirmar": perda óssea estimada e radiação acumulada são estimativa e contexto, não medidas nem limites; metas semanais não são prescrição
 - [x] Roteiro da demonstração e respostas a perguntas (`docs/roteiro-demonstracao.md`); capturas das novas telas e teste de integração em `scripts/verify-larissa.mjs`
 - [ ] **(fase 11)** Ensaiar o roteiro de novo, porque o check-in tem mais passos. Cenas sugeridas: perfil Artemis II em Missão; a Lia desmarcando o colírio (alerta "Dose não tomada", ligado ao caso de visão dela); o teste de reação em **modo curto** (os 3 minutos não cabem na demonstração). Refazer as capturas das telas que mudaram
-- [ ] Slides e envio ao Space Apps. A equipe decidiu entregar **7 slides**: falta escolher quem faz e confirmar no guia do participante se o envio precisa estar em inglês
+- [ ] Slides e envio ao Space Apps, somente após concluir todo o escopo e projeto (orientação de Larissa em 15/11). A equipe decidiu entregar **7 slides**: falta escolher quem faz e confirmar no guia do participante se o envio precisa estar em inglês
 
 ## Fase 11: melhorias alinhadas ao desafio oficial
 
