@@ -67,10 +67,12 @@ try {
     Object.getOwnPropertyDescriptor(prototype, 'value').set.call(field, ${JSON.stringify(value)});
     field.dispatchEvent(new Event('input', { bubbles: true }));
   })()`);
+  // Perfis de demonstração entram só com o toque em Entrar, sem campo de PIN (aviso 2026-11-15-v8).
+  // O PIN só é digitado se o campo aparecer, como nos perfis fora da demonstração.
   async function login(id, pin) {
-    await waitFor("!!document.querySelector('#pin')");
+    await waitFor("!!document.querySelector('input[name=profile]')");
     await evaluate(`document.querySelector('input[name="profile"][value="${id}"]').click()`);
-    await fill('#pin', pin);
+    if (await evaluate("!!document.querySelector('#pin')")) await fill('#pin', pin);
     await waitFor("!document.querySelector('button[type=submit]').disabled");
     await click('Entrar');
     await waitFor("!!document.querySelector('.navbar')");
@@ -112,12 +114,20 @@ try {
   await evaluate("location.hash = '#/mission'");
   await waitFor(`!!document.querySelector('select[aria-label="Perfil da missão"]')`);
   assert.ok(await evaluate("document.body.innerText.includes('Metas da semana') && document.body.innerText.includes('não é prescrição')"));
+  // Só o comandante e o oficial médico mudam o perfil da missão: a Lia vê o campo travado.
+  assert.ok(await evaluate(`document.querySelector('select[aria-label="Perfil da missão"]').disabled`), 'Tripulante conseguiu mudar o perfil da missão');
+  await click('Bloquear e trocar de perfil');
+  await login('kenji', '2222');
+  await evaluate("location.hash = '#/mission'");
+  await waitFor(`!!document.querySelector('select[aria-label="Perfil da missão"]:not([disabled])')`);
   await evaluate(`(() => {
     const select = document.querySelector('select[aria-label="Perfil da missão"]');
     Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(select, 'lunarFlyby');
     select.dispatchEvent(new Event('change', { bubbles: true }));
   })()`);
   await waitFor("document.body.innerText.includes('10 dias') && document.body.innerText.includes('Trânsito ao redor da Lua')");
+  await click('Bloquear e trocar de perfil');
+  await login('lia', '3333');
   await evaluate("location.hash = '#/'");
   await waitFor("!!document.querySelector('.region-button')");
   await evaluate("[...document.querySelectorAll('.region-button')].find(b => b.textContent.includes('Ossos e músculos')).click()");
@@ -125,7 +135,7 @@ try {
   assert.ok(await evaluate("document.body.innerText.includes('Não mede nem prevê')"));
   assert.ok(await evaluate("document.body.innerText.includes('missão curta não foi validado')"));
   await evaluate("[...document.querySelectorAll('.region-button')].find(b => b.textContent.includes('Corpo inteiro')).click()");
-  await waitFor("document.body.innerText.includes('Dose acumulada registrada na missão')");
+  await waitFor("document.body.innerText.includes('acumulados nesta missão')");
   assert.ok(await evaluate("document.body.innerText.includes('não está conectado a um dosímetro')"));
   console.log('PASS: perfil lunar M8 e contexto ósseo/radiação M5–M6 sem promessa de medição individual');
 
@@ -279,7 +289,7 @@ try {
   await click('Recriar dados de demonstração');
   await waitFor("document.body.innerText.includes('Sim, apagar e recriar')");
   await click('Sim, apagar e recriar');
-  await waitFor("!!document.querySelector('#pin')");
+  await waitFor("!!document.querySelector('input[name=profile]')");
   // O bloqueio é imediato; a geração das chaves e dos 180 registros termina depois.
   await waitFor("(async () => { const { db } = await import('/src/data/db.ts'); return await db.records.count() === 180 && await db.profiles.count() === 4; })()");
   const resetValid = await inspect(`return await db.records.count() === 180 && await db.medicalMessages.count() === 0

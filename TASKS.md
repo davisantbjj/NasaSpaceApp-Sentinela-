@@ -134,6 +134,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] Botão "Texto maior", que aumenta a escala base da fonte. No menu do usuário e no aviso inicial; 125%, guardado como preferência do aparelho (`src/lib/textSize.ts`)
 - [x] Testar com zoom de 200%, largura de 320 px e espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12), incluindo os passos novos do check-in, o teste de reação, o perfil de missão e as metas semanais. Feito com Edge automatizado em todas as telas e perfis; corrigidos: tela de Missão mais larga que a tela, selos e cartões cortados em 320 px, horários do solo, abas da barra escondidas entre 721 e 1300 px. Fica de propósito: a faixa de abas de Tendências rola na horizontal no desktop
 - [x] Check-in conferido preenchendo os 16 passos no navegador (15/11): exercício com tipo, aparelhos e minutos; grade de Amsler tocável por olho, com setas, Home e End (o Tab para uma vez só na grade); listas de opção no tamanho normal; rótulo que repetia o título escondido; "De onde veio o valor?" sem espremer; "Pular" na visão não grava mais "sem alteração"
+- [x] Perfis de demonstração entram com um toque, sem digitar o PIN (o app usa o PIN de exemplo sozinho); perfis fora da demonstração continuam pedindo o PIN. Aviso de privacidade v8 explica que, assim, qualquer pessoa com o aparelho abre qualquer perfil (`a86ab60`, 15/11)
 - [ ] Passada com leitor de tela e só teclado em todas as telas (fase 9). **Teclado: feito** (Tab em todas as telas, foco sempre visível e sem ficar sob a barra ou o alarme). Árvore de acessibilidade conferida (nenhum controle sem nome, sem id repetido, um h1 por tela; o check-in ganhou h1). **Falta a passada manual com NVDA** no Windows ou VoiceOver no celular
 - [x] Layout no desktop: lista de regiões alinhada ao topo; chip "Estação" vira "Ambiente: Estação" (na barra até 1100 px o "Ambiente:" fica só para leitor de tela, para as abas caberem)
 - [x] Layout no celular: figura menor ou resumo antes dela ("1 região para acompanhar"); nome do tripulante sem corte (cargo na segunda linha); cabeçalho com fundo opaco. Escolhido o resumo antes da figura, sem mudar a figura
@@ -146,13 +147,15 @@ Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam p
 
 - [x] Revisão documental do escopo já implementado da fase 12: N1, N2, N8, N11, N12, N13, N14 e N17. Evidências e limites em `docs/pesquisa/revisao-faixas.md`; sem alterar cortes ou níveis
 - [x] Conferir especificação, privacidade e exportação pelo código para os novos campos; banco v14 e 18 indicadores documentados; aviso de privacidade v7 em português/inglês
-- [ ] Completar N10 após implementar N7; revisar as perguntas e o compartilhamento do N19 quando definidos. Revisão clínica permanece pendente
+- [ ] Completar N10: a N7 ficou pronta em 15/11 (`9e67397`), falta registrar os dois sintomas novos em `docs/pesquisa/revisao-faixas.md`. As perguntas do N19 ficam para depois da entrega (D6). Revisão clínica permanece pendente
 - [ ] Entrega da mensagem ao oficial médico. Fazer junto com o Davi
 - [ ] Atualizar "De onde vêm os indicadores" em `docs/apresentacao.md`: revisar o texto do teste de reação (a frase "o app não aplica o teste de reação" deixou de ser verdade com a M4) e acrescentar a origem do dado (M10)
 - [ ] Reforçar "Como a NASA mede" com os aparelhos reais: dosímetro ativo e pulseira de actigrafia do Artemis II; esteira, bicicleta e aparelho resistido da ISS (cerca de 2 h por dia); flywheel compacto da Orion (cerca de 30 min por dia). Combinar com a N21 da Talita
 - [ ] Ligar "O que muda entre ambientes" ao perfil de missão (M8): missões de exemplo (ISS, Artemis II e Marte como referência, não missão real) e as fases
 - [ ] Acrescentar em "O que podemos afirmar": perda óssea estimada e radiação acumulada são estimativa e contexto, não medidas nem limites; metas semanais não são prescrição
 - [ ] Texto dos recursos da NASA usados, exigido para o Prêmio Global (rascunho em inglês já preparado na conversa com a Talita)
+- [ ] Ajustar os textos à entrada sem PIN da demonstração (`a86ab60`): o roteiro ainda diz "entrar como Ana (PIN 1111)" (`docs/roteiro-demonstracao.md`, 6:00–6:45); `docs/apresentacao.md` (seção de privacidade), `README.md` e `docs/como-funciona.md` (mensagens e privacidade) ainda dizem que a entrada é por perfil e PIN
+- [ ] Terminar `scripts/verify-larissa.mjs`. Em 15/11 já foram corrigidos o login sem PIN, a troca de perfil da missão (agora como oficial médico) e o texto da radiação; passam as 3 primeiras etapas. A 4ª (exercício) falha porque o script ainda espera o exercício em dois campos, e o passo agora tem tipo, aparelhos e minutos
 - [ ] Ensaiar o roteiro de novo, porque o check-in tem mais passos. Cenas sugeridas: perfil Artemis II em Missão; a Lia desmarcando o colírio (alerta "Dose não tomada", ligado ao caso de visão dela); o teste de reação em **modo curto**. Refazer as capturas das telas que mudaram
 - [ ] Capturas de tela e link do app publicado no `README.md` (depois da publicação do Davi)
 - [ ] Slides (a equipe decidiu entregar **7 slides**), vídeo e envio no site do Space Apps. Falta escolher quem faz e confirmar no guia do participante se o envio precisa estar em inglês
@@ -177,6 +180,7 @@ Hoje a origem do dado (M10) é **declarada** pela pessoa: o app não lê aparelh
 - A lista de medicação prevista não é editável pela interface: vem da demonstração.
 - Os dados ficam no navegador onde o app foi aberto. Outro navegador começa com outra demonstração e outra chave de dados, então não consegue abrir os pacotes do primeiro.
 - A central de bordo é simulada no próprio navegador: todos os perfis usam o mesmo aparelho.
+- Na demonstração, os perfis de exemplo entram sem digitar o PIN: quem tem o aparelho abre qualquer perfil, inclusive o do oficial médico. A separação por papel continua na tela, mas a cifra não separa quem usa o aparelho. Num produto real, cada pessoa digitaria o próprio PIN ou entraria pelo sistema da agência.
 - O PIN de 4 a 6 números protege pouco contra quem copiar o banco do aparelho (dá para testar todas as combinações fora do app). Num produto real a chave ficaria no hardware do aparelho ou no sistema da agência.
 - O token do backend vai junto do app publicado; só impede gravações de quem não tem o app.
 - O app envia pacotes ao backend, mas ainda não busca de volta para recuperar dados num aparelho novo.
