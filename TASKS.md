@@ -186,7 +186,7 @@ Revisado em 14/11 depois das melhorias M1 e M2 e dos papéis do Davi, que já es
 **Horários e lembretes.** O banner e o som são os mesmos dos alarmes da Talita: combinar uma função única (ex.: `raiseAlarm(level, text)`) para não existirem dois banners.
 
 - [ ] Horário do check-in por tripulante na tela de missão, com lembrete antes, alerta de atraso e aviso ao oficial médico se o atraso passar do limite. Mostrar junto o dia da missão do perfil (M8), ex.: "Dia 45 de 180"
-- [ ] **(fase 11)** Lembrete do teste de reação (M4): na ISS ele era feito a cada 4 dias; acrescentar a opção "a cada 4 dias" à lista de lembretes
+- [x] **(fase 11)** Lembrete do teste de reação (M4): na ISS ele era feito a cada 4 dias; acrescentar a opção "a cada 4 dias" à lista de lembretes. Feito junto com a M4
 - [ ] **(fase 11)** Aviso de meta semanal atrasada (M9), ex.: "faltam 2 sessões de treino resistido nesta semana", no mesmo banner dos lembretes
 - [ ] Lembrete recorrente "a cada X horas", com banner e som, usado primeiro para as **doses do plano de medicação** (M1; ex.: o colírio da Lia, 2 vezes ao dia) e também para outros casos, como hidratação. Os lembretes atuais "a cada N dias" continuam como opção
 - [ ] Notificação do sistema quando a aba está em segundo plano e, ao abrir o app, conferir o que ficou atrasado. No iPhone só funciona com o app instalado na tela inicial e com permissão; na demonstração, o banner dentro do app é o que garante o aviso
@@ -213,7 +213,7 @@ Revisado em 15/11 considerando a fase 11 inteira (M1 a M11) como feita. Tarefas 
 - [x] Composição e histórico local de mensagem para **mostrar** ao oficial médico, com indicação de não enviada, validação, exportação e exclusão
 - [ ] Entrega da mensagem ao oficial médico. Não está mais bloqueada: os papéis e a central de bordo do Davi já existem. Fazer junto com o Davi, que tem a mesma tarefa
 - [x] Conteúdo no Git sobre como a NASA mede e onde o Sentinela entra (`docs/apresentacao.md`)
-- [ ] **(fase 11)** Atualizar "De onde vêm os indicadores" em `docs/apresentacao.md`: acrescentar o teste de reação e **apagar a frase "o app não aplica o teste de reação"**, que deixa de ser verdade com a M4; acrescentar a origem do dado (M10)
+- [ ] **(fase 11)** Atualizar "De onde vêm os indicadores" em `docs/apresentacao.md`: acrescentar o teste de reação e **apagar a frase "o app não aplica o teste de reação"**, que deixa de ser verdade com a M4 (as duas partes já feitas junto com a M4: falta revisar o texto); acrescentar a origem do dado (M10)
 - [ ] **(fase 11)** Reforçar "Como a NASA mede" com os aparelhos reais: dosímetro ativo e pulseira de actigrafia do Artemis II; esteira, bicicleta e aparelho resistido da ISS (cerca de 2 h por dia); flywheel compacto da Orion (cerca de 30 min por dia). Isso justifica o passo de exercício que vale para qualquer nave
 - [ ] **(fase 11)** Texto dos recursos da NASA usados, exigido para o Prêmio Global (rascunho em inglês já preparado na conversa com a Talita)
 - [x] Justificativa dos dados simulados, sem afirmar inexistência absoluta de conjuntos públicos (`docs/apresentacao.md`)
@@ -236,18 +236,18 @@ Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente m
 - [x] **M1. Medicação**: indicador "tomei a medicação prevista", com lista por tripulante e lembrete. A página do evento de Kuala Lumpur cita medicação entre o que as agências monitoram, e a ISS usa o app Dose Tracker. Esforço baixo
 - [x] **M2. Estresse e carga de trabalho**: duas escalas de 1 a 5 no check-in, na região "Mente e sono". São as perguntas do Reaction Self Test da NASA. Esforço baixo
 - [x] **M3. Tipo de exercício**: separar aeróbico de resistido (musculação). O resistido é o que protege o osso, e o alerta já recomenda priorizá-lo. Esforço baixo
-- [ ] **M4. Teste de reação de 3 minutos**: tocar a tela assim que o sinal aparece, como no Reaction Self Test (ISS, desde 2009). Entra como indicador com linha de base pessoal. Incluir um **modo curto** para a demonstração (cerca de 30 s) e o lembrete "a cada 4 dias", como na ISS. Esforço médio; é o maior ganho em saúde mental
+- [x] **M4. Teste de reação de 3 minutos**: tocar a tela assim que o sinal aparece, como no Reaction Self Test (ISS, desde 2009). Entra como indicador com linha de base pessoal. Incluir um **modo curto** para a demonstração (cerca de 30 s) e o lembrete "a cada 4 dias", como na ISS. Esforço médio; é o maior ganho em saúde mental
 
 ### Avaliar
 
 - [x] **M5. Perda óssea estimada pelo dia de missão** (média de 1% a 1,5% ao mês), mostrada como "estimativa, não medida". Só contexto, sem faixa de alerta. Esforço baixo
 - [x] **M6. Radiação acumulada na missão**: soma das doses do dia, como contexto, sem faixa nova. Esforço baixo
-- [ ] **M7. Fadiga**: sono de 6 h ou menos junto com reação mais lenta aparece como "mudaram juntos", sem afirmar causa. Base: estudo com 24 astronautas em missões de 6 meses na ISS. Esforço baixo; depende de M4
+- [x] **M7. Fadiga**: sono de 6 h ou menos junto com reação mais lenta aparece como "mudaram juntos", sem afirmar causa. Base: estudo com 24 astronautas em missões de 6 meses na ISS. Esforço baixo; depende de M4
 - [x] **M8. Perfil de missão**: nave, tamanho da tripulação, duração e fases (ida, superfície, volta), com modelos ISS (cerca de 6 meses), Artemis II (Orion, 4 pessoas, cerca de 10 dias) e Marte (marcado como referência, não missão real). A tela de missão mostra "Dia 45 de 180, fase trânsito", e a fase define o ambiente. Quem pode mudar o perfil e a fase fica na tarefa do Davi. Esforço médio
 
 ### Agir
 
-- [ ] **M9. Metas semanais de sono e exercício**: a gamificação leve sugerida no enunciado, prometida na proposta e ainda ausente. Esforço baixo
+- [x] **M9. Metas semanais de sono e exercício**: a gamificação leve sugerida no enunciado, prometida na proposta e ainda ausente. Esforço baixo
 - [ ] **M10. Origem do dado**: cada valor marcado como "digitado", "pulseira" ou "dosímetro", e textos "como medir" citando os aparelhos do Artemis II (pulseira do ARCHeR e Crew Active Dosimeter). Opcional: importar um arquivo de exemplo da pulseira. Esforço baixo
 - [ ] **M11. Readaptação à gravidade**: perto do fim da missão ou do pouso, destacar a orientação de tontura ao levantar que já existe em Missão (entrega da Larissa). Depende de M8. Esforço baixo
 

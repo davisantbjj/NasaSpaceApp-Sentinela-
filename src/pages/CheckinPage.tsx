@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
+import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
 import { fieldError, NumberStep, parseNumber, type NumberField } from '../components/checkin/NumberStep';
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
@@ -24,6 +25,7 @@ interface Draft {
   scale: Partial<Record<ScaleId, number>>;
   symptoms?: string[];
   medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
+  reactionTime?: number; // resultado do teste de reação, em ms (M4)
 }
 
 function draftFrom(values: DailyValues | undefined, member: CrewMember | undefined): Draft {
@@ -49,7 +51,7 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     : member?.medications?.length ? [] : undefined;
   const scale: Draft['scale'] = {};
   for (const id of SCALE_IDS) scale[id] = values?.[id];
-  return { text, scale, symptoms: values?.symptoms, medicationTaken };
+  return { text, scale, symptoms: values?.symptoms, medicationTaken, reactionTime: values?.reactionTime };
 }
 
 // Quem acompanha treino resistido digita o exercício em dois campos (M3).
@@ -82,6 +84,8 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       if (chosen !== undefined) Object.assign(values, { [indicator]: chosen });
     } else if (indicator === 'symptoms') {
       if (draft.symptoms !== undefined) values.symptoms = draft.symptoms;
+    } else if (indicator === 'reactionTime') {
+      if (draft.reactionTime !== undefined) values.reactionTime = draft.reactionTime;
     } else if (indicator === 'medication') {
       const taken = draft.medicationTaken;
       if (taken !== undefined && member.medications?.length) {
@@ -171,6 +175,7 @@ function OwnCheckin() {
         scale: isScale(indicator) ? { ...d.scale, [indicator]: undefined } : d.scale,
         symptoms: indicator === 'symptoms' ? undefined : d.symptoms,
         medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
+        reactionTime: indicator === 'reactionTime' ? undefined : d.reactionTime,
       };
     });
     next();
@@ -301,6 +306,12 @@ function OwnCheckin() {
             options={content.scale}
             value={isScale(indicator) ? draft.scale[indicator] : undefined}
             onChange={(value) => setDraft((d) => ({ ...d, scale: { ...d.scale, [indicator]: value } }))}
+          />
+        )}
+        {indicator === 'reactionTime' && (
+          <ReactionTestStep
+            value={draft.reactionTime}
+            onResult={(reactionTime) => setDraft((d) => ({ ...d, reactionTime }))}
           />
         )}
         {indicator === 'medication' && (

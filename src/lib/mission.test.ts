@@ -3,6 +3,7 @@ import { daysByEnvironment, MISSION_PROFILES, phaseOnDay } from '../content/miss
 import { rules } from '../rules/rules';
 import { estimateBoneLoss } from './boneEstimate';
 import { radiationTotal } from './radiationTotal';
+import { weeklyGoals } from './weeklyGoals';
 
 describe('perfil de missão (M8)', () => {
   const mars = MISSION_PROFILES.mars;
@@ -66,5 +67,20 @@ describe('radiação acumulada (M6)', () => {
 
   it('sem nenhuma leitura não mostra nada', () => {
     expect(radiationTotal([day()], 1, rules)).toBeUndefined();
+  });
+});
+
+describe('metas semanais (M9)', () => {
+  const rec = (date: string, sleepHours: number, exerciseMinutes?: number) => ({ id: date, crewId: 'c1', date, missionDay: 1, values: { sleepHours, exerciseMinutes }, createdAt: '' });
+
+  it('conta os dias na faixa verde nos últimos 7 dias, contando hoje', () => {
+    const records = [
+      rec('2026-11-01', 8, 90), // fora da janela
+      rec('2026-11-09', 8, 90), rec('2026-11-10', 8, 90), rec('2026-11-11', 6, 90),
+      rec('2026-11-12', 7.5, 20), rec('2026-11-13', 8, 90), rec('2026-11-15', 8),
+    ];
+    const [sleep, exercise] = weeklyGoals(records, '2026-11-15', rules);
+    expect(sleep).toMatchObject({ indicator: 'sleepHours', daysInGreen: 5, windowDays: 7, targetDays: 5, met: true, greenText: '7 a 9 h' });
+    expect(exercise).toMatchObject({ indicator: 'exerciseMinutes', daysInGreen: 4, met: false });
   });
 });

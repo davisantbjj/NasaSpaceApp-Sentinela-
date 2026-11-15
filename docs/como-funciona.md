@@ -6,7 +6,7 @@ Explicação completa do aplicativo: o que ele faz, como cada indicador é medid
 
 ## 1. Ideia geral
 
-O astronauta faz um **check-in diário**: informa até catorze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
+O astronauta faz um **check-in diário**: informa até quinze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
 
 - numa **figura humana** em que cada sistema do corpo fica verde, amarelo ou vermelho;
 - numa **lista de alertas**, cada um explicando o que mudou e o que fazer;
@@ -29,7 +29,7 @@ Tudo roda no navegador, sem servidor e sem internet. Os dados ficam no próprio 
 
 Os alertas e as linhas de base não são gravados. São recalculados a partir dos registros sempre que a tela abre. Assim, mudar uma regra no `rules.json` muda o resultado na hora, sem dado velho guardado.
 
-## 3. Os catorze indicadores e como medir
+## 3. Os quinze indicadores e como medir
 
 | Indicador | Unidade | Região do corpo | Como medir (texto mostrado no app) |
 | --- | --- | --- | --- |
@@ -41,6 +41,7 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Humor | escala de 1 a 5 | Mente e sono | Escolha o rosto que melhor descreve como você se sentiu na maior parte do dia. |
 | Estresse | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o seu estresse na maior parte do dia. |
 | Carga de trabalho | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o volume de trabalho de hoje. |
+| Tempo de reação | ms (média do teste) | Mente e sono | Teste no próprio app: quando aparecer o sinal, tocar na área ou apertar espaço o mais rápido possível. 3 minutos, ou 30 s na versão curta para demonstração. Respostas antes do sinal não entram na média. |
 | Exercício | minutos | Ossos e músculos | Digite os minutos de aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência), com o equipamento da nave. O app soma os dois. Não depende de um aparelho específico: vale para a esteira, a bicicleta e o aparelho resistido da estação e para o aparelho compacto da Orion. |
 | Treino resistido | minutos | Ossos e músculos | É o segundo campo do passo de exercício, sem passo próprio. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
@@ -76,6 +77,7 @@ Cada pessoa tem o seu normal. Uma frequência de 58 bpm pode ser ótima para um 
 | Humor | Não | Só a faixa geral |
 | Estresse | Não | Só a faixa geral |
 | Carga de trabalho | Não | Só a faixa geral |
+| Tempo de reação | Sim, e só ela (sem faixa geral) | Só para cima (reação mais lenta) |
 | Visão | Não | Só a faixa geral |
 | Medicação | Não | Amarelo quando uma dose prevista não foi tomada |
 | Sintomas | Não | Cada sintoma tem nível fixo |
@@ -103,6 +105,7 @@ Os limites contam como dentro da faixa: 7 h de sono é verde, e 6,9 h é amarelo
 | Humor | 4 e 5 | 3 | 1 e 2 |
 | Estresse | 1 a 3 | 4 e 5 | Nunca |
 | Carga de trabalho | 1 a 3 | 4 e 5 | Nunca |
+| Tempo de reação | Sem faixa geral | Só por desvio do padrão pessoal (mais lento) | Nunca |
 | Exercício | 60 a 150 min | 30 a 59 ou 151 a 180 | abaixo de 30 ou acima de 180 |
 | Treino resistido | Sem faixa geral | Só por desvio do padrão pessoal | Nunca |
 | Visão | 0 (sem mudança) | 1 (mudança leve) | 2 (mudança clara) |
@@ -170,11 +173,12 @@ Cada tripulante pode ter uma lista de medicação prevista (na demonstração: A
 
 ## 8. "Mudaram juntos" (correlações)
 
-O app acompanha três pares de indicadores:
+O app acompanha quatro pares de indicadores:
 
 - sono e humor;
 - exercício e humor;
-- sono e frequência cardíaca.
+- sono e frequência cardíaca;
+- sono e tempo de reação (fadiga: num estudo com 24 astronautas na estação, dormir 6 horas ou menos veio junto com reação mais lenta).
 
 Num dia, um indicador "se afastou" se saiu da faixa verde geral ou passou do limite de desvio pessoal no sentido que preocupa. Se os dois indicadores de um par se afastaram nos mesmos dias, por **3 registros seguidos ou mais** até o mais recente, o app mostra, por exemplo: "Sono e humor mudaram juntos nos últimos 4 dias".
 
@@ -206,6 +210,10 @@ No painel, a região **Ossos e músculos** mostra uma nota com a perda óssea **
 
 No painel, a região **Corpo inteiro** mostra a dose acumulada registrada na missão: a soma das doses do dia digitadas, em µSv ou, a partir de 1.000 µSv, em mSv. Se houver dias sem leitura até o último registro, a nota diz quantos e que o total real é maior. É contexto, **não limite**: o app não avalia limites de dose da carreira nem eventos de radiação intensa, e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
 
+### Metas da semana
+
+Em **Missão**, o cartão "Metas da semana" mostra em quantos dos últimos 7 dias (contando hoje) o sono e o exercício ficaram na faixa verde geral, com meta de 5 dias. É a gamificação leve sugerida no desafio. A meta é de demonstração, **não é prescrição**: o plano de cada tripulante vem da equipe médica. A janela, a meta e os indicadores ficam em `rules.json` (`context.weeklyGoals`); a faixa verde é a mesma dos alertas.
+
 ## 10. As telas
 
 | Tela | O que mostra |
@@ -224,7 +232,7 @@ Na primeira abertura, o app cria três tripulantes fictícios com **60 dias de r
 
 | Tripulante | Função | Caso preparado | Resultado no app |
 | --- | --- | --- | --- |
-| Ana Ribeiro | Comandante | O sono cai nos últimos 7 dias (de 7,0 até 5,2 h) e o humor cai junto (de 4 para 3) | 2 alertas amarelos (sono e humor) e "Sono e humor mudaram juntos nos últimos 4 dias" |
+| Ana Ribeiro | Comandante | O sono cai nos últimos 7 dias (de 7,0 até 5,2 h), o humor cai junto (de 4 para 3) e, nos 4 dias com 6 h de sono ou menos, a reação fica mais lenta (de cerca de 306 para 360 a 372 ms) | 3 alertas amarelos (sono, humor e tempo de reação), "Sono e humor mudaram juntos nos últimos 4 dias" e "Sono e tempo de reação mudaram juntos nos últimos 4 dias" |
 | Lia Santos | Engenheira de voo | Mudança leve na visão nos últimos 2 dias e dor de cabeça no último | 2 alertas amarelos (visão e sintomas) |
 | Kenji Mori | Médico de bordo | Tudo normal. É o único que acompanha glicemia | Nenhum alerta |
 

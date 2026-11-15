@@ -4,7 +4,7 @@ export type Level = 'green' | 'yellow' | 'red';
 
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
-  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
+  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'reactionTime' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
   | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
@@ -50,6 +50,7 @@ export interface DailyValues {
   mood?: 1 | 2 | 3 | 4 | 5;
   stress?: 1 | 2 | 3 | 4 | 5; // 1 = muito baixo, 5 = muito alto
   workload?: 1 | 2 | 3 | 4 | 5; // 1 = muito leve, 5 = excessiva
+  reactionTime?: number; // média do teste de reação, em ms (M4)
   exerciseMinutes?: number; // total do dia (aeróbico + resistido)
   resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
   radiationDose?: number;
@@ -276,5 +277,6 @@ export interface Rules {
       demo: boolean;
     };
     radiationTotal?: { sourceUrl: string }; // M6: soma das doses do dia, só contexto
+    weeklyGoals?: { windowDays: number; targetDays: number; indicators: IndicatorId[]; demo: boolean }; // M9
   };
 }

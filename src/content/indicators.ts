@@ -21,7 +21,7 @@ export interface IndicatorContent {
 // próprio: é o segundo campo do passo de exercício.
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'stress', 'workload', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
+  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
 ];
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
@@ -99,6 +99,12 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
       { value: 5, label: 'Excessiva', symbol: '5' },
     ],
   },
+  reactionTime: {
+    label: 'Tempo de reação',
+    unit: 'ms',
+    howToMeasure: 'Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.',
+    whyMeasure: 'Na estação, os astronautas fazem um teste parecido, o Reaction Self Test, para perceber a fadiga cedo. Reação mais lenta que o seu padrão é um sinal para descansar.',
+  },
   exerciseMinutes: {
     label: 'Exercício',
     unit: 'min',
@@ -146,7 +152,7 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
 };
 
 export const REGIONS: Record<BodyRegion, { label: string; description: string }> = {
-  mind: { label: 'Mente e sono', description: 'Sono, humor, estresse e carga de trabalho' },
+  mind: { label: 'Mente e sono', description: 'Sono, humor, estresse, carga de trabalho e tempo de reação' },
   head: { label: 'Olhos e visão', description: 'Autoteste de visão' },
   heart: { label: 'Coração', description: 'Pressão arterial e frequência cardíaca' },
   immune: { label: 'Defesas do corpo', description: 'Temperatura' },
