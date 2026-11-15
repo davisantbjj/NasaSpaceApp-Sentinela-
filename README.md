@@ -8,6 +8,8 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 
 > Protótipo de apoio à decisão. Não é dispositivo médico e não faz diagnóstico. Os dados da tripulação são simulados.
 
+**App publicado:** https://sentinela-theta-nine.vercel.app (os perfis de demonstração entram com um toque). Os pacotes para a Terra vão ao backend da equipe, em https://sentinela-server-production.up.railway.app, que guarda só conteúdo cifrado.
+
 ## Estado
 
 As cinco telas funcionam com dados simulados: painel com o corpo humano, check-in diário, alertas, tendências e missão. Faltam a revisão das faixas pela equipe, a publicação e o material de entrega. Detalhes em [TASKS.md](TASKS.md).

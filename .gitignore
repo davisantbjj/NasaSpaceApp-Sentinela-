@@ -13,3 +13,6 @@ coverage/
 .idea/
 .claude/
 server/data/
+
+.vercel
+.env*

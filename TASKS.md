@@ -72,7 +72,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] Valores novos legíveis na "Visão do solo", conferido no navegador em 15/11. Acrescentados a qualidade do sono, o tipo e os aparelhos do exercício e a origem do dado ("sensor vestível", "dosímetro pessoal"). O resumo do comandante continua sem dado clínico (teste da N9)
 - [ ] Entregar as mensagens ao oficial médico pela central de bordo (hoje ficam só no aparelho do tripulante, cifradas). Fazer junto com a Larissa
 - [x] ~~D3. Mapa do corpo com 5 regiões e mudanças na figura~~: não fazer (D3 decidida: ficam as 7 regiões)
-- [ ] ❄️ Publicar o backend no Railway com volume em `/data` (passo a passo em `server/README.md`) e configurar `VITE_EARTH_API_URL` e `VITE_EARTH_MISSION_TOKEN` no deploy do app
+- [x] Backend publicado no Railway em 15/11: projeto `sentinela-server`, volume em `/data`, https://sentinela-server-production.up.railway.app. `ALLOWED_ORIGINS` é o app publicado; o `READ_TOKEN` fica só nas variáveis do Railway. Testado de ponta a ponta: o check-in feito no app publicado chega cifrado ao servidor
 - [ ] ❄️ Testes do store e da central com `fake-indexeddb` (bloqueio no meio do ciclo, fila, pacote já enviado). Hoje só as funções puras têm teste
 - [ ] ❄️ O perfil do médico do solo roda o ciclo de bordo, porque tudo está num navegador só. Num produto real o solo não teria a chave de bordo
 - [ ] ❄️ Buscar pacotes do servidor para recuperar dados num aparelho novo (a rota já existe; falta o app usar e resolver como a chave chega ao aparelho novo)
@@ -80,7 +80,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 **Publicação (fase 8)**
 
 - [x] Uso sem rede no build de produção, conferido em 15/11: com o service worker ativo e a rede cortada, o app abre, a Lia entra, faz e salva o check-in, sem erro no console
-- [ ] Escolher Vercel ou GitHub Pages e publicar (no GitHub Pages é preciso ajustar `base` em `vite.config.ts`)
+- [x] App publicado na Vercel (projeto `sentinela`, ligado ao GitHub; publica sozinho a cada push no `main`): https://sentinela-theta-nine.vercel.app. Em produção, `VITE_EARTH_API_URL` e `VITE_EARTH_MISSION_TOKEN` ligam o app ao backend; as prévias de branch usam a ligação simulada
 - [x] `npm audit` revisto em 15/11: 8 avisos (2 baixos, 6 moderados). Seis são do build do PWA (`workbox-build`, `glob`, `minimatch`), que não vai para o app publicado. Os 2 do `react-router` 6 não se aplicam: todo destino de `Link`/`navigate` é fixo no código e o app não usa SSR. A correção exige versão maior (`react-router-dom` 7, `vite-plugin-pwa` 1.1); fica para depois da entrega
 - [x] Licença: MIT, em nome da Equipe CosmoTI (`LICENSE`, `package.json` e `README.md`)
 
@@ -164,7 +164,7 @@ Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam p
 - [x] Como medir a pressão: costas apoiadas, pés retos e apoiados sem cruzar (no chão ou, em microgravidade, no apoio de pés), braço apoiado com o manguito na altura do peito (15/11)
 - [x] Scanner do corpo refeito: uma faixa luminosa percorre a silhueta inteira a cada 4,5 s sobre uma grade fina; sem piscar e parado com "reduzir movimento" (15/11)
 - [ ] Ensaiar o roteiro de novo, porque o check-in tem mais passos. Cenas sugeridas: perfil Artemis II em Missão; a Lia desmarcando o colírio (alerta "Dose não tomada", ligado ao caso de visão dela); o teste de reação em **modo curto**. Refazer as capturas das telas que mudaram
-- [ ] Capturas de tela e link do app publicado no `README.md` (depois da publicação do Davi)
+- [ ] Capturas de tela no `README.md` (o link do app publicado já está lá)
 - [ ] Slides (a equipe decidiu entregar **7 slides**), vídeo e envio no site do Space Apps. Falta escolher quem faz e confirmar no guia do participante se o envio precisa estar em inglês
 
 ## Fora do escopo: leitura de aparelhos
