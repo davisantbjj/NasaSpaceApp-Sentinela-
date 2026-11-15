@@ -61,6 +61,7 @@ export function AmslerStep({ value, onChange }: Props) {
           </label>
         ))}
       </fieldset>
+      <p className="small muted">{i18n.t('checkin:amsler.noneMarked')}</p>
       <p className="small muted">{i18n.t('checkin:amsler.disclaimer')}</p>
     </div>
   );

@@ -187,6 +187,13 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     unit: '',
     howToMeasureKey: 'indicators:vision.howToMeasure',
     whyMeasureKey: 'indicators:vision.whyMeasure',
+    // O check-in usa a grade de Amsler (N15), mas o resumo 0/1/2 continua com rótulos
+    // no histórico, no gráfico e na revisão.
+    scale: [
+      { value: 0, labelKey: 'indicators:vision.scale.0', symbol: '0' },
+      { value: 1, labelKey: 'indicators:vision.scale.1', symbol: '1' },
+      { value: 2, labelKey: 'indicators:vision.scale.2', symbol: '2' },
+    ],
   },
   conditioning: {
     labelKey: 'indicators:conditioning.label',

@@ -11,8 +11,9 @@ export interface SeriesPoint {
 
 export const BP_COMPONENTS: BpComponent[] = ['systolic', 'diastolic'];
 
-// Indicadores que são listas, não números: não têm série, linha de base nem gráfico.
-const LIST_INDICATORS: IndicatorId[] = ['symptoms', 'medication'];
+// Indicadores que não são um número só (listas ou avaliações com várias partes):
+// não têm série, linha de base nem gráfico.
+const LIST_INDICATORS: IndicatorId[] = ['symptoms', 'medication', 'conditioning'];
 
 export function hasHistoryChart(indicator: IndicatorId): boolean {
   return !LIST_INDICATORS.includes(indicator);

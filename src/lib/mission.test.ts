@@ -78,6 +78,13 @@ describe('radiação acumulada (M6)', () => {
     expect(total.text).toContain('não limite oficial');
   });
 
+  it('dose pequena não aparece como 0% do limite de carreira (N2)', () => {
+    const total = radiationTotal([day(400), day(420), day(430)], 3, rules)!;
+    expect(total.careerPercent).toBe(0.2);
+    expect(total.text).toContain('<1%');
+    expect(total.text).not.toContain(' 0%');
+  });
+
   it('soma as doses do dia e passa para mSv a partir de 1.000 µSv', () => {
     const total = radiationTotal([day(400), day(420), day(430)], 3, rules)!;
     expect(total.text).toContain('1,3 mSv');

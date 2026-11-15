@@ -203,6 +203,12 @@ function evaluateIndicator(
   };
 }
 
+// CO2 da cabine acima do limite de atenção da missão (N13). O limite fica no rules.json.
+export function isCabinCo2High(cabinCo2Mmhg: number | undefined, rules: Rules): boolean {
+  const limit = rules.context?.cabinCo2?.attentionMmhg;
+  return limit !== undefined && cabinCo2Mmhg !== undefined && cabinCo2Mmhg > limit;
+}
+
 function evaluateSymptoms(
   rule: IndicatorRule,
   record: DailyRecord,
@@ -216,8 +222,9 @@ function evaluateSymptoms(
   if (reported.length === 0) return undefined;
 
   const level = worstLevel(...reported.map((s) => s.level)) as 'yellow' | 'red';
-  const cabinCo2High = (context?.cabinCo2Mmhg ?? 0) > 3
-    && reported.some((s) => s.id === 'headache' || s.id === 'congestion');
+  const co2Symptoms = rules.context?.cabinCo2?.symptoms ?? [];
+  const cabinCo2High = isCabinCo2High(context?.cabinCo2Mmhg, rules)
+    && reported.some((s) => co2Symptoms.includes(s.id));
   return {
     id: `${record.id}_symptoms`,
     crewId: record.crewId,
@@ -250,8 +257,10 @@ function evaluateBodyMass(
   const current = record.values.bodyMassKg;
   if (start === undefined || !Number.isFinite(start) || start <= 0 || current === undefined || !Number.isFinite(current)) return undefined;
 
+  const limits = rule.lossPercent;
+  if (!limits) return undefined;
   const lossPercent = ((start - current) / start) * 100;
-  const level: Level = lossPercent > 10 ? 'red' : lossPercent > 5 ? 'yellow' : 'green';
+  const level: Level = lossPercent > limits.red ? 'red' : lossPercent > limits.yellow ? 'yellow' : 'green';
   if (level === 'green') return undefined;
 
   return {
@@ -268,7 +277,7 @@ function evaluateBodyMass(
     },
     reference: {
       key: 'alerts:reference.bodyMass',
-      params: { start, yellow: 5, red: 10, unit: rule.unit },
+      params: { start, yellow: limits.yellow, red: limits.red, unit: rule.unit },
     },
     whyItMatters: rule.messages.whyItMatters,
     whatToDo: rule.messages.whatToDo[level],
@@ -283,12 +292,13 @@ function evaluateConditioning(
   record: DailyRecord,
 ): Alert[] {
   const assessment = record.values.conditioning;
-  if (!assessment) return [];
+  const min = rule.green?.min;
+  if (!assessment || min === undefined) return [];
   return ([
     ['aerobic', assessment.aerobicPercent],
     ['strength', assessment.strengthPercent],
   ] as const)
-    .filter(([, value]) => Number.isFinite(value) && value < 80)
+    .filter(([, value]) => Number.isFinite(value) && value < min)
     .map(([kind, value]) => ({
       id: `${record.id}_conditioning_${kind}`,
       crewId: record.crewId,
@@ -304,7 +314,7 @@ function evaluateConditioning(
           value: { key: 'alerts:values.number', params: { value, unit: '%' } },
         },
       },
-      reference: { key: 'alerts:reference.conditioning' },
+      reference: { key: 'alerts:reference.conditioning', params: { min, unit: '%' } },
       whyItMatters: rule.messages.whyItMatters,
       whatToDo: rule.messages.whatToDo.yellow,
       confidence: 'normal' as const,

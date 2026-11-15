@@ -36,7 +36,7 @@
     "noSymptoms": "Esperado: nenhum sintoma",
     "medication": "Esperado: todas as doses previstas no dia",
     "bodyMass": "Valor inicial: {{start}} {{unit}} · amarelo acima de {{yellow}}% de perda · vermelho acima de {{red}}%",
-    "conditioning": "Referência: pelo menos 80% do valor antes do voo",
+    "conditioning": "Referência: pelo menos {{min}}{{unit}} do valor antes do voo",
     "meals": "Esperado: pelo menos uma refeição completa por dia; o alerta sai com {{days}} dias seguidos sem nenhuma"
   },
   "confidence": {
@@ -159,8 +159,8 @@
       "yellow": "Anote quando começou e como evolui, e registre de novo amanhã.",
       "red": "Avise o médico de bordo agora.",
       "co2High": {
-        "yellow": "Como o CO2 da cabine está acima de 3 mmHg, confira a ventilação da cabine e avise o oficial médico sobre o sintoma.",
-        "red": "Como o CO2 da cabine está acima de 3 mmHg, confira a ventilação da cabine e avise o oficial médico agora."
+        "yellow": "Como o CO2 da cabine está acima do limite de atenção da missão, confira a ventilação da cabine e avise o oficial médico sobre o sintoma.",
+        "red": "Como o CO2 da cabine está acima do limite de atenção da missão, confira a ventilação da cabine e avise o oficial médico agora."
       }
     },
     "reactionTime": {

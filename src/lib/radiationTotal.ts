@@ -21,6 +21,12 @@ function doseText(microsieverts: number): string {
   return `${formatNumber(Math.round(microsieverts / 100) / 10)} mSv`;
 }
 
+// Percentual do limite de carreira: abaixo de 1% não vira "0%"; abaixo de 10%, uma casa decimal.
+function percentText(percent: number): string {
+  if (percent > 0 && percent < 1) return '<1';
+  return formatNumber(percent < 10 ? percent : Math.round(percent));
+}
+
 export function radiationTotal(
   records: DailyRecord[],
   missionDay: number,
@@ -39,7 +45,7 @@ export function radiationTotal(
   const careerLimitMsv = context.careerLimitMsv ?? 600;
   const missionDoseMsv = Math.round((total / 1000) * 10) / 10;
   const totalCareerDoseMsv = Math.round((missionDoseMsv + priorCareerDoseMsv) * 10) / 10;
-  const careerPercent = Math.round((totalCareerDoseMsv / careerLimitMsv) * 100);
+  const careerPercent = Math.round((totalCareerDoseMsv / careerLimitMsv) * 1000) / 10;
 
   const priorNote = priorCareerDoseMsv > 0
     ? i18n.t('context.radiation.prior', { prior: formatNumber(priorCareerDoseMsv) })
@@ -48,7 +54,7 @@ export function radiationTotal(
   const parts = [
     i18n.t('context.radiation.total', {
       dose: doseText(total),
-      percent: formatNumber(careerPercent),
+      percent: percentText(careerPercent),
       limit: formatNumber(careerLimitMsv),
       priorNote,
       days: i18n.t('context.dayCount', { count: doses.length }),

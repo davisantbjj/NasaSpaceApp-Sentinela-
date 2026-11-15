@@ -44,6 +44,7 @@
     "right": "Olho direito",
     "grid": "Grade de Amsler",
     "questions": "Alterações percebidas",
+    "noneMarked": "Se não marcar nada e avançar, o registro será \"sem alteração\" nos dois olhos.",
     "distorted": "As linhas pareceram tortas ou onduladas?",
     "missing": "Faltou alguma área ou parte da grade?",
     "near": "A leitura de perto pareceu pior?",
@@ -55,6 +56,8 @@
     "resistance": "Resistido",
     "both": "Aeróbico e resistido",
     "minutes": "Duração da sessão",
+    "resistanceMinutes": "Minutos de resistido",
+    "resistanceTooLong": "A parte resistida não pode passar da duração da sessão.",
     "heartRate": "Frequência cardíaca média",
     "resistanceStatus": "Treino resistido",
     "completed": "Feito",
@@ -63,10 +66,12 @@
     "disclaimer": "Registre uma sessão de hoje. O protótipo guarda o tipo, a duração, a frequência média do aeróbico e o estado do resistido; não avalia desempenho."
   },
   "conditioning": {
+    "invalid": "Use um percentual de 0 a 200.",
+    "apparatusFor": "Aparelho usado: {{part}}",
     "instructions": "Informe o resultado da avaliação periódica como percentual do valor medido antes do voo e selecione o aparelho usado em cada parte.",
     "aerobic": "Capacidade aeróbica",
     "strength": "Força",
-    "disclaimer": "O limite de acompanhamento é 80% do valor antes do voo. A frequência da avaliação é definida pela equipe médica; este registro não é um teste automático.",
+    "disclaimer": "O limite de acompanhamento é {{min}}% do valor antes do voo. A frequência da avaliação é definida pela equipe médica; este registro não é um teste automático.",
     "apparatus": {
       "treadmill": "Esteira",
       "cycle": "Bicicleta ergométrica",

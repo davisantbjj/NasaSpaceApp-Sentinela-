@@ -164,9 +164,18 @@
       "title": "Cabin CO2",
       "intro": "Mission data, not a person's measurement. Enter the one-hour average in mmHg.",
       "value": "CO2 average",
-      "warning": "General warning: {{value}} mmHg is above the demo threshold of 3 mmHg.",
-      "note": "Above 3 mmHg, the cabin needs attention. If there is a headache or nasal congestion, check this value.",
+      "warning": "General warning: {{value}} mmHg is above the demo threshold of {{limit}} mmHg.",
+      "note": "Above {{limit}} mmHg, the cabin needs attention. If there is a headache or nasal congestion, check this value.",
       "source": "NASA cabin CO2 source (opens another site)"
+    },
+    "numberRange": "Use a value from {{min}} to {{max}}.",
+    "crewData": {
+      "title": "Starting data for {{name}}",
+      "intro": "Body mass at the start of the mission (the basis for the mass comparison) and radiation dose from previous missions (included in the career limit percentage).",
+      "startBodyMass": "Body mass at mission start",
+      "priorCareerDose": "Dose from previous missions",
+      "note": "The value is saved when you leave the field. Leave it empty if unknown.",
+      "medicalOnly": "Only the medical officer can change this data."
     },
     "reminders": "Measurement reminders",
     "remindersIntro": "For indicators that do not need to be measured every day.",

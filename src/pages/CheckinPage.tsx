@@ -15,6 +15,7 @@ import { displayText, sleepQualityText, sourceLabel } from '../content/format';
 import { indicatorContent, sleepQualityOptions } from '../content/indicators';
 import { translateText } from '../content/localize';
 import i18n from '../i18n';
+import { AMSLER_NO_CHANGE, resistancePart, visionSummary } from '../lib/checkinSummary';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
@@ -116,20 +117,16 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       if (draft.water !== undefined) values.waterSufficient = draft.water;
     } else if (indicator === 'exerciseMinutes' && draft.exerciseSession) {
       const session = draft.exerciseSession;
-      const resistanceDone = session.resistanceStatus !== 'notDone';
       values.exerciseSession = session;
       values.exerciseMinutes = session.durationMinutes;
-      values.resistanceMinutes = resistanceDone && (session.type === 'resistance' || session.type === 'both')
-        ? session.durationMinutes
-        : 0;
+      // A parte resistida só é guardada para quem acompanha treino resistido (M3).
+      if (splitsExercise(member)) values.resistanceMinutes = resistancePart(session);
     } else if (indicator === 'conditioning') {
       if (draft.conditioning) values.conditioning = draft.conditioning;
     } else if (indicator === 'vision') {
       if (draft.amsler) {
-        const eyes = [draft.amsler.left, draft.amsler.right].filter((eye): eye is NonNullable<typeof eye> => eye !== undefined);
-        const concerns = eyes.reduce((sum, eye) => sum + Object.values(eye).filter(Boolean).length, 0);
         values.visionAmsler = draft.amsler;
-        values.vision = concerns >= 2 ? 2 : concerns > 0 ? 1 : 0;
+        values.vision = visionSummary(draft.amsler);
       }
     } else if (isScale(indicator)) {
       const chosen = draft.scale[indicator];
@@ -222,7 +219,13 @@ function OwnCheckin() {
   const values = toValues(steps, draft, member);
   const filled = Object.keys(values).filter((key) => key !== 'sources' && key !== 'reactionTest').length;
 
-  const next = () => (index < steps.length - 1 ? setIndex(index + 1) : setStage('review'));
+  const next = () => {
+    // Avançar na grade de Amsler sem marcar nada é responder "sem alteração" (N15).
+    // Para não registrar, a pessoa usa "Pular".
+    if (steps[index] === 'vision') setDraft((d) => (d.amsler ? d : { ...d, amsler: AMSLER_NO_CHANGE }));
+    if (index < steps.length - 1) setIndex(index + 1);
+    else setStage('review');
+  };
   const back = index > 0 ? () => setIndex(index - 1) : undefined;
 
   const skip = () => {

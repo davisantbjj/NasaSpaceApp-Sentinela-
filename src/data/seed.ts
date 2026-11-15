@@ -14,7 +14,8 @@ const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
-  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'symptoms',
+  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'conditioning',
+  'symptoms',
 ];
 
 // Marca como tomado o remédio para dormir "só quando necessário" (N14).

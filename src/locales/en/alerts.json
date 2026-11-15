@@ -36,7 +36,7 @@
     "noSymptoms": "Expected: no symptoms",
     "medication": "Expected: all scheduled doses for the day",
     "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%",
-    "conditioning": "Reference: at least 80% of the preflight value",
+    "conditioning": "Reference: at least {{min}}{{unit}} of the preflight value",
     "meals": "Expected: at least one complete meal a day; the alert appears after {{days}} days in a row without one"
   },
   "confidence": {
@@ -159,8 +159,8 @@
       "yellow": "Note when it started and how it changes, then record it again tomorrow.",
       "red": "Notify the onboard medical officer now.",
       "co2High": {
-        "yellow": "Because cabin CO2 is above 3 mmHg, check cabin ventilation and tell the medical officer about the symptom.",
-        "red": "Because cabin CO2 is above 3 mmHg, check cabin ventilation and notify the medical officer now."
+        "yellow": "Because cabin CO2 is above the mission attention threshold, check cabin ventilation and tell the medical officer about the symptom.",
+        "red": "Because cabin CO2 is above the mission attention threshold, check cabin ventilation and notify the medical officer now."
       }
     },
     "reactionTime": {

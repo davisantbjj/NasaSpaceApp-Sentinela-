@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { CabinCo2Card, CrewMissionDataCard } from '../components/mission/MissionDataCards';
 import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, environmentContent, indicatorContent } from '../content/indicators';
 import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, nextGravityChange, phaseOnDay } from '../content/missions';
@@ -56,7 +57,7 @@ function gravityWhen(inDays: number): string {
 
 export function MissionPage() {
   const member = useActiveCrew();
-  const { crew, settings, records, session, setEnvironment, setCabinCo2Mmhg, setMissionProfile, applyPhaseEnvironment, setReminder, resetDemo } = useAppStore();
+  const { crew, settings, records, session, setEnvironment, setMissionProfile, applyPhaseEnvironment, setReminder, resetDemo } = useAppStore();
   // Só o oficial médico recria a demonstração: recriar apaga também o registro de acesso de todos.
   const canReset = session?.role === 'medicalOfficer';
   const [confirmReset, setConfirmReset] = useState(false);
@@ -196,41 +197,9 @@ export function MissionPage() {
         )}
       </section>
 
-      <section className="card stack" style={{ gap: 14 }}>
-        <div>
-          <h2>{i18n.t('mission.cabinCo2.title')}</h2>
-          <p className="small muted">{i18n.t('mission.cabinCo2.intro')}</p>
-        </div>
-        <label className="field" htmlFor="cabin-co2">
-          <span>{i18n.t('mission.cabinCo2.value')}</span>
-          <div className="field-input">
-            <input
-              id="cabin-co2"
-              className="input"
-              type="number"
-              min="0"
-              max="10"
-              step="0.1"
-              value={settings.cabinCo2Mmhg ?? ''}
-              onChange={(event) => {
-                const value = Number(event.target.value);
-                void setCabinCo2Mmhg(event.target.value === '' || !Number.isFinite(value) ? undefined : value);
-              }}
-            />
-            <span className="muted">mmHg</span>
-          </div>
-        </label>
-        {settings.cabinCo2Mmhg !== undefined && settings.cabinCo2Mmhg > 3 && (
-          <p className="notice">
-            <span className="notice-icon" aria-hidden="true">!</span>
-            <span>{i18n.t('mission.cabinCo2.warning', { value: settings.cabinCo2Mmhg })}</span>
-          </p>
-        )}
-        <p className="small muted">{i18n.t('mission.cabinCo2.note')}</p>
-        <a href="https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf" target="_blank" rel="noreferrer">
-          {i18n.t('mission.cabinCo2.source')}
-        </a>
-      </section>
+      <CabinCo2Card />
+
+      <CrewMissionDataCard member={member} />
 
       <section className="card stack" style={{ gap: 14 }}>
         <div>

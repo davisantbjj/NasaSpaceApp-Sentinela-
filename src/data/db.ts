@@ -191,6 +191,19 @@ export class SentinelaDB extends Dexie {
         }
       }),
     );
+    // v14: avaliação periódica de condicionamento (N17); o passo pode ser pulado nos dias sem avaliação.
+    // A N17 e a N12/N14 foram feitas em paralelo e as duas usaram a v13, então esta versão repete
+    // a atualização da N12/N14 para quem gravou a v13 da N17. Cada passo só acrescenta o que falta.
+    this.version(14).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (!member.trackedIndicators.includes('conditioning')) member.trackedIndicators.push('conditioning');
+        if (!member.trackedIndicators.includes('mealsCompleted')) member.trackedIndicators.push('mealsCompleted');
+        const sleepAid = DEMO_MEDICATIONS[member.id]?.find((m) => m.sleepAid);
+        if (sleepAid && member.medications && !member.medications.some((m) => m.id === sleepAid.id)) {
+          member.medications.push(sleepAid);
+        }
+      }),
+    );
   }
 }
 
