@@ -248,8 +248,8 @@ Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente m
 ### Agir
 
 - [x] **M9. Metas semanais de sono e exercício**: a gamificação leve sugerida no enunciado, prometida na proposta e ainda ausente. Esforço baixo
-- [ ] **M10. Origem do dado**: cada valor marcado como "digitado", "pulseira" ou "dosímetro", e textos "como medir" citando os aparelhos do Artemis II (pulseira do ARCHeR e Crew Active Dosimeter). Opcional: importar um arquivo de exemplo da pulseira. Esforço baixo
-- [ ] **M11. Readaptação à gravidade**: perto do fim da missão ou do pouso, destacar a orientação de tontura ao levantar que já existe em Missão (entrega da Larissa). Depende de M8. Esforço baixo
+- [x] **M10. Origem do dado**: cada valor marcado como "digitado", "pulseira" ou "dosímetro", e textos "como medir" citando os aparelhos do Artemis II (pulseira do ARCHeR e Crew Active Dosimeter). Feito com nomes genéricos (sensor vestível, dosímetro pessoal), com o Artemis II só como exemplo. O opcional de importar um arquivo de exemplo da pulseira não foi feito. Esforço baixo
+- [x] **M11. Readaptação à gravidade**: perto do fim da missão ou do pouso, destacar a orientação de tontura ao levantar que já existe em Missão (entrega da Larissa). Depende de M8. Esforço baixo
 
 ### Ordem sugerida
 

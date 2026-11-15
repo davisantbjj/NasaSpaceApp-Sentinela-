@@ -122,6 +122,11 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
       for (const indicator of profile.member.trackedIndicators) {
         Object.assign(values, { [indicator]: all[indicator] });
       }
+      // Na demonstração, o sono vem de um sensor vestível e a dose do dosímetro pessoal (M10).
+      const sources: DailyValues['sources'] = {};
+      if (values.sleepHours !== undefined) sources.sleepHours = 'wearable';
+      if (values.radiationDose !== undefined) sources.radiationDose = 'dosimeter';
+      if (Object.keys(sources).length > 0) values.sources = sources;
       records.push({
         id: `${profile.member.id}_${date}`,
         crewId: profile.member.id,

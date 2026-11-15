@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { daysByEnvironment, MISSION_PROFILES, phaseOnDay } from '../content/missions';
+import { sourceLabel } from '../content/format';
+import { daysByEnvironment, MISSION_PROFILES, nextGravityChange, phaseOnDay } from '../content/missions';
 import { rules } from '../rules/rules';
 import { estimateBoneLoss } from './boneEstimate';
 import { radiationTotal } from './radiationTotal';
@@ -82,5 +83,23 @@ describe('metas semanais (M9)', () => {
     const [sleep, exercise] = weeklyGoals(records, '2026-11-15', rules);
     expect(sleep).toMatchObject({ indicator: 'sleepHours', daysInGreen: 5, windowDays: 7, targetDays: 5, met: true, greenText: '7 a 9 h' });
     expect(exercise).toMatchObject({ indicator: 'exerciseMinutes', daysInGreen: 4, met: false });
+  });
+});
+
+describe('readaptação à gravidade (M11)', () => {
+  it('acha o próximo pouso ou a volta à Terra', () => {
+    expect(nextGravityChange(MISSION_PROFILES.mars, 60)).toEqual({ label: 'Pouso em Marte', day: 181, inDays: 121 });
+    expect(nextGravityChange(MISSION_PROFILES.mars, 181)).toEqual({ label: 'Pouso em Marte', day: 181, inDays: 0 });
+    expect(nextGravityChange(MISSION_PROFILES.mars, 700)).toEqual({ label: 'Volta à Terra', day: 915, inDays: 215 });
+    expect(nextGravityChange(MISSION_PROFILES.station, 175)).toEqual({ label: 'Volta à Terra', day: 181, inDays: 6 });
+    expect(nextGravityChange(MISSION_PROFILES.lunarFlyby, 30)).toBeUndefined();
+  });
+});
+
+describe('origem do dado (M10)', () => {
+  it('mostra o aparelho só quando o valor não foi digitado', () => {
+    expect(sourceLabel({ sleepHours: 7, sources: { sleepHours: 'wearable' } }, 'sleepHours')).toBe('Sensor vestível');
+    expect(sourceLabel({ sleepHours: 7, sources: { sleepHours: 'manual' } }, 'sleepHours')).toBeUndefined();
+    expect(sourceLabel({ sleepHours: 7 }, 'sleepHours')).toBeUndefined();
   });
 });

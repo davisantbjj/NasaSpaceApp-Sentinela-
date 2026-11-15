@@ -210,6 +210,14 @@ No painel, a região **Ossos e músculos** mostra uma nota com a perda óssea **
 
 No painel, a região **Corpo inteiro** mostra a dose acumulada registrada na missão: a soma das doses do dia digitadas, em µSv ou, a partir de 1.000 µSv, em mSv. Se houver dias sem leitura até o último registro, a nota diz quantos e que o total real é maior. É contexto, **não limite**: o app não avalia limites de dose da carreira nem eventos de radiação intensa, e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
 
+### Origem do dado
+
+Nos passos de **sono**, **frequência cardíaca** e **radiação**, o check-in pergunta "De onde veio o valor?": digitado, sensor vestível (ex.: pulseira de actigrafia) ou dosímetro pessoal. O app **não lê aparelhos**: a pessoa informa onde leu o número. A origem aparece na revisão do check-in e no painel ("Origem: sensor vestível"), fica cifrada junto com os valores do dia e não muda nenhum nível. Na demonstração, o sono vem de um sensor vestível e a radiação do dosímetro. É o primeiro passo para, no futuro, receber os dados direto dos aparelhos.
+
+### Readaptação à gravidade
+
+Com um perfil de missão, o cartão "Contexto de readaptação à gravidade", em Missão, mostra a próxima mudança de gravidade: pouso na Lua ou em Marte depois de uma fase sem gravidade, ou a volta à Terra no fim da missão. Faltando **7 dias ou menos** (`rules.json`, `context.readaptation`), a mudança aparece em destaque, com o pedido de reler a orientação e combinar o protocolo com o oficial médico. A orientação em si é a mesma de antes (tontura ao levantar, com fonte da NASA) e não muda nenhum nível.
+
 ### Metas da semana
 
 Em **Missão**, o cartão "Metas da semana" mostra em quantos dos últimos 7 dias (contando hoje) o sono e o exercício ficaram na faixa verde geral, com meta de 5 dias. É a gamificação leve sugerida no desafio. A meta é de demonstração, **não é prescrição**: o plano de cada tripulante vem da equipe médica. A janela, a meta e os indicadores ficam em `rules.json` (`context.weeklyGoals`); a faixa verde é a mesma dos alertas.

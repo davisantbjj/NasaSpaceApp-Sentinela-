@@ -98,6 +98,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 - Não crie regra que mude o nível por ambiente da missão.
 - O valor de cerca de 150 microsieverts por dia (Radi-N2) é só de nêutrons, medido na estação espacial. Use como contexto em texto, nunca como faixa de alerta.
 - Correlações entre indicadores são mostradas como "mudaram juntos". Nunca escreva que um causou o outro.
+- A origem de um valor (`values.sources`: digitado, sensor vestível ou dosímetro) é informada pela pessoa. O app não lê aparelhos; não escreva que lê.
 - O motor de regras (`src/rules/engine.ts`) é feito de funções puras, sem acesso a banco nem a React.
 - Componentes não acessam o Dexie direto. Passam pelos repositórios em `src/data/`.
 - Toda tela que mostra nível de alerta usa cor e também texto ou ícone. A cor nunca é o único sinal.

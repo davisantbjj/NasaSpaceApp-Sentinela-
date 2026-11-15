@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
-import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, phaseOnDay } from '../content/missions';
+import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, nextGravityChange, phaseOnDay } from '../content/missions';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
 import { weeklyGoals, type WeeklyGoal } from '../lib/weeklyGoals';
@@ -65,6 +65,9 @@ export function MissionPage() {
   const phase = profile ? phaseOnDay(profile, crewDay) : undefined;
   const offPhase = !!phase && settings.environment !== phase.environment;
   const goals = weeklyGoals(records, today, rules).filter((g) => member.trackedIndicators.includes(g.indicator));
+  // Readaptação (M11): próxima mudança de gravidade e se já está perto.
+  const gravity = profile ? nextGravityChange(profile, crewDay) : undefined;
+  const gravitySoon = !!gravity && gravity.inDays <= (rules.context?.readaptation?.noticeDaysBefore ?? 0);
 
   return (
     <div className="page">
@@ -113,6 +116,18 @@ export function MissionPage() {
 
       <section className="card stack">
         <h2>Contexto de readaptação à gravidade</h2>
+        {gravity && gravitySoon && (
+          <p className="notice" style={{ color: 'var(--text)' }}>
+            <span className="notice-icon" aria-hidden="true">!</span>
+            <span>
+              <strong>{gravity.label} {gravity.inDays === 0 ? 'hoje' : gravity.inDays === 1 ? 'amanhã' : `em ${gravity.inDays} dias`}.</strong>{' '}
+              Releia a orientação abaixo e combine com o oficial médico o protocolo de readaptação.
+            </span>
+          </p>
+        )}
+        {gravity && !gravitySoon && (
+          <p className="small muted">Próxima mudança de gravidade: {gravity.label}, no dia {gravity.day} da missão (em {gravity.inDays} dias).</p>
+        )}
         <p>{healthContext.text}</p>
         <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA — intolerância ortostática (abre outro site)</a>
       </section>

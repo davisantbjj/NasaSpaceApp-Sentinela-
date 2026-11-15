@@ -13,6 +13,9 @@ export type BodyRegion =
 
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
 
+// Origem de um valor (M10): digitado pela pessoa ou lido de um aparelho. O app não lê aparelhos.
+export type DataSource = 'manual' | 'wearable' | 'dosimeter';
+
 // Perfis de missão de referência (src/content/missions.ts, M8).
 export type MissionProfileId = 'station' | 'lunarFlyby' | 'mars';
 
@@ -57,6 +60,7 @@ export interface DailyValues {
   vision?: 0 | 1 | 2;
   symptoms?: string[]; // ids de sintomas definidos em rules.json
   medication?: MedicationDose[]; // doses previstas no dia
+  sources?: Partial<Record<IndicatorId, DataSource>>; // origem dos valores; ausente = digitado (M10)
 }
 
 export interface DailyRecord {
@@ -278,5 +282,6 @@ export interface Rules {
     };
     radiationTotal?: { sourceUrl: string }; // M6: soma das doses do dia, só contexto
     weeklyGoals?: { windowDays: number; targetDays: number; indicators: IndicatorId[]; demo: boolean }; // M9
+    readaptation?: { noticeDaysBefore: number }; // M11: quantos dias antes da mudança de gravidade destacar
   };
 }

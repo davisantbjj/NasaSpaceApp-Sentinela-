@@ -486,6 +486,9 @@
       "targetDays": 5,
       "indicators": ["sleepHours", "exerciseMinutes"],
       "demo": true
+    },
+    "readaptation": {
+      "noticeDaysBefore": 7
     }
   },
   "correlationPairs": [
