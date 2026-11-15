@@ -102,7 +102,7 @@ Detalhes que valem explicar:
 
 ### Sintomas
 
-Nove itens fixos, cada um com o nível que gera quando marcado. São escolhas de demonstração, não um protocolo de triagem.
+Onze itens fixos, cada um com o nível que gera quando marcado. São escolhas de demonstração, não um protocolo de triagem.
 
 | id | Nível |
 | --- | --- |
@@ -113,6 +113,8 @@ Nove itens fixos, cada um com o nível que gera quando marcado. São escolhas de
 | `backPain` | amarelo |
 | `congestion` | amarelo |
 | `skinRash` | amarelo |
+| `jointMusclePain` | amarelo |
+| `urinaryRetention` | amarelo |
 | `chestPain` | vermelho |
 | `shortBreath` | vermelho |
 
@@ -359,6 +361,7 @@ interface PacketPayload {
   crewRole: string;
   missionDay: number;
   environment: Environment;
+  mission?: { profile: MissionProfileId; day: number; durationDays: number; phaseLabelKey: string }; // perfil no dia do registro
   recordedAt: string;
   values: DailyValues;
   alerts: { id; indicator; level; whatChanged }[];

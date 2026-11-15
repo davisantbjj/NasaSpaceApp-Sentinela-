@@ -56,7 +56,7 @@
       "left": "Cover your RIGHT eye and look at the center dot with your left eye.",
       "right": "Cover your LEFT eye and look at the center dot with your right eye."
     },
-    "gridLabel": "Amsler grid, {{eye}}. Tap the affected areas.",
+    "gridLabel": "Amsler grid, {{eye}}. Use the arrow keys to move and Enter or Space to mark an affected area.",
     "cell": "Row {{row}}, column {{col}}",
     "marked_one": "{{count}} area marked.",
     "marked_other": "{{count}} areas marked.",

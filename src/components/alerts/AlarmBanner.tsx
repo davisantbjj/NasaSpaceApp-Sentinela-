@@ -6,7 +6,7 @@ import { LevelIcon } from './LevelBadge';
 
 const BASE_TITLE = typeof document !== 'undefined' ? document.title : 'Sentinela';
 
-// Banner fixo dos alarmes: equivalente visual de todo som (cor, ícone e texto).
+// Banner dos alarmes: equivalente visual de todo som (cor, ícone e texto).
 // Nada pisca nem se move (WCAG 2.3.1). "Silenciar" para o som; o banner só sai com "Confirmar".
 export function AlarmBanner() {
   const { t } = useTranslation();
@@ -22,9 +22,12 @@ export function AlarmBanner() {
 
   if (alarms.length === 0) return null;
   const sounding = alarms.some((a) => a.level === 'red' && !a.silenced);
+  // Só o vermelho (Warning, ação imediata) fica preso no topo ao rolar. O amarelo (Caution)
+  // rola com a página, para não cobrir o formulário de quem está fazendo o check-in.
+  const hasRed = alarms.some((a) => a.level === 'red');
 
   return (
-    <section className="alarm-stack" aria-label={t('alarm.region')}>
+    <section className="alarm-stack" data-sticky={hasRed} aria-label={t('alarm.region')}>
       {alarms.map((alarm) => (
         <div key={alarm.id} className="alarm-banner" data-level={alarm.level} role={alarm.level === 'red' ? 'alert' : 'status'}>
           <span className="level-color alarm-icon" data-level={alarm.level}><LevelIcon level={alarm.level} /></span>

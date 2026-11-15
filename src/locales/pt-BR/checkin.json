@@ -56,7 +56,7 @@
       "left": "Cubra o olho DIREITO e olhe o ponto central com o esquerdo.",
       "right": "Cubra o olho ESQUERDO e olhe o ponto central com o direito."
     },
-    "gridLabel": "Grade de Amsler, {{eye}}. Toque nas áreas alteradas.",
+    "gridLabel": "Grade de Amsler, {{eye}}. Use as setas para andar e Enter ou Espaço para marcar uma área alterada.",
     "cell": "Linha {{row}}, coluna {{col}}",
     "marked_one": "{{count}} área marcada.",
     "marked_other": "{{count}} áreas marcadas.",

@@ -11,7 +11,7 @@ import { SourcePicker } from '../components/checkin/SourcePicker';
 import { fieldError, NumberStep, parseNumber, type NumberField } from '../components/checkin/NumberStep';
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
-import { displayText, sleepQualityText, sourceLabel } from '../content/format';
+import { displayText, exerciseSummary, sleepQualityText, sourceLabel } from '../content/format';
 import { indicatorContent, sleepQualityOptions } from '../content/indicators';
 import { translateText } from '../content/localize';
 import i18n from '../i18n';
@@ -26,15 +26,6 @@ import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 const SCALE_IDS = ['mood', 'stress', 'workload'] as const;
 type ScaleId = (typeof SCALE_IDS)[number];
 const isScale = (id: IndicatorId): id is ScaleId => (SCALE_IDS as readonly IndicatorId[]).includes(id);
-
-// Revisão do exercício: tipo da sessão e minutos em cada aparelho.
-function exerciseSummary(session: ExerciseSession): string {
-  const type = i18n.t(`checkin:exerciseSession.${session.type}`);
-  const uses = (session.apparatus ?? []).map(
-    (use) => `${i18n.t(`checkin:conditioning.apparatus.${use.apparatus}`)} ${use.minutes} min`,
-  );
-  return uses.length ? `${type}: ${uses.join(', ')}` : type;
-}
 
 // Rascunho do formulário: números como texto (aceita vírgula), escalas e sintomas já prontos.
 interface Draft {

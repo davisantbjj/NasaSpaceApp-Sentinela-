@@ -18,7 +18,7 @@ O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12
 | Pacote para o solo e resumo do comandante | Conteúdo selado para cada destinatário | Metadados de fila ficam abertos; o protótipo simula os destinatários no mesmo navegador. |
 | Registro de acesso, pedidos de exclusão e preferências | Sem cifra | Também precisam de uma política de proteção e retenção para uso real. |
 | Arquivo JSON exportado | Legível e sem cifra fora do banco | O PIN não protege o arquivo baixado. O usuário precisa cuidar das cópias. |
-| Perfil de missão e substituição manual do ambiente (M8) | Preferências compartilhadas em `settings`, sem cifra | Qualquer perfil de bordo pode alterar pela interface atual; a definição de permissões continua com Davi. Não integram a cópia individual. |
+| Perfil de missão e substituição manual do ambiente (M8) | Preferências compartilhadas em `settings`, sem cifra | Só o comandante e o oficial médico alteram (interface e store). O pacote do solo leva o perfil e a fase do dia do registro, que não são dados de saúde. Não integram a cópia individual. |
 | Estimativa óssea e soma/percentual de radiação (M5–M6/N2) | Calculados em tela, sem nova tabela | Não são novas medições. O JSON contém doses diárias, início da missão e dose anterior informada no cadastro, mas não exporta essas contas nem um histórico real das fases. |
 
 ## Reação, origem e cálculos novos

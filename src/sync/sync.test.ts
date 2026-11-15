@@ -114,6 +114,18 @@ describe('pacotes para a Terra', () => {
     expect(payload.notes.map((n) => n.note)).toEqual(['Repetir amanhã']);
   });
 
+  it('leva o perfil da missão, o dia de N e a fase quando há perfil', () => {
+    const r = record('2026-11-13', true);
+    const payload = buildPacketPayload(member, r, [], [], 'transit', 'lunarFlyby');
+    expect(payload.mission).toEqual({
+      profile: 'lunarFlyby',
+      day: r.missionDay,
+      durationDays: 10,
+      phaseLabelKey: 'common:missionProfiles.lunarFlyby.phases.transit',
+    });
+    expect(buildPacketPayload(member, r, [], [], 'station').mission).toBeUndefined();
+  });
+
   it('a fila manda o vermelho primeiro e depois o mais antigo', () => {
     const packets = [
       { id: 'a', priority: 'normal' as const, createdAt: '2026-11-13T08:00:00' },

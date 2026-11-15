@@ -59,3 +59,7 @@ O [roteiro da demonstração](docs/roteiro-demonstracao.md) e a [base de conteú
 | [docs/diagramas/](docs/diagramas/) | Visão geral, fluxo do check-in, dados, níveis e navegação |
 | [docs/pesquisa/](docs/pesquisa/) | Pesquisa e proposta que deram origem ao projeto |
 | [docs/pesquisa/riscos-nasa-links-completo.md](docs/pesquisa/riscos-nasa-links-completo.md) | Riscos de saúde da NASA, com as páginas e os links de dentro delas |
+
+## Licença
+
+[MIT](LICENSE), Equipe CosmoTI. Os dados da demonstração são fictícios; os textos e links da NASA citados seguem as condições de uso da própria NASA.

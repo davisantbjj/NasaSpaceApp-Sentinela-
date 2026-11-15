@@ -11,7 +11,7 @@ import { resetDemo, seedIfEmpty } from '../data/seed';
 import { loadSettings, saveSettings } from '../data/settingsRepo';
 import { MISSION_PROFILES, missionStartOf, phaseOnDay } from '../content/missions';
 import { currentReview } from '../lib/reviews';
-import { canViewCrew, canViewCrewStatus, crewStatus, isOwnData, visibleRecords, visibleReviews } from '../lib/access';
+import { canEditMission, canViewCrew, canViewCrewStatus, crewStatus, isOwnData, visibleRecords, visibleReviews } from '../lib/access';
 import { missionDay, todayISO } from '../lib/dates';
 import { worstLevel } from '../lib/levels';
 import { computeBaselines } from '../rules/baseline';
@@ -131,6 +131,10 @@ export const useAppStore = create<AppState>((set, get) => {
     return session;
   }
 
+  function requireMissionEditor(): void {
+    if (!canEditMission(requireSession())) throw new Error('Só o comandante e o oficial médico alteram os dados da missão.');
+  }
+
   // Cada entrada e cada bloqueio abrem uma "época" nova. Uma carga que começou numa época
   // e termina em outra é descartada: assim dados de uma sessão nunca caem na tela de outra.
   let epoch = 0;
@@ -198,7 +202,8 @@ export const useAppStore = create<AppState>((set, get) => {
     const member = get().crew.find((c) => c.id === crewId);
     if (!member) return;
     try {
-      await composeForDay(member, date, get().settings.environment, get().settings.cabinCo2Mmhg);
+      const { environment, cabinCo2Mmhg, missionProfile } = get().settings;
+      await composeForDay(member, date, environment, cabinCo2Mmhg, missionProfile);
     } catch (error) {
       console.error('Sentinela: não foi possível montar o pacote para a Terra', error);
       set({ sync: { ...get().sync, lastError: 'Não foi possível montar o pacote para a Terra deste registro.' } });
@@ -299,6 +304,7 @@ export const useAppStore = create<AppState>((set, get) => {
     },
 
     setEnvironment: async (environment) => {
+      requireMissionEditor();
       // Com perfil de missão, trocar à mão vale até alguém voltar ao ambiente da fase.
       const manual = !!get().settings.missionProfile;
       const settings = await updateSettings({ environment, environmentManual: manual });
@@ -307,6 +313,7 @@ export const useAppStore = create<AppState>((set, get) => {
     },
 
     setCabinCo2Mmhg: async (value) => {
+      requireMissionEditor();
       const settings = await updateSettings({ cabinCo2Mmhg: value });
       set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment, get().crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });
     },
@@ -331,6 +338,7 @@ export const useAppStore = create<AppState>((set, get) => {
     },
 
     setMissionProfile: async (missionProfile) => {
+      requireMissionEditor();
       const environment = missionProfile ? phaseEnvironment(missionProfile, get().crew) : get().settings.environment;
       const settings = await updateSettings({ missionProfile, environment, environmentManual: false });
       set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment, get().crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });

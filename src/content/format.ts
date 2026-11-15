@@ -1,5 +1,5 @@
 import { formatNumber } from '../lib/series';
-import type { DailyValues, IndicatorId } from '../types';
+import type { DailyValues, ExerciseSession, IndicatorId } from '../types';
 import i18n from '../i18n';
 import { indicatorContent, sleepQualityOptions, sourceContent } from './indicators';
 
@@ -77,6 +77,15 @@ export function displayValue(
 }
 
 // "qualidade: boa" quando a qualidade do sono foi informada (N14).
+// Exercício (N16): tipo da sessão e minutos em cada aparelho, para a revisão e a Visão do solo.
+export function exerciseSummary(session: ExerciseSession): string {
+  const type = i18n.t(`checkin:exerciseSession.${session.type}`);
+  const uses = (session.apparatus ?? []).map(
+    (use) => `${i18n.t(`checkin:conditioning.apparatus.${use.apparatus}`)} ${use.minutes} min`,
+  );
+  return uses.length ? `${type}: ${uses.join(', ')}` : type;
+}
+
 export function sleepQualityText(values: DailyValues): string | undefined {
   const quality = values.sleepQuality;
   if (quality === undefined) return undefined;

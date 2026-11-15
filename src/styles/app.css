@@ -472,7 +472,8 @@ details summary { cursor: pointer; min-height: 40px; display: flex; align-items:
 }
 
 /* Alarmes: banner fixo abaixo da barra, sem animação (WCAG 2.3.1). Cor, ícone e texto juntos. */
-.alarm-stack { position: sticky; top: calc(var(--navbar-h, 64px) + 8px); z-index: 9; display: grid; gap: 8px; margin-bottom: 20px; }
+.alarm-stack { display: grid; gap: 8px; margin-bottom: 20px; }
+.alarm-stack[data-sticky='true'] { position: sticky; top: calc(var(--navbar-h, 64px) + 8px); z-index: 9; }
 .alarm-banner {
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px;
   border-radius: var(--radius-md); background: var(--surface-2);

@@ -50,6 +50,12 @@ export function isOnBoard(session: Session): boolean {
   return session.role !== 'groundSurgeon';
 }
 
+// Perfil, fase, ambiente e CO2 da cabine valem para a tripulação inteira: só o comandante
+// e o oficial médico mudam. Os outros veem os valores, sem editar.
+export function canEditMission(session: Session | null | undefined): boolean {
+  return session?.role === 'commander' || session?.role === 'medicalOfficer';
+}
+
 export function isOwnData(session: Session, crewId: string): boolean {
   return session.crewId === crewId;
 }

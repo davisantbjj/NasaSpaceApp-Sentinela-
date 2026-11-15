@@ -89,7 +89,7 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 
 ### N7. Dois sintomas novos
 
-- [ ] **N7.** Acrescentar `jointMusclePain` (dor muscular ou nas articulações) e `urinaryRetention` (dificuldade para urinar), os dois amarelos.
+- [x] **N7.** Acrescentar `jointMusclePain` (dor muscular ou nas articulações) e `urinaryRetention` (dificuldade para urinar), os dois amarelos.
   - **Por quê:** os dois constam da lista de condições em voo da NASA e faltam na nossa.
   - **Arquivos:** `src/rules/rules.json`, traduções dos dois idiomas.
   - **Aceite:** o teste que compara as chaves dos dois idiomas continua passando.
@@ -184,7 +184,7 @@ Mexem em como se mede, não só no que se guarda. Precisam de decisão da equipe
 
 ### N20. Caution e Warning na tradução
 
-- [ ] **N20.** Na versão em inglês, amarelo vira Caution e vermelho vira Warning.
+- [x] **N20.** Na versão em inglês, amarelo vira Caution e vermelho vira Warning.
   - **Por quê:** é o padrão da NASA: Warning pede ação imediata, Caution pede atenção sem ação imediata, Advisory é informativo ([NASA](https://ntrs.nasa.gov/api/citations/20240003565/downloads/CLD%20HSI%20Workshop%20Alerts.pdf)).
   - **Não usar** Emergency, reservado a fogo, perda de pressão e atmosfera tóxica.
   - Vale junto com a tarefa de alarmes da Talita: tripulantes da estação pediram voz e luz junto do tom, porque os tons são difíceis de distinguir nos primeiros segundos.
@@ -218,6 +218,8 @@ Falar assim na apresentação, em vez de dar um número:
 | Bio-Monitor | usado em pesquisa; rotina clínica não confirmada |
 
 ## Perguntas para a equipe
+
+Respondidas em 15/11 (detalhes nas decisões D5 a D8 do `TASKS.md`): 1. aprovados; 2. tudo diário na demonstração, N18 depois da entrega; 3. entraram como protótipos (D7); 4. a Larissa faz a revisão documental.
 
 1. Aprovam os quatro dados novos da fase 2 (massa, alimentação, CO2, qualidade do sono)?
 2. A cadência proposta em N18 serve, ou mantemos tudo diário na demonstração?

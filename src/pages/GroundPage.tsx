@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
-import { displayValue } from '../content/format';
+import { displayValue, exerciseSummary, sleepQualityText, sourceLabel } from '../content/format';
 import { CHECKIN_ORDER, environmentContent, indicatorContent } from '../content/indicators';
 import { translateText } from '../content/localize';
+import { MISSION_PROFILES } from '../content/missions';
 import { useNow } from '../hooks/useNow';
 import { formatDate, formatDateTime, formatDuration } from '../lib/dates';
 import { worstLevel } from '../lib/levels';
@@ -125,6 +126,16 @@ function GroundPacketDetail({ packet, history }: { packet: GroundPacket; history
           <div>
             <span className="eyebrow">{i18n.t('ground.packetTitle', { date: formatDate(packet.date), day: payload.missionDay })}</span>
             <h2>{i18n.t('ground.recordedAt', { date: formatDateTime(payload.recordedAt) })}</h2>
+            {payload.mission && (
+              <p className="small">
+                {i18n.t('ground.mission', {
+                  profile: i18n.t(MISSION_PROFILES[payload.mission.profile].labelKey),
+                  day: payload.mission.day,
+                  total: payload.mission.durationDays,
+                  phase: i18n.t(payload.mission.phaseLabelKey),
+                })}
+              </p>
+            )}
             <p className="small muted num">{i18n.t('ground.sent', { sent: formatDateTime(packet.sentAt!), arrived: formatDateTime(packet.deliverAt!), environment: environmentContent(payload.environment).label })}</p>
           </div>
           <LevelBadge level={packetLevel(packet)} />
@@ -133,7 +144,12 @@ function GroundPacketDetail({ packet, history }: { packet: GroundPacket; history
           {measured.map(({ id, value }) => (
             <li key={id}>
               <span>{indicatorContent(id).label}</span>
-              <span className="num">{value!.text}{value!.unit && <span className="muted"> {value!.unit}</span>}</span>
+              <span className="num">
+                {value!.text}{value!.unit && <span className="muted"> {value!.unit}</span>}
+                {id === 'sleepHours' && sleepQualityText(payload.values) && ` · ${sleepQualityText(payload.values)}`}
+                {id === 'exerciseMinutes' && payload.values.exerciseSession && ` · ${exerciseSummary(payload.values.exerciseSession)}`}
+                {sourceLabel(payload.values, id) && <span className="muted"> · {sourceLabel(payload.values, id)}</span>}
+              </span>
             </li>
           ))}
         </ul>

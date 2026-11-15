@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { buildCrewStatusSummary, crewStatus, hasCommanderRed, isCommanderAlert } from './access';
+import { buildCrewStatusSummary, canEditMission, crewStatus, hasCommanderRed, isCommanderAlert } from './access';
 import { addDays, diffDays, formatDate, formatDateTime, formatDuration, lastDays, missionDay } from './dates';
 import { formatNumber } from './format';
 import { worstLevel } from './levels';
@@ -114,5 +114,17 @@ describe('access: resumo do comandante (N9)', () => {
       checkinToday: true,
       hasRed: true,
     });
+  });
+});
+
+describe('quem altera os dados da missão', () => {
+  const as = (role: 'crew' | 'commander' | 'medicalOfficer' | 'groundSurgeon') => ({ profileId: role, name: role, role });
+
+  it('só o comandante e o oficial médico', () => {
+    expect(canEditMission(as('commander'))).toBe(true);
+    expect(canEditMission(as('medicalOfficer'))).toBe(true);
+    expect(canEditMission(as('crew'))).toBe(false);
+    expect(canEditMission(as('groundSurgeon'))).toBe(false);
+    expect(canEditMission(null)).toBe(false);
   });
 });

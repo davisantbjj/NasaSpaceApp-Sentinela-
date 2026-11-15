@@ -11,11 +11,11 @@ A divisão é uma sugestão: troquem entre vocês se preferirem, só atualizem o
 | Fase | Assunto | Estado |
 | --- | --- | --- |
 | 0 a 7 | Pesquisa, estrutura, motor de regras, dados, check-in, painel, alertas, tendências | Feito |
-| 8 | PWA e publicação | Começado |
+| 8 | PWA e publicação | Falta só publicar (build sem rede testado em 15/11) |
 | 9 | Entrega do hackathon | A fazer |
 | 10 | Pontos da reunião da equipe (14/11) | Em andamento |
 | 11 | Melhorias alinhadas ao desafio oficial (M1 a M11) | Feito |
-| 12 | Revisão com as fontes da NASA (N0 a N21) | A fazer |
+| 12 | Revisão com as fontes da NASA (N0 a N21) | Quase feito: faltam N10 (fechamento), N18 e N19 |
 
 ## Regras que valem para tudo
 
@@ -28,12 +28,12 @@ A divisão é uma sugestão: troquem entre vocês se preferirem, só atualizem o
 
 Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
-- [ ] **D3. Regiões do corpo:** passar de 7 para 5 (mente e sono; olhos e visão; coração e circulação; ossos e músculos; corpo inteiro)? Chegou a ser feito e foi desfeito: a equipe quer o painel como era.
-- [ ] **D4. Predição:** projeção linear simples na tela de tendências, com o rótulo "projeção, não previsão", ou o app só mede e compara? Recomendação (14/11): só medir e comparar, como já diz `docs/apresentacao.md`.
-- [ ] **D5. Dados novos da fase 12:** aprovar massa corporal, alimentação e água, CO2 da cabine e qualidade do sono (N11 a N14)?
-- [ ] **D6. Cadência:** a frequência por indicador proposta em N18 serve, ou mantemos tudo diário na demonstração?
+- [x] **D3. Regiões do corpo:** decidido em 15/11: **ficam as 7 regiões**. A troca para 5 chegou a ser feita e foi desfeita porque a equipe quer o painel como era.
+- [x] **D4. Predição:** decidido em 15/11: **o app só mede e compara**, sem projeção, como já dizem `docs/apresentacao.md` e "O que decidimos não mudar" em `docs/tarefas-nasa-2026-11-15.md`.
+- [x] **D5. Dados novos da fase 12:** decidido em 15/11: **aprovados** massa corporal, alimentação e água, CO2 da cabine e qualidade do sono (N11 a N14). Já estão implementados, com especificação e privacidade v7 revisadas pela Larissa.
+- [x] **D6. Cadência:** decidido em 15/11: **tudo continua diário na demonstração**. A cadência da N18 é proposta para depois do hackathon e entra na apresentação como próximo passo; mudar o fluxo do check-in no dia da entrega quebraria o roteiro. N18 e N19 viram trabalho futuro.
 - [x] **D7. Mudança de método:** grade de Amsler (N15) e exercício por sessão (N16) entram no hackathon como protótipos demonstrativos; a cadência detalhada segue N18.
-- [ ] **D8. Revisão das propostas:** quem revisa os limites marcados como proposta (massa corporal, cadência semanal e perguntas do bloco mensal)?
+- [x] **D8. Revisão das propostas:** decidido em 15/11: a **Larissa** faz a revisão documental (massa corporal, cadência e perguntas do bloco mensal), como já faz com as faixas. A revisão clínica continua pendente e fora do alcance da equipe.
 - [ ] **Revisão das faixas** (vem da fase 2): as faixas verdes de pressão, frequência, glicemia, temperatura e sono vêm de `docs/pesquisa/`. Estas foram escolhidas para a demonstração e precisam de confirmação:
   - todas as faixas amarelas;
   - a faixa verde de pressão por número (sistólica de 100 a 130 e diastólica de 60 a 85; a pesquisa só diz "perto de 120/80");
@@ -67,12 +67,11 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
 **Fase 10 e 11**
 
-- [ ] Decidir quem pode mudar o **perfil e a fase da missão** (hoje qualquer tripulante muda o ambiente para todos). Sugestão: só o comandante e o oficial médico
-- [ ] Levar o perfil de missão (M8) para o pacote do solo e para a "Visão do solo": nave, dia da missão de N e fase. O atraso mostrado passa a vir da fase
-- [ ] Conferir se os valores novos (medicação, estresse, carga, treino resistido, teste de reação, origem do dado) chegam legíveis na "Visão do solo" e se o resumo do comandante continua sem nenhum dado clínico
+- [x] Quem muda o **perfil, a fase, o ambiente e o CO2 da missão**: só o comandante e o oficial médico (`canEditMission` em `src/lib/access.ts`, conferido no store e na tela). Os outros veem os campos travados, com aviso
+- [x] Perfil de missão (M8) no pacote do solo (`payload.mission`) e na "Visão do solo": "Missão: … · dia 60 de 180 · fase: …". O atraso já vem do ambiente, que segue a fase quando há perfil
+- [x] Valores novos legíveis na "Visão do solo", conferido no navegador em 15/11. Acrescentados a qualidade do sono, o tipo e os aparelhos do exercício e a origem do dado ("sensor vestível", "dosímetro pessoal"). O resumo do comandante continua sem dado clínico (teste da N9)
 - [ ] Entregar as mensagens ao oficial médico pela central de bordo (hoje ficam só no aparelho do tripulante, cifradas). Fazer junto com a Larissa
-- [ ] 🔒 D3. Passar o mapa do corpo para 5 regiões: `REGIONS` e `rules.json`, e refazer as formas das figuras masculina **e** feminina em `bodyRegions.ts`
-- [ ] 🔒 D3. Na figura: marcador só nas regiões amarelas e vermelhas, selo de "corpo inteiro" ao lado da figura em vez do contorno, área de toque maior na cabeça
+- [x] ~~D3. Mapa do corpo com 5 regiões e mudanças na figura~~: não fazer (D3 decidida: ficam as 7 regiões)
 - [ ] ❄️ Publicar o backend no Railway com volume em `/data` (passo a passo em `server/README.md`) e configurar `VITE_EARTH_API_URL` e `VITE_EARTH_MISSION_TOKEN` no deploy do app
 - [ ] ❄️ Testes do store e da central com `fake-indexeddb` (bloqueio no meio do ciclo, fila, pacote já enviado). Hoje só as funções puras têm teste
 - [ ] ❄️ O perfil do médico do solo roda o ciclo de bordo, porque tudo está num navegador só. Num produto real o solo não teria a chave de bordo
@@ -80,10 +79,10 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
 **Publicação (fase 8)**
 
-- [ ] Testar o uso sem rede no build de produção (`npm run build` e `npm run preview`)
+- [x] Uso sem rede no build de produção, conferido em 15/11: com o service worker ativo e a rede cortada, o app abre, a Lia entra, faz e salva o check-in, sem erro no console
 - [ ] Escolher Vercel ou GitHub Pages e publicar (no GitHub Pages é preciso ajustar `base` em `vite.config.ts`)
-- [ ] Rever os avisos do `npm audit` (baixos e moderados, em dependências do build do PWA e no `react-router` 6)
-- [ ] Escolher a licença do repositório
+- [x] `npm audit` revisto em 15/11: 8 avisos (2 baixos, 6 moderados). Seis são do build do PWA (`workbox-build`, `glob`, `minimatch`), que não vai para o app publicado. Os 2 do `react-router` 6 não se aplicam: todo destino de `Link`/`navigate` é fixo no código e o app não usa SSR. A correção exige versão maior (`react-router-dom` 7, `vite-plugin-pwa` 1.1); fica para depois da entrega
+- [x] Licença: MIT, em nome da Equipe CosmoTI (`LICENSE`, `package.json` e `README.md`)
 
 ## Lorena: idiomas, textos, horários e escalonamento
 
@@ -94,10 +93,10 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] **N4.** Evidência da pressão em voo no `rangeEvidence` e no `whyItMatters` (Norsk et al., 2015), sem mudar a faixa. Prioridade alta
 - [x] **N5.** Evidência do corte de 6 horas de sono no `rangeEvidence` (Jones et al., 2022). Prioridade alta
 - [x] **N6.** Evidência dos sintomas com percentuais no `rangeEvidence` (OCHMO)
-- [ ] **N7.** Dois sintomas novos, amarelos: `jointMusclePain` e `urinaryRetention`, nos dois idiomas. Esforço pequeno
+- [x] **N7.** Dois sintomas novos, amarelos: `jointMusclePain` e `urinaryRetention`, nos dois idiomas. Feito em 15/11; a Larissa pode fechar a N10
 - [ ] **N10.** Registrar em `docs/pesquisa/revisao-faixas.md` tudo que mudou em N1 a N8, com as fontes novas. Revisão documental com a Larissa
-- [ ] **N20.** Na versão em inglês, amarelo vira Caution e vermelho vira Warning (nunca Emergency). Combinar com os alarmes da Talita
-- [ ] **N18.** Cadência por indicador (diário, semanal, mensal ou por dia de missão); o check-in diário pergunta só o que é diário e cabe em 2 a 3 minutos. Depende de D6. Esforço grande
+- [x] **N20.** Na versão em inglês, amarelo é Caution e vermelho é Warning (nunca Emergency) no banner, nos selos, nas contagens e no resumo das regiões. Feito em 15/11. O banner amarelo rola com a página e só o vermelho fica preso no topo
+- [ ] ❄️ **N18.** Cadência por indicador (diário, semanal, mensal ou por dia de missão); o check-in diário pergunta só o que é diário e cabe em 2 a 3 minutos. D6 decidiu manter tudo diário na demonstração: fica para depois da entrega. Esforço grande
 
 **Horários e lembretes.** O banner e o som são os mesmos dos alarmes da Talita.
 
@@ -110,7 +109,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
 - [ ] Escalonamento por nível: amarelo entra no resumo do oficial médico; amarelo por 3 dias vira pendência dele (vale também para **estresse e carga de trabalho**, da M2); **dose não tomada** (M1) entra no resumo do oficial médico no mesmo dia, sem esperar 3 dias; **reação mais lenta mantida por 3 dias** (M4) vira pendência dele, e sono curto junto com reação lenta (M7) entra no resumo; vermelho e sintoma vermelho avisam na hora e mostram "Chame o oficial médico agora". Com a N12, dois dias seguidos sem refeição completa também entram no resumo
 - [ ] Texto do vermelho por ambiente, usando o `signalDelayLabel` de `ENVIRONMENTS` (`src/content/indicators.ts`) em vez de escrever o atraso à mão. O ambiente vem da **fase da missão** (M8). Na estação: "o solo será avisado no próximo contato". Em Marte, por exemplo: "a decisão é de bordo; o alerta leva de 3 a 22 minutos para chegar à Terra (só a ida)". O atraso é por sentido, não é tempo de resposta do médico (`docs/apresentacao.md`). O texto muda, o nível não
-- [ ] 🔒 D4. Projeção linear na tela de tendências ("se continuar no ritmo dos últimos 7 dias, sai da faixa em cerca de N dias"), com confiança baixa e rótulo "projeção, não previsão". **Recomendação: decidir que não.** A perda óssea estimada (M5) não é projeção: é a média publicada pela NASA multiplicada pelo tempo de missão, mostrada como contexto
+- [x] ~~D4. Projeção linear na tela de tendências~~ (D4 decidida: não fazer) ("se continuar no ritmo dos últimos 7 dias, sai da faixa em cerca de N dias"), com confiança baixa e rótulo "projeção, não previsão". **Recomendação: decidir que não.** A perda óssea estimada (M5) não é projeção: é a média publicada pela NASA multiplicada pelo tempo de missão, mostrada como contexto
 
 ## Talita: interface, acessibilidade e alarmes
 
@@ -120,7 +119,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico: noites com remédio para dormir marcadas em Tendências → Sono. Remédio "só quando necessário" (`asNeeded`) não gera dose não tomada; a Ana tem um remédio para dormir fictício
 - [x] **N21.** Atualizar "Como a NASA mede" em `docs/apresentacao.md` com o que a pesquisa de 15/11 trouxe e com o que a NASA não faz. Feito na seção "O que a pesquisa de 15/11 acrescentou". Falta a Larissa revisar e confirmar a frequência da conferência psicológica ("a cada duas semanas" está sem fonte primária)
 - [x] **N16.** Exercício por sessão: tipo, aparelhos usados e minutos em cada um (a duração é a soma), frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
-- [ ] **N19.** Bloco mensal de sono e equipe, visível só para o próprio tripulante e para o oficial médico, com perguntas próprias marcadas como demonstração. Depende de D6. Esforço médio
+- [ ] ❄️ **N19.** Bloco mensal de sono e equipe, visível só para o próprio tripulante e para o oficial médico, com perguntas próprias marcadas como demonstração. D6 decidiu manter tudo diário na demonstração: fica para depois da entrega. Esforço médio
 - [x] **N15.** Visão com grade de Amsler tocável (marca as áreas alteradas), um olho de cada vez, três perguntas, com opção de pular e aviso de que não diagnostica SANS. A cadência específica dos dias de missão fica em N18. Depende de D7. Esforço grande
 
 **Alarmes.** Usar a mesma função dos lembretes da Lorena.
@@ -134,6 +133,7 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [x] Teste de reação acessível: responder com toque, clique **ou** tecla (espaço); o passo pode ser pulado por quem não pode fazer um teste visual; o sinal aparece uma vez por tentativa, sem piscar mais de 3 vezes por segundo (WCAG 2.3.1). Espaço e Enter funcionam mesmo com o foco fora da área de resposta
 - [x] Botão "Texto maior", que aumenta a escala base da fonte. No menu do usuário e no aviso inicial; 125%, guardado como preferência do aparelho (`src/lib/textSize.ts`)
 - [x] Testar com zoom de 200%, largura de 320 px e espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12), incluindo os passos novos do check-in, o teste de reação, o perfil de missão e as metas semanais. Feito com Edge automatizado em todas as telas e perfis; corrigidos: tela de Missão mais larga que a tela, selos e cartões cortados em 320 px, horários do solo, abas da barra escondidas entre 721 e 1300 px. Fica de propósito: a faixa de abas de Tendências rola na horizontal no desktop
+- [x] Check-in conferido preenchendo os 16 passos no navegador (15/11): exercício com tipo, aparelhos e minutos; grade de Amsler tocável por olho, com setas, Home e End (o Tab para uma vez só na grade); listas de opção no tamanho normal; rótulo que repetia o título escondido; "De onde veio o valor?" sem espremer; "Pular" na visão não grava mais "sem alteração"
 - [ ] Passada com leitor de tela e só teclado em todas as telas (fase 9). **Teclado: feito** (Tab em todas as telas, foco sempre visível e sem ficar sob a barra ou o alarme). Árvore de acessibilidade conferida (nenhum controle sem nome, sem id repetido, um h1 por tela; o check-in ganhou h1). **Falta a passada manual com NVDA** no Windows ou VoiceOver no celular
 - [x] Layout no desktop: lista de regiões alinhada ao topo; chip "Estação" vira "Ambiente: Estação" (na barra até 1100 px o "Ambiente:" fica só para leitor de tela, para as abas caberem)
 - [x] Layout no celular: figura menor ou resumo antes dela ("1 região para acompanhar"); nome do tripulante sem corte (cargo na segunda linha); cabeçalho com fundo opaco. Escolhido o resumo antes da figura, sem mudar a figura

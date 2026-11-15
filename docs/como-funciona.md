@@ -166,7 +166,7 @@ Quando o registro mais recente da própria pessoa tem alerta, o app levanta um *
 
 - **Amarelo:** dois bipes curtos, uma vez só.
 - **Vermelho:** três bipes repetidos a cada 2,5 s até alguém silenciar ou confirmar.
-- **Banner fixo** no alto da tela, abaixo da barra, com a cor, o ícone, o título do nível ("Acompanhar" ou "Atenção imediata"; em inglês, Caution ou Warning) e o que mudou. O título da aba ganha um contador, como "(1) Sentinela". Nada pisca nem se move (WCAG 2.3.1).
+- **Banner** no alto da tela, abaixo da barra, com a cor, o ícone, o título do nível ("Acompanhar" ou "Atenção imediata"; em inglês, Caution ou Warning, o padrão da NASA) e o que mudou. O vermelho fica preso no topo ao rolar a página até alguém confirmar; o amarelo rola com a página, para não cobrir o formulário do check-in. O título da aba ganha um contador, como "(1) Sentinela". Nada pisca nem se move (WCAG 2.3.1).
 - **Vibração** no celular, quando o aparelho permite. O iPhone não permite.
 - **Voz curta**, só com o nível ("Alerta vermelho no Sentinela"). Ela não diz o motivo, porque numa cabine compartilhada todos ouvem.
 - **Silenciar** para o som, mas o banner fica. O banner só sai com **Confirmar** (WCAG 1.4.2). O volume de cada nível se escolhe em **Missão → Volume dos alarmes**, com botão para testar o som.
@@ -185,7 +185,7 @@ Cada sintoma marcado tem um nível fixo, definido em `rules.json`. O alerta de s
 
 | Sintoma | Nível |
 | --- | --- |
-| Dor de cabeça, enjoo, tontura, cansaço fora do comum, dor nas costas, nariz entupido, irritação na pele | Amarelo |
+| Dor de cabeça, enjoo, tontura, cansaço fora do comum, dor nas costas, nariz entupido, irritação na pele, dor muscular ou nas articulações, dificuldade para urinar | Amarelo |
 | Dor no peito, falta de ar | Vermelho |
 
 ### Medicação
@@ -252,6 +252,8 @@ O resultado identifica modo curto/completo, conclusão, duração, respostas vá
 Nos passos de **sono**, **frequência cardíaca** e **radiação**, o check-in pergunta "De onde veio o valor?": digitado, sensor vestível (ex.: pulseira de actigrafia) ou dosímetro pessoal. O app **não lê aparelhos**: a pessoa informa onde leu o número. A origem aparece na revisão do check-in e no painel ("Origem: sensor vestível"), fica cifrada junto com os valores do dia e não muda nenhum nível. Na demonstração, o sono vem de um sensor vestível e a radiação do dosímetro. É o primeiro passo para, no futuro, receber os dados direto dos aparelhos.
 
 ### Readaptação à gravidade
+
+Só o **comandante** e o **oficial médico** mudam o perfil, a fase, o ambiente e o CO₂ da cabine, porque valem para a tripulação inteira. Os outros tripulantes veem os valores com os campos travados. O pacote do solo leva o perfil no dia do registro, e a Visão do solo mostra, por exemplo, "Missão: estação em órbita baixa · dia 60 de 180 · fase: estação".
 
 Com um perfil de missão, o cartão "Contexto de readaptação à gravidade", em Missão, mostra a próxima mudança de gravidade: pouso na Lua ou em Marte depois de uma fase sem gravidade, ou a volta à Terra no fim da missão. Faltando **7 dias ou menos** (`rules.json`, `context.readaptation`), a mudança aparece em destaque, com o pedido de reler a orientação e combinar o protocolo com o oficial médico. A orientação em si é a mesma de antes (tontura ao levantar, com fonte da NASA) e não muda nenhum nível.
 

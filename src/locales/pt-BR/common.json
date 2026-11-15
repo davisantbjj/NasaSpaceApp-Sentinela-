@@ -155,6 +155,7 @@
     "security": "Os valores dos check-ins ficam cifrados e abrem com o PIN; o cadastro e o plano de medicação ficam sem criptografia. A tela bloqueia sozinha depois de 5 minutos sem uso. Num produto real, a entrada seria a do sistema da agência."
   },
   "mission": {
+    "editorsOnly": "Só o comandante e o oficial médico alteram o perfil, a fase, o ambiente e o CO2 da missão.",
     "title": "Missão e rotina",
     "of": "Missão de {{name}}",
     "day": "Dia da missão",
@@ -326,6 +327,7 @@
     "arrivedAt": "✓ Chegou {{date}}"
   },
   "ground": {
+    "mission": "Missão: {{profile}} · dia {{day}} de {{total}} · fase: {{phase}}",
     "notice": "Os dados chegam em pacotes, quando há janela de comunicação, com atraso de ida de {{delay}} ({{environment}}). O que está aqui pode já ter mudado a bordo. A decisão imediata é sempre de bordo.",
     "allCrew": "← Toda a tripulação",
     "title": "Visão do solo",

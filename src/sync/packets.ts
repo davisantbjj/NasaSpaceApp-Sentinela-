@@ -1,5 +1,6 @@
 import { ENVIRONMENTS } from '../content/indicators';
-import type { Alert, AlertReview, CrewMember, DailyRecord, Environment, GroundPacket, PacketPayload } from '../types';
+import { MISSION_PROFILES, phaseOnDay } from '../content/missions';
+import type { Alert, AlertReview, CrewMember, DailyRecord, Environment, GroundPacket, MissionProfileId, PacketPayload } from '../types';
 
 // Pacotes para a Terra. Funções puras, testadas em sync.test.ts.
 
@@ -11,12 +12,24 @@ export function buildPacketPayload(
   alerts: Alert[],
   reviews: AlertReview[],
   environment: Environment,
+  missionProfile?: MissionProfileId,
 ): PacketPayload {
+  const profile = missionProfile ? MISSION_PROFILES[missionProfile] : undefined;
   return {
     crewName: member.name,
     crewRole: member.role,
     missionDay: record.missionDay,
     environment,
+    ...(profile && missionProfile
+      ? {
+          mission: {
+            profile: missionProfile,
+            day: record.missionDay,
+            durationDays: profile.durationDays,
+            phaseLabelKey: phaseOnDay(profile, record.missionDay).labelKey,
+          },
+        }
+      : {}),
     recordedAt: record.createdAt,
     values: record.values,
     alerts: alerts.map(({ id, indicator, level, whatChanged }) => ({ id, indicator, level, whatChanged })),

@@ -5,7 +5,7 @@ import { buildCrewStatusSummary } from '../lib/access';
 import { computeBaselines } from '../rules/baseline';
 import { evaluateRecord } from '../rules/engine';
 import { rules } from '../rules/rules';
-import type { CrewMember, Environment, GroundPacket } from '../types';
+import type { CrewMember, Environment, GroundPacket, MissionProfileId } from '../types';
 import { buildPacketPayload, packetPriority } from './packets';
 
 // Monta e sela, para um tripulante e um dia, o pacote da Terra e o resumo do comandante.
@@ -16,7 +16,13 @@ import { buildPacketPayload, packetPriority } from './packets';
 // move essas caixas, sem precisar de chave nenhuma, então um vermelho nunca espera alguém entrar.
 //
 // O pacote e o resumo só saem depois que o registro (e as anotações) chegam à central (`waitsFor`).
-export async function composeForDay(member: CrewMember, date: string, environment: Environment, cabinCo2Mmhg?: number): Promise<void> {
+export async function composeForDay(
+  member: CrewMember,
+  date: string,
+  environment: Environment,
+  cabinCo2Mmhg?: number,
+  missionProfile?: MissionProfileId,
+): Promise<void> {
   // `strict`: um registro ilegível faz falhar, em vez de mudar a linha de base em silêncio.
   const records = await listRecords(member.id, true);
   const index = records.findIndex((r) => r.date === date);
@@ -29,7 +35,7 @@ export async function composeForDay(member: CrewMember, date: string, environmen
     cabinCo2Mmhg,
   });
   const reviews = (await listReviews(member.id)).filter((r) => r.date === date && r.note.trim() !== '');
-  const payload = buildPacketPayload(member, record, alerts, reviews, environment);
+  const payload = buildPacketPayload(member, record, alerts, reviews, environment, missionProfile);
   const waitsFor = [record.id, ...reviews.map((r) => r.id)];
 
   // Só reaproveita pacote que nunca tentou sair. Depois da primeira tentativa o conteúdo fica

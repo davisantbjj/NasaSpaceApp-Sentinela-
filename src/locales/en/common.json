@@ -31,8 +31,8 @@
   },
   "level": {
     "green": "Within expected range",
-    "yellow": "Monitor",
-    "red": "Immediate attention"
+    "yellow": "Caution",
+    "red": "Warning"
   },
   "status": {
     "noData": "No data",
@@ -66,10 +66,10 @@
     "sourceNote": "Source: {{source}}",
     "summary": {
       "allGreen": "All regions as expected",
-      "red_one": "{{count}} region needs immediate attention",
-      "red_other": "{{count}} regions need immediate attention",
-      "yellow_one": "{{count}} region to monitor",
-      "yellow_other": "{{count}} regions to monitor"
+      "red_one": "{{count}} region with a warning",
+      "red_other": "{{count}} regions with a warning",
+      "yellow_one": "{{count}} region with a caution",
+      "yellow_other": "{{count}} regions with a caution"
     }
   },
   "regionPanel": {
@@ -155,6 +155,7 @@
     "security": "Check-in values are encrypted and open with the PIN; the profile and the medication plan are not encrypted. The screen locks by itself after 5 minutes without use. In a real product, sign-in would use the agency's system."
   },
   "mission": {
+    "editorsOnly": "Only the commander and the medical officer change the mission profile, phase, environment, and CO2.",
     "title": "Mission and routine",
     "of": "{{name}}'s mission",
     "day": "Mission day",
@@ -267,8 +268,8 @@
     "allExpected": "Everything is within the expected range",
     "checkinDone": "✓ Today's check-in complete",
     "checkinPending": "! Today's check-in pending",
-    "immediate_one": "▲ {{count}} immediate attention",
-    "immediate_other": "▲ {{count}} immediate attention",
+    "immediate_one": "▲ {{count}} warning",
+    "immediate_other": "▲ {{count}} warnings",
     "unseen_one": "{{count}} not reviewed",
     "unseen_other": "{{count}} not reviewed",
     "openDashboard": "Open dashboard",
@@ -326,6 +327,7 @@
     "arrivedAt": "✓ Arrived {{date}}"
   },
   "ground": {
+    "mission": "Mission: {{profile}} · day {{day}} of {{total}} · phase: {{phase}}",
     "notice": "Data arrives in packets when a communication window is available, with a one-way delay of {{delay}} ({{environment}}). Information here may have changed onboard. Immediate decisions are always made onboard.",
     "allCrew": "← All crew",
     "title": "Ground view",

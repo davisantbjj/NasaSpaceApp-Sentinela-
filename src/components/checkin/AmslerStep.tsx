@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState, type KeyboardEvent } from 'react';
 import type { AmslerEyeResult, AmslerVisionResult } from '../../types';
 import i18n from '../../i18n';
 import { eyeConcerns } from '../../lib/checkinSummary';
@@ -23,6 +23,25 @@ const cells = Array.from({ length: SIZE * SIZE }, (_, i) => i);
 // as áreas onde as linhas pareceram tortas ou sumiram; depois responde às três perguntas.
 export function AmslerStep({ value, onChange }: Props) {
   const [eye, setEye] = useState<Eye>('left');
+  // Teclado: a grade é uma parada só do Tab; as setas, Home e End andam entre as células.
+  const [focusCell, setFocusCell] = useState(44);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const moveFocus = (event: KeyboardEvent<HTMLButtonElement>, cell: number) => {
+    const row = Math.floor(cell / SIZE);
+    const col = cell % SIZE;
+    const target = {
+      ArrowUp: row > 0 ? cell - SIZE : cell,
+      ArrowDown: row < SIZE - 1 ? cell + SIZE : cell,
+      ArrowLeft: col > 0 ? cell - 1 : cell,
+      ArrowRight: col < SIZE - 1 ? cell + 1 : cell,
+      Home: row * SIZE,
+      End: row * SIZE + SIZE - 1,
+    }[event.key];
+    if (target === undefined) return;
+    event.preventDefault();
+    setFocusCell(target);
+    gridRef.current?.querySelectorAll<HTMLButtonElement>('button')[target]?.focus();
+  };
   const current = value?.[eye] ?? EMPTY;
   const areas = current.areas ?? [];
   const other: Eye = eye === 'left' ? 'right' : 'left';
@@ -65,7 +84,7 @@ export function AmslerStep({ value, onChange }: Props) {
         {i18n.t(`checkin:amsler.cover.${eye}`)}
       </p>
 
-      <div className="amsler-grid" role="group" aria-label={i18n.t('checkin:amsler.gridLabel', { eye: i18n.t(`checkin:amsler.${eye}`) })}>
+      <div ref={gridRef} className="amsler-grid" role="group" aria-label={i18n.t('checkin:amsler.gridLabel', { eye: i18n.t(`checkin:amsler.${eye}`) })}>
         {cells.map((cell) => {
           const marked = areas.includes(cell);
           return (
@@ -74,6 +93,9 @@ export function AmslerStep({ value, onChange }: Props) {
               type="button"
               className={`amsler-cell${marked ? ' is-marked' : ''}`}
               aria-pressed={marked}
+              tabIndex={cell === focusCell ? 0 : -1}
+              onKeyDown={(event) => moveFocus(event, cell)}
+              onFocus={() => setFocusCell(cell)}
               aria-label={i18n.t('checkin:amsler.cell', { row: Math.floor(cell / SIZE) + 1, col: (cell % SIZE) + 1 })}
               onClick={() => toggleCell(cell)}
             />

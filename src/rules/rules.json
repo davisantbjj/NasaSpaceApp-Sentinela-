@@ -556,7 +556,7 @@
           "https://www.nasa.gov/wp-content/uploads/2023/07/ochmo-tb-033-spaceflight-experience-medical-care-rev-c.pdf"
         ],
         "green": "Nenhum sintoma marcado: não é atestado de saúde.",
-        "yellow": "headache, nausea, dizziness, fatigue, backPain, congestion, skinRash: níveis fixos de demonstração, não validados pela página de riscos. OCHMO-TB-033 Rev C (2023), p. 4: adaptação espacial em 50–70%, congestão em mais de 50% e dor lombar de adaptação em 52%; p. 9: uso de auxiliares do sono em cerca de 71%. Frequências descritivas, não probabilidades individuais nem validação dos níveis.",
+        "yellow": "headache, nausea, dizziness, fatigue, backPain, congestion, skinRash, jointMusclePain, urinaryRetention: níveis fixos de demonstração, não validados pela página de riscos. OCHMO-TB-033 Rev C (2023), p. 4: adaptação espacial em 50–70%, congestão em mais de 50% e dor lombar de adaptação em 52%; p. 9: uso de auxiliares do sono em cerca de 71%. Frequências descritivas, não probabilidades individuais nem validação dos níveis.",
         "red": "chestPain e shortBreath: prioridade de demonstração. A página de riscos não valida este protocolo de triagem."
       },
       "demo": true
@@ -570,6 +570,8 @@
     { "id": "backPain", "labelKey": "alerts:symptoms.backPain", "level": "yellow" },
     { "id": "congestion", "labelKey": "alerts:symptoms.congestion", "level": "yellow" },
     { "id": "skinRash", "labelKey": "alerts:symptoms.skinRash", "level": "yellow" },
+    { "id": "jointMusclePain", "labelKey": "alerts:symptoms.jointMusclePain", "level": "yellow" },
+    { "id": "urinaryRetention", "labelKey": "alerts:symptoms.urinaryRetention", "level": "yellow" },
     { "id": "chestPain", "labelKey": "alerts:symptoms.chestPain", "level": "red" },
     { "id": "shortBreath", "labelKey": "alerts:symptoms.shortBreath", "level": "red" }
   ],

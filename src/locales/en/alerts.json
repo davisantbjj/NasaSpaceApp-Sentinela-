@@ -47,8 +47,8 @@
   },
   "level": {
     "green": "Within expected range",
-    "yellow": "Monitor",
-    "red": "Immediate attention"
+    "yellow": "Caution",
+    "red": "Warning"
   },
   "correlation": "{{first}} and {{second}} changed together over the last {{days}} days",
   "card": {
@@ -82,8 +82,8 @@
     "inLatest": "{{count}} alert in the latest record",
     "inLatest_other": "{{count}} alerts in the latest record",
     "record": "Record from {{date}}, mission day {{day}}.",
-    "redCount": "{{count}} immediate attention",
-    "yellowCount": "{{count}} to monitor",
+    "redCount": "Warning: {{count}}",
+    "yellowCount": "Caution: {{count}}",
     "contact": "Can't speak? Write a message to show the medical officer →",
     "allWithin": "All measured indicators are within the general range and personal pattern.",
     "noRecords": "No records to review. Complete a check-in to track your indicators.",
@@ -197,6 +197,8 @@
     "backPain": "Back pain",
     "congestion": "Nasal congestion",
     "skinRash": "Skin irritation",
+    "jointMusclePain": "Muscle or joint pain",
+    "urinaryRetention": "Difficulty urinating",
     "chestPain": "Chest pain",
     "shortBreath": "Shortness of breath"
   },

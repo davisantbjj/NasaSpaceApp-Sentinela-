@@ -10,6 +10,7 @@ import { exerciseVolumeSummary, weeklyGoals, type WeeklyGoal } from '../lib/week
 import { saveAlarmVolume } from '../data/alarmPrefsRepo';
 import { setAlarmVolume, testAlarmSound, useAlarmStore, type AlarmLevel } from '../lib/alarm';
 import { rules } from '../rules/rules';
+import { canEditMission } from '../lib/access';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { DailyRecord, IndicatorId, MissionProfileId } from '../types';
 import { trackedInOrder } from './helpers';
@@ -62,6 +63,7 @@ export function MissionPage() {
   const { crew, settings, records, session, setEnvironment, setMissionProfile, applyPhaseEnvironment, setReminder, resetDemo } = useAppStore();
   // Só o oficial médico recria a demonstração: recriar apaga também o registro de acesso de todos.
   const canReset = session?.role === 'medicalOfficer';
+  const canEdit = canEditMission(session);
   const [confirmReset, setConfirmReset] = useState(false);
 
   if (!member) return null;
@@ -170,6 +172,7 @@ export function MissionPage() {
           className="select"
           aria-label={i18n.t('mission.profile.title')}
           value={settings.missionProfile ?? ''}
+          disabled={!canEdit}
           onChange={(event) => void setMissionProfile((event.target.value || undefined) as MissionProfileId | undefined)}
         >
           <option value="">{i18n.t('mission.profile.none')}</option>
@@ -213,7 +216,7 @@ export function MissionPage() {
             <span className="notice-icon" aria-hidden="true">!</span>
             <span>
               {i18n.t('mission.profile.offPhase', { environment: environmentContent(phase!.environment).label })}{' '}
-              <button type="button" className="btn btn-ghost" onClick={() => void applyPhaseEnvironment()}>{i18n.t('mission.profile.usePhase')}</button>
+              <button type="button" className="btn btn-ghost" disabled={!canEdit} onClick={() => void applyPhaseEnvironment()}>{i18n.t('mission.profile.usePhase')}</button>
             </span>
           </p>
         )}
@@ -221,7 +224,7 @@ export function MissionPage() {
           <legend className="visually-hidden">{i18n.t('mission.environment')}</legend>
           {ENVIRONMENT_ORDER.map((env) => (
             <label key={env} className="option">
-              <input type="radio" name="environment" checked={settings.environment === env} onChange={() => setEnvironment(env)} />
+              <input type="radio" name="environment" checked={settings.environment === env} disabled={!canEdit} onChange={() => setEnvironment(env)} />
               <span className="option-face">
                 {environmentContent(env).label}
                 <span>{environmentContent(env).description}</span>
@@ -229,6 +232,7 @@ export function MissionPage() {
             </label>
           ))}
         </fieldset>
+        {!canEdit && <p className="small muted">{i18n.t('mission.editorsOnly')}</p>}
       </section>
 
       <AlarmVolumeCard />

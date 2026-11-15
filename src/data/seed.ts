@@ -237,7 +237,7 @@ async function writeSeed(): Promise<void> {
   try {
     for (const member of seed.crew) {
       const last = seed.records.filter((r) => r.crewId === member.id).at(-1);
-      if (last) await composeForDay(member, last.date, seed.settings.environment, seed.settings.cabinCo2Mmhg);
+      if (last) await composeForDay(member, last.date, seed.settings.environment, seed.settings.cabinCo2Mmhg, seed.settings.missionProfile);
     }
   } finally {
     clearSessionKeys();

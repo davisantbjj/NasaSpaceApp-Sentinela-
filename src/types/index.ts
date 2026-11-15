@@ -187,6 +187,8 @@ export interface PacketPayload {
   crewRole: string;
   missionDay: number;
   environment: Environment;
+  // Perfil da missão no dia do registro (M8): o solo vê nave, dia de N e fase sem abrir as configurações de bordo.
+  mission?: { profile: MissionProfileId; day: number; durationDays: number; phaseLabelKey: string };
   recordedAt: string;
   values: DailyValues;
   alerts: { id: string; indicator: IndicatorId; level: Level; whatChanged: LocalizedText }[];

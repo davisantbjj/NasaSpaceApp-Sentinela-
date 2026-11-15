@@ -3,6 +3,7 @@ import i18n from '../../i18n';
 import { formatNumber } from '../../lib/format';
 import { isCabinCo2High } from '../../rules/engine';
 import { rules } from '../../rules/rules';
+import { canEditMission } from '../../lib/access';
 import { useAppStore } from '../../store/useAppStore';
 import type { CrewMember } from '../../types';
 
@@ -70,7 +71,8 @@ function DraftNumberField({ id, label, unit, min, max, step, value, disabled, on
 
 // CO2 da cabine (N13): dado da missão, não de uma pessoa.
 export function CabinCo2Card() {
-  const { settings, setCabinCo2Mmhg } = useAppStore();
+  const { settings, session, setCabinCo2Mmhg } = useAppStore();
+  const canEdit = canEditMission(session);
   const config = rules.context?.cabinCo2;
   const value = settings.cabinCo2Mmhg;
   const high = isCabinCo2High(value, rules);
@@ -92,6 +94,7 @@ export function CabinCo2Card() {
         max={10}
         step={0.1}
         value={value}
+        disabled={!canEdit}
         onCommit={setCabinCo2Mmhg}
       />
       {high && value !== undefined && (
@@ -101,6 +104,7 @@ export function CabinCo2Card() {
         </p>
       )}
       <p className="small muted">{i18n.t('mission.cabinCo2.note', { limit })}</p>
+      {!canEdit && <p className="small muted">{i18n.t('mission.editorsOnly')}</p>}
       {config?.sourceUrl && (
         <a href={config.sourceUrl} target="_blank" rel="noreferrer">
           {i18n.t('mission.cabinCo2.source')}
