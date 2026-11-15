@@ -91,7 +91,12 @@
     "systolic": "Sistólica",
     "diastolic": "Diastólica",
     "generalRange": "Faixa geral",
-    "personalPattern": "Seu padrão pessoal"
+    "personalPattern": "Seu padrão pessoal",
+    "sleepQuality": "Qualidade",
+    "sleepAid": "Remédio para dormir",
+    "sleepAidTaken": "Tomado: {{doses}}",
+    "sleepAidNight": "Noite com remédio para dormir",
+    "sleepAidNote": "Os pontos marcam as noites em que um remédio para dormir foi marcado como tomado. Sete horas com remédio não equivalem a sete horas sem: compare a qualidade relatada nesses dias."
   },
   "errors": {
     "openLocal": "Não foi possível abrir os dados locais",

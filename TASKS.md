@@ -116,8 +116,8 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
 **Fase 12 (novas)**
 
-- [ ] **N12.** Alimentação e água: refeições completas (0 a 3 ou mais) e água suficiente (sim ou não), sem calorias. Entra na migração v12 do Davi. Depende de D5. Esforço pequeno
-- [ ] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico. Entra na migração v12. Depende de D5. Esforço pequeno
+- [x] **N12.** Alimentação e água: refeições completas (0 a 3 ou mais) e água suficiente (sim ou não), sem calorias. Dois dias seguidos sem refeição completa geram amarelo (`missedMealDays` em `rules.json`, proposta de demonstração). Campos da v12; a v13 só acrescenta o indicador ao cadastro já gravado
+- [x] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico: noites com remédio para dormir marcadas em Tendências → Sono. Remédio "só quando necessário" (`asNeeded`) não gera dose não tomada; a Ana tem um remédio para dormir fictício
 - [ ] **N21.** Atualizar "Como a NASA mede" em `docs/apresentacao.md` com o que a pesquisa de 15/11 trouxe e com o que a NASA não faz. Combinar com a Larissa, que tem a tarefa parecida dos aparelhos reais
 - [x] **N16.** Exercício por sessão: tipo, minutos e frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
 - [ ] **N19.** Bloco mensal de sono e equipe, visível só para o próprio tripulante e para o oficial médico, com perguntas próprias marcadas como demonstração. Depende de D6. Esforço médio

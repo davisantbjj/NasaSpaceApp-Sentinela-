@@ -39,8 +39,19 @@ export function sourceContent(source: DataSource) {
 // próprio: é o segundo campo do passo de exercício.
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'vision', 'conditioning', 'medication', 'symptoms',
+  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'conditioning', 'medication', 'symptoms',
 ];
+
+// Qualidade do sono (N14): não tem passo próprio, é a segunda pergunta do passo de sono.
+export const SLEEP_QUALITY_SCALE: ScaleOption[] = [1, 2, 3, 4, 5].map((value) => ({
+  value,
+  labelKey: `indicators:sleepQuality.scale.${value}`,
+  symbol: String(value),
+}));
+
+export function sleepQualityOptions(): TranslatedScaleOption[] {
+  return SLEEP_QUALITY_SCALE.map((option) => ({ ...option, label: i18n.t(option.labelKey) }));
+}
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
   bloodPressure: {
@@ -156,6 +167,20 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     howToMeasureKey: 'indicators:bodyMassKg.howToMeasure',
     whyMeasureKey: 'indicators:bodyMassKg.whyMeasure',
     input: { min: 20, max: 300, step: 0.1 },
+  },
+  // Alimentação e água (N12): refeições completas numa escala de 0 a 3 ou mais; a água é a
+  // segunda pergunta do mesmo passo. Sem contagem de calorias.
+  mealsCompleted: {
+    labelKey: 'indicators:mealsCompleted.label',
+    unit: '',
+    howToMeasureKey: 'indicators:mealsCompleted.howToMeasure',
+    whyMeasureKey: 'indicators:mealsCompleted.whyMeasure',
+    scale: [
+      { value: 0, labelKey: 'indicators:mealsCompleted.scale.0', symbol: '0' },
+      { value: 1, labelKey: 'indicators:mealsCompleted.scale.1', symbol: '1' },
+      { value: 2, labelKey: 'indicators:mealsCompleted.scale.2', symbol: '2' },
+      { value: 3, labelKey: 'indicators:mealsCompleted.scale.3', symbol: '3+' },
+    ],
   },
   vision: {
     labelKey: 'indicators:vision.label',

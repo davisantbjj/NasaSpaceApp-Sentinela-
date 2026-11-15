@@ -1,3 +1,4 @@
+import { addDays } from '../lib/dates';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { formatNumber, inRange, rangesFor, seriesPoints, seriesValue } from '../lib/series';
 import type {
@@ -322,15 +323,47 @@ function evaluateConditioning(
     }));
 }
 
+// Alimentação (N12): alerta amarelo quando há `missedMealDays` dias seguidos (incluindo hoje)
+// sem nenhuma refeição completa. Dia sem registro de refeições interrompe a sequência.
+function evaluateMeals(
+  rule: IndicatorRule,
+  record: DailyRecord,
+  previous: DailyRecord[],
+): Alert | undefined {
+  const days = rule.missedMealDays;
+  if (!days || record.values.mealsCompleted !== 0) return undefined;
+  const byDate = new Map(previous.map((r) => [r.date, r]));
+  for (let back = 1; back < days; back += 1) {
+    if (byDate.get(addDays(record.date, -back))?.values.mealsCompleted !== 0) return undefined;
+  }
+  return {
+    id: `${record.id}_mealsCompleted`,
+    crewId: record.crewId,
+    date: record.date,
+    indicator: 'mealsCompleted',
+    region: rule.region,
+    level: 'yellow',
+    trigger: 'missedMeals',
+    whatChanged: { key: 'alerts:change.missedMeals', params: { days } },
+    reference: { key: 'alerts:reference.meals', params: { days } },
+    whyItMatters: rule.messages.whyItMatters,
+    whatToDo: rule.messages.whatToDo.yellow,
+    confidence: 'low',
+    confidenceNote: { key: 'alerts:confidence.selfReported' },
+    notifyGround: false,
+    sourceUrl: rule.sourceUrl,
+  };
+}
+
 // Medicação: alerta quando uma dose prevista no dia não foi marcada como tomada.
-// O nível vem de `missedLevel` no rules.json.
+// Doses "só quando necessário" não contam. O nível vem de `missedLevel` no rules.json.
 function evaluateMedication(
   rule: IndicatorRule,
   record: DailyRecord,
   rules: Rules,
   environment: Environment,
 ): Alert | undefined {
-  const missed = (record.values.medication ?? []).filter((dose) => !dose.taken);
+  const missed = (record.values.medication ?? []).filter((dose) => !dose.taken && !dose.asNeeded);
   if (missed.length === 0) return undefined;
 
   const level = rule.missedLevel ?? 'yellow';
@@ -385,6 +418,8 @@ export function evaluateRecord(
           ? evaluateMedication(rule, record, rules, environment)
           : indicator === 'bodyMassKg'
             ? evaluateBodyMass(rule, record, context)
+          : indicator === 'mealsCompleted'
+            ? evaluateMeals(rule, record, previous)
           : evaluateIndicator(indicator, rule, record, previous, own, rules, environment);
     if (Array.isArray(alert)) alerts.push(...alert);
     else if (alert) alerts.push(alert);

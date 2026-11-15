@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { IndicatorChart, type ChartBand, type ChartSeries } from '../components/charts/IndicatorChart';
-import { displayText } from '../content/format';
-import { indicatorContent } from '../content/indicators';
+import { displayText, sleepAidsTaken, sleepQualityText } from '../content/format';
+import { indicatorContent, sleepQualityOptions } from '../content/indicators';
 import { formatDate } from '../lib/dates';
 import { radiationTotal } from '../lib/radiationTotal';
 import { formatNumber, hasHistoryChart, rangesFor, seriesValue } from '../lib/series';
@@ -14,6 +14,10 @@ import { baselineNote, symptomLabels, trackedInOrder } from './helpers';
 import i18n from '../i18n';
 
 const PERIODS = [14, 30, 60];
+
+function sleepQualityLabel(quality?: number): string | undefined {
+  return quality === undefined ? undefined : sleepQualityOptions().find((o) => o.value === quality)?.label;
+}
 
 export function TrendsPage() {
   const member = useActiveCrew();
@@ -56,6 +60,26 @@ export function TrendsPage() {
   const scaleLabels = content.scale ? Object.fromEntries(content.scale.map((o) => [String(o.value), o.label])) : undefined;
   const measured = window.filter((r) => seriesValue(r.values, indicator, components[0]) !== undefined);
   const last = measured[measured.length - 1];
+  // Sono (N14): qualidade relatada e noites com remédio para dormir, para comparar horas com e sem remédio.
+  const isSleep = indicator === 'sleepHours';
+  const sleepMarkers = isSleep
+    ? {
+        label: i18n.t('trends.sleepAidNight'),
+        points: measured
+          .filter((r) => sleepAidsTaken(r.values).length > 0)
+          .map((r) => ({ date: r.date, value: seriesValue(r.values, indicator)! })),
+      }
+    : undefined;
+  const sleepExtras = isSleep
+    ? Object.fromEntries(measured.map((r) => {
+        const aids = sleepAidsTaken(r.values);
+        const lines = [
+          sleepQualityText(r.values),
+          aids.length > 0 ? `${i18n.t('trends.sleepAid')}: ${i18n.t('trends.sleepAidTaken', { doses: aids.join(', ') })}` : undefined,
+        ].filter((line): line is string => line !== undefined);
+        return [r.date, lines];
+      }))
+    : undefined;
   const average = components.map((c) => {
     const values = measured.map((r) => seriesValue(r.values, indicator, c)!);
     return values.length ? formatNumber(values.reduce((s, v) => s + v, 0) / values.length) : '–';
@@ -103,10 +127,11 @@ export function TrendsPage() {
         {measured.length === 0 ? (
           <p className="muted">{i18n.t('trends.noMeasurements')}</p>
         ) : (
-          <IndicatorChart data={data} series={series} unit={rule.unit} bands={bands} baselines={baselineLines} scaleLabels={scaleLabels} />
+          <IndicatorChart data={data} series={series} unit={rule.unit} bands={bands} baselines={baselineLines} scaleLabels={scaleLabels} markers={sleepMarkers} tooltipExtras={sleepExtras} />
         )}
 
         {baselineNote(indicator, baselines) &&         <p className="small muted">{baselineNote(indicator, baselines)}.</p>}
+        {sleepMarkers && sleepMarkers.points.length > 0 && <p className="small muted">{i18n.t('trends.sleepAidNote')}</p>}
         {indicator === 'radiationDose' && (
           <div className="stack" style={{ gap: 8 }}>
             {(() => {
@@ -134,11 +159,22 @@ export function TrendsPage() {
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>{i18n.t('trends.date')}</th><th>{i18n.t('trends.missionDay')}</th><th>{i18n.t('trends.value')}</th></tr>
+                <tr>
+                  <th>{i18n.t('trends.date')}</th><th>{i18n.t('trends.missionDay')}</th><th>{i18n.t('trends.value')}</th>
+                  {isSleep && <><th>{i18n.t('trends.sleepQuality')}</th><th>{i18n.t('trends.sleepAid')}</th></>}
+                </tr>
               </thead>
               <tbody>
                 {[...measured].reverse().map((r) => (
-                  <tr key={r.id}><td>{formatDate(r.date)}</td><td>{r.missionDay}</td><td>{displayText(r.values, indicator, symptomLabels())}</td></tr>
+                  <tr key={r.id}>
+                    <td>{formatDate(r.date)}</td><td>{r.missionDay}</td><td>{displayText(r.values, indicator, symptomLabels())}</td>
+                    {isSleep && (
+                      <>
+                        <td>{sleepQualityLabel(r.values.sleepQuality) ?? '–'}</td>
+                        <td>{sleepAidsTaken(r.values).join(', ') || '–'}</td>
+                      </>
+                    )}
+                  </tr>
                 ))}
               </tbody>
             </table>

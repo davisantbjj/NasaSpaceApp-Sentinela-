@@ -91,7 +91,12 @@
     "systolic": "Systolic",
     "diastolic": "Diastolic",
     "generalRange": "General range",
-    "personalPattern": "Your personal pattern"
+    "personalPattern": "Your personal pattern",
+    "sleepQuality": "Quality",
+    "sleepAid": "Sleep medication",
+    "sleepAidTaken": "Taken: {{doses}}",
+    "sleepAidNight": "Night with sleep medication",
+    "sleepAidNote": "The dots mark nights when a sleep medication was marked as taken. Seven hours with medication are not the same as seven hours without: compare the reported quality on those days."
   },
   "errors": {
     "openLocal": "Could not open local data",

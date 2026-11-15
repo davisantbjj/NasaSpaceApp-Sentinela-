@@ -353,6 +353,41 @@ describe('evaluateRecord', () => {
     expect(alert.notifyGround).toBe(false);
   });
 
+  it('medicação: dose "só quando necessário" não marcada não gera alerta (N14)', () => {
+    const sleepAid = { id: 'sleepAid', label: 'Remédio para dormir', asNeeded: true, sleepAid: true };
+    expect(evaluateLast([{ medication: [{ ...sleepAid, taken: false }] }])).toEqual([]);
+    expect(evaluateLast([{ medication: [{ ...sleepAid, taken: true }] }])).toEqual([]);
+  });
+
+  describe('alimentação e água (N12)', () => {
+    it('dois dias seguidos sem refeição completa geram amarelo para o oficial médico', () => {
+      const [alert] = evaluateLast([{ mealsCompleted: 3 }, { mealsCompleted: 0 }, { mealsCompleted: 0 }]);
+      expect(alert.indicator).toBe('mealsCompleted');
+      expect(alert.level).toBe('yellow');
+      expect(alert.trigger).toBe('missedMeals');
+      expect(alert.region).toBe('wholeBody');
+      expect(alert.whatChanged).toEqual({ key: 'alerts:change.missedMeals', params: { days: 2 } });
+      expect(alert.notifyGround).toBe(false);
+    });
+
+    it('um dia só sem refeição completa não gera alerta', () => {
+      expect(evaluateLast([{ mealsCompleted: 2 }, { mealsCompleted: 0 }])).toEqual([]);
+      expect(evaluateLast([{ mealsCompleted: 0 }])).toEqual([]);
+    });
+
+    it('dia sem registro de refeições interrompe a sequência', () => {
+      expect(evaluateLast([{ mealsCompleted: 0 }, { heartRate: 70 }, { mealsCompleted: 0 }])).toEqual([]);
+    });
+
+    it('água insuficiente sozinha não gera alerta', () => {
+      expect(evaluateLast([{ mealsCompleted: 3, waterSufficient: false }, { mealsCompleted: 3, waterSufficient: false }])).toEqual([]);
+    });
+  });
+
+  it('qualidade do sono é registrada sem gerar alerta próprio (N14)', () => {
+    expect(evaluateLast([{ sleepHours: 7.5, sleepQuality: 1 }])).toEqual([]);
+  });
+
   it('medicação: o ambiente não muda o nível', () => {
     const day = { medication: [{ id: 'vitaminD', label: 'Suplemento de vitamina D', taken: false }] };
     expect(evaluateLast([day], 'mars')[0].level).toBe(evaluateLast([day], 'station')[0].level);

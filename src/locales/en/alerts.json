@@ -3,7 +3,8 @@
     "generalRange": "Outside the general range",
     "baselineDeviation": "Change from personal baseline",
     "symptom": "Reported symptom",
-    "missedMedication": "Dose not taken"
+    "missedMedication": "Dose not taken",
+    "missedMeals": "Meals missed"
   },
   "change": {
     "general": "{{name}} is {{value}}",
@@ -11,7 +12,8 @@
     "symptoms": "Reported symptoms: {{symptoms}}",
     "missedMedication": "Dose not taken today: {{doses}}",
     "bodyMassLoss": "Body mass: {{percent}}% below the start ({{value}} kg now; {{start}} kg at start)",
-    "conditioning": "{{name}} is {{value}} of the preflight value"
+    "conditioning": "{{name}} is {{value}} of the preflight value",
+    "missedMeals": "No complete meal for {{days}} days in a row"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -34,7 +36,8 @@
     "noSymptoms": "Expected: no symptoms",
     "medication": "Expected: all scheduled doses for the day",
     "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%",
-    "conditioning": "Reference: at least {{min}}{{unit}} of the preflight value"
+    "conditioning": "Reference: at least {{min}}{{unit}} of the preflight value",
+    "meals": "Expected: at least one complete meal a day; the alert appears after {{days}} days in a row without one"
   },
   "confidence": {
     "baselineForming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
@@ -178,6 +181,11 @@
     "conditioning": {
       "whyItMatters": "Physical conditioning helps preserve work capacity during the mission and readaptation after flight.",
       "yellow": "Repeat the assessment as planned and discuss any training change with the medical officer.",
+      "red": "This criterion does not generate a red alert."
+    },
+    "mealsCompleted": {
+      "whyItMatters": "In flight, crew members often eat less than they need, and body mass loss is concentrated in the first month. Several days in a row without a complete meal go into the medical officer summary.",
+      "yellow": "Have a complete meal as soon as you can and drink water. If appetite, time, or food you like is lacking, talk to the medical officer.",
       "red": "This criterion does not generate a red alert."
     }
   },

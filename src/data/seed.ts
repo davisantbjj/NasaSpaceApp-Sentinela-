@@ -14,8 +14,14 @@ const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
-  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'vision', 'conditioning', 'symptoms',
+  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'conditioning',
+  'symptoms',
 ];
+
+// Marca como tomado o remédio para dormir "só quando necessário" (N14).
+function takeSleepAid(values: DailyValues) {
+  for (const dose of values.medication ?? []) if (dose.sleepAid) dose.taken = true;
+}
 
 // Gerador pseudoaleatório com semente, para a demonstração ser sempre igual.
 function mulberry32(seed: number): () => number {
@@ -45,12 +51,17 @@ const PROFILES: SeedProfile[] = [
     story: (values, daysLeft) => {
       const sleep = [5.2, 5.3, 5.6, 5.9, 6.3, 6.7, 7.0];
       const mood = [3, 3, 3, 3, 4, 4, 4] as const;
+      // Qualidade relatada cai junto (N14). Nas duas primeiras noites do caso ela tomou o remédio
+      // para dormir: as horas parecem melhores, mas a qualidade continua ruim.
+      const quality = [2, 2, 2, 3, 3, 2, 2] as const;
       // Nos dias com 6 h de sono ou menos, a reação fica mais lenta (M4 e M7).
       const reaction = [372, 368, 364, 360];
       if (daysLeft < sleep.length) {
         values.sleepHours = sleep[daysLeft];
         values.mood = mood[daysLeft];
+        values.sleepQuality = quality[daysLeft];
       }
+      if (daysLeft === 5 || daysLeft === 6 || daysLeft === 24 || daysLeft === 41) takeSleepAid(values);
       if (daysLeft < reaction.length) values.reactionTime = reaction[daysLeft];
     },
   },
@@ -83,6 +94,8 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
     const mindRandom = mulberry32(profile.seed + 1000); // estresse e carga de trabalho (M2)
     const resistanceRandom = mulberry32(profile.seed + 2000); // treino resistido (M3)
     const reactionRandom = mulberry32(profile.seed + 3000); // tempo de reação (M4)
+    const nutritionRandom = mulberry32(profile.seed + 4000); // alimentação e água (N12)
+    const sleepQualityRandom = mulberry32(profile.seed + 5000); // qualidade do sono (N14)
     // Variação em torno do valor de base, limitada a ±spread.
     const around = (center: number, spread: number, decimals = 0) => {
       const factor = 10 ** decimals;
@@ -106,7 +119,14 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         vision: 0,
         symptoms: [],
         // Histórico com todas as doses tomadas: a medicação não muda os casos preparados da demonstração.
-        medication: profile.member.medications?.map((m) => ({ id: m.id, label: m.label, taken: true })),
+        // O remédio "só quando necessário" começa não tomado; o caso preparado marca as noites em que foi usado.
+        medication: profile.member.medications?.map((m) => ({
+          id: m.id,
+          label: m.label,
+          taken: !m.asNeeded,
+          ...(m.asNeeded ? { asNeeded: true } : {}),
+          ...(m.sleepAid ? { sleepAid: true } : {}),
+        })),
         // Estresse e carga dentro da faixa verde (1 a 3), com gerador próprio para não mudar os outros
         // valores simulados. Não mudam os casos preparados da demonstração.
         stress: mindRandom() < 0.7 ? 2 : 3,
@@ -116,6 +136,11 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         resistanceMinutes: Math.round(40 + (resistanceRandom() * 2 - 1) * 3),
         // Tempo de reação perto de 300 ms, com gerador próprio.
         reactionTime: Math.round(300 + (reactionRandom() * 2 - 1) * 12),
+        // Pelo menos duas refeições completas e quase sempre água suficiente: não gera alerta (N12).
+        mealsCompleted: nutritionRandom() < 0.7 ? 3 : 2,
+        waterSufficient: nutritionRandom() < 0.9,
+        // Qualidade do sono entre regular e muito boa, na maior parte boa (N14).
+        sleepQuality: ((r: number) => (r < 0.6 ? 4 : r < 0.85 ? 3 : 5))(sleepQualityRandom()),
       };
       profile.story?.(all, SEED_DAYS - 1 - i);
 
@@ -123,6 +148,9 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
       for (const indicator of profile.member.trackedIndicators) {
         Object.assign(values, { [indicator]: all[indicator] });
       }
+      // Segundas perguntas dos passos de alimentação e de sono.
+      if (values.mealsCompleted !== undefined) values.waterSufficient = all.waterSufficient;
+      if (values.sleepHours !== undefined) values.sleepQuality = all.sleepQuality;
       // Na demonstração, o sono vem de um sensor vestível e a dose do dosímetro pessoal (M10).
       const sources: DailyValues['sources'] = {};
       if (values.sleepHours !== undefined) sources.sleepHours = 'wearable';
