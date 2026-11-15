@@ -13,6 +13,9 @@ export type BodyRegion =
 
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
 
+// Perfis de missão de referência (src/content/missions.ts, M8).
+export type MissionProfileId = 'station' | 'lunarFlyby' | 'mars';
+
 export interface CrewMember {
   id: string;
   name: string;
@@ -177,6 +180,8 @@ export interface Settings {
   environment: Environment;
   activeCrewId: string; // tripulante cujos dados estão na tela
   reminders: { indicator: IndicatorId; everyDays: number }[];
+  missionProfile?: MissionProfileId; // sem perfil, o ambiente é só o escolhido à mão
+  environmentManual?: boolean; // true quando alguém trocou o ambiente à mão, fora da fase da missão
 }
 
 // Resumo que o comandante pode ver de cada colega. Fica selado para o comandante.
@@ -260,4 +265,16 @@ export interface Rules {
   symptoms: SymptomRule[];
   environmentNotes: Partial<Record<IndicatorId, Record<Environment, string>>>;
   correlationPairs: [IndicatorId, IndicatorId][];
+  // Contexto que não vira alerta (M5).
+  context?: {
+    boneLoss: {
+      minPercentPerMonth: number;
+      maxPercentPerMonth: number;
+      daysPerMonth: number;
+      studiedMonths: { min: number; max: number };
+      sourceUrl: string;
+      demo: boolean;
+    };
+    radiationTotal?: { sourceUrl: string }; // M6: soma das doses do dia, só contexto
+  };
 }

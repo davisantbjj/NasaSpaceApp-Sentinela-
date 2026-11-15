@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
+import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, phaseOnDay } from '../content/missions';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
-import type { DailyRecord, IndicatorId } from '../types';
+import type { DailyRecord, IndicatorId, MissionProfileId } from '../types';
 import { trackedInOrder } from './helpers';
 
 const REMINDER_OPTIONS = [
@@ -37,7 +38,7 @@ function lastMeasured(records: DailyRecord[], indicator: IndicatorId): string | 
 
 export function MissionPage() {
   const member = useActiveCrew();
-  const { settings, records, session, setEnvironment, setReminder, resetDemo } = useAppStore();
+  const { crew, settings, records, session, setEnvironment, setMissionProfile, applyPhaseEnvironment, setReminder, resetDemo } = useAppStore();
   // Só o oficial médico recria a demonstração: recriar apaga também o registro de acesso de todos.
   const canReset = session?.role === 'medicalOfficer';
   const [confirmReset, setConfirmReset] = useState(false);
@@ -47,6 +48,12 @@ export function MissionPage() {
   // O treino resistido é digitado no passo de exercício: o lembrete de exercício vale para os dois.
   const tracked = trackedInOrder(member).filter((id) => id !== 'resistanceMinutes');
   const healthContext = crewHealthContext(member.sex);
+  const day = missionDay(member.missionStart, today);
+  const profile = settings.missionProfile ? MISSION_PROFILES[settings.missionProfile] : undefined;
+  const missionStart = missionStartOf(crew) ?? member.missionStart;
+  const crewDay = missionDay(missionStart, today);
+  const phase = profile ? phaseOnDay(profile, crewDay) : undefined;
+  const offPhase = !!phase && settings.environment !== phase.environment;
 
   return (
     <div className="page">
@@ -58,7 +65,7 @@ export function MissionPage() {
       <section className="card stat-row">
         <div className="metric">
           <span className="small muted">Dia da missão</span>
-          <span className="metric-value">{missionDay(member.missionStart, today)}</span>
+          <span className="metric-value">{day}{profile && <span className="unit">de {profile.durationDays}</span>}</span>
         </div>
         <div className="metric">
           <span className="small muted">Início</span>
@@ -88,9 +95,56 @@ export function MissionPage() {
 
       <section className="card stack" style={{ gap: 14 }}>
         <div>
+          <h2>Perfil da missão</h2>
+          <p className="small muted">O Sentinela serve para qualquer nave. O perfil diz o tipo de missão, a duração e as fases; a fase de hoje define o ambiente.</p>
+        </div>
+        <select
+          className="select"
+          aria-label="Perfil da missão"
+          value={settings.missionProfile ?? ''}
+          onChange={(event) => void setMissionProfile((event.target.value || undefined) as MissionProfileId | undefined)}
+        >
+          <option value="">Sem perfil (ambiente escolhido à mão)</option>
+          {MISSION_PROFILE_ORDER.map((id) => (
+            <option key={id} value={id}>{MISSION_PROFILES[id].label} ({MISSION_PROFILES[id].example})</option>
+          ))}
+        </select>
+        {profile && phase && (
+          <>
+            <ul className="summary-list">
+              <li><span>Veículo</span><span>{profile.vehicle}</span></li>
+              <li><span>Tripulação</span><span>{profile.crewSize}</span></li>
+              <li><span>Duração prevista</span><span className="num">{profile.durationDays} dias</span></li>
+              {profile.phases.map((p) => (
+                <li key={p.label}>
+                  <span>{p === phase ? <strong>Fase atual: {p.label}</strong> : `Fase: ${p.label}`}</span>
+                  <span className="num">dias {p.fromDay} a {p.toDay} · {ENVIRONMENTS[p.environment].label}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="small muted">
+              {profile.note}{' '}
+              {crewDay > profile.durationDays && `Hoje é o dia ${crewDay}, depois do fim previsto (${profile.durationDays} dias): vale a última fase. `}
+              <a href={profile.sourceUrl} target="_blank" rel="noreferrer">Fonte (abre outro site)</a>
+            </p>
+          </>
+        )}
+      </section>
+
+      <section className="card stack" style={{ gap: 14 }}>
+        <div>
           <h2>Ambiente da missão</h2>
           <p className="small muted">O ambiente muda a explicação dos alertas, nunca o nível. As faixas são as mesmas em todos.</p>
         </div>
+        {offPhase && (
+          <p className="notice">
+            <span className="notice-icon" aria-hidden="true">!</span>
+            <span>
+              Ambiente trocado à mão. Pela fase da missão, hoje seria {ENVIRONMENTS[phase!.environment].label}.{' '}
+              <button type="button" className="btn btn-ghost" onClick={() => void applyPhaseEnvironment()}>Usar o ambiente da fase</button>
+            </span>
+          </p>
+        )}
         <fieldset className="env-grid options">
           <legend className="visually-hidden">Ambiente da missão</legend>
           {ENVIRONMENT_ORDER.map((env) => (

@@ -243,10 +243,10 @@ Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente m
 
 ### Avaliar
 
-- [ ] **M5. Perda óssea estimada pelo dia de missão** (média de 1% a 1,5% ao mês), mostrada como "estimativa, não medida". Só contexto, sem faixa de alerta. Esforço baixo
-- [ ] **M6. Radiação acumulada na missão**: soma das doses do dia, como contexto, sem faixa nova. Esforço baixo
+- [x] **M5. Perda óssea estimada pelo dia de missão** (média de 1% a 1,5% ao mês), mostrada como "estimativa, não medida". Só contexto, sem faixa de alerta. Esforço baixo
+- [x] **M6. Radiação acumulada na missão**: soma das doses do dia, como contexto, sem faixa nova. Esforço baixo
 - [ ] **M7. Fadiga**: sono de 6 h ou menos junto com reação mais lenta aparece como "mudaram juntos", sem afirmar causa. Base: estudo com 24 astronautas em missões de 6 meses na ISS. Esforço baixo; depende de M4
-- [ ] **M8. Perfil de missão**: nave, tamanho da tripulação, duração e fases (ida, superfície, volta), com modelos ISS (cerca de 6 meses), Artemis II (Orion, 4 pessoas, cerca de 10 dias) e Marte (marcado como referência, não missão real). A tela de missão mostra "Dia 45 de 180, fase trânsito", e a fase define o ambiente. Quem pode mudar o perfil e a fase fica na tarefa do Davi. Esforço médio
+- [x] **M8. Perfil de missão**: nave, tamanho da tripulação, duração e fases (ida, superfície, volta), com modelos ISS (cerca de 6 meses), Artemis II (Orion, 4 pessoas, cerca de 10 dias) e Marte (marcado como referência, não missão real). A tela de missão mostra "Dia 45 de 180, fase trânsito", e a fase define o ambiente. Quem pode mudar o perfil e a fase fica na tarefa do Davi. Esforço médio
 
 ### Agir
 

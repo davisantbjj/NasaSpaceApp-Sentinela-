@@ -182,9 +182,29 @@ Isso **não** é alerta, **não** muda nenhum nível e **nunca** afirma que um i
 
 ## 9. Ambiente da missão
 
-O tripulante escolhe o ambiente atual: estação, trânsito, Lua ou Marte. O ambiente **só muda a explicação** do alerta, com uma nota de contexto, e **nunca muda o nível**. As faixas são as mesmas em todos os ambientes.
+O ambiente atual é estação, trânsito, Lua ou Marte. O ambiente **só muda a explicação** do alerta, com uma nota de contexto, e **nunca muda o nível**. As faixas são as mesmas em todos os ambientes.
 
 Hoje só a radiação tem notas por ambiente. Por exemplo: "A estação fica dentro da magnetosfera, que bloqueia boa parte da radiação" e "A Lua fica fora da magnetosfera. Use as áreas mais protegidas do habitat."
+
+### Perfil da missão
+
+O Sentinela serve para qualquer nave. Em **Missão**, a equipe escolhe um perfil de referência, que descreve o tipo de missão (a nave aparece só como exemplo). Cada perfil tem veículo, tamanho da tripulação, duração e fases, e **a fase de hoje define o ambiente**. Trocar o ambiente à mão continua possível (por exemplo, para a demonstração); o app avisa que o ambiente está fora da fase e oferece voltar a ele.
+
+| Perfil | Exemplo | Duração | Fases | Fonte |
+| --- | --- | --- | --- | --- |
+| Estação em órbita baixa | Estação Espacial Internacional | 180 dias | Estação | Risco ósseo da NASA (missões de 4 a 6 meses) |
+| Voo lunar curto, sem pouso | Artemis II | 10 dias | Trânsito ao redor da Lua | Página da missão Artemis II (NASA) |
+| Missão a Marte (referência de planejamento) | Arquitetura de referência da NASA, não é missão marcada | 914 dias | Ida (1 a 180), superfície (181 a 719), volta (720 a 914) | NASA NTRS 20100028285 |
+
+Os perfis ficam em `src/content/missions.ts`. Não são números de saúde e não mudam nenhum nível.
+
+### Perda óssea estimada
+
+No painel, a região **Ossos e músculos** mostra uma nota com a perda óssea **estimada, não medida**: os dias sem gravidade (estação e trânsito) vezes a média da NASA de 1% a 1,5% ao mês, que vale para missões de 4 a 6 meses e é um valor de grupo. Depois de 6 meses, a nota avisa que a NASA ainda não sabe se a perda continua no mesmo ritmo. Dias em gravidade parcial (Lua, Marte) não entram na conta, porque a taxa não é conhecida, e a nota diz isso. É contexto: não gera alerta. A taxa fica em `rules.json` (`context.boneLoss`).
+
+### Radiação acumulada
+
+No painel, a região **Corpo inteiro** mostra a dose acumulada registrada na missão: a soma das doses do dia digitadas, em µSv ou, a partir de 1.000 µSv, em mSv. Se houver dias sem leitura até o último registro, a nota diz quantos e que o total real é maior. É contexto, **não limite**: o app não avalia limites de dose da carreira nem eventos de radiação intensa, e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
 
 ## 10. As telas
 
