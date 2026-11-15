@@ -238,6 +238,15 @@
       "source": "Source (opens another site)",
       "offPhase": "Environment changed by hand. Based on the mission phase, today it would be {{environment}}.",
       "usePhase": "Use the phase environment"
+    },
+    "alarms": {
+      "title": "Alarm volume",
+      "intro": "Yellow plays one short tone. Red repeats the sound until someone silences or confirms it. Every sound also appears as a fixed notice at the top of the screen.",
+      "yellow": "Yellow (caution)",
+      "red": "Red (warning)",
+      "off": "No sound",
+      "test": "Test sound",
+      "note": "Silence stops the sound, but the notice only goes away when someone confirms it. On phones, the notice also vibrates when the device allows it (iPhone does not). The voice says only the alert level, with no health details, because everyone in the cabin can hear it."
     }
   },
   "crewOverview": {
@@ -473,6 +482,21 @@
         "surface": "Mars surface",
         "return": "Return"
       }
+    }
+  },
+  "alarm": {
+    "region": "Alarms",
+    "title": {
+      "yellow": "Caution",
+      "red": "Warning"
+    },
+    "details": "View alerts and actions →",
+    "silence": "Silence",
+    "silenced": "Sound silenced. The notice stays until someone confirms.",
+    "confirm": "Confirm",
+    "speech": {
+      "yellow": "Sentinela caution.",
+      "red": "Sentinela warning. Check the screen."
     }
   }
 }

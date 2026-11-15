@@ -1,9 +1,11 @@
 import { lazy, Suspense, useCallback, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { AlarmBanner } from './components/alerts/AlarmBanner';
 import { Disclaimer } from './components/layout/Disclaimer';
 import { NavBar } from './components/layout/NavBar';
 import { PrivacyNotice } from './components/layout/PrivacyNotice';
+import { useHealthAlarms } from './hooks/useHealthAlarms';
 import { useIdleLock } from './hooks/useIdleLock';
 import { AlertsPage } from './pages/AlertsPage';
 import { CheckinPage } from './pages/CheckinPage';
@@ -91,6 +93,9 @@ export function App() {
   const lockIdle = useCallback(() => lock(t('app.idleLock')), [lock, t]);
   useIdleLock(!!session, IDLE_MS, lockIdle);
 
+  // Alarmes (som, banner e vibração) dos alertas da própria pessoa.
+  useHealthAlarms();
+
   // Sincronização em segundo plano enquanto alguém está dentro.
   useEffect(() => {
     if (!session) return;
@@ -136,6 +141,7 @@ export function App() {
           <GroundRoutes />
         ) : (
           <>
+            <AlarmBanner />
             <ViewingBanner />
             <OnBoardRoutes activeCrewId={settings.activeCrewId} role={session.role} />
           </>

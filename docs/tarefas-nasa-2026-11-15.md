@@ -186,7 +186,7 @@ Mexem em como se mede, não só no que se guarda. Precisam de decisão da equipe
 
 ### N21. Atualizar "Como a NASA mede"
 
-- [ ] **N21.** Em `docs/apresentacao.md`, acrescentar o que a pesquisa de 15/11 trouxe: conferência médica privada semanal e psicológica a cada duas semanas; bateria Cognition de 10 testes nos dias 30 e antes do retorno; calendário do exame de visão; dosímetro individual; registro de alimentação em tablet; massa corporal em voo.
+- [x] **N21.** Em `docs/apresentacao.md`, acrescentar o que a pesquisa de 15/11 trouxe: conferência médica privada semanal e psicológica a cada duas semanas; bateria Cognition de 10 testes nos dias 30 e antes do retorno; calendário do exame de visão; dosímetro individual; registro de alimentação em tablet; massa corporal em voo.
   - Acrescentar também o que a NASA não faz: não mede densidade óssea em voo, não faz glicemia de rotina, e em 25 astronautas de missões de 6 meses não houve queda sistemática do desempenho cognitivo ([NASA BHP](https://www.kbr.com/document/16756)).
 
 ## O que decidimos não mudar
