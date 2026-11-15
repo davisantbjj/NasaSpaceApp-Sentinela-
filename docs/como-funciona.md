@@ -202,6 +202,10 @@ Os perfis ficam em `src/content/missions.ts`. Não são números de saúde e nã
 
 No painel, a região **Ossos e músculos** mostra uma nota com a perda óssea **estimada, não medida**: os dias sem gravidade (estação e trânsito) vezes a média da NASA de 1% a 1,5% ao mês, que vale para missões de 4 a 6 meses e é um valor de grupo. Depois de 6 meses, a nota avisa que a NASA ainda não sabe se a perda continua no mesmo ritmo. Dias em gravidade parcial (Lua, Marte) não entram na conta, porque a taxa não é conhecida, e a nota diz isso. É contexto: não gera alerta. A taxa fica em `rules.json` (`context.boneLoss`).
 
+### Radiação acumulada
+
+No painel, a região **Corpo inteiro** mostra a dose acumulada registrada na missão: a soma das doses do dia digitadas, em µSv ou, a partir de 1.000 µSv, em mSv. Se houver dias sem leitura até o último registro, a nota diz quantos e que o total real é maior. É contexto, **não limite**: o app não avalia limites de dose da carreira nem eventos de radiação intensa, e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
+
 ## 10. As telas
 
 | Tela | O que mostra |

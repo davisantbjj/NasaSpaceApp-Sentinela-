@@ -7,6 +7,7 @@ import { displayValue } from '../content/format';
 import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
 import { daysByEnvironment, MISSION_PROFILES } from '../content/missions';
 import { estimateBoneLoss } from '../lib/boneEstimate';
+import { radiationTotal } from '../lib/radiationTotal';
 import { formatDate, missionDay, todayISO } from '../lib/dates';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { rules } from '../rules/rules';
@@ -61,6 +62,10 @@ export function DashboardPage() {
   const profile = settings.missionProfile ? MISSION_PROFILES[settings.missionProfile] : undefined;
   const bone = region === 'musculoskeletal'
     ? estimateBoneLoss(day, profile ? daysByEnvironment(profile, day) : { [settings.environment]: day }, rules)
+    : undefined;
+  // Radiação acumulada (M6): só para quem acompanha a dose.
+  const radiation = region === 'wholeBody' && member.trackedIndicators.includes('radiationDose')
+    ? radiationTotal(records, latest?.missionDay ?? day, rules) // até o último registro: hoje pode estar pendente
     : undefined;
 
   const togetherNotes = correlations
@@ -134,7 +139,7 @@ export function DashboardPage() {
           items={items}
           alerts={alerts}
           togetherNotes={togetherNotes}
-          contextNotes={bone ? [bone] : []}
+          contextNotes={[bone, radiation].filter((note) => note !== undefined)}
         />
         </div>
       </div>

@@ -275,5 +275,6 @@ export interface Rules {
       sourceUrl: string;
       demo: boolean;
     };
+    radiationTotal?: { sourceUrl: string }; // M6: soma das doses do dia, só contexto
   };
 }

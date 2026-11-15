@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { daysByEnvironment, MISSION_PROFILES, phaseOnDay } from '../content/missions';
 import { rules } from '../rules/rules';
 import { estimateBoneLoss } from './boneEstimate';
+import { radiationTotal } from './radiationTotal';
 
 describe('perfil de missão (M8)', () => {
   const mars = MISSION_PROFILES.mars;
@@ -43,5 +44,27 @@ describe('perda óssea estimada (M5)', () => {
     const estimate = estimateBoneLoss(200, { transit: 180, mars: 20 }, rules)!;
     expect(estimate.text).toContain('depois de 180 dias sem gravidade');
     expect(estimate.text).toContain('20 dias foram em gravidade parcial');
+  });
+});
+
+describe('radiação acumulada (M6)', () => {
+  const day = (radiationDose?: number) => ({ id: 'x', crewId: 'c1', date: '2026-01-01', missionDay: 1, values: { radiationDose }, createdAt: '' });
+
+  it('soma as doses do dia e passa para mSv a partir de 1.000 µSv', () => {
+    const total = radiationTotal([day(400), day(420), day(430)], 3, rules)!;
+    expect(total.text).toContain('1,3 mSv');
+    expect(total.text).toContain('3 dias com leitura');
+    expect(total.text).toContain('não limite');
+    expect(total.text).not.toContain('sem leitura');
+  });
+
+  it('avisa quando há dias sem leitura', () => {
+    const total = radiationTotal([day(400), day()], 5, rules)!;
+    expect(total.text).toContain('400 µSv');
+    expect(total.text).toContain('4 dias sem leitura não entram');
+  });
+
+  it('sem nenhuma leitura não mostra nada', () => {
+    expect(radiationTotal([day()], 1, rules)).toBeUndefined();
   });
 });

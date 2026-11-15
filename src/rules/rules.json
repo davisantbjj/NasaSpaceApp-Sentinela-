@@ -449,6 +449,9 @@
       "studiedMonths": { "min": 4, "max": 6 },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
       "demo": false
+    },
+    "radiationTotal": {
+      "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"
     }
   },
   "correlationPairs": [
