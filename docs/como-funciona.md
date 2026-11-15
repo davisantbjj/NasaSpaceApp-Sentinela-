@@ -37,16 +37,17 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Frequência cardíaca | bpm | Coração | Meça em repouso, antes do exercício. Use o oxímetro de dedo ou conte os batimentos por 1 minuto. |
 | Temperatura | °C | Defesas do corpo | Use o termômetro de bordo, sempre no mesmo horário e longe do exercício. |
 | Glicemia | mg/dL | Metabolismo | Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição. |
-| Sono | horas | Mente e sono | Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. |
+| Sono | horas e qualidade (1 a 5) | Mente e sono | Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. No mesmo passo, escolha a qualidade do sono, de muito ruim a muito boa. A qualidade não gera alerta. |
 | Humor | escala de 1 a 5 | Mente e sono | Escolha o rosto que melhor descreve como você se sentiu na maior parte do dia. |
 | Estresse | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o seu estresse na maior parte do dia. |
 | Carga de trabalho | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o volume de trabalho de hoje. |
 | Tempo de reação | ms (média do teste) | Mente e sono | Teste no próprio app: quando aparecer o sinal, tocar na área ou apertar espaço o mais rápido possível. 3 minutos, ou 30 s na versão curta para demonstração. Respostas antes do sinal não entram na média. |
 | Exercício | sessão | Ossos e músculos | Registre o tipo (aeróbico, resistido ou os dois), a duração, a frequência cardíaca média do aeróbico e se o resistido foi feito, parcial ou não feito. Os aparelhos de referência são esteira, bicicleta ergométrica, remo, aparelho resistido da estação e flywheel da Orion. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
+| Alimentação e água | refeições completas (0, 1, 2, 3 ou mais) e água (sim ou não) | Corpo inteiro | Conte as refeições que comeu por inteiro hoje e diga se bebeu água suficiente. Sem contagem de calorias. |
 | Visão | grade de Amsler | Olhos e visão | Observe a grade com um olho de cada vez e responda sobre linhas tortas, áreas faltando e piora na leitura de perto. O autoteste pode ser pulado e não diagnostica SANS. |
 | Condicionamento físico | percentual | Ossos e músculos | Em uma avaliação periódica, informe o resultado aeróbico e de força como percentual do valor antes do voo e selecione o aparelho utilizado. Abaixo de 80% gera alerta. |
-| Medicação | lista de marcar | Corpo inteiro | Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada. Só aparece para quem tem medicação prevista. |
+| Medicação | lista de marcar | Corpo inteiro | Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada, menos a de remédio "só quando necessário", que só conta quando marcada. Só aparece para quem tem medicação prevista. |
 | Sintomas | lista de marcar | Corpo inteiro | Marque tudo o que sentiu hoje. Se não sentiu nada, avance sem marcar. |
 
 Cada passo do check-in também mostra o **por que medir**, com um dado da NASA (por exemplo: os ossos perdem de 1% a 1,5% de densidade por mês sem gravidade; cerca de 70% dos astronautas da estação têm inchaço no fundo do olho).
@@ -79,6 +80,7 @@ Cada pessoa tem o seu normal. Uma frequência de 58 bpm pode ser ótima para um 
 | Carga de trabalho | Não | Só a faixa geral |
 | Tempo de reação | Sim, e só ela (sem faixa geral) | Só para cima (reação mais lenta) |
 | Visão | Não | Só a faixa geral |
+| Alimentação e água | Não | Amarelo com 2 dias seguidos sem refeição completa |
 | Medicação | Não | Amarelo quando uma dose prevista não foi tomada |
 | Sintomas | Não | Cada sintoma tem nível fixo |
 
@@ -170,6 +172,16 @@ Cada sintoma marcado tem um nível fixo, definido em `rules.json`. O alerta de s
 ### Medicação
 
 Cada tripulante pode ter uma lista de medicação prevista (na demonstração: Ana e Lia, com nomes fictícios). No check-in, a pessoa marca as doses que tomou. Uma dose prevista sem marcar gera alerta **amarelo** (`missedLevel` em `rules.json`), com confiança baixa, porque é autorrelato. O motor atual não gera vermelho por medicação. Fonte: risco da NASA de remédios ineficazes ou tóxicos em voos longos.
+
+Um remédio pode ser marcado no plano como **só quando necessário** (`asNeeded`): deixar sem marcar não gera alerta. Um remédio pode ser marcado também como **remédio para dormir** (`sleepAid`). Na demonstração, a Ana tem um remédio para dormir fictício, usado em quatro noites.
+
+### Alimentação e água
+
+Um passo diário pergunta quantas refeições completas a pessoa fez (0, 1, 2, 3 ou mais) e se bebeu água suficiente (sim ou não), sem contar calorias. Os astronautas registram o que comem num aplicativo de tablet desde 2016 (NASA). **Dois dias seguidos sem nenhuma refeição completa** (`missedMealDays` em `rules.json`) geram alerta **amarelo**, gatilho `missedMeals`, com confiança baixa por ser autorrelato. O alerta entra na lista do oficial médico, como os outros amarelos. Um dia sem registro de refeições interrompe a sequência. A água insuficiente aparece no registro, mas sozinha não gera alerta. O corte é uma proposta de demonstração.
+
+### Qualidade do sono
+
+No passo de sono, depois das horas, a pessoa escolhe a qualidade do sono numa escala de 1 (muito ruim) a 5 (muito boa). A NASA compara o sono relatado com o medido pela pulseira, e a qualidade faz parte do questionário (Standard Measures). A qualidade não gera alerta. Em **Tendências → Sono**, as noites em que um remédio para dormir foi marcado como tomado aparecem como pontos sobre a linha. A qualidade e o remédio aparecem na dica de cada dia e em duas colunas da tabela, porque sete horas com remédio não equivalem a sete horas sem.
 
 ## 8. "Mudaram juntos" (correlações)
 

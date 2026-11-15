@@ -123,7 +123,7 @@ As quatro exigem versão nova do banco (v12) e recriar a demonstração. Fazer j
 
 ### N12. Alimentação e água
 
-- [ ] **N12.** Passo diário simples: refeições completas feitas (0 a 3 ou mais) e água suficiente (sim ou não). Sem contagem de calorias.
+- [x] **N12.** Passo diário simples: refeições completas feitas (0 a 3 ou mais) e água suficiente (sim ou não). Sem contagem de calorias.
   - **Por quê:** os astronautas registram o que comem num aplicativo de tablet desde 2016 ([NASA](https://www.nasa.gov/?p=209742)). No aplicativo europeu, basta fotografar o código de barras.
   - **Aceite:** dois dias seguidos sem refeição completa entram no resumo do oficial médico.
 
@@ -136,7 +136,7 @@ As quatro exigem versão nova do banco (v12) e recriar a demonstração. Fazer j
 
 ### N14. Qualidade do sono
 
-- [ ] **N14.** Escala ao lado das horas de sono.
+- [x] **N14.** Escala ao lado das horas de sono.
   - **Por quê:** a NASA compara o sono relatado com o medido pela pulseira, e a qualidade é parte do questionário ([Standard Measures](https://ntrs.nasa.gov/api/citations/20200001281/downloads/20200001281.pdf)).
   - Sete horas com remédio não são sete horas sem: cruzar com a medicação (M1) no gráfico.
 

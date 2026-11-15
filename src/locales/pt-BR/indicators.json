@@ -10,7 +10,11 @@
     "reactionShort": "curto",
     "reactionFull": "completo",
     "reactionInterrupted": ", interrompido",
-    "reactionUnknownMode": "modo não registrado"
+    "reactionUnknownMode": "modo não registrado",
+    "asNeededTaken": "quando necessário, tomado: {{doses}}",
+    "waterSufficient": "água suficiente",
+    "waterInsufficient": "água insuficiente",
+    "sleepQuality": "qualidade: {{quality}}"
   },
   "bloodPressure": {
     "label": "Pressão arterial",
@@ -34,7 +38,7 @@
   },
   "sleepHours": {
     "label": "Sono",
-    "howToMeasure": "Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. Se usa um sensor vestível de sono, copie as horas que ele registrou.",
+    "howToMeasure": "Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. Se usa um sensor vestível de sono, copie as horas que ele registrou. Depois, escolha como foi a qualidade do sono.",
     "whyMeasure": "Na estação a tripulação vê cerca de 16 nasceres do sol por dia, o que confunde o relógio do corpo. Dormir pouco reduz a atenção."
   },
   "mood": {
@@ -100,7 +104,7 @@
   },
   "medication": {
     "label": "Medicação",
-    "howToMeasure": "Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada.",
+    "howToMeasure": "Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada. Remédios \"só quando necessário\" contam só quando marcados.",
     "whyMeasure": "Longe da Terra não há reposição rápida, e o corpo muda no voo. Registrar cada dose ajuda o médico de bordo a saber se o tratamento está sendo seguido."
   },
   "symptoms": {
@@ -115,7 +119,7 @@
     "immune": { "label": "Defesas do corpo", "description": "Temperatura" },
     "metabolism": { "label": "Metabolismo", "description": "Glicemia" },
     "musculoskeletal": { "label": "Ossos e músculos", "description": "Exercício e treino resistido" },
-    "wholeBody": { "label": "Corpo inteiro", "description": "Radiação, sintomas e medicação" }
+    "wholeBody": { "label": "Corpo inteiro", "description": "Radiação, massa corporal, alimentação, sintomas e medicação" }
   },
   "environments": {
     "station": {
@@ -168,6 +172,34 @@
     "dosimeter": {
       "label": "Dosímetro pessoal",
       "example": "ex.: dosímetro ativo levado no bolso, como no Artemis II"
+    }
+  },
+  "mealsCompleted": {
+    "label": "Alimentação e água",
+    "meals": "Refeições completas hoje",
+    "water": "Bebeu água suficiente hoje?",
+    "howToMeasure": "Conte as refeições que você comeu por inteiro hoje e diga se bebeu água suficiente. Não é preciso contar calorias.",
+    "whyMeasure": "Os astronautas registram o que comem num aplicativo de tablet. Comer menos do que o necessário é comum em voo e leva à perda de massa corporal.",
+    "scale": {
+      "0": "Nenhuma",
+      "1": "1 refeição",
+      "2": "2 refeições",
+      "3": "3 ou mais"
+    },
+    "waterOptions": {
+      "yes": "Sim",
+      "no": "Não"
+    }
+  },
+  "sleepQuality": {
+    "label": "Qualidade do sono",
+    "question": "Como foi a qualidade do sono?",
+    "scale": {
+      "1": "Muito ruim",
+      "2": "Ruim",
+      "3": "Regular",
+      "4": "Boa",
+      "5": "Muito boa"
     }
   }
 }

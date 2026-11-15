@@ -89,11 +89,11 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
 **Fase 12 (novas)**
 
-- [ ] **N8.** Glicemia: dizer que não é rotina da NASA em voo e que está no app porque o desafio cita açúcar no sangue; tirar a ligação com o risco de nutrição. Prioridade alta, esforço pequeno
-- [ ] **N3.** Corrigir o texto da visão: cerca de 70% mostram sinais iniciais na tomografia; 16% chegam a ter inchaço do nervo óptico. Em `indicators.ts`, `rules.json`, traduções e `docs/apresentacao.md`. Prioridade alta
-- [ ] **N4.** Evidência da pressão em voo no `rangeEvidence` e no `whyItMatters` (Norsk et al., 2015), sem mudar a faixa. Prioridade alta
-- [ ] **N5.** Evidência do corte de 6 horas de sono no `rangeEvidence` (Jones et al., 2022). Prioridade alta
-- [ ] **N6.** Evidência dos sintomas com percentuais no `rangeEvidence` (OCHMO)
+- [x] **N8.** Glicemia: dizer que não é rotina da NASA em voo e que está no app porque o desafio cita açúcar no sangue; tirar a ligação com o risco de nutrição. Prioridade alta, esforço pequeno
+- [x] **N3.** Corrigir o texto da visão: cerca de 70% mostram sinais iniciais na tomografia; 16% chegam a ter inchaço do nervo óptico. Em `indicators.ts`, `rules.json`, traduções e `docs/apresentacao.md`. Prioridade alta
+- [x] **N4.** Evidência da pressão em voo no `rangeEvidence` e no `whyItMatters` (Norsk et al., 2015), sem mudar a faixa. Prioridade alta
+- [x] **N5.** Evidência do corte de 6 horas de sono no `rangeEvidence` (Jones et al., 2022). Prioridade alta
+- [x] **N6.** Evidência dos sintomas com percentuais no `rangeEvidence` (OCHMO)
 - [ ] **N7.** Dois sintomas novos, amarelos: `jointMusclePain` e `urinaryRetention`, nos dois idiomas. Esforço pequeno
 - [ ] **N10.** Registrar em `docs/pesquisa/revisao-faixas.md` tudo que mudou em N1 a N8, com as fontes novas. Revisão documental com a Larissa
 - [ ] **N20.** Na versão em inglês, amarelo vira Caution e vermelho vira Warning (nunca Emergency). Combinar com os alarmes da Talita
@@ -116,8 +116,8 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 
 **Fase 12 (novas)**
 
-- [ ] **N12.** Alimentação e água: refeições completas (0 a 3 ou mais) e água suficiente (sim ou não), sem calorias. Entra na migração v12 do Davi. Depende de D5. Esforço pequeno
-- [ ] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico. Entra na migração v12. Depende de D5. Esforço pequeno
+- [x] **N12.** Alimentação e água: refeições completas (0 a 3 ou mais) e água suficiente (sim ou não), sem calorias. Dois dias seguidos sem refeição completa geram amarelo (`missedMealDays` em `rules.json`, proposta de demonstração). Campos da v12; a v13 só acrescenta o indicador ao cadastro já gravado
+- [x] **N14.** Qualidade do sono, numa escala ao lado das horas, cruzada com a medicação (M1) no gráfico: noites com remédio para dormir marcadas em Tendências → Sono. Remédio "só quando necessário" (`asNeeded`) não gera dose não tomada; a Ana tem um remédio para dormir fictício
 - [ ] **N21.** Atualizar "Como a NASA mede" em `docs/apresentacao.md` com o que a pesquisa de 15/11 trouxe e com o que a NASA não faz. Combinar com a Larissa, que tem a tarefa parecida dos aparelhos reais
 - [x] **N16.** Exercício por sessão: tipo, minutos e frequência média do aeróbico, resistido feito/parcial/não feito; comparar o volume da semana com o plano e com a linha de base. Depende de D7. Esforço médio
 - [ ] **N19.** Bloco mensal de sono e equipe, visível só para o próprio tripulante e para o oficial médico, com perguntas próprias marcadas como demonstração. Depende de D6. Esforço médio
@@ -139,6 +139,8 @@ Até a equipe decidir, as tarefas marcadas com 🔒 ficam paradas.
 - [ ] Layout no celular: figura menor ou resumo antes dela ("1 região para acompanhar"); nome do tripulante sem corte (cargo na segunda linha); cabeçalho com fundo opaco
 
 ## Larissa: pesquisa, LGPD e apresentação
+
+Conferência local de 15/11 após integrar a base remota `7de0df1`: N3, N4, N5, N6 e N8 já foram realizadas pela Larissa no commit `1072f49`, incluindo os textos em português/inglês e as evidências. As marcações correspondentes na seção da Lorena foram sincronizadas, preservando a divisão atual da equipe. Isso não conclui a revisão completa da fase 12: N10 e a revisão dos dados novos abaixo continuam pendentes.
 
 Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`. Revisão documental não equivale a aprovação clínica.
 

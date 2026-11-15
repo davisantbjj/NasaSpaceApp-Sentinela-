@@ -5,7 +5,7 @@ export type Level = 'green' | 'yellow' | 'red';
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
   | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'reactionTime' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
-  | 'bodyMassKg' | 'vision' | 'conditioning' | 'symptoms' | 'medication';
+  | 'bodyMassKg' | 'mealsCompleted' | 'vision' | 'conditioning' | 'symptoms' | 'medication';
 
 export type BodyRegion =
   | 'head' | 'heart' | 'musculoskeletal' | 'immune'
@@ -36,6 +36,8 @@ export interface PlannedMedication {
   id: string;
   label: string; // "Suplemento de vitamina D"
   schedule: string; // "1 vez ao dia"
+  asNeeded?: boolean; // só quando necessário: não marcar não conta como dose não tomada
+  sleepAid?: boolean; // remédio para dormir: marcado no gráfico de sono (N14)
 }
 
 // Uma dose prevista no dia e se foi tomada. Guarda o nome junto, para o registro continuar legível
@@ -44,6 +46,8 @@ export interface MedicationDose {
   id: string;
   label: string;
   taken: boolean;
+  asNeeded?: boolean; // cópia do plano no dia, para o registro continuar legível
+  sleepAid?: boolean;
 }
 
 export interface ReactionTestDetails {
@@ -100,9 +104,9 @@ export interface DailyValues {
   exerciseSession?: ExerciseSession; // N16; sessão registrada no dia
   radiationDose?: number;
   bodyMassKg?: number;
-  mealsCompleted?: number; // preparado para N12: refeições completas no dia
-  waterSufficient?: boolean; // preparado para N12: água suficiente no dia
-  sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
+  mealsCompleted?: number; // N12: refeições completas no dia (0 a 3; 3 = 3 ou mais)
+  waterSufficient?: boolean; // N12: água suficiente no dia, no mesmo passo das refeições
+  sleepQuality?: 1 | 2 | 3 | 4 | 5; // N14: qualidade relatada, no mesmo passo das horas de sono
   vision?: 0 | 1 | 2;
   visionAmsler?: AmslerVisionResult; // N15; o resumo vision continua para histórico
   conditioning?: ConditioningAssessment; // N17; avaliação periódica comparada ao pré-voo
@@ -209,7 +213,7 @@ export interface Alert {
   indicator: IndicatorId;
   region: BodyRegion;
   level: Level;
-  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication';
+  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication' | 'missedMeals';
   whatChanged: LocalizedText;
   reference: LocalizedText;
   whyItMatters: string;
@@ -318,6 +322,7 @@ export interface IndicatorRule {
   demo: boolean;
   rangeEvidence?: RangeEvidence;
   missedLevel?: 'yellow' | 'red'; // medicação: nível quando uma dose prevista não foi tomada
+  missedMealDays?: number; // alimentação (N12): dias seguidos sem refeição completa que geram alerta
 }
 
 export interface Rules {

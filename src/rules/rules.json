@@ -409,6 +409,40 @@
       },
       "demo": true
     },
+    "mealsCompleted": {
+      "labelKey": "indicators:mealsCompleted.label",
+      "region": "wholeBody",
+      "unit": "",
+      "valueLabels": {
+        "0": "indicators:mealsCompleted.scale.0",
+        "1": "indicators:mealsCompleted.scale.1",
+        "2": "indicators:mealsCompleted.scale.2",
+        "3": "indicators:mealsCompleted.scale.3"
+      },
+      "useBaseline": false,
+      "missedMealDays": 2,
+      "nasaRisk": "Risk of Inadequate Food and Nutrition",
+      "hazards": ["distance"],
+      "messages": {
+        "whyItMatters": "alerts:rules.mealsCompleted.whyItMatters",
+        "whatToDo": {
+          "yellow": "alerts:rules.mealsCompleted.yellow",
+          "red": "alerts:rules.mealsCompleted.red"
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/?p=209742",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/?p=209742",
+          "https://pubmed.ncbi.nlm.nih.gov/25197887/"
+        ],
+        "green": "Pelo menos uma refeição completa no dia: escolha de demonstração. O registro é autorrelato, sem contagem de calorias.",
+        "yellow": "Dois dias seguidos sem refeição completa: proposta de demonstração (N12) para entrar no resumo do oficial médico. A água insuficiente aparece no registro, mas sozinha não gera alerta.",
+        "red": "Não é gerado por este critério. A perda de massa corporal (N11) é o indicador de nutrição com corte vermelho."
+      },
+      "demo": true
+    },
     "vision": {
       "labelKey": "indicators:vision.label",
       "region": "head",

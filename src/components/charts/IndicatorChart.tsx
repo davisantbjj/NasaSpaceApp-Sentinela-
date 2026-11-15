@@ -1,5 +1,5 @@
 import {
-  CartesianGrid, Line, LineChart, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  CartesianGrid, Line, LineChart, ReferenceArea, ReferenceDot, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from 'recharts';
 import { formatDate } from '../../lib/dates';
 import { formatNumber } from '../../lib/series';
@@ -24,6 +24,10 @@ interface Props {
   bands: ChartBand[]; // faixa verde geral de cada série
   baselines: { value: number; label: string }[];
   scaleLabels?: Record<string, string>;
+  // Dias destacados com um ponto sobre a linha (ex.: noite com remédio para dormir, N14).
+  markers?: { points: { date: string; value: number }[]; label: string };
+  // Linhas extras na dica de cada dia (ex.: qualidade do sono).
+  tooltipExtras?: Record<string, string[]>;
 }
 
 interface TooltipProps {
@@ -33,7 +37,7 @@ interface TooltipProps {
 }
 
 // Histórico de um indicador: linha do valor, faixa geral sombreada e linha de base tracejada.
-export function IndicatorChart({ data, series, unit, bands, baselines, scaleLabels }: Props) {
+export function IndicatorChart({ data, series, unit, bands, baselines, scaleLabels, markers, tooltipExtras }: Props) {
   const format = (value: number) => scaleLabels?.[String(value)] ?? formatNumber(value);
 
   const renderTooltip = ({ active, label, payload }: TooltipProps) => {
@@ -52,6 +56,9 @@ export function IndicatorChart({ data, series, unit, bands, baselines, scaleLabe
             </div>
           );
         })}
+        {tooltipExtras?.[String(label)]?.map((line) => (
+          <div key={line} className="small muted">{line}</div>
+        ))}
       </div>
     );
   };
@@ -102,6 +109,9 @@ export function IndicatorChart({ data, series, unit, bands, baselines, scaleLabe
                 isAnimationActive={false}
               />
             ))}
+            {markers?.points.map((point) => (
+              <ReferenceDot key={point.date} x={point.date} y={point.value} r={5} fill="var(--chart-2)" stroke="var(--surface)" strokeWidth={2} ifOverflow="extendDomain" />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -111,6 +121,9 @@ export function IndicatorChart({ data, series, unit, bands, baselines, scaleLabe
         ))}
         {bands.length > 0 && <span><span className="swatch band" />{i18n.t('trends.generalRange')}</span>}
         {baselines.length > 0 && <span><span className="swatch dash" />{i18n.t('trends.personalPattern')}</span>}
+        {markers && markers.points.length > 0 && (
+          <span><span className="dot" style={{ background: 'var(--chart-2)' }} />{markers.label}</span>
+        )}
       </div>
     </div>
   );

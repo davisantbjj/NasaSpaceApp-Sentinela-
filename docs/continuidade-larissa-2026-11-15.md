@@ -1,5 +1,13 @@
 # Continuidade da Larissa — 15/11/2026
 
+## Nova conferência da main remota — 15/11/2026
+
+Consulta a `origin/main`: `7de0df1`, de Talita Santos, implementa N12 (alimentação e água) e N14 (qualidade do sono). O repositório já estava mesclando esse commit, com as resoluções no índice e sem conflitos pendentes. A integração foi conferida preservando as revisões da Larissa (`1072f49`) e as integrações anteriores, incluindo N17, de Davi.
+
+N3–N6/N8 permanecem realizadas: evidências no `rules.json`, textos nos dois idiomas, revisão documental e correções factuais na apresentação. O `TASKS.md` reorganizado as listava na seção da Lorena como abertas; as marcações foram alinhadas à entrega da Larissa. N10 e a revisão completa dos dados da fase 12 continuam pendentes. Mensagens dependem do trabalho conjunto com Davi; apresentação final e materiais de entrega continuam reservados ao fim do escopo.
+
+Validação da base integrada: **104 testes em oito arquivos passaram**, build TypeScript/PWA passou; nenhuma marca de conflito encontrada em código/documentos e `git diff --cached --check` sem erros. Continua o aviso de pacote acima de 500 kB. Não houve nova validação pelo navegador nem publicação de commits no remoto.
+
 ## Integração local das atualizações de Davi — 15/11/2026
 
 Base local: `main` em `755187b`. Após consultar `origin`, foi identificado e integrado o commit de Davi `0d185ad`, com N15 (grade de Amsler, perguntas por olho e opção de pular) e N16 (exercício por sessão e comparação semanal com plano demonstrativo e linha de base). A cadência da visão continua pendente em N18. O merge ocorreu sem conflitos.

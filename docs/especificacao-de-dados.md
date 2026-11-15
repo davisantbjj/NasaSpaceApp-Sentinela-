@@ -64,9 +64,9 @@ interface DailyValues {
   exerciseSession?: ExerciseSession; // sessão do dia (N16)
   radiationDose?: number;
   bodyMassKg?: number;             // massa periódica, comparada ao início da missão
-  mealsCompleted?: number;         // preparado para N12
-  waterSufficient?: boolean;       // preparado para N12
-  sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
+  mealsCompleted?: number;         // N12: refeições completas (0 a 3; 3 = 3 ou mais)
+  waterSufficient?: boolean;       // N12: segunda pergunta do passo de alimentação
+  sleepQuality?: 1 | 2 | 3 | 4 | 5; // N14: segunda pergunta do passo de sono
   vision?: 0 | 1 | 2;              // resumo derivado, para histórico/alertas
   visionAmsler?: {                  // N15, um olho por vez
     left?: { distortedLines: boolean; missingAreas: boolean; nearReadingWorse: boolean };
@@ -118,6 +118,8 @@ interface PlannedMedication {
   id: string;
   label: string;     // "Suplemento de vitamina D"
   schedule: string;  // "1 vez ao dia"
+  asNeeded?: boolean; // só quando necessário: sem marcar não é dose esquecida
+  sleepAid?: boolean; // remédio para dormir, marcado no gráfico de sono (N14)
 }
 ```
 
@@ -128,10 +130,12 @@ interface MedicationDose {
   id: string;
   label: string;   // copiado do plano
   taken: boolean;
+  asNeeded?: boolean; // copiados do plano
+  sleepAid?: boolean;
 }
 ```
 
-O nome é copiado de propósito para o registro continuar legível se a lista prevista mudar depois. Se o tripulante não tem lista, o check-in nem pergunta. Uma dose prevista e não tomada gera alerta amarelo, com gatilho `missedMedication`.
+O nome é copiado de propósito para o registro continuar legível se a lista prevista mudar depois. Se o tripulante não tem lista, o check-in nem pergunta. Uma dose prevista e não tomada gera alerta amarelo, com gatilho `missedMedication`. Dose com `asNeeded` não gera esse alerta.
 
 Um limite conhecido: a lista prevista fica no cadastro sem cifra, diferente do resto. O aviso de privacidade registra isso.
 
