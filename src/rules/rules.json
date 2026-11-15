@@ -67,6 +67,35 @@
       },
       "demo": true
     },
+    "oxygenSaturation": {
+      "labelKey": "indicators:oxygenSaturation.label",
+      "region": "heart",
+      "unit": "%",
+      "green": { "min": 95, "max": 100 },
+      "yellow": { "min": 90, "max": 100 },
+      "useBaseline": false,
+      "deviationDirection": "below",
+      "nasaRisk": "Cardiovascular Adaptations; cabin atmosphere",
+      "hazards": ["hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "alerts:rules.oxygenSaturation.whyItMatters",
+        "whatToDo": {
+          "yellow": "alerts:rules.oxygenSaturation.yellow",
+          "red": "alerts:rules.oxygenSaturation.red"
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/hrp/risks/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://medlineplus.gov/lab-tests/pulse-oximetry/"
+        ],
+        "green": "95–100%: referência geral de saturação normal em adulto saudável em repouso; não é faixa validada para astronautas.",
+        "yellow": "90–94%: escolha de demonstração, sem validação clínica. Oxímetro de dedo pode errar com mão fria, movimento ou esmalte.",
+        "red": "Abaixo de 90%: lógica de demonstração para hipoxemia, não um limiar de emergência validado. Fonte a revisar pela Larissa."
+      },
+      "demo": true
+    },
     "glucose": {
       "labelKey": "indicators:glucose.label",
       "region": "metabolism",
@@ -479,32 +508,6 @@
       },
       "demo": true
     },
-    "conditioning": {
-      "labelKey": "indicators:conditioning.label",
-      "region": "musculoskeletal",
-      "unit": "%",
-      "green": { "min": 80, "max": 200 },
-      "yellow": { "min": 0, "max": 79.99 },
-      "useBaseline": false,
-      "nasaRisk": "Reduced Cardiorespiratory and Musculoskeletal Fitness",
-      "hazards": ["gravity"],
-      "messages": {
-        "whyItMatters": "alerts:rules.conditioning.whyItMatters",
-        "whatToDo": {
-          "yellow": "alerts:rules.conditioning.yellow",
-          "red": "alerts:rules.conditioning.red"
-        }
-      },
-      "sourceUrl": "https://www.nasa.gov/reference/4-0-human-performance/",
-      "rangeEvidence": {
-        "status": "official-threshold-not-demo-range",
-        "generalReferenceUrls": ["https://www.nasa.gov/reference/4-0-human-performance/"],
-        "green": "Pelo menos 80% do valor pré-missão: requisito NASA de manutenção de capacidade aeróbica e força. O app recebe percentuais informados, sem medir a capacidade nem conferir protocolo ou comparabilidade com o pré-voo. O valor 200 é limite da entrada demonstrativa, não máximo fisiológico oficial.",
-        "yellow": "Abaixo de 80% em qualquer componente gera amarelo no app. O requisito oficial sustenta o número, mas não valida essa classificação, o método de entrada ou uma decisão individual de aptidão. demo false identifica a origem do corte, não valida o protótipo.",
-        "red": "Não há segundo corte definido nesta tarefa; o motor gera alerta amarelo abaixo de 80%."
-      },
-      "demo": false
-    },
     "medication": {
       "labelKey": "indicators:medication.label",
       "region": "wholeBody",
@@ -609,6 +612,13 @@
     },
     "readaptation": {
       "noticeDaysBefore": 7
+    },
+    "hydration": {
+      "mlPerKg": 35,
+      "minimumMl": 2000,
+      "highMlPerKg": 70,
+      "demo": true,
+      "evidence": "Referência de demonstração: 35 mL por kg de massa corporal, nunca abaixo de 2 L por dia; acima de 70 mL/kg é mostrado como bem acima da referência. Fonte a revisar pela Larissa (requisitos nutricionais da NASA para voo)."
     }
   },
   "correlationPairs": [

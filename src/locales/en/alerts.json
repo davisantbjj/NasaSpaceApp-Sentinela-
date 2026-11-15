@@ -4,7 +4,8 @@
     "baselineDeviation": "Change from personal baseline",
     "symptom": "Reported symptom",
     "missedMedication": "Dose not taken",
-    "missedMeals": "Meals missed"
+    "missedMeals": "Meals missed",
+    "lowWater": "Low water"
   },
   "change": {
     "general": "{{name}} is {{value}}",
@@ -12,8 +13,9 @@
     "symptoms": "Reported symptoms: {{symptoms}}",
     "missedMedication": "Dose not taken today: {{doses}}",
     "bodyMassLoss": "Body mass: {{percent}}% below the start ({{value}} kg now; {{start}} kg at start)",
-    "conditioning": "{{name}} is {{value}} of the preflight value",
-    "missedMeals": "No complete meal for {{days}} days in a row"
+    "missedMeals": "No complete meal for {{days}} days in a row",
+    "lowWater": "Water: {{value}} mL today, below the {{reference}} mL reference",
+    "missedMealsAndWater": "No complete meal for {{days}} days in a row and water below the reference ({{value}} of {{reference}} mL)"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -36,8 +38,8 @@
     "noSymptoms": "Expected: no symptoms",
     "medication": "Expected: all scheduled doses for the day",
     "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%",
-    "conditioning": "Reference: at least {{min}}{{unit}} of the preflight value",
-    "meals": "Expected: at least one complete meal a day; the alert appears after {{days}} days in a row without one"
+    "meals": "Expected: at least one complete meal a day; the alert appears after {{days}} days in a row without one",
+    "water": "Demo reference: {{reference}} mL ({{perKg}} mL per kg of body mass, at least 2 L a day)"
   },
   "confidence": {
     "baselineForming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
@@ -103,6 +105,11 @@
       "whyItMatters": "Microgravity changes circulation and how the heart works.",
       "yellow": "Rest for 10 minutes, repeat the measurement, and record it again.",
       "red": "Rest and notify the onboard medical officer."
+    },
+    "oxygenSaturation": {
+      "whyItMatters": "Low saturation can mean too little oxygen in the blood. Finger pulse oximeters are wrong with cold hands, movement, or nail polish, so repeat the measurement before acting.",
+      "yellow": "Rest, warm your hand, and measure again in 5 minutes. If it stays below 95%, tell the medical officer and check the cabin oxygen readings.",
+      "red": "Measure again now. If it stays below 90%, tell the medical officer immediately and follow the mission atmosphere protocol."
     },
     "glucose": {
       "whyItMatters": "Sentinela includes glucose because the challenge mentions blood sugar, and only selected profiles track it. We found no routine inflight glucose monitoring in the NASA sources reviewed. This does not rule out research or individual indications, or make glucose a measure of adequate nutrition.",
@@ -177,11 +184,6 @@
       "whyItMatters": "Body mass is an indicator of nutrition during flight. The comparison is with this mission's starting value, not a universal range.",
       "yellow": "Review food, hydration, and the plan with the medical officer.",
       "red": "Notify the medical officer now to review nutrition and the mission plan."
-    },
-    "conditioning": {
-      "whyItMatters": "Physical conditioning helps preserve work capacity during the mission and readaptation after flight.",
-      "yellow": "Repeat the assessment as planned and discuss any training change with the medical officer.",
-      "red": "This criterion does not generate a red alert."
     },
     "mealsCompleted": {
       "whyItMatters": "In flight, crew members often eat less than they need, and body mass loss is concentrated in the first month. Several days in a row without a complete meal go into the medical officer summary.",

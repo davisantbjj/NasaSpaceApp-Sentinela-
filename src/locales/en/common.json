@@ -81,7 +81,6 @@
     "checkinOwnPending": "Today's check-in is pending. The dashboard shows the record from {{date}}.",
     "systems": "Body systems",
     "regionHint": "Select a region to view its indicators.",
-    "sourceNote": "Source: {{source}}",
     "summary": {
       "allGreen": "All regions as expected",
       "red_one": "{{count}} region with a warning",
@@ -383,7 +382,7 @@
     "sections": {
       "stored": {
         "title": "What stays in this browser",
-        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records. Daily values also include body mass, meals, water, sleep quality, visual responses for each eye, exercise session, and conditioning assessment, when recorded."
+        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records. Daily values also include body mass, meals, water intake (in mL), pulse oximeter oxygen saturation, sleep quality, visual responses for each eye, and exercise session (type, equipment, and minutes), when recorded."
       },
       "purpose": {
         "title": "Purpose",
@@ -414,8 +413,8 @@
         "text": "The mission profile and environment stay in the device's shared preferences, without encryption. The bone estimate and the sum of recorded radiation doses are calculated on screen, without creating a new measurement. The JSON copy includes the recorded daily doses, but not these calculations or the shared mission preferences. The demo data is simulated. Initial body mass and prior mission dose are stored unencrypted in the profile and included in the individual copy; only the medical officer can edit them through the interface. Cabin CO₂ is shared in unencrypted settings and excluded from that copy. There is no continuous device monitoring."
       },
       "reactionAndSource": {
-        "title": "Reaction test and declared source",
-        "text": "The check-in can store the average reaction time in milliseconds, short or full mode, completion, duration, number of valid responses, and anticipations. This data and the declared source of values are encrypted with the check-in and appear readable in the JSON copy. We do not store each tap, recordings, or device identification. Selecting wearable sensor or dosimeter only states where you copied the number from; the app does not read devices. Weekly goals and readaptation notices are calculated on screen, without diagnosis."
+        "title": "Reaction test and manual entry",
+        "text": "The check-in can store the average reaction time in milliseconds, short or full mode, completion, duration, number of valid responses, and anticipations. This data is encrypted with the check-in and appears readable in the JSON copy. We do not store each tap, recordings, or device identification. Every value is typed in by you: the app does not connect to devices or read sensors. Weekly goals and readaptation notices are calculated on screen, without diagnosis."
       }
     }
   },
@@ -425,7 +424,7 @@
     "intro": "The actions below apply only to your data, for the profile you used to sign in.",
     "encryption": "Check-in values, notes, and message text are encrypted with one key per crew member, opened by your PIN and by the medical officer's. The profile and the medication plan are not encrypted. Prototype limit: the short PIN can be guessed by anyone who copies the database.",
     "actions": "Copy and deletion request",
-    "copyIncludes": "The copy includes the profile and the medication plan, the check-ins (including medication taken, stress, workload, exercise, reaction test result and details, and declared source, when recorded), the medical officer's notes, messages, the access log, and the deletion request. It does not include other crew members' data. The downloaded JSON file is readable, not encrypted; store it carefully. It is a copy for reference, without import or regulated portability.",
+    "copyIncludes": "The copy includes the profile and the medication plan, the check-ins (including medication taken, stress, workload, exercise, reaction test result and details, when recorded), the medical officer's notes, messages, the access log, and the deletion request. It does not include other crew members' data. The downloaded JSON file is readable, not encrypted; store it carefully. It is a copy for reference, without import or regulated portability.",
     "export": "Export my data as JSON",
     "pdf": "Prepare a PDF report for the medical team on Earth",
     "pdfHint": "Creates a readable report you can save as PDF or share yourself. The app does not send the file.",
@@ -544,6 +543,7 @@
       "red": "Warning"
     },
     "details": "View alerts and actions →",
+    "more": "+{{count}} more",
     "silence": "Silence",
     "silenced": "Sound silenced. The notice stays until someone confirms.",
     "confirm": "Confirm",

@@ -43,34 +43,6 @@ describe('levelForRange', () => {
     expect(levelForRange(121, green, yellow)).toBe('red');
   });
 
-  describe('condicionamento periódico (N17)', () => {
-    const assessment = (aerobicPercent: number, strengthPercent: number): DailyValues => ({
-      conditioning: {
-        aerobicPercent,
-        strengthPercent,
-        aerobicApparatus: 'treadmill',
-        strengthApparatus: 'resistive',
-      },
-    });
-
-    it('gera um alerta separado para cada capacidade abaixo de 80%', () => {
-      const alerts = evaluateLast([assessment(79, 75)]);
-      expect(alerts).toHaveLength(2);
-      expect(alerts.map((alert) => alert.level)).toEqual(['yellow', 'yellow']);
-      expect(alerts.every((alert) => alert.indicator === 'conditioning')).toBe(true);
-    });
-
-    it('o corte de 80% vem da faixa verde do rules.json', () => {
-      const custom = structuredClone(rules);
-      custom.indicators.conditioning!.green = { min: 70, max: 200 };
-      expect(evaluateLast([assessment(75, 72)], 'station', custom)).toEqual([]);
-    });
-
-    it('não alerta quando as duas capacidades atingem 80%', () => {
-      expect(evaluateLast([assessment(80, 100)])).toEqual([]);
-    });
-  });
-
   it('sem faixa geral fica verde', () => {
     expect(levelForRange(999)).toBe('green');
   });
@@ -379,8 +351,41 @@ describe('evaluateRecord', () => {
       expect(evaluateLast([{ mealsCompleted: 0 }, { heartRate: 70 }, { mealsCompleted: 0 }])).toEqual([]);
     });
 
-    it('água insuficiente sozinha não gera alerta', () => {
+    it('o sim/não antigo da água não gera alerta', () => {
       expect(evaluateLast([{ mealsCompleted: 3, waterSufficient: false }, { mealsCompleted: 3, waterSufficient: false }])).toEqual([]);
+    });
+
+    it('água abaixo de 35 mL por kg gera amarelo, com a referência calculada pelo peso', () => {
+      // 70 kg × 35 mL = 2.450 mL
+      const [alert] = evaluateLast([{ mealsCompleted: 3, bodyMassKg: 70, waterIntakeMl: 1800 }]);
+      expect(alert.indicator).toBe('mealsCompleted');
+      expect(alert.level).toBe('yellow');
+      expect(alert.trigger).toBe('lowWater');
+      expect(alert.whatChanged.key).toBe('alerts:change.lowWater');
+      expect(alert.reference.params?.reference).toMatch(/^2[.,]450$/);
+      expect(evaluateLast([{ mealsCompleted: 3, bodyMassKg: 70, waterIntakeMl: 2500 }])).toEqual([]);
+    });
+
+    it('sem peso do dia usa o último registrado, depois o do início, e nunca menos de 2 L', () => {
+      expect(evaluateLast([{ bodyMassKg: 80 }, { mealsCompleted: 3, waterIntakeMl: 2600 }])).toHaveLength(1); // 80 × 35 = 2.800
+      expect(evaluateLast([{ mealsCompleted: 3, waterIntakeMl: 2600 }], 'station', rules, { startBodyMassKg: 70 })).toEqual([]);
+      expect(evaluateLast([{ mealsCompleted: 3, waterIntakeMl: 1900 }])).toHaveLength(1); // sem peso: mínimo de 2.000 mL
+    });
+
+    it('refeições e água juntas viram um só alerta', () => {
+      const alerts = evaluateLast([{ mealsCompleted: 0 }, { mealsCompleted: 0, bodyMassKg: 70, waterIntakeMl: 1000 }]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].whatChanged.key).toBe('alerts:change.missedMealsAndWater');
+    });
+  });
+
+  describe('oxímetro (SpO2)', () => {
+    it('95% ou mais é verde, de 90% a 94% é amarelo e abaixo de 90% é vermelho', () => {
+      expect(evaluateLast([{ oxygenSaturation: 97 }])).toEqual([]);
+      expect(evaluateLast([{ oxygenSaturation: 93 }])[0].level).toBe('yellow');
+      const [red] = evaluateLast([{ oxygenSaturation: 88 }]);
+      expect(red.level).toBe('red');
+      expect(red.region).toBe('heart');
     });
   });
 

@@ -13,6 +13,7 @@ const TRIGGER_TEXT: Record<Alert['trigger'], string> = {
   symptom: 'alerts:trigger.symptom',
   missedMedication: 'alerts:trigger.missedMedication',
   missedMeals: 'alerts:trigger.missedMeals',
+  lowWater: 'alerts:trigger.lowWater',
 };
 
 // As seis partes de todo alerta: o que mudou, a referência, por que importa,

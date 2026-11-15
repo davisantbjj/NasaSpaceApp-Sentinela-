@@ -33,7 +33,8 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 
 | Indicador | Unidade | Região do corpo | Como medir (texto mostrado no app) |
 | --- | --- | --- | --- |
-| Pressão arterial | mmHg (sistólica e diastólica) | Coração | Sente-se preso ao assento, descanse 5 minutos e use o medidor de braço. Digite os dois números. |
+| Pressão arterial | mmHg (sistólica e diastólica) | Coração | Sente-se com as costas apoiadas (na nave, preso ao assento) e descanse 5 minutos. Pés retos e apoiados, sem cruzar as pernas nem deixar os pés soltos (sola no chão ou, em microgravidade, no apoio de pés). Braço apoiado, com o manguito na altura do peito. Digite os dois números. |
+| Oxigenação (oxímetro) | % (SpO2) | Coração | Oxímetro de dedo no indicador ou no dedo médio, em repouso, mão parada, aquecida e sem esmalte. Espere estabilizar (cerca de 30 s) e digite a saturação. |
 | Frequência cardíaca | bpm | Coração | Meça em repouso, antes do exercício. Use o oxímetro de dedo ou conte os batimentos por 1 minuto. |
 | Temperatura | °C | Defesas do corpo | Use o termômetro de bordo, sempre no mesmo horário e longe do exercício. |
 | Glicemia | mg/dL | Metabolismo | Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição. |
@@ -44,9 +45,8 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Tempo de reação | ms (média do teste) | Mente e sono | Teste no próprio app: quando aparecer o sinal, tocar na área ou apertar espaço o mais rápido possível. 3 minutos, ou 30 s na versão curta para demonstração. Respostas antes do sinal não entram na média. |
 | Exercício | sessão | Ossos e músculos | Escolha o tipo (aeróbico, resistido ou os dois), marque cada aparelho usado e informe os minutos em cada um; o app soma a duração total. Aparelhos: esteira, bicicleta ergométrica, remo, flywheel da Orion e outro na parte aeróbica; aparelho resistido, flywheel e outro na resistida. Também registra a frequência cardíaca média do aeróbico e se o resistido foi feito, parcial ou não feito. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
-| Alimentação e água | refeições completas (0, 1, 2, 3 ou mais) e água (sim ou não) | Corpo inteiro | Conte as refeições que comeu por inteiro hoje e diga se bebeu água suficiente. Sem contagem de calorias. |
+| Alimentação e água | refeições completas (0, 1, 2, 3 ou mais) e água bebida (mL) | Corpo inteiro | Conte as refeições que comeu por inteiro hoje e some a água que bebeu, em mL. O passo mostra a referência calculada pelo seu peso. Sem contagem de calorias. |
 | Visão | grade de Amsler | Olhos e visão | Cubra um olho, olhe o ponto central e toque nas áreas da grade onde as linhas parecerem tortas ou sumirem; depois responda sobre linhas tortas, áreas faltando e piora na leitura de perto. Repita com o outro olho. Cada olho mostra se foi testado e se teve alteração. Pular não grava nada. O autoteste não diagnostica SANS. |
-| Condicionamento físico | percentual | Ossos e músculos | Em uma avaliação periódica, informe o resultado aeróbico e de força como percentual do valor antes do voo e selecione o aparelho utilizado. Abaixo de 80% gera alerta. |
 | Medicação | lista de marcar | Corpo inteiro | Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada, menos a de remédio "só quando necessário", que só conta quando marcada. Só aparece para quem tem medicação prevista. |
 | Sintomas | lista de marcar | Corpo inteiro | Marque tudo o que sentiu hoje. Se não sentiu nada, avance sem marcar. |
 
@@ -101,6 +101,7 @@ Os limites contam como dentro da faixa: 7 h de sono é verde, e 6,9 h é amarelo
 | Pressão sistólica | 100 a 130 | 90 a 99 ou 131 a 140 | abaixo de 90 ou acima de 140 |
 | Pressão diastólica | 60 a 85 | 55 a 59 ou 86 a 90 | abaixo de 55 ou acima de 90 |
 | Frequência cardíaca | 60 a 100 bpm | 50 a 59 ou 101 a 120 | abaixo de 50 ou acima de 120 |
+| Oxigenação (SpO2) | 95 a 100% | 90 a 94% | abaixo de 90% |
 | Glicemia | 70 a 99 mg/dL | 60 a 69 ou 100 a 125 | abaixo de 60 ou acima de 125 |
 | Temperatura | 36,1 a 37,2 °C | 35,5 a 36,0 ou 37,3 a 37,9 | abaixo de 35,5 ou acima de 37,9 |
 | Sono | 7 a 9 h | 5 a 6,9 ou 9,1 a 10 | abaixo de 5 ou acima de 10 |
@@ -166,7 +167,7 @@ Quando o registro mais recente da própria pessoa tem alerta, o app levanta um *
 
 - **Amarelo:** dois bipes curtos, uma vez só.
 - **Vermelho:** três bipes repetidos a cada 2,5 s até alguém silenciar ou confirmar.
-- **Banner** no alto da tela, abaixo da barra, com a cor, o ícone, o título do nível ("Acompanhar" ou "Atenção imediata"; em inglês, Caution ou Warning, o padrão da NASA) e o que mudou. O vermelho fica preso no topo ao rolar a página até alguém confirmar; o amarelo rola com a página, para não cobrir o formulário do check-in. O título da aba ganha um contador, como "(1) Sentinela". Nada pisca nem se move (WCAG 2.3.1).
+- **Banner** no alto da tela, abaixo da barra, com a cor, o ícone, o título do nível ("Acompanhar" ou "Atenção imediata"; em inglês, Caution ou Warning, o padrão da NASA) e o que mudou. O bloco completo rola com a página. Enquanto houver um vermelho, ao rolar aparece abaixo da barra uma **faixa compacta de uma linha** com o vermelho, "+N mais" quando há outros alarmes, Silenciar e Confirmar, até alguém confirmar. O amarelo não fica preso, para não cobrir o formulário do check-in. O título da aba ganha um contador, como "(1) Sentinela". Nada pisca nem se move (WCAG 2.3.1).
 - **Vibração** no celular, quando o aparelho permite. O iPhone não permite.
 - **Voz curta**, só com o nível ("Alerta vermelho no Sentinela"). Ela não diz o motivo, porque numa cabine compartilhada todos ouvem.
 - **Silenciar** para o som, mas o banner fica. O banner só sai com **Confirmar** (WCAG 1.4.2). O volume de cada nível se escolhe em **Missão → Volume dos alarmes**, com botão para testar o som.
@@ -175,7 +176,9 @@ Os sons são gerados com Web Audio, sem arquivos. A confirmação vale para aque
 
 A função é uma só, `raiseAlarm(level, text, options)` em `src/lib/alarm.ts`, para os lembretes (horário do check-in, doses, metas) usarem o mesmo banner e o mesmo som.
 
-### Texto maior e telas pequenas
+### Texto maior, idioma e telas pequenas
+
+O idioma escolhido (português ou inglês) fica guardado neste navegador e vale na próxima abertura, para todos os perfis. Sem escolha salva, o app abre em inglês.
 
 O botão **Texto maior**, no menu do usuário e no aviso inicial, aumenta o texto do app inteiro para 125%. Todo o CSS usa `rem`, então nada se sobrepõe. A escolha fica guardada no aparelho e vale para todos os perfis. Em 320 px de largura, em 200% de zoom e com espaçamento de texto aumentado (WCAG 1.4.4, 1.4.10 e 1.4.12), nenhuma tela rola na horizontal. Os selos quebram linha em vez de cortar, e a barra de abas ganha uma linha própria quando não cabe ao lado da marca. No celular, o painel mostra antes da figura um resumo como "2 regiões para acompanhar".
 
@@ -196,7 +199,7 @@ Um remédio pode ser marcado no plano como **só quando necessário** (`asNeeded
 
 ### Alimentação e água
 
-Um passo diário pergunta quantas refeições completas a pessoa fez (0, 1, 2, 3 ou mais) e se bebeu água suficiente (sim ou não), sem contar calorias. Os astronautas registram o que comem num aplicativo de tablet desde 2016 (NASA). **Dois dias seguidos sem nenhuma refeição completa** (`missedMealDays` em `rules.json`) geram alerta **amarelo**, gatilho `missedMeals`, com confiança baixa por ser autorrelato. O alerta entra na lista do oficial médico, como os outros amarelos. Um dia sem registro de refeições interrompe a sequência. A água insuficiente aparece no registro, mas sozinha não gera alerta. O corte é uma proposta de demonstração.
+Um passo diário pergunta quantas refeições completas a pessoa fez (0, 1, 2, 3 ou mais) e quanto de água bebeu, em mL, sem contar calorias. Os astronautas registram o que comem num aplicativo de tablet desde 2016 (NASA). **Dois dias seguidos sem nenhuma refeição completa** (`missedMealDays` em `rules.json`) geram alerta **amarelo**, gatilho `missedMeals`, com confiança baixa por ser autorrelato. O alerta entra na lista do oficial médico, como os outros amarelos. Um dia sem registro de refeições interrompe a sequência. A água é comparada com uma referência pelo peso (`context.hydration` em `rules.json`): **35 mL por kg** de massa corporal, nunca abaixo de **2 L por dia**. O peso é o do próprio dia, senão o último registrado, senão o do início da missão. Abaixo da referência, o mesmo alerta amarelo aparece com o gatilho `lowWater`; com refeições e água em falta juntos, sai um alerta só. Acima de 70 mL/kg o valor é mostrado como bem acima da referência, sem alerta. Registros antigos guardam só o sim/não da água e não geram alerta. Os cortes são proposta de demonstração, com fonte a revisar pela Larissa.
 
 ### Qualidade do sono
 
@@ -247,9 +250,9 @@ Para responder, vale tocar, clicar ou apertar espaço (ou Enter), mesmo com o fo
 
 O resultado identifica modo curto/completo, conclusão, duração, respostas válidas e antecipações. Só sessões completas de três minutos concluídas entram em série, gráfico, linha de base, alertas e correlações. Curto, interrompido e registros antigos sem modo ficam para consulta/exportação, sem comparação pessoal. Um teste com menos de três respostas válidas não salva resultado. A execução termina ao atingir a duração, mesmo sem nova resposta. Este teste não é uma reprodução clinicamente validada do RST NASA; latências do aparelho e forma de interação influenciam a média.
 
-### Origem do dado
+### Só registro manual
 
-Nos passos de **sono**, **frequência cardíaca** e **radiação**, o check-in pergunta "De onde veio o valor?": digitado, sensor vestível (ex.: pulseira de actigrafia) ou dosímetro pessoal. O app **não lê aparelhos**: a pessoa informa onde leu o número. A origem aparece na revisão do check-in e no painel ("Origem: sensor vestível"), fica cifrada junto com os valores do dia e não muda nenhum nível. Na demonstração, o sono vem de um sensor vestível e a radiação do dosímetro. É o primeiro passo para, no futuro, receber os dados direto dos aparelhos.
+Todos os valores são digitados pela pessoa no check-in. O app **não se conecta a aparelhos** nem lê sensores, e não pergunta mais de onde veio o número: a opção "De onde veio o valor?" (M10) foi retirada em 15/11 para a entrega. Quem usa uma pulseira ou um dosímetro copia o valor que o aparelho mostra.
 
 ### Readaptação à gravidade
 
@@ -257,11 +260,9 @@ Só o **comandante** e o **oficial médico** mudam o perfil, a fase, o ambiente 
 
 Com um perfil de missão, o cartão "Contexto de readaptação à gravidade", em Missão, mostra a próxima mudança de gravidade: pouso na Lua ou em Marte depois de uma fase sem gravidade, ou a volta à Terra no fim da missão. Faltando **7 dias ou menos** (`rules.json`, `context.readaptation`), a mudança aparece em destaque, com o pedido de reler a orientação e combinar o protocolo com o oficial médico. A orientação em si é a mesma de antes (tontura ao levantar, com fonte da NASA) e não muda nenhum nível.
 
-### Condicionamento periódico
+### Condicionamento físico (retirado)
 
-O indicador de condicionamento registra separadamente a **capacidade aeróbica** e a **força**, sempre como percentual do valor medido antes do voo. O critério de acompanhamento é manter pelo menos **80%** em cada resultado; abaixo disso, o motor gera um alerta amarelo para o oficial médico. A referência vem da orientação operacional da NASA/OCHMO e não é uma faixa demonstrativa.
-
-O registro também guarda o aparelho usado: esteira, bicicleta ergométrica, remo ergométrico, aparelho resistido, flywheel da Orion ou outro. Isso identifica a origem da avaliação, mas não transforma o app em um teste físico automático. A frequência da avaliação é periódica e ainda deve ser definida pela equipe médica; a cadência detalhada fica na N18.
+O indicador de condicionamento (N17, capacidade aeróbica e força em percentual do valor antes do voo) foi retirado em 15/11: não há como medir essa avaliação a bordo com o que o app oferece. A migração v15 tira o indicador dos cadastros já gravados. Os nomes dos aparelhos continuam no passo de exercício.
 
 ### Metas da semana
 
@@ -323,12 +324,12 @@ Antes da primeira entrada, o app apresenta finalidade, dados, acesso, retenção
 
 Seus dados exporta somente o perfil de quem entrou e seus registros, anotações, mensagens, acessos e pedido, em JSON legível. Registrar o pedido não executa nem envia exclusão; não existe botão de exclusão imediata do histórico pelo tripulante. Recarregar exige novo login e preserva os registros. Recriar a demonstração é uma ação explícita do oficial médico que limpa os dados locais de todos. Cópias JSON já baixadas não são apagadas. Plano de medicação e preferências da missão ficam sem cifra; estimativa óssea e soma de radiação são cálculos de tela e não integram a cópia individual.
 
-Mensagens são texto local para mostrar à equipe: não são entregues nem têm confirmação de leitura. Cada pessoa entra com o próprio PIN, e o texto fica cifrado no aparelho. Detalhes em `docs/privacidade.md`.
+Mensagens são texto local para mostrar à equipe: não são entregues nem têm confirmação de leitura. Cada pessoa entra com o próprio perfil (na demonstração, com um toque, sem digitar o PIN), e o texto fica cifrado no aparelho. Detalhes em `docs/privacidade.md`.
 
 Missão mostra uma nota educativa de readaptação à gravidade, com contexto pelo campo `sex`, sem mudar classificação. A rastreabilidade das faixas está em `rangeEvidence`, no JSON, e em `docs/pesquisa/revisao-faixas.md`. A revisão documental não valida clinicamente os cortes.
 
 - As faixas são de demonstração e ainda precisam de revisão da equipe (ver `TASKS.md`).
-- Os dados ficam no navegador onde o app foi aberto, cifrados com uma chave por tripulante: o PIN de um tripulante não abre os dados de outro. Limites: o PIN curto (4 a 6 dígitos) pode ser descoberto testando todas as combinações por quem copiar o banco; e, como tudo roda num navegador só, a chave privada do solo fica no mesmo aparelho, cifrada no PIN do solo.
+- Os dados ficam no navegador onde o app foi aberto, cifrados com uma chave por tripulante: o PIN de um tripulante não abre os dados de outro. Na demonstração, os perfis de exemplo entram sem digitar o PIN, então quem tem o aparelho abre qualquer perfil. Limites: o PIN curto (4 a 6 dígitos) pode ser descoberto testando todas as combinações por quem copiar o banco; e, como tudo roda num navegador só, a chave privada do solo fica no mesmo aparelho, cifrada no PIN do solo.
 - O aviso ao solo é só uma marcação, e os lembretes aparecem só dentro do app.
 - Humor, estresse, carga de trabalho, visão, medicação e sintomas são autorrelato. O app não substitui exame médico.
 

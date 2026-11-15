@@ -15,8 +15,8 @@ import { sealRecord } from './recordsRepo';
 const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
-  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
-  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'conditioning',
+  'bloodPressure', 'heartRate', 'oxygenSaturation', 'temperature', 'sleepHours', 'mood', 'stress', 'workload',
+  'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision',
   'symptoms',
 ];
 
@@ -105,6 +105,8 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
     const reactionRandom = mulberry32(profile.seed + 3000); // tempo de reação (M4)
     const nutritionRandom = mulberry32(profile.seed + 4000); // alimentação e água (N12)
     const sleepQualityRandom = mulberry32(profile.seed + 5000); // qualidade do sono (N14)
+    const waterRandom = mulberry32(profile.seed + 6000); // água em mL
+    const oxygenRandom = mulberry32(profile.seed + 7000); // oxímetro (SpO2)
     // Variação em torno do valor de base, limitada a ±spread.
     const around = (center: number, spread: number, decimals = 0) => {
       const factor = 10 ** decimals;
@@ -145,9 +147,12 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         resistanceMinutes: Math.round(40 + (resistanceRandom() * 2 - 1) * 3),
         // Tempo de reação perto de 300 ms, com gerador próprio.
         reactionTime: Math.round(300 + (reactionRandom() * 2 - 1) * 12),
-        // Pelo menos duas refeições completas e quase sempre água suficiente: não gera alerta (N12).
+        // Pelo menos duas refeições completas: não gera alerta (N12).
         mealsCompleted: nutritionRandom() < 0.7 ? 3 : 2,
-        waterSufficient: nutritionRandom() < 0.9,
+        // Água entre 40 e 46 mL/kg, sempre acima da referência de 35 mL/kg: não gera alerta.
+        waterIntakeMl: Math.round((base.bodyMassKg * (40 + waterRandom() * 6)) / 50) * 50,
+        // Saturação entre 96% e 99%, na faixa verde.
+        oxygenSaturation: 96 + Math.floor(oxygenRandom() * 4),
         // Qualidade do sono entre regular e muito boa, na maior parte boa (N14).
         sleepQuality: ((r: number) => (r < 0.6 ? 4 : r < 0.85 ? 3 : 5))(sleepQualityRandom()),
       };
@@ -158,13 +163,8 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         Object.assign(values, { [indicator]: all[indicator] });
       }
       // Segundas perguntas dos passos de alimentação e de sono.
-      if (values.mealsCompleted !== undefined) values.waterSufficient = all.waterSufficient;
+      if (values.mealsCompleted !== undefined) values.waterIntakeMl = all.waterIntakeMl;
       if (values.sleepHours !== undefined) values.sleepQuality = all.sleepQuality;
-      // Na demonstração, o sono vem de um sensor vestível e a dose do dosímetro pessoal (M10).
-      const sources: DailyValues['sources'] = {};
-      if (values.sleepHours !== undefined) sources.sleepHours = 'wearable';
-      if (values.radiationDose !== undefined) sources.radiationDose = 'dosimeter';
-      if (Object.keys(sources).length > 0) values.sources = sources;
       records.push({
         id: `${profile.member.id}_${date}`,
         crewId: profile.member.id,

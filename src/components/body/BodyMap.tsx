@@ -58,8 +58,11 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
   const { image, viewBox, regions } = BODY_FIGURES[figure];
   const glowId = `bodymap-glow-${useId().replace(/:/g, '')}`;
   const scannerId = `bodymap-scanner-${useId().replace(/:/g, '')}`;
+  const beamId = `bodymap-beam-${useId().replace(/:/g, '')}`;
+  const gridId = `bodymap-grid-${useId().replace(/:/g, '')}`;
   const silhouette = regions.find((region) => region.id === 'wholeBody')?.outline;
   const [viewX, viewY, viewWidth, viewHeight] = viewBox.split(' ').map(Number);
+  const band = Math.round(viewHeight * 0.14); // altura da faixa do scanner
 
   const onKey = (event: KeyboardEvent, region: BodyRegion) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -88,12 +91,26 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
         <clipPath id={scannerId}>
           {silhouette ? <path d={silhouette} /> : <rect x="0" y="0" width={viewWidth} height={viewHeight} />}
         </clipPath>
+        {/* Faixa do scanner: transparente em cima, mais forte perto da borda de baixo. */}
+        <linearGradient id={beamId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="currentColor" stopOpacity="0" />
+          <stop offset="0.85" stopColor="currentColor" stopOpacity="0.28" />
+          <stop offset="1" stopColor="currentColor" stopOpacity="0.45" />
+        </linearGradient>
+        <pattern id={gridId} width="14" height="14" patternUnits="userSpaceOnUse">
+          <path d="M14 0H0V14" fill="none" stroke="currentColor" strokeWidth="0.6" />
+        </pattern>
       </defs>
       <image href={imageSrc(image.file)} width={image.width} height={image.height} aria-hidden="true" />
+      {/* Scanner: grade fina parada e uma faixa que percorre o corpo de cima a baixo, recortadas na silhueta.
+          Só decoração (aria-hidden); para com prefers-reduced-motion. */}
       <g className="bodymap-scanner" clipPath={`url(#${scannerId})`} aria-hidden="true"
-        style={{ '--scan-height': `${viewHeight}px` } as CSSProperties}>
-        <line x1={viewX} x2={viewX + viewWidth} y1={viewY} y2={viewY} />
-        <line className="bodymap-scanner-trail" x1={viewX} x2={viewX + viewWidth} y1={viewY + 5} y2={viewY + 5} />
+        style={{ '--scan-distance': `${viewHeight + band}px` } as CSSProperties}>
+        <rect className="bodymap-scanner-grid" x={viewX} y={viewY} width={viewWidth} height={viewHeight} fill={`url(#${gridId})`} />
+        <g className="bodymap-scanner-beam">
+          <rect x={viewX} y={viewY - band} width={viewWidth} height={band} fill={`url(#${beamId})`} />
+          <line x1={viewX} x2={viewX + viewWidth} y1={viewY} y2={viewY} />
+        </g>
       </g>
       {regions.map((def) => {
         const { id, shapes, marker, padHit, outline } = def;

@@ -1,4 +1,4 @@
-import type { BodyRegion, DataSource, Environment, IndicatorId } from '../types';
+import type { BodyRegion, Environment, IndicatorId } from '../types';
 import i18n from '../i18n';
 
 export interface ScaleOption {
@@ -21,25 +21,14 @@ export interface IndicatorContent {
   // (essas ficam em src/rules/rules.json).
   input?: { min: number; max: number; step: number };
   scale?: ScaleOption[];
-  sources?: DataSource[]; // de onde o valor pode vir (M10); sem lista, só digitado
 }
 
-// Origens de um valor (M10). Os aparelhos são genéricos; a nave ou a missão aparecem só como exemplo.
-export const DATA_SOURCES: Record<DataSource, { labelKey: string; exampleKey: string }> = {
-  manual: { labelKey: 'indicators:sources.manual.label', exampleKey: 'indicators:sources.manual.example' },
-  wearable: { labelKey: 'indicators:sources.wearable.label', exampleKey: 'indicators:sources.wearable.example' },
-  dosimeter: { labelKey: 'indicators:sources.dosimeter.label', exampleKey: 'indicators:sources.dosimeter.example' },
-};
-
-export function sourceContent(source: DataSource) {
-  return { label: i18n.t(DATA_SOURCES[source].labelKey), example: i18n.t(DATA_SOURCES[source].exampleKey) };
-}
 
 // Ordem dos passos do check-in (docs/diagramas/05-navegacao-telas.md). `resistanceMinutes` não tem passo
 // próprio: é o segundo campo do passo de exercício.
 export const CHECKIN_ORDER: IndicatorId[] = [
-  'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'conditioning', 'medication', 'symptoms',
+  'bloodPressure', 'heartRate', 'oxygenSaturation', 'temperature', 'glucose', 'sleepHours',
+  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'mealsCompleted', 'vision', 'medication', 'symptoms',
 ];
 
 // Qualidade do sono (N14): não tem passo próprio, é a segunda pergunta do passo de sono.
@@ -67,7 +56,13 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     howToMeasureKey: 'indicators:heartRate.howToMeasure',
     whyMeasureKey: 'indicators:heartRate.whyMeasure',
     input: { min: 20, max: 250, step: 1 },
-    sources: ['manual', 'wearable'],
+  },
+  oxygenSaturation: {
+    labelKey: 'indicators:oxygenSaturation.label',
+    unit: '%',
+    howToMeasureKey: 'indicators:oxygenSaturation.howToMeasure',
+    whyMeasureKey: 'indicators:oxygenSaturation.whyMeasure',
+    input: { min: 50, max: 100, step: 1 },
   },
   temperature: {
     labelKey: 'indicators:temperature.label',
@@ -89,7 +84,6 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     howToMeasureKey: 'indicators:sleepHours.howToMeasure',
     whyMeasureKey: 'indicators:sleepHours.whyMeasure',
     input: { min: 0, max: 24, step: 0.1 },
-    sources: ['manual', 'wearable'],
   },
   mood: {
     labelKey: 'indicators:mood.label',
@@ -159,7 +153,6 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     howToMeasureKey: 'indicators:radiationDose.howToMeasure',
     whyMeasureKey: 'indicators:radiationDose.whyMeasure',
     input: { min: 0, max: 100000, step: 1 },
-    sources: ['manual', 'dosimeter'],
   },
   bodyMassKg: {
     labelKey: 'indicators:bodyMassKg.label',
@@ -195,12 +188,6 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
       { value: 2, labelKey: 'indicators:vision.scale.2', symbol: '2' },
     ],
   },
-  conditioning: {
-    labelKey: 'indicators:conditioning.label',
-    unit: '%',
-    howToMeasureKey: 'indicators:conditioning.howToMeasure',
-    whyMeasureKey: 'indicators:conditioning.whyMeasure',
-  },
   medication: {
     labelKey: 'indicators:medication.label',
     unit: '',
@@ -224,7 +211,6 @@ export function indicatorContent(id: IndicatorId) {
     howToMeasure: i18n.t(content.howToMeasureKey),
     whyMeasure: i18n.t(content.whyMeasureKey),
     input: content.input,
-    sources: content.sources,
     scale: content.scale?.map((option): TranslatedScaleOption => ({ ...option, label: i18n.t(option.labelKey) })),
   };
 }

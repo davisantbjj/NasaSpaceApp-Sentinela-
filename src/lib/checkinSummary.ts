@@ -1,4 +1,4 @@
-import type { AmslerEyeResult, AmslerVisionResult, ConditioningApparatus, ExercisePart, ExerciseSession } from '../types';
+import type { AmslerEyeResult, AmslerVisionResult, ExerciseApparatus, ExercisePart, ExerciseSession } from '../types';
 
 // Minutos resistidos de uma sessão (N16). Em "aeróbico e resistido" vale o que a pessoa
 // informou, limitado à duração; sem informar, não se supõe nada e fica 0.
@@ -9,7 +9,7 @@ export function resistancePart(session: ExerciseSession): number {
 }
 
 // Aparelhos oferecidos em cada parte da sessão. O flywheel da Orion serve às duas.
-export const APPARATUS_BY_PART: Record<ExercisePart, ConditioningApparatus[]> = {
+export const APPARATUS_BY_PART: Record<ExercisePart, ExerciseApparatus[]> = {
   aerobic: ['treadmill', 'cycle', 'rower', 'flywheel', 'other'],
   resistance: ['resistive', 'flywheel', 'other'],
 };

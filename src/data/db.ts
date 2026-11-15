@@ -191,17 +191,24 @@ export class SentinelaDB extends Dexie {
         }
       }),
     );
-    // v14: avaliação periódica de condicionamento (N17); o passo pode ser pulado nos dias sem avaliação.
-    // A N17 e a N12/N14 foram feitas em paralelo e as duas usaram a v13, então esta versão repete
-    // a atualização da N12/N14 para quem gravou a v13 da N17. Cada passo só acrescenta o que falta.
+    // v14: acrescentava o condicionamento (N17), retirado na v15. Como a N17 e a N12/N14 foram feitas
+    // em paralelo e as duas usaram a v13, esta versão também repete a atualização da N12/N14.
     this.version(14).upgrade((tx) =>
       tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
-        if (!member.trackedIndicators.includes('conditioning')) member.trackedIndicators.push('conditioning');
         if (!member.trackedIndicators.includes('mealsCompleted')) member.trackedIndicators.push('mealsCompleted');
         const sleepAid = DEMO_MEDICATIONS[member.id]?.find((m) => m.sleepAid);
         if (sleepAid && member.medications && !member.medications.some((m) => m.id === sleepAid.id)) {
           member.medications.push(sleepAid);
         }
+      }),
+    );
+    // v15: sai o condicionamento físico (não há como medir a bordo) e entra o oxímetro (SpO2) para
+    // todos. A água passa a ser digitada em mL (waterIntakeMl); registros antigos guardam o sim/não.
+    this.version(15).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const tracked = member.trackedIndicators.filter((id) => (id as string) !== 'conditioning');
+        if (!tracked.includes('oxygenSaturation')) tracked.push('oxygenSaturation');
+        member.trackedIndicators = tracked;
       }),
     );
   }

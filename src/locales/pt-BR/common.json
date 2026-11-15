@@ -81,7 +81,6 @@
     "checkinOwnPending": "O check-in de hoje está pendente. O painel mostra o registro de {{date}}.",
     "systems": "Sistemas do corpo",
     "regionHint": "Toque numa região para ver os indicadores.",
-    "sourceNote": "Origem: {{source}}",
     "summary": {
       "allGreen": "Todas as regiões dentro do esperado",
       "red_one": "{{count}} região com atenção imediata",
@@ -383,7 +382,7 @@
     "sections": {
       "stored": {
         "title": "O que fica neste navegador",
-        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros. Os valores diários também incluem massa corporal, refeições, água, qualidade do sono, respostas visuais por olho, sessão de exercício e avaliação de condicionamento, quando registrados."
+        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros. Os valores diários também incluem massa corporal, refeições, água bebida (em mL), oxigenação do oxímetro, qualidade do sono, respostas visuais por olho e sessão de exercício (tipo, aparelhos e minutos), quando registrados."
       },
       "purpose": {
         "title": "Para quê",
@@ -414,8 +413,8 @@
         "text": "O perfil e o ambiente da missão ficam nas preferências compartilhadas do aparelho, sem criptografia. A estimativa óssea e a soma das doses registradas de radiação são calculadas na tela, sem criar uma nova medição. A cópia JSON inclui as doses diárias registradas, mas não essas contas nem as preferências compartilhadas da missão. Os dados da demonstração são simulados. A massa inicial e a dose de missões anteriores ficam no cadastro sem cifra e entram na cópia individual; só o oficial médico pode alterá-las pela interface. O CO₂ é compartilhado em configurações sem cifra e fica fora dessa cópia. Não há leitura contínua de aparelhos."
       },
       "reactionAndSource": {
-        "title": "Teste de reação e origem declarada",
-        "text": "O check-in pode guardar a média de reação em milissegundos, modo curto ou completo, conclusão, duração, quantidade de respostas válidas e antecipações. Esses dados e a origem declarada dos valores ficam cifrados junto do check-in e aparecem legíveis na cópia JSON. Não guardamos cada toque, gravações ou identificação de aparelhos. Selecionar sensor vestível ou dosímetro apenas informa de onde você copiou o número; o app não lê aparelhos. Metas semanais e avisos de readaptação são calculados na tela, sem diagnóstico."
+        "title": "Teste de reação e registro manual",
+        "text": "O check-in pode guardar a média de reação em milissegundos, modo curto ou completo, conclusão, duração, quantidade de respostas válidas e antecipações. Esses dados ficam cifrados junto do check-in e aparecem legíveis na cópia JSON. Não guardamos cada toque, gravações ou identificação de aparelhos. Todos os valores são digitados por você: o app não se conecta a aparelhos nem lê sensores. Metas semanais e avisos de readaptação são calculados na tela, sem diagnóstico."
       }
     }
   },
@@ -425,7 +424,7 @@
     "intro": "As ações abaixo valem só para os seus dados, do perfil com que você entrou.",
     "encryption": "Os valores dos check-ins, as anotações e o texto das mensagens ficam cifrados com uma chave por tripulante, aberta pelo seu PIN e pelo do oficial médico. O cadastro e o plano de medicação ficam sem criptografia. Limite do protótipo: o PIN curto pode ser descoberto por quem copiar o banco.",
     "actions": "Cópia e pedido de exclusão",
-    "copyIncludes": "A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho, exercício, resultado e detalhes do teste de reação e origem declarada, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.",
+    "copyIncludes": "A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho, exercício, resultado e detalhes do teste de reação, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.",
     "export": "Exportar meus dados em JSON",
     "pdf": "Preparar relatório em PDF para a equipe médica na Terra",
     "pdfHint": "Gera um relatório legível com os seus dados para salvar como PDF ou compartilhar manualmente. O arquivo não é enviado pelo aplicativo.",
@@ -544,6 +543,7 @@
       "red": "Atenção imediata"
     },
     "details": "Ver alertas e ações →",
+    "more": "+{{count}} mais",
     "silence": "Silenciar",
     "silenced": "Som silenciado. O aviso continua até alguém confirmar.",
     "confirm": "Confirmar",

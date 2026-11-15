@@ -172,7 +172,6 @@
   .alarm-banner { gap: 8px; }
   .alarm-text { min-width: 0; flex: 1; }
   .alarm-actions { width: 100%; justify-content: flex-end; }
-  .alarm-stack[data-sticky='true'] { position: relative; top: auto; }
 }
 @media (max-width: 380px) {
   .navbar-brand { font-size: 0.875rem; }

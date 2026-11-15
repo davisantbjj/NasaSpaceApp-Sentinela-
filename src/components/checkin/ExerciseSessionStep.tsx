@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ConditioningApparatus, ExercisePart, ExerciseSession, ExerciseSessionType, ResistanceStatus } from '../../types';
+import type { ExerciseApparatus, ExercisePart, ExerciseSession, ExerciseSessionType, ResistanceStatus } from '../../types';
 import i18n from '../../i18n';
 import { APPARATUS_BY_PART, withApparatusTotals } from '../../lib/checkinSummary';
 
@@ -11,7 +11,7 @@ interface Props {
 const TYPES: ExerciseSessionType[] = ['aerobic', 'resistance', 'both'];
 const partsOf = (type: ExerciseSessionType): ExercisePart[] =>
   type === 'both' ? ['aerobic', 'resistance'] : [type];
-const keyOf = (part: ExercisePart, apparatus: ConditioningApparatus) => `${part}:${apparatus}`;
+const keyOf = (part: ExercisePart, apparatus: ExerciseApparatus) => `${part}:${apparatus}`;
 
 interface Form {
   type: ExerciseSessionType;
@@ -43,7 +43,7 @@ const parseMinutes = (text: string) => {
 function toSession(form: Form): ExerciseSession | undefined {
   const parts = partsOf(form.type);
   const apparatus = Object.entries(form.minutes).flatMap(([key, text]) => {
-    const [part, id] = key.split(':') as [ExercisePart, ConditioningApparatus];
+    const [part, id] = key.split(':') as [ExercisePart, ExerciseApparatus];
     const minutes = parseMinutes(text);
     return parts.includes(part) && minutes ? [{ part, apparatus: id, minutes }] : [];
   });
@@ -96,7 +96,7 @@ export function ExerciseSessionStep({ value, onChange }: Props) {
             const checked = key in form.minutes;
             const text = form.minutes[key] ?? '';
             const invalid = checked && text.trim() !== '' && parseMinutes(text) === undefined;
-            const name = i18n.t(`checkin:conditioning.apparatus.${apparatus}`);
+            const name = i18n.t(`checkin:exerciseSession.apparatus.${apparatus}`);
             const inputId = `exercise-${part}-${apparatus}`;
             return (
               <div key={key} className={`apparatus-row${checked ? ' is-on' : ''}`}>

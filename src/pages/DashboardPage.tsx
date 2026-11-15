@@ -4,7 +4,7 @@ import { DashboardAlertCard } from '../components/alerts/DashboardAlertCard';
 import { LevelBadge, LevelIcon } from '../components/alerts/LevelBadge';
 import { BodyMap } from '../components/body/BodyMap';
 import { RegionPanel, type RegionItem } from '../components/body/RegionPanel';
-import { displayValue, sourceLabel } from '../content/format';
+import { displayValue } from '../content/format';
 import { environmentContent, REGION_ORDER, regionContent } from '../content/indicators';
 import { translateText } from '../content/localize';
 import { daysByEnvironment, MISSION_PROFILES } from '../content/missions';
@@ -43,13 +43,11 @@ export function DashboardPage() {
   const items: RegionItem[] = trackedInOrder(member).map((indicator) => {
     const value = latest ? displayValue(latest.values, indicator, symptomLabels()) : undefined;
     const alert = alerts.find((a) => a.indicator === indicator);
-    const source = latest && sourceLabel(latest.values, indicator);
     return {
       indicator,
       value,
       level: alert?.level ?? (value ? 'green' : undefined),
       baselineNote: baselineNote(indicator, baselines),
-      sourceNote: source ? i18n.t('dashboard.sourceNote', { source: source.toLocaleLowerCase(i18n.language) }) : undefined,
     };
   });
   // A apresentação distingue regiões sem medida; os níveis continuam vindo do store.

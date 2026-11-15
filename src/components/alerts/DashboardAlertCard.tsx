@@ -16,10 +16,7 @@ export function DashboardAlertCard({ alert, record, baselines }: { alert: Alert;
   const raw = record.values[alert.indicator];
   const numeric = typeof raw === 'number';
   const pattern = baselineNote(alert.indicator, baselines);
-  // Condicionamento pode ter mais de um alerta; cada um mantém sua descrição específica.
-  const value = alert.indicator === 'conditioning'
-    ? translateText(alert.whatChanged)
-    : numeric ? formatNumber(raw) : display?.text ?? translateText(alert.whatChanged);
+  const value = numeric ? formatNumber(raw) : display?.text ?? translateText(alert.whatChanged);
   const unit = numeric ? content.unit : display?.unit;
   const scaleLabel = numeric ? content.scale?.find((option) => option.value === raw)?.label : undefined;
 

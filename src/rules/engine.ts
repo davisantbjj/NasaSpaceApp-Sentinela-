@@ -1,4 +1,5 @@
 import { addDays } from '../lib/dates';
+import { hydrationReferenceMl, referenceBodyMass, waterStatus } from '../lib/hydration';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { formatNumber, inRange, rangesFor, seriesPoints, seriesValue } from '../lib/series';
 import type {
@@ -287,55 +288,39 @@ function evaluateBodyMass(
   };
 }
 
-function evaluateConditioning(
-  rule: IndicatorRule,
-  record: DailyRecord,
-): Alert[] {
-  const assessment = record.values.conditioning;
-  const min = rule.green?.min;
-  if (!assessment || min === undefined) return [];
-  return ([
-    ['aerobic', assessment.aerobicPercent],
-    ['strength', assessment.strengthPercent],
-  ] as const)
-    .filter(([, value]) => Number.isFinite(value) && value < min)
-    .map(([kind, value]) => ({
-      id: `${record.id}_conditioning_${kind}`,
-      crewId: record.crewId,
-      date: record.date,
-      indicator: 'conditioning' as const,
-      region: rule.region,
-      level: 'yellow' as const,
-      trigger: 'generalRange' as const,
-      whatChanged: {
-        key: 'alerts:change.conditioning',
-        params: {
-          nameKey: `indicators:conditioning.${kind}`,
-          value: { key: 'alerts:values.number', params: { value, unit: '%' } },
-        },
-      },
-      reference: { key: 'alerts:reference.conditioning', params: { min, unit: '%' } },
-      whyItMatters: rule.messages.whyItMatters,
-      whatToDo: rule.messages.whatToDo.yellow,
-      confidence: 'normal' as const,
-      notifyGround: false,
-      sourceUrl: rule.sourceUrl,
-    }));
-}
-
-// Alimentação (N12): alerta amarelo quando há `missedMealDays` dias seguidos (incluindo hoje)
-// sem nenhuma refeição completa. Dia sem registro de refeições interrompe a sequência.
-function evaluateMeals(
-  rule: IndicatorRule,
-  record: DailyRecord,
-  previous: DailyRecord[],
-): Alert | undefined {
+// Alimentação e água (N12): alerta amarelo quando há `missedMealDays` dias seguidos (incluindo hoje)
+// sem nenhuma refeição completa, ou quando a água do dia ficou abaixo da referência pelo peso
+// (context.hydration). Dia sem registro de refeições interrompe a sequência.
+function missedMealStreak(rule: IndicatorRule, record: DailyRecord, previous: DailyRecord[]): number | undefined {
   const days = rule.missedMealDays;
   if (!days || record.values.mealsCompleted !== 0) return undefined;
   const byDate = new Map(previous.map((r) => [r.date, r]));
   for (let back = 1; back < days; back += 1) {
     if (byDate.get(addDays(record.date, -back))?.values.mealsCompleted !== 0) return undefined;
   }
+  return days;
+}
+
+function evaluateMeals(
+  rule: IndicatorRule,
+  record: DailyRecord,
+  previous: DailyRecord[],
+  rules: Rules,
+  context?: MissionRuleContext,
+): Alert | undefined {
+  const days = missedMealStreak(rule, record, previous);
+  const water = record.values.waterIntakeMl;
+  const mass = referenceBodyMass(record.values, previous, context?.startBodyMassKg);
+  const lowWater = water !== undefined && waterStatus(water, mass, rules) === 'below';
+  if (days === undefined && !lowWater) return undefined;
+  const reference = hydrationReferenceMl(mass, rules);
+  const waterParams = { value: formatNumber(water ?? 0), reference: formatNumber(reference ?? 0) };
+  const whatChanged =
+    days !== undefined && lowWater
+      ? { key: 'alerts:change.missedMealsAndWater', params: { days, ...waterParams } }
+      : days !== undefined
+        ? { key: 'alerts:change.missedMeals', params: { days } }
+        : { key: 'alerts:change.lowWater', params: waterParams };
   return {
     id: `${record.id}_mealsCompleted`,
     crewId: record.crewId,
@@ -343,9 +328,14 @@ function evaluateMeals(
     indicator: 'mealsCompleted',
     region: rule.region,
     level: 'yellow',
-    trigger: 'missedMeals',
-    whatChanged: { key: 'alerts:change.missedMeals', params: { days } },
-    reference: { key: 'alerts:reference.meals', params: { days } },
+    trigger: days !== undefined ? 'missedMeals' : 'lowWater',
+    whatChanged,
+    reference: lowWater
+      ? {
+          key: 'alerts:reference.water',
+          params: { reference: formatNumber(reference ?? 0), perKg: rules.context?.hydration?.mlPerKg ?? 0 },
+        }
+      : { key: 'alerts:reference.meals', params: { days: days ?? rule.missedMealDays ?? 0 } },
     whyItMatters: rule.messages.whyItMatters,
     whatToDo: rule.messages.whatToDo.yellow,
     confidence: 'low',
@@ -410,16 +400,14 @@ export function evaluateRecord(
     if (!rule) continue;
     const indicator = id as IndicatorId;
     const alert =
-      indicator === 'conditioning'
-        ? evaluateConditioning(rule, record)
-        : indicator === 'symptoms'
+      indicator === 'symptoms'
         ? evaluateSymptoms(rule, record, rules, environment, context)
         : indicator === 'medication'
           ? evaluateMedication(rule, record, rules, environment)
           : indicator === 'bodyMassKg'
             ? evaluateBodyMass(rule, record, context)
           : indicator === 'mealsCompleted'
-            ? evaluateMeals(rule, record, previous)
+            ? evaluateMeals(rule, record, previous, rules, context)
           : evaluateIndicator(indicator, rule, record, previous, own, rules, environment);
     if (Array.isArray(alert)) alerts.push(...alert);
     else if (alert) alerts.push(alert);

@@ -6,7 +6,7 @@ Revisado por Larissa em 15/11/2026 até a base integrada `2769fb5`, incluindo os
 
 Antes de criar a demonstração ou liberar o login, o app apresenta finalidade, armazenamento, acesso, retenção e limites da base legal. O botão registra a leitura em `preferences`, no IndexedDB. Isso não identifica uma pessoa nem constitui consentimento genérico. Outro navegador tem sua própria leitura. A recriação da demonstração preserva essa preferência.
 
-O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12 e as referências de massa/dose anterior guardadas sem cifra. Na `2026-11-15-v8`, o aviso passou a dizer que os perfis de exemplo entram só com um toque, sem digitar o PIN. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
+O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12 e as referências de massa/dose anterior guardadas sem cifra. Na `2026-11-15-v8`, o aviso passou a dizer que os perfis de exemplo entram só com um toque, sem digitar o PIN. Na `2026-11-15-v9`, saiu a origem declarada (todos os valores são digitados), saiu o condicionamento físico e entraram a água em mL e o oxímetro. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
 
 ## Dados armazenados e proteção real
 
@@ -25,7 +25,7 @@ O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12
 
 M4 guarda `reactionTime` (média em ms) e `reactionTest` (modo curto/completo, conclusão, duração decorrida, quantidade de respostas válidas e antecipações). Esses campos estão dentro de `DailyValues`: ficam cifrados com o registro e aparecem legíveis na exportação individual, nos mesmos limites de acesso já existentes. Toques individuais e seus horários não são persistidos. Se houver menos de três respostas válidas ou o passo for pulado, não há resultado salvo. Curto/interrompido não entra na comparação pessoal; registros anteriores sem modo são mantidos sem presumir protocolo.
 
-M10 guarda `values.sources`, também cifrado e exportado: origem declarada como sensor vestível ou dosímetro. Ausente/manual significa valor digitado, sem confirmar o método usado em registros antigos. O app não obtém identificador, pareamento, autorização Bluetooth ou leitura contínua do aparelho. Todos os valores são copiados pela pessoa ou simulados no seed; a origem não é prova de precisão.
+A origem declarada (M10, `values.sources`) foi retirada em 15/11 (aviso `2026-11-15-v9`): o app não pergunta nem guarda de onde veio o valor. Todos os valores são digitados pela pessoa ou simulados no seed. O app não obtém identificador, pareamento, autorização Bluetooth ou leitura contínua de aparelho. Registros antigos com o campo, se existirem no navegador, aparecem na cópia JSON como estavam.
 
 Metas semanais, associação entre sono e reação e aviso de readaptação são derivados, sem nova tabela. Não integram o JSON como diagnósticos; seus valores de origem são exportados quando registrados. Preferências de missão continuam compartilhadas e fora da cópia individual. A migração v11 acrescenta o acompanhamento da reação aos cadastros, sem inventar resultados passados. Não há nova categoria de destinatário ou envio criada por esta revisão.
 
@@ -33,8 +33,9 @@ Metas semanais, associação entre sono e reação e aviso de readaptação são
 
 ### Novos campos da fase 12: fluxo conferido no código
 
-- Dentro de `DailyValues`, massa diária, refeições, água, qualidade do sono, respostas da Amsler por olho (incluindo as áreas tocadas na grade), sessão de exercício (incluindo aparelhos usados e minutos em cada um) e avaliação de condicionamento ficam cifrados com o check-in. `asNeeded` e `sleepAid` são copiados nas marcações de medicação. O exportador inclui os registros abertos pelos repositórios: esses campos aparecem no JSON quando presentes, sem uma lista de campos novos a filtrar.
+- Dentro de `DailyValues`, massa diária, refeições, água bebida em mL, oxigenação do oxímetro, qualidade do sono, respostas da Amsler por olho (incluindo as áreas tocadas na grade), sessão de exercício (incluindo aparelhos usados e minutos em cada um) ficam cifrados com o check-in. O condicionamento físico (N17) foi retirado na v15 do banco. `asNeeded` e `sleepAid` são copiados nas marcações de medicação. O exportador inclui os registros abertos pelos repositórios: esses campos aparecem no JSON quando presentes, sem uma lista de campos novos a filtrar.
 - `startBodyMassKg` e `priorCareerDoseMsv` ficam no cadastro `crew` **sem cifra** e são incluídos na cópia individual. Na interface atual, só o oficial médico pode editá-los; essa restrição de interface não cifra o armazenamento. Dose anterior ausente não comprova exposição zero.
+- O idioma escolhido fica no `localStorage` do navegador (`sentinela.language`), sem dado de saúde, e vale para todos os perfis do aparelho. Limpar os dados do site volta ao inglês.
 - `cabinCo2Mmhg` fica em `settings`, compartilhado e sem cifra; não integra a cópia individual. O app não grava série de amostras, sensor ou hora da leitura de CO₂. Não é um monitor ambiental contínuo.
 - Os valores diários entram em `PacketPayload.values`, selados para o solo, sob o fluxo atual de sincronização; isso não garante que cada campo já tenha uma apresentação específica na tela do solo. O comandante não recebe os valores clínicos de colegas. Não foi criado outro destinatário.
 - Migrações v12–v14 acrescentam referências fictícias e indicadores aos cadastros, sem preencher retroativamente valores diários antigos. A v14 concilia as migrações feitas em paralelo. Não há nova tabela de leituras contínuas.

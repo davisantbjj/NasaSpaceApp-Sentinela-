@@ -126,25 +126,27 @@
 /* WCAG 2.3.1: nada pode piscar mais de 3 vezes por segundo. Este pulso repete a cada 1,6 s,
    muda só a espessura (sem clarão) e para com prefers-reduced-motion. Não encurtar abaixo de 0,34 s. */
 .bodymap-region--red .bodymap-marker-ring { animation: bodymap-pulse 1.6s ease-in-out infinite; }
-.bodymap-scanner { color: #9ceaff; opacity: 0; filter: drop-shadow(0 0 3px #45d8ff); pointer-events: none; animation: bodymap-scan 8s ease-in-out infinite; }
-.bodymap-scanner line { stroke: currentColor; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
-.bodymap-scanner .bodymap-scanner-trail { opacity: 0.22; stroke-width: 5; }
+/* Scanner: a faixa desce pelo corpo em cerca de 3 s e some antes de voltar ao topo (sem clarão nem piscar). */
+.bodymap-scanner { color: #7fe3ff; pointer-events: none; }
+.bodymap-scanner-grid { opacity: 0.1; }
+.bodymap-scanner-beam { opacity: 0; filter: drop-shadow(0 0 4px #45d8ff); animation: bodymap-scan 4.5s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+.bodymap-scanner-beam line { stroke: currentColor; stroke-width: 1.4; vector-effect: non-scaling-stroke; }
 
 @keyframes bodymap-pulse {
   0%, 100% { stroke-width: 3; }
   50% { stroke-width: 6; }
 }
 @keyframes bodymap-scan {
-  0% { transform: translateY(calc(0px - var(--scan-height))); opacity: 0; }
-  8% { opacity: 0.55; }
-  68% { opacity: 0.55; }
-  78% { opacity: 0; }
-  100% { transform: translateY(var(--scan-height)); opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
+  6% { opacity: 0.9; }
+  66% { opacity: 0.9; }
+  70% { transform: translateY(var(--scan-distance)); opacity: 0; }
+  100% { transform: translateY(var(--scan-distance)); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .bodymap-region--red .bodymap-marker-ring { animation: none; }
-  .bodymap-scanner { animation: none; }
+  .bodymap-scanner-beam { animation: none; }
   .bodymap-shape,
   .bodymap-outline { transition: none; }
 }

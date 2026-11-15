@@ -36,7 +36,6 @@
   "resistance": "Resistance (with load)",
   "resistancePart": "({{value}} resistance)",
   "partialExercise": "Enter both times (use 0 if you skipped one), or skip the step.",
-  "sourceQuestion": "Where did the value come from?",
   "amsler": {
     "instructions": "Test one eye at a time at your usual reading distance, always looking at the center dot. Tap the areas where lines looked bent or were missing.",
     "eye": "Eye being tested",
@@ -89,15 +88,7 @@
     },
     "apparatusMinutes": "Minutes on {{name}}",
     "total": "Total duration: {{minutes}} min",
-    "pickApparatus": "Mark each piece of equipment you used and enter how many minutes."
-  },
-  "conditioning": {
-    "invalid": "Use a percentage from 0 to 200.",
-    "apparatusFor": "Apparatus used: {{part}}",
-    "instructions": "Enter the periodic assessment as a percentage of the preflight value and select the apparatus used for each part.",
-    "aerobic": "Aerobic capacity",
-    "strength": "Strength",
-    "disclaimer": "The monitoring threshold is {{min}}% of the preflight value. The medical team sets the assessment frequency; this record is not an automated test.",
+    "pickApparatus": "Mark each piece of equipment you used and enter how many minutes.",
     "apparatus": {
       "treadmill": "Treadmill",
       "cycle": "Cycle ergometer",
@@ -128,6 +119,5 @@
     "interrupted": ", interrupted",
     "howToRespond": "Respond by tapping the area, clicking, or pressing Space (or Enter) as soon as the signal appears. It works even if focus leaves the area.",
     "skipHint": "Can’t take a visual test right now? Use \"Skip\": the step stays without a result, and that does not count as a decline."
-  },
-  "sourceNote": "Source declared by you. The app does not connect to the device; copy the value and state the source."
+  }
 }

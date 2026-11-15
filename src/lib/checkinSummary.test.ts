@@ -46,16 +46,6 @@ describe('parte resistida da sessão de exercício (N16)', () => {
   });
 });
 
-describe('condicionamento (N17)', () => {
-  const conditioning = { aerobicPercent: 85, strengthPercent: 90, aerobicApparatus: 'treadmill', strengthApparatus: 'resistive' } as const;
-
-  it('conta como registrado e não ganha gráfico de série única', () => {
-    expect(hasValue({ conditioning }, 'conditioning')).toBe(true);
-    expect(hasValue({}, 'conditioning')).toBe(false);
-    expect(hasHistoryChart('conditioning')).toBe(false);
-  });
-});
-
 describe('campos numéricos da tela de Missão (N2, N11, N13)', () => {
   it('vazio apaga, fora da faixa ou inválido não grava, vírgula vale como decimal', () => {
     expect(parseBounded('', 0, 10)).toBeNull();
