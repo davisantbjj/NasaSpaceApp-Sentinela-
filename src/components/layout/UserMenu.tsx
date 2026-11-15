@@ -5,7 +5,6 @@ import type { Session } from '../../types';
 import i18n from '../../i18n';
 import { LanguageSelect } from './LanguageSelect';
 import { TextSizeToggle } from './TextSizeToggle';
-import { BackgroundMotionToggle } from './AmbientBackground';
 
 interface Props {
   session: Session;
@@ -56,7 +55,6 @@ export function UserMenu({ session, pendingSync, onLock }: Props) {
         </div>
         <LanguageSelect />
         <TextSizeToggle />
-        <BackgroundMotionToggle />
         {onBoard && (
           <>
             <Link to="/mission" onClick={close}>{i18n.t('menu.mission')}</Link>

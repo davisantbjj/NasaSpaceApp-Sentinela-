@@ -6,6 +6,7 @@ import { exportCrewData, getCrewDeletionRequest, requestCrewDataDeletion } from 
 import { useAppStore } from '../store/useAppStore';
 import type { AccessLogEntry, DeletionRequest } from '../types';
 import i18n from '../i18n';
+import { openHealthReport } from '../lib/healthReport';
 
 export function YourDataPage() {
   // Sempre os dados de quem entrou, nunca os do tripulante que o oficial médico está vendo.
@@ -57,12 +58,17 @@ export function YourDataPage() {
         <p>{i18n.t('yourData.copyIncludes')}</p>
         <div className="row">
           <button type="button" className="btn" disabled={busy} onClick={() => void run(download)}>{i18n.t('yourData.export')}</button>
+          <button type="button" className="btn btn-primary" disabled={busy} onClick={() => void run(async () => {
+            try { await openHealthReport(crewId); setStatus(i18n.t('yourData.pdfReady')); }
+            catch { setError(i18n.t('yourData.pdfBlocked')); }
+          })}>{i18n.t('yourData.pdf')}</button>
           <button type="button" className="btn" disabled={busy || !!request} onClick={() => void run(async () => {
             await requestCrewDataDeletion(crewId);
             setRequest(await getCrewDeletionRequest(crewId));
             setStatus(i18n.t('yourData.requestDone'));
           })}>{request ? i18n.t('yourData.requestRecorded') : i18n.t('yourData.request')}</button>
         </div>
+        <p className="small muted">{i18n.t('yourData.pdfHint')}</p>
         {request && <p>{i18n.t('yourData.requestPending', { date: formatDateTime(request.createdAt, true), id: request.id })}</p>}
         <p className="small muted">{i18n.t('yourData.noDelete')}</p>
         <p role="status">{busy ? i18n.t('yourData.processing') : status}</p>

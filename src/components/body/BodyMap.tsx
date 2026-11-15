@@ -57,6 +57,9 @@ function Marker({ marker, level }: { marker: BodyRegionDef['marker']; level: Lev
 export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) {
   const { image, viewBox, regions } = BODY_FIGURES[figure];
   const glowId = `bodymap-glow-${useId().replace(/:/g, '')}`;
+  const scannerId = `bodymap-scanner-${useId().replace(/:/g, '')}`;
+  const silhouette = regions.find((region) => region.id === 'wholeBody')?.outline;
+  const [viewX, viewY, viewWidth, viewHeight] = viewBox.split(' ').map(Number);
 
   const onKey = (event: KeyboardEvent, region: BodyRegion) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -82,8 +85,16 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
+        <clipPath id={scannerId}>
+          {silhouette ? <path d={silhouette} /> : <rect x="0" y="0" width={viewWidth} height={viewHeight} />}
+        </clipPath>
       </defs>
       <image href={imageSrc(image.file)} width={image.width} height={image.height} aria-hidden="true" />
+      <g className="bodymap-scanner" clipPath={`url(#${scannerId})`} aria-hidden="true"
+        style={{ '--scan-height': `${viewHeight}px` } as CSSProperties}>
+        <rect x={viewX} y={viewY} width={viewWidth} height={viewHeight * 0.075} />
+        <line x1={viewX} x2={viewX + viewWidth} y1={viewY} y2={viewY} />
+      </g>
       {regions.map((def) => {
         const { id, shapes, marker, padHit, outline } = def;
         const level = levels[id];

@@ -1,10 +1,4 @@
 {
-  "background": {
-    "label": "Background animation",
-    "on": "on",
-    "off": "paused",
-    "reduced": "reduced motion on this device"
-  },
   "language": {
     "label": "Language",
     "en": "English",
@@ -59,6 +53,9 @@
     "excludedDays_other": "{{count}} excluded"
   },
   "dashboard": {
+    "modelPicker": "Illustrative body model",
+    "model": { "female": "Female", "male": "Male" },
+    "modelNote": "Illustrative model; this choice does not change the profile or indicators.",
     "dayLabel": "Day",
     "ofDays": "of {{total}}",
     "environmentLabel": "Environment",
@@ -433,6 +430,25 @@
     "actions": "Copy and deletion request",
     "copyIncludes": "The copy includes the profile and the medication plan, the check-ins (including medication taken, stress, workload, exercise, reaction test result and details, and declared source, when recorded), the medical officer's notes, messages, the access log, and the deletion request. It does not include other crew members' data. The downloaded JSON file is readable, not encrypted; store it carefully. It is a copy for reference, without import or regulated portability.",
     "export": "Export my data as JSON",
+    "pdf": "Prepare a PDF report for the medical team on Earth",
+    "pdfHint": "Creates a readable report you can save as PDF or share yourself. The app does not send the file.",
+    "pdfBlocked": "Allow the report window to open and try again.",
+    "pdfReady": "The report opened in a new tab. Choose Print, then Save as PDF.",
+    "pdfTitle": "Health report — {{name}}",
+    "pdfSubtitle": "Check-in history for the signed-in profile",
+    "pdfEyebrow": "Individual report",
+    "pdfName": "Crew member",
+    "pdfRole": "Role",
+    "pdfMissionStart": "Mission start",
+    "pdfExported": "Generated",
+    "pdfNotice": "This file contains only the signed-in profile's data. Share it with the medical team on Earth through a channel you choose. Sentinela does not send this report.",
+    "pdfHistory": "Mission records",
+    "pdfDate": "Date",
+    "pdfDay": "Mission day",
+    "pdfIndicators": "Recorded indicators",
+    "pdfNoMeasures": "No indicators recorded on this day.",
+    "pdfDisclaimer": "Prototype with simulated data. Not a medical device; it does not diagnose or replace professional care. This export is readable and unencrypted; store and share it carefully.",
+    "pdfPrint": "Print or save as PDF",
     "request": "Register deletion request",
     "requestRecorded": "Request recorded locally",
     "exportDone": "JSON file prepared for download. It contains only this profile's data.",

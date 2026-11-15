@@ -12,12 +12,12 @@
 .ambient-background::before, .ambient-background::after {
   content: '';
   position: absolute;
-  inset: -8%;
-  animation: ambient-drift 32s ease-in-out infinite alternate;
+  inset: -12%;
+  animation: ambient-drift 18s ease-in-out infinite alternate;
 }
 .ambient-background::before {
-  background: radial-gradient(ellipse at 25% 40%, #2d70902e, transparent 45%),
-    radial-gradient(ellipse at 75% 65%, #38588f26, transparent 40%);
+  background: radial-gradient(ellipse at 25% 40%, #2d709044, transparent 45%),
+    radial-gradient(ellipse at 75% 65%, #38588f3b, transparent 40%);
 }
 .ambient-background::after {
   background-image: radial-gradient(circle, #a4c4df88 0.7px, transparent 1.3px),
@@ -25,16 +25,12 @@
   background-size: 173px 193px, 251px 283px;
   background-position: 23px 41px, 112px 157px;
   opacity: 0.45;
-  animation-duration: 48s;
+  animation-duration: 25s;
 }
 @keyframes ambient-drift {
   from { transform: translate3d(-1%, -1%, 0); }
   to { transform: translate3d(2%, 3%, 0); }
 }
-.ambient-background[data-motion='off']::before,
-.ambient-background[data-motion='off']::after { animation-play-state: paused; }
-.motion-state { display: block; font-size: 0.75rem; font-weight: 400; }
-.background-motion-toggle { text-align: left; }
 @media (prefers-reduced-motion: reduce) {
   .ambient-background::before, .ambient-background::after { animation: none; }
 }

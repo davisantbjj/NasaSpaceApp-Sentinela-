@@ -4,7 +4,6 @@ import { useAppStore } from '../../store/useAppStore';
 import i18n from '../../i18n';
 import { LanguageSelect } from './LanguageSelect';
 import { TextSizeToggle } from './TextSizeToggle';
-import { BackgroundMotionToggle } from './AmbientBackground';
 
 export function PrivacyExplanation() {
   return <>
@@ -38,7 +37,6 @@ export function PrivacyNotice() {
         <div className="row privacy-preferences">
           <LanguageSelect />
           <TextSizeToggle />
-          <BackgroundMotionToggle />
         </div>
         <PrivacyExplanation />
         {error && <p role="alert">{error}</p>}

@@ -14,6 +14,7 @@ import { formatDate, missionDay, todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
 import type { BodyRegion, Level } from '../types';
+import type { BodyFigure } from '../components/body/bodyRegions';
 import { baselineNote, latestRecord, symptomLabels, trackedInOrder } from './helpers';
 import i18n from '../i18n';
 
@@ -22,9 +23,13 @@ export function DashboardPage() {
   const viewingOther = useViewingOther();
   const { records, alerts, baselines, correlations, regionLevels, settings } = useAppStore();
   const [selected, setSelected] = useState<BodyRegion | null>(null);
+  const [figure, setFigure] = useState<BodyFigure>('male');
   const panelRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => setSelected(null), [member?.id]);
+  useEffect(() => {
+    setSelected(null);
+    setFigure(member?.sex === 'female' ? 'female' : 'male');
+  }, [member?.id, member?.sex]);
   useEffect(() => {
     if (!selected) return;
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -111,9 +116,18 @@ export function DashboardPage() {
         <section className="console-body" aria-labelledby="body-heading">
           <h2 id="body-heading" className="console-heading">{i18n.t('dashboard.systems')}</h2>
           <p className="muted small">{i18n.t('dashboard.regionHint')}</p>
-          <div className="console-figure">
-            <BodyMap levels={mapLevels} selected={selected} onSelect={setSelected} figure={member.sex === 'female' ? 'female' : 'male'} />
+          <div className="body-model-picker" role="group" aria-label={i18n.t('dashboard.modelPicker')}>
+            {(['female', 'male'] as const).map((model) => (
+              <button key={model} type="button" aria-pressed={figure === model}
+                onClick={() => setFigure(model)}>
+                <span aria-hidden="true">{model === 'female' ? '♀' : '♂'}</span>{i18n.t(`dashboard.model.${model}`)}
+              </button>
+            ))}
           </div>
+          <div className="console-figure">
+            <BodyMap levels={mapLevels} selected={selected} onSelect={setSelected} figure={figure} />
+          </div>
+          <p className="body-model-note">{i18n.t('dashboard.modelNote')}</p>
           <p className="console-figure-note">{i18n.t('dashboard.mapHint')}</p>
           <div className="console-legend">
             <LevelBadge level="green" label={i18n.t('status.ok')} />

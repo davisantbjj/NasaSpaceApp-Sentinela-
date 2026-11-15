@@ -1,10 +1,4 @@
 {
-  "background": {
-    "label": "Animação do fundo",
-    "on": "ativada",
-    "off": "pausada",
-    "reduced": "movimento reduzido neste dispositivo"
-  },
   "language": {
     "label": "Idioma",
     "en": "English",
@@ -59,6 +53,9 @@
     "excludedDays_other": "{{count}} descartados"
   },
   "dashboard": {
+    "modelPicker": "Modelo ilustrativo do corpo",
+    "model": { "female": "Feminino", "male": "Masculino" },
+    "modelNote": "Modelo ilustrativo; a escolha não altera o perfil nem os indicadores.",
     "dayLabel": "Dia",
     "ofDays": "de {{total}}",
     "environmentLabel": "Ambiente",
@@ -433,6 +430,25 @@
     "actions": "Cópia e pedido de exclusão",
     "copyIncludes": "A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho, exercício, resultado e detalhes do teste de reação e origem declarada, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.",
     "export": "Exportar meus dados em JSON",
+    "pdf": "Preparar relatório em PDF para a equipe médica na Terra",
+    "pdfHint": "Gera um relatório legível com os seus dados para salvar como PDF ou compartilhar manualmente. O arquivo não é enviado pelo aplicativo.",
+    "pdfBlocked": "Permita a abertura do relatório nesta janela para continuar.",
+    "pdfReady": "Relatório aberto em outra guia. Escolha Imprimir e depois Salvar como PDF.",
+    "pdfTitle": "Relatório de saúde — {{name}}",
+    "pdfSubtitle": "Histórico de check-ins do perfil autenticado",
+    "pdfEyebrow": "Relatório individual",
+    "pdfName": "Tripulante",
+    "pdfRole": "Função",
+    "pdfMissionStart": "Início da missão",
+    "pdfExported": "Gerado em",
+    "pdfNotice": "Este arquivo contém somente os dados do perfil autenticado. Para compartilhar com a equipe médica na Terra, entregue o arquivo por um canal escolhido por você. O Sentinela não envia este relatório.",
+    "pdfHistory": "Registros da missão",
+    "pdfDate": "Data",
+    "pdfDay": "Dia da missão",
+    "pdfIndicators": "Indicadores registrados",
+    "pdfNoMeasures": "Nenhum indicador registrado neste dia.",
+    "pdfDisclaimer": "Protótipo com dados simulados. Não é dispositivo médico, não faz diagnóstico e não substitui avaliação de profissionais de saúde. A exportação é legível e sem criptografia; guarde e compartilhe com cuidado.",
+    "pdfPrint": "Imprimir ou salvar como PDF",
     "request": "Registrar pedido de exclusão",
     "requestRecorded": "Pedido registrado localmente",
     "exportDone": "Arquivo JSON preparado para download. Ele contém somente os dados deste perfil.",

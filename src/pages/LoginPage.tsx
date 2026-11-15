@@ -8,7 +8,6 @@ import i18n from '../i18n';
 import { BrandMark } from '../components/layout/BrandMark';
 import { LanguageSelect } from '../components/layout/LanguageSelect';
 import { TextSizeToggle } from '../components/layout/TextSizeToggle';
-import { BackgroundMotionToggle } from '../components/layout/AmbientBackground';
 
 const MAX_ATTEMPTS = 5;
 const WAIT_MS = 30_000;
@@ -109,7 +108,7 @@ export function LoginPage() {
           <li><span className="num" aria-hidden="true">02</span><span>{i18n.t('login.featureAlerts')}</span></li>
           <li><span className="num" aria-hidden="true">03</span><span>{i18n.t('login.featureProfiles')}</span></li>
         </ul>
-        <div className="login-preferences"><LanguageSelect /><TextSizeToggle /><BackgroundMotionToggle /></div>
+        <div className="login-preferences"><LanguageSelect /><TextSizeToggle /></div>
       </aside>
       <section className="login-access" aria-labelledby="login-title">
       <header className="page-header">
