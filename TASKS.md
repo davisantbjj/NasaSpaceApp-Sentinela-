@@ -17,6 +17,7 @@ Atualizado em 2026-11-14.
 | 8 | PWA e publicação | Começado |
 | 9 | Entrega do hackathon | A fazer |
 | 10 | Pontos da reunião da equipe (14/11) | A fazer, dividido por pessoa |
+| 11 | Melhorias alinhadas ao desafio oficial | A fazer |
 
 ## Fase 0: pesquisa e documentação (feito)
 
@@ -194,8 +195,49 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 - [x] Roteiro da demonstração e respostas a perguntas (`docs/roteiro-demonstracao.md`); capturas das novas telas e teste de integração em `scripts/verify-larissa.mjs`
 - [ ] Vídeo, slides e envio ao Space Apps: fora do escopo desta etapa, conforme Larissa. Nenhum commit realizado pelo assistente
 
+## Fase 11: melhorias alinhadas ao desafio oficial
+
+O desafio pede um software que **reúna indicadores de saúde e permita ao astronauta avaliar e agir** sobre o próprio estado, citando imunidade, ossos, coração e saúde mental. As tarefas abaixo fecham lacunas desse pedido. Nenhuma é infraestrutura nova.
+
+Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente muda o texto e nunca o nível, correlação é "mudaram juntos" e estimativa nunca vira faixa de alerta.
+
+### Reunir indicadores
+
+- [x] **M1. Medicação**: indicador "tomei a medicação prevista", com lista por tripulante e lembrete. A página do evento de Kuala Lumpur cita medicação entre o que as agências monitoram, e a ISS usa o app Dose Tracker. Esforço baixo
+- [ ] **M2. Estresse e carga de trabalho**: duas escalas de 1 a 5 no check-in, na região "Mente e sono". São as perguntas do Reaction Self Test da NASA. Esforço baixo
+- [ ] **M3. Tipo de exercício**: separar aeróbico de resistido (musculação). O resistido é o que protege o osso, e o alerta já recomenda priorizá-lo. Esforço baixo
+- [ ] **M4. Teste de reação de 3 minutos**: tocar a tela assim que o sinal aparece, como no Reaction Self Test (ISS, desde 2009). Entra como indicador com linha de base pessoal. Esforço médio; é o maior ganho em saúde mental
+
+### Avaliar
+
+- [ ] **M5. Perda óssea estimada pelo dia de missão** (média de 1% a 1,5% ao mês), mostrada como "estimativa, não medida". Só contexto, sem faixa de alerta. Esforço baixo
+- [ ] **M6. Radiação acumulada na missão**: soma das doses do dia, como contexto, sem faixa nova. Esforço baixo
+- [ ] **M7. Fadiga**: sono de 6 h ou menos junto com reação mais lenta aparece como "mudaram juntos", sem afirmar causa. Base: estudo com 24 astronautas em missões de 6 meses na ISS. Esforço baixo; depende de M4
+- [ ] **M8. Perfil de missão**: nave, tamanho da tripulação, duração e fases (ida, superfície, volta), com modelos ISS (cerca de 6 meses), Artemis II (Orion, 4 pessoas, cerca de 10 dias) e Marte (marcado como referência, não missão real). A tela de missão mostra "Dia 45 de 180, fase trânsito", e a fase define o ambiente. Esforço médio
+
+### Agir
+
+- [ ] **M9. Metas semanais de sono e exercício**: a gamificação leve sugerida no enunciado, prometida na proposta e ainda ausente. Esforço baixo
+- [ ] **M10. Origem do dado**: cada valor marcado como "digitado", "pulseira" ou "dosímetro", e textos "como medir" citando os aparelhos do Artemis II (pulseira do ARCHeR e Crew Active Dosimeter). Opcional: importar um arquivo de exemplo da pulseira. Esforço baixo
+- [ ] **M11. Readaptação à gravidade**: perto do fim da missão ou do pouso, destacar a orientação de tontura ao levantar que já existe em Missão (entrega da Larissa). Depende de M8. Esforço baixo
+
+### Ordem sugerida
+
+1. M1, M2 e M3: rápidas e fecham as lacunas do tema.
+2. M8: base para M5, M6 e M11.
+3. M5, M6 e M9.
+4. M4 e depois M7: maior impacto na demonstração.
+5. M10 e M11.
+
+### Prioridade das tarefas que já existem
+
+- **No tema, manter:** alarmes e banner (Talita), escalonamento e texto do vermelho por ambiente (Lorena), horário do check-in e lembretes (Lorena), revisão das faixas, acessibilidade, teste offline e publicação.
+- **Fora do tema, congelar até a entrega** (não apagar): backend no Railway e variáveis de deploy, recuperar dados em aparelho novo, prender o conteúdo cifrado ao registro, solo sem a chave de bordo, testes do store e da central. O i18n completo só se os jurados avaliarem em inglês; nesse caso, ao menos as telas principais.
+
 ## Limitações conhecidas
 
+- A lista de medicação prevista fica no registro do tripulante, que não é cifrado (como a lista de indicadores acompanhados). Só os registros diários, com as doses tomadas, são cifrados. Num produto real, o plano de medicação também seria cifrado.
+- A lista de medicação prevista não é editável pela interface: vem da demonstração.
 - Os dados ficam no navegador onde o app foi aberto. Outro navegador começa com outra demonstração e outra chave de dados, então não consegue abrir os pacotes do primeiro.
 - A central de bordo é simulada no próprio navegador: todos os perfis usam o mesmo aparelho.
 - O PIN de 4 a 6 números protege pouco contra quem copiar o banco do aparelho (dá para testar todas as combinações fora do app). Num produto real a chave ficaria no hardware do aparelho ou no sistema da agência.

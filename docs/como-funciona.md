@@ -6,7 +6,7 @@ Explicação completa do aplicativo: o que ele faz, como cada indicador é medid
 
 ## 1. Ideia geral
 
-O astronauta faz um **check-in diário**: informa até dez indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
+O astronauta faz um **check-in diário**: informa até onze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
 
 - numa **figura humana** em que cada sistema do corpo fica verde, amarelo ou vermelho;
 - numa **lista de alertas**, cada um explicando o que mudou e o que fazer;
@@ -29,7 +29,7 @@ Tudo roda no navegador, sem servidor e sem internet. Os dados ficam no próprio 
 
 Os alertas e as linhas de base não são gravados. São recalculados a partir dos registros sempre que a tela abre. Assim, mudar uma regra no `rules.json` muda o resultado na hora, sem dado velho guardado.
 
-## 3. Os dez indicadores e como medir
+## 3. Os onze indicadores e como medir
 
 | Indicador | Unidade | Região do corpo | Como medir (texto mostrado no app) |
 | --- | --- | --- | --- |
@@ -42,6 +42,7 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Exercício | minutos | Ossos e músculos | Some os minutos de esteira, bicicleta e treino resistido feitos hoje. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
 | Visão | 0, 1 ou 2 | Olhos e visão | Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão. 0 = sem mudança, 1 = mudança leve, 2 = mudança clara. |
+| Medicação | lista de marcar | Corpo inteiro | Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada. Só aparece para quem tem medicação prevista. |
 | Sintomas | lista de marcar | Corpo inteiro | Marque tudo o que sentiu hoje. Se não sentiu nada, avance sem marcar. |
 
 Cada passo do check-in também mostra o **por que medir**, com um dado da NASA (por exemplo: os ossos perdem de 1% a 1,5% de densidade por mês sem gravidade; cerca de 70% dos astronautas da estação têm inchaço no fundo do olho).
@@ -70,6 +71,7 @@ Cada pessoa tem o seu normal. Uma frequência de 58 bpm pode ser ótima para um 
 | Temperatura | Não | Só a faixa geral |
 | Humor | Não | Só a faixa geral |
 | Visão | Não | Só a faixa geral |
+| Medicação | Não | Amarelo quando uma dose prevista não foi tomada |
 | Sintomas | Não | Cada sintoma tem nível fixo |
 
 ## 5. A comparação: faixa geral e desvio pessoal
@@ -152,6 +154,10 @@ Cada sintoma marcado tem um nível fixo, definido em `rules.json`. O alerta de s
 | --- | --- |
 | Dor de cabeça, enjoo, tontura, cansaço fora do comum, dor nas costas, nariz entupido, irritação na pele | Amarelo |
 | Dor no peito, falta de ar | Vermelho |
+
+### Medicação
+
+Cada tripulante pode ter uma lista de medicação prevista (na demonstração: Ana e Lia, com nomes fictícios). No check-in, a pessoa marca as doses que tomou. Uma dose prevista sem marcar gera alerta **amarelo** (`missedLevel` em `rules.json`), com confiança baixa, porque é autorrelato. O motor atual não gera vermelho por medicação. Fonte: risco da NASA de remédios ineficazes ou tóxicos em voos longos.
 
 ## 8. "Mudaram juntos" (correlações)
 

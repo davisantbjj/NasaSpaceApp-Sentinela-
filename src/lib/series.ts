@@ -8,9 +8,22 @@ export interface SeriesPoint {
 
 export const BP_COMPONENTS: BpComponent[] = ['systolic', 'diastolic'];
 
-// Valores numéricos de um indicador num dia. Sintomas não são numéricos e devolvem lista vazia.
+// Indicadores que são listas, não números: não têm série, linha de base nem gráfico.
+const LIST_INDICATORS: IndicatorId[] = ['symptoms', 'medication'];
+
+export function hasHistoryChart(indicator: IndicatorId): boolean {
+  return !LIST_INDICATORS.includes(indicator);
+}
+
+// Se o indicador foi registrado no dia (para listas, mesmo vazia).
+export function hasValue(values: DailyValues, indicator: IndicatorId): boolean {
+  if (LIST_INDICATORS.includes(indicator)) return values[indicator] !== undefined;
+  return seriesPoints(values, indicator).length > 0;
+}
+
+// Valores numéricos de um indicador num dia. Sintomas e medicação não são numéricos e devolvem lista vazia.
 export function seriesPoints(values: DailyValues, indicator: IndicatorId): SeriesPoint[] {
-  if (indicator === 'symptoms') return [];
+  if (!hasHistoryChart(indicator)) return [];
   if (indicator === 'bloodPressure') {
     const bp = values.bloodPressure;
     return bp ? BP_COMPONENTS.map((component) => ({ component, value: bp[component] })) : [];

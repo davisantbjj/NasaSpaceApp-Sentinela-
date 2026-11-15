@@ -4,7 +4,7 @@ import { IndicatorChart, type ChartBand, type ChartSeries } from '../components/
 import { displayText } from '../content/format';
 import { INDICATORS } from '../content/indicators';
 import { formatDate } from '../lib/dates';
-import { formatNumber, rangesFor, seriesValue } from '../lib/series';
+import { formatNumber, hasHistoryChart, rangesFor, seriesValue } from '../lib/series';
 import { findBaseline, isBaselineReady } from '../rules/baseline';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
@@ -19,7 +19,7 @@ export function TrendsPage() {
   const params = useParams<{ indicator?: string }>();
   const [period, setPeriod] = useState(30);
 
-  const options: IndicatorId[] = trackedInOrder(member).filter((id) => id !== 'symptoms');
+  const options: IndicatorId[] = trackedInOrder(member).filter(hasHistoryChart);
   const indicator = (options.includes(params.indicator as IndicatorId) ? params.indicator : options[0]) as IndicatorId | undefined;
 
   if (!member || !indicator) return null;

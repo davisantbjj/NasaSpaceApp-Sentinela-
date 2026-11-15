@@ -25,6 +25,13 @@ export function displayValue(
     if (symptoms.length === 0) return { text: 'Nenhum', unit: '' };
     return { text: symptoms.map((id) => symptomLabels[id] ?? id).join(', '), unit: '' };
   }
+  if (indicator === 'medication') {
+    const doses = values.medication;
+    if (!doses) return undefined;
+    const missed = doses.filter((dose) => !dose.taken);
+    if (missed.length === 0) return { text: doses.length === 0 ? 'Nenhuma prevista' : 'Todas tomadas', unit: '' };
+    return { text: `Não tomada: ${missed.map((dose) => dose.label).join(', ')}`, unit: '' };
+  }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
   const option = content.scale?.find((o) => o.value === value);

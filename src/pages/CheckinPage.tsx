@@ -10,7 +10,7 @@ import { INDICATORS } from '../content/indicators';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, DailyValues, IndicatorId } from '../types';
+import type { Alert, CrewMember, DailyValues, IndicatorId } from '../types';
 import { latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
 
 // Rascunho do formulário: números como texto (aceita vírgula), escalas e sintomas já prontos.
@@ -19,9 +19,10 @@ interface Draft {
   mood?: number;
   vision?: number;
   symptoms?: string[];
+  medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
 }
 
-function draftFrom(values: DailyValues | undefined): Draft {
+function draftFrom(values: DailyValues | undefined, member: CrewMember | undefined): Draft {
   const text: Record<string, string> = {};
   const str = (v?: number) => (v === undefined ? '' : String(v).replace('.', ','));
   if (values) {
@@ -31,7 +32,11 @@ function draftFrom(values: DailyValues | undefined): Draft {
       text[id] = str(values[id]);
     }
   }
-  return { text, mood: values?.mood, vision: values?.vision, symptoms: values?.symptoms };
+  // Medicação começa sem nada marcado: avançar sem marcar registra as doses como não tomadas.
+  const medicationTaken = values?.medication
+    ? values.medication.filter((dose) => dose.taken).map((dose) => dose.id)
+    : member?.medications?.length ? [] : undefined;
+  return { text, mood: values?.mood, vision: values?.vision, symptoms: values?.symptoms, medicationTaken };
 }
 
 function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
@@ -47,7 +52,7 @@ function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
 }
 
 // Converte o rascunho em valores do dia. Campos vazios ou inválidos ficam de fora (pulados).
-function toValues(steps: IndicatorId[], draft: Draft): DailyValues {
+function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): DailyValues {
   const values: DailyValues = {};
   for (const indicator of steps) {
     if (indicator === 'mood') {
@@ -56,6 +61,11 @@ function toValues(steps: IndicatorId[], draft: Draft): DailyValues {
       if (draft.vision !== undefined) values.vision = draft.vision as DailyValues['vision'];
     } else if (indicator === 'symptoms') {
       if (draft.symptoms !== undefined) values.symptoms = draft.symptoms;
+    } else if (indicator === 'medication') {
+      const taken = draft.medicationTaken;
+      if (taken !== undefined && member.medications?.length) {
+        values.medication = member.medications.map((m) => ({ id: m.id, label: m.label, taken: taken.includes(m.id) }));
+      }
     } else {
       const fields = fieldsFor(indicator, draft);
       if (fields.some((f) => fieldError(f))) continue;
@@ -98,16 +108,20 @@ function OwnCheckin() {
   const latest = latestRecord(records);
   const existing = latest?.date === todayISO() ? latest : undefined;
 
-  const steps = useMemo(() => trackedInOrder(member), [member]);
+  // Medicação só entra no check-in de quem tem medicação prevista.
+  const steps = useMemo(
+    () => trackedInOrder(member).filter((id) => id !== 'medication' || (member?.medications?.length ?? 0) > 0),
+    [member],
+  );
   const [index, setIndex] = useState(0);
-  const [draft, setDraft] = useState<Draft>(() => draftFrom(existing?.values));
+  const [draft, setDraft] = useState<Draft>(() => draftFrom(existing?.values, member));
   const [stage, setStage] = useState<'steps' | 'review' | 'done'>('steps');
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<Alert[]>([]);
 
   if (!member || steps.length === 0) return null;
 
-  const values = toValues(steps, draft);
+  const values = toValues(steps, draft, member);
   const filled = Object.keys(values).length;
 
   const next = () => (index < steps.length - 1 ? setIndex(index + 1) : setStage('review'));
@@ -126,6 +140,7 @@ function OwnCheckin() {
         mood: indicator === 'mood' ? undefined : d.mood,
         vision: indicator === 'vision' ? undefined : d.vision,
         symptoms: indicator === 'symptoms' ? undefined : d.symptoms,
+        medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
       };
     });
     next();
@@ -251,6 +266,14 @@ function OwnCheckin() {
             options={content.scale}
             value={indicator === 'mood' ? draft.mood : draft.vision}
             onChange={(value) => setDraft((d) => ({ ...d, [indicator]: value }))}
+          />
+        )}
+        {indicator === 'medication' && (
+          <ChecklistStep
+            legend="Doses de hoje"
+            options={(member.medications ?? []).map((m) => ({ id: m.id, label: `${m.label} · ${m.schedule}` }))}
+            value={draft.medicationTaken ?? []}
+            onChange={(medicationTaken) => setDraft((d) => ({ ...d, medicationTaken }))}
           />
         )}
         {indicator === 'symptoms' && (

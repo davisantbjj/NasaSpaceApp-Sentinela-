@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { INDICATORS } from '../../content/indicators';
+import { hasHistoryChart } from '../../lib/series';
 import type { Alert, AlertReview } from '../../types';
 import { AlertReviewBox } from './AlertReviewBox';
 import { LevelBadge } from './LevelBadge';
@@ -8,6 +9,7 @@ const TRIGGER_TEXT: Record<Alert['trigger'], string> = {
   generalRange: 'Fora da faixa geral',
   baselineDeviation: 'Desvio do padrão pessoal',
   symptom: 'Sintoma relatado',
+  missedMedication: 'Dose não tomada',
 };
 
 // As seis partes de todo alerta: o que mudou, a referência, por que importa,
@@ -68,7 +70,7 @@ export function AlertCard({ alert, review, onReview }: Props) {
       {(review || onReview) && <AlertReviewBox review={review} onReview={onReview} />}
 
       <div className="row-between">
-        {alert.indicator !== 'symptoms' ? (
+        {hasHistoryChart(alert.indicator) ? (
           <Link className="link-arrow" to={`/trends/${alert.indicator}`}>Ver histórico →</Link>
         ) : <span />}
         <a className="link-arrow muted small" href={alert.sourceUrl} target="_blank" rel="noreferrer">

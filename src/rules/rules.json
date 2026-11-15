@@ -267,6 +267,33 @@
       },
       "demo": true
     },
+    "medication": {
+      "label": "Medicação",
+      "region": "wholeBody",
+      "unit": "",
+      "useBaseline": false,
+      "missedLevel": "yellow",
+      "nasaRisk": "Risk of Ineffective or Toxic Medications During Long-Duration Exploration Spaceflight",
+      "hazards": ["distance", "radiation"],
+      "messages": {
+        "whyItMatters": "Longe da Terra não há reposição rápida e o corpo muda no voo, o que pode mudar o efeito dos remédios. Saber se cada dose prevista foi tomada ajuda o médico de bordo a avaliar o tratamento.",
+        "whatToDo": {
+          "yellow": "Veja no plano de medicação se ainda dá para tomar a dose hoje. Se tiver dúvida, fale com o oficial médico antes de tomar duas doses juntas.",
+          "red": "Avise o oficial médico agora."
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://www.nasa.gov/directorates/esdmd/hhp/risk-of-ineffective-or-toxic-medications-during-long-duration-exploration-spaceflight"
+        ],
+        "green": "Todas as doses previstas no dia marcadas como tomadas. Autorrelato, sem conferência do estoque.",
+        "yellow": "Uma ou mais doses previstas não tomadas: regra de demonstração. A fonte da NASA trata da estabilidade e do efeito dos remédios no voo, não da adesão ao tratamento.",
+        "red": "Não é gerado no motor atual. Um plano real definiria quais remédios exigem aviso imediato."
+      },
+      "demo": true
+    },
     "symptoms": {
       "label": "Sintomas",
       "region": "wholeBody",

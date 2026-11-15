@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
-import { seriesPoints } from '../lib/series';
+import { hasValue } from '../lib/series';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { DailyRecord, IndicatorId } from '../types';
 import { trackedInOrder } from './helpers';
@@ -30,9 +30,7 @@ function streak(records: DailyRecord[], today: string): number {
 
 function lastMeasured(records: DailyRecord[], indicator: IndicatorId): string | undefined {
   for (let i = records.length - 1; i >= 0; i -= 1) {
-    const values = records[i].values;
-    const has = indicator === 'symptoms' ? values.symptoms !== undefined : seriesPoints(values, indicator).length > 0;
-    if (has) return records[i].date;
+    if (hasValue(records[i].values, indicator)) return records[i].date;
   }
   return undefined;
 }

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { INDICATORS, REGIONS } from '../../content/indicators';
 import type { DisplayValue } from '../../content/format';
+import { hasHistoryChart } from '../../lib/series';
 import type { Alert, BodyRegion, IndicatorId, Level } from '../../types';
 import { LevelBadge } from '../alerts/LevelBadge';
 
@@ -61,7 +62,7 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
             {item.baselineNote && <p className="small muted">{item.baselineNote}</p>}
             <div className="row">
               {alert && <Link className="link-arrow" to="/alerts">Ver alerta →</Link>}
-              {item.indicator !== 'symptoms' && (
+              {hasHistoryChart(item.indicator) && (
                 <Link className="link-arrow" to={`/trends/${item.indicator}`}>Ver histórico →</Link>
               )}
             </div>

@@ -2,7 +2,7 @@ import { addDays, missionDay, todayISO } from '../lib/dates';
 import { createDataKey, createKeyPair, exportPublicKey } from '../lib/crypto';
 import { composeForDay } from '../sync/compose';
 import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Profile, Settings } from '../types';
-import { db, DEMO_TABLES } from './db';
+import { db, DEMO_MEDICATIONS, DEMO_TABLES } from './db';
 import { clearSessionKeys, setSessionKeys } from './keyring';
 import { buildProfile } from './profilesRepo';
 import { sealRecord } from './recordsRepo';
@@ -39,7 +39,7 @@ interface SeedProfile {
 const PROFILES: SeedProfile[] = [
   {
     // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
-    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
+    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.ana },
     seed: 11,
     base: { systolic: 116, diastolic: 74, heartRate: 66, glucose: 88, temperature: 36.6, sleepHours: 7.5, exerciseMinutes: 88, radiationDose: 420 },
     story: (values, daysLeft) => {
@@ -59,7 +59,7 @@ const PROFILES: SeedProfile[] = [
   },
   {
     // Mudança leve na visão nos últimos dias, com dor de cabeça.
-    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: ALL_BUT_GLUCOSE },
+    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.lia },
     seed: 37,
     base: { systolic: 112, diastolic: 72, heartRate: 74, glucose: 90, temperature: 36.7, sleepHours: 7.6, exerciseMinutes: 82, radiationDose: 425 },
     story: (values, daysLeft) => {
@@ -98,6 +98,8 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         radiationDose: around(base.radiationDose, 20),
         vision: 0,
         symptoms: [],
+        // Histórico com todas as doses tomadas: a medicação não muda os casos preparados da demonstração.
+        medication: profile.member.medications?.map((m) => ({ id: m.id, label: m.label, taken: true })),
       };
       profile.story?.(all, SEED_DAYS - 1 - i);
 

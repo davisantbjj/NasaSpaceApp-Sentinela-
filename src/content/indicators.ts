@@ -20,7 +20,7 @@ export interface IndicatorContent {
 // Ordem dos passos do check-in (docs/diagramas/05-navegacao-telas.md).
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'exerciseMinutes', 'radiationDose', 'vision', 'symptoms',
+  'mood', 'exerciseMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
 ];
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
@@ -97,6 +97,12 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
       { value: 2, label: 'Mudança clara', symbol: '2' },
     ],
   },
+  medication: {
+    label: 'Medicação',
+    unit: '',
+    howToMeasure: 'Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada.',
+    whyMeasure: 'Longe da Terra não há reposição rápida, e o corpo muda no voo. Registrar cada dose ajuda o médico de bordo a saber se o tratamento está sendo seguido.',
+  },
   symptoms: {
     label: 'Sintomas',
     unit: '',
@@ -112,7 +118,7 @@ export const REGIONS: Record<BodyRegion, { label: string; description: string }>
   immune: { label: 'Defesas do corpo', description: 'Temperatura' },
   metabolism: { label: 'Metabolismo', description: 'Glicemia' },
   musculoskeletal: { label: 'Ossos e músculos', description: 'Exercício' },
-  wholeBody: { label: 'Corpo inteiro', description: 'Radiação e sintomas' },
+  wholeBody: { label: 'Corpo inteiro', description: 'Radiação, sintomas e medicação' },
 };
 
 export const REGION_ORDER: BodyRegion[] = [

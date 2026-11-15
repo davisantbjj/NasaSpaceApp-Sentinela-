@@ -5,7 +5,7 @@ export type Level = 'green' | 'yellow' | 'red';
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
   | 'sleepHours' | 'mood' | 'exerciseMinutes' | 'radiationDose'
-  | 'vision' | 'symptoms';
+  | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
   | 'head' | 'heart' | 'musculoskeletal' | 'immune'
@@ -20,6 +20,22 @@ export interface CrewMember {
   missionStart: string; // data ISO, AAAA-MM-DD
   trackedIndicators: IndicatorId[]; // o check-in só pede estes
   sex?: 'female' | 'male'; // figura e contexto educativo; não muda nenhuma faixa
+  medications?: PlannedMedication[]; // medicação prevista; sem lista, o check-in não pergunta
+}
+
+// Medicação prevista para o tripulante. Na demonstração os nomes são fictícios.
+export interface PlannedMedication {
+  id: string;
+  label: string; // "Suplemento de vitamina D"
+  schedule: string; // "1 vez ao dia"
+}
+
+// Uma dose prevista no dia e se foi tomada. Guarda o nome junto, para o registro continuar legível
+// mesmo se a lista prevista mudar depois.
+export interface MedicationDose {
+  id: string;
+  label: string;
+  taken: boolean;
 }
 
 export interface DailyValues {
@@ -33,6 +49,7 @@ export interface DailyValues {
   radiationDose?: number;
   vision?: 0 | 1 | 2;
   symptoms?: string[]; // ids de sintomas definidos em rules.json
+  medication?: MedicationDose[]; // doses previstas no dia
 }
 
 export interface DailyRecord {
@@ -133,7 +150,7 @@ export interface Alert {
   indicator: IndicatorId;
   region: BodyRegion;
   level: Level;
-  trigger: 'generalRange' | 'baselineDeviation' | 'symptom';
+  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication';
   whatChanged: string;
   reference: string;
   whyItMatters: string;
@@ -226,6 +243,7 @@ export interface IndicatorRule {
   sourceUrl: string;
   demo: boolean;
   rangeEvidence?: RangeEvidence;
+  missedLevel?: 'yellow' | 'red'; // medicação: nível quando uma dose prevista não foi tomada
 }
 
 export interface Rules {

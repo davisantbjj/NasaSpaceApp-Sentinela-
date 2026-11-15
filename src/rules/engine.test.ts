@@ -140,6 +140,26 @@ describe('evaluateRecord', () => {
     expect(red.whatChanged).toBe('Sintomas relatados: dor de cabeça, dor no peito');
   });
 
+  it('medicação: alerta só quando uma dose prevista não foi tomada', () => {
+    const vitaminD = { id: 'vitaminD', label: 'Suplemento de vitamina D' };
+    const eyeDrops = { id: 'eyeDrops', label: 'Colírio lubrificante' };
+    expect(evaluateLast([{ medication: [] }])).toEqual([]);
+    expect(evaluateLast([{ medication: [{ ...vitaminD, taken: true }] }])).toEqual([]);
+
+    const [alert] = evaluateLast([{ medication: [{ ...vitaminD, taken: false }, { ...eyeDrops, taken: true }] }]);
+    expect(alert.level).toBe('yellow');
+    expect(alert.region).toBe('wholeBody');
+    expect(alert.trigger).toBe('missedMedication');
+    expect(alert.whatChanged).toBe('Dose não tomada hoje: Suplemento de vitamina D');
+    expect(alert.confidence).toBe('low');
+    expect(alert.notifyGround).toBe(false);
+  });
+
+  it('medicação: o ambiente não muda o nível', () => {
+    const day = { medication: [{ id: 'vitaminD', label: 'Suplemento de vitamina D', taken: false }] };
+    expect(evaluateLast([day], 'mars')[0].level).toBe(evaluateLast([day], 'station')[0].level);
+  });
+
   it('ordena os alertas do mais grave para o menos grave', () => {
     const alerts = evaluateLast([{ heartRate: 110, temperature: 39, mood: 3 }]);
     expect(alerts.map((a) => a.level)).toEqual(['red', 'yellow', 'yellow']);

@@ -1,7 +1,7 @@
 import Dexie, { type Table } from 'dexie';
 import type { Sealed } from '../lib/crypto';
 import type {
-  AccessLogEntry, AlertReview, CrewMember, DailyRecord, DeletionRequest, GroundPacket, MedicalMessage, Profile, Settings,
+  AccessLogEntry, AlertReview, CrewMember, DailyRecord, DeletionRequest, GroundPacket, MedicalMessage, PlannedMedication, Profile, Settings,
 } from '../types';
 
 export interface SettingsRow {
@@ -51,6 +51,15 @@ const DEMO_CREW_SEX: Record<string, NonNullable<CrewMember['sex']>> = {
   ana: 'female',
   lia: 'female',
   kenji: 'male',
+};
+
+// Medicação prevista FICTÍCIA da demonstração (seed.ts), usada também para atualizar o banco já gravado (v8).
+export const DEMO_MEDICATIONS: Record<string, PlannedMedication[]> = {
+  ana: [{ id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' }],
+  lia: [
+    { id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' },
+    { id: 'eyeDrops', label: 'Colírio lubrificante', schedule: '2 vezes ao dia' },
+  ],
 };
 
 // Tabelas com dados da demonstração. As preferências (aviso de privacidade lido) ficam fora.
@@ -113,6 +122,16 @@ export class SentinelaDB extends Dexie {
       .upgrade(async (tx) => {
         await Promise.all(DEMO_TABLES.map((name) => tx.table(name).clear()));
       });
+    // v8: medicação prevista (M1). Os tripulantes da demonstração já gravados ganham a lista e o
+    // indicador, sem apagar o histórico. Os dias antigos ficam sem registro de medicação.
+    this.version(8).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const planned = DEMO_MEDICATIONS[member.id];
+        if (!planned || member.medications) return;
+        member.medications = planned;
+        if (!member.trackedIndicators.includes('medication')) member.trackedIndicators.push('medication');
+      }),
+    );
   }
 }
 
