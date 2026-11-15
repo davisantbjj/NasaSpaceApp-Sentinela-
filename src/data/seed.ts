@@ -13,7 +13,7 @@ import { sealRecord } from './recordsRepo';
 const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
-  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload',
+  'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
   'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'symptoms',
 ];
 
@@ -45,10 +45,13 @@ const PROFILES: SeedProfile[] = [
     story: (values, daysLeft) => {
       const sleep = [5.2, 5.3, 5.6, 5.9, 6.3, 6.7, 7.0];
       const mood = [3, 3, 3, 3, 4, 4, 4] as const;
+      // Nos dias com 6 h de sono ou menos, a reação fica mais lenta (M4 e M7).
+      const reaction = [372, 368, 364, 360];
       if (daysLeft < sleep.length) {
         values.sleepHours = sleep[daysLeft];
         values.mood = mood[daysLeft];
       }
+      if (daysLeft < reaction.length) values.reactionTime = reaction[daysLeft];
     },
   },
   {
@@ -79,6 +82,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
     const random = mulberry32(profile.seed);
     const mindRandom = mulberry32(profile.seed + 1000); // estresse e carga de trabalho (M2)
     const resistanceRandom = mulberry32(profile.seed + 2000); // treino resistido (M3)
+    const reactionRandom = mulberry32(profile.seed + 3000); // tempo de reação (M4)
     // Variação em torno do valor de base, limitada a ±spread.
     const around = (center: number, spread: number, decimals = 0) => {
       const factor = 10 ** decimals;
@@ -109,6 +113,8 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         // Parte resistida do exercício: perto de 40 min, sem passar do total. Gerador próprio, para não
         // mudar os outros valores simulados.
         resistanceMinutes: Math.round(40 + (resistanceRandom() * 2 - 1) * 3),
+        // Tempo de reação perto de 300 ms, com gerador próprio.
+        reactionTime: Math.round(300 + (reactionRandom() * 2 - 1) * 12),
       };
       profile.story?.(all, SEED_DAYS - 1 - i);
 
@@ -116,6 +122,11 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
       for (const indicator of profile.member.trackedIndicators) {
         Object.assign(values, { [indicator]: all[indicator] });
       }
+      // Na demonstração, o sono vem de um sensor vestível e a dose do dosímetro pessoal (M10).
+      const sources: DailyValues['sources'] = {};
+      if (values.sleepHours !== undefined) sources.sleepHours = 'wearable';
+      if (values.radiationDose !== undefined) sources.radiationDose = 'dosimeter';
+      if (Object.keys(sources).length > 0) values.sources = sources;
       records.push({
         id: `${profile.member.id}_${date}`,
         crewId: profile.member.id,

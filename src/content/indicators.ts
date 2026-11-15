@@ -1,4 +1,4 @@
-import type { BodyRegion, Environment, IndicatorId } from '../types';
+import type { BodyRegion, DataSource, Environment, IndicatorId } from '../types';
 
 export interface ScaleOption {
   value: number;
@@ -15,13 +15,21 @@ export interface IndicatorContent {
   // (essas ficam em src/rules/rules.json).
   input?: { min: number; max: number; step: number };
   scale?: ScaleOption[];
+  sources?: DataSource[]; // de onde o valor pode vir (M10); sem lista, só digitado
 }
+
+// Origens de um valor (M10). Os aparelhos são genéricos; a nave ou a missão aparecem só como exemplo.
+export const DATA_SOURCES: Record<DataSource, { label: string; example: string }> = {
+  manual: { label: 'Digitado', example: 'medido ou contado por você' },
+  wearable: { label: 'Sensor vestível', example: 'ex.: pulseira de actigrafia, como a usada no Artemis II' },
+  dosimeter: { label: 'Dosímetro pessoal', example: 'ex.: dosímetro ativo levado no bolso, como no Artemis II' },
+};
 
 // Ordem dos passos do check-in (docs/diagramas/05-navegacao-telas.md). `resistanceMinutes` não tem passo
 // próprio: é o segundo campo do passo de exercício.
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'stress', 'workload', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
+  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
 ];
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
@@ -35,9 +43,10 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
   heartRate: {
     label: 'Frequência cardíaca',
     unit: 'bpm',
-    howToMeasure: 'Meça em repouso, antes do exercício. Use o oxímetro de dedo ou conte os batimentos por 1 minuto.',
+    howToMeasure: 'Meça em repouso, antes do exercício. Use o oxímetro de dedo, um sensor vestível ou conte os batimentos por 1 minuto.',
     whyMeasure: 'A falta de gravidade muda a circulação. O ritmo em repouso é um sinal simples de como o coração está respondendo.',
     input: { min: 20, max: 250, step: 1 },
+    sources: ['manual', 'wearable'],
   },
   temperature: {
     label: 'Temperatura',
@@ -56,9 +65,10 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
   sleepHours: {
     label: 'Sono',
     unit: 'h',
-    howToMeasure: 'Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir.',
+    howToMeasure: 'Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir. Se usa um sensor vestível de sono, copie as horas que ele registrou.',
     whyMeasure: 'Na estação a tripulação vê cerca de 16 nasceres do sol por dia, o que confunde o relógio do corpo. Dormir pouco reduz a atenção.',
     input: { min: 0, max: 24, step: 0.1 },
+    sources: ['manual', 'wearable'],
   },
   mood: {
     label: 'Humor',
@@ -99,6 +109,12 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
       { value: 5, label: 'Excessiva', symbol: '5' },
     ],
   },
+  reactionTime: {
+    label: 'Tempo de reação',
+    unit: 'ms',
+    howToMeasure: 'Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.',
+    whyMeasure: 'Na estação, os astronautas fazem um teste parecido, o Reaction Self Test, para perceber a fadiga cedo. Reação mais lenta que o seu padrão é um sinal para descansar.',
+  },
   exerciseMinutes: {
     label: 'Exercício',
     unit: 'min',
@@ -119,6 +135,7 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     howToMeasure: 'Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor em microsieverts.',
     whyMeasure: 'A radiação espacial aumenta o risco de câncer ao longo da vida. Para dar uma ideia de escala: o detector Radi-N2 mediu cerca de 150 µSv por dia só de nêutrons na estação.',
     input: { min: 0, max: 100000, step: 1 },
+    sources: ['manual', 'dosimeter'],
   },
   vision: {
     label: 'Visão',
@@ -146,7 +163,7 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
 };
 
 export const REGIONS: Record<BodyRegion, { label: string; description: string }> = {
-  mind: { label: 'Mente e sono', description: 'Sono, humor, estresse e carga de trabalho' },
+  mind: { label: 'Mente e sono', description: 'Sono, humor, estresse, carga de trabalho e tempo de reação' },
   head: { label: 'Olhos e visão', description: 'Autoteste de visão' },
   heart: { label: 'Coração', description: 'Pressão arterial e frequência cardíaca' },
   immune: { label: 'Defesas do corpo', description: 'Temperatura' },

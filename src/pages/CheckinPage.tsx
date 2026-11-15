@@ -2,15 +2,17 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
+import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
+import { SourcePicker } from '../components/checkin/SourcePicker';
 import { fieldError, NumberStep, parseNumber, type NumberField } from '../components/checkin/NumberStep';
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
-import { displayText } from '../content/format';
+import { displayText, sourceLabel } from '../content/format';
 import { INDICATORS } from '../content/indicators';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, CrewMember, DailyValues, IndicatorId } from '../types';
+import type { Alert, CrewMember, DailyValues, DataSource, IndicatorId } from '../types';
 import { latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
@@ -24,6 +26,8 @@ interface Draft {
   scale: Partial<Record<ScaleId, number>>;
   symptoms?: string[];
   medicationTaken?: string[]; // ids das doses marcadas como tomadas; ausente = passo pulado
+  reactionTime?: number; // resultado do teste de reação, em ms (M4)
+  sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
 function draftFrom(values: DailyValues | undefined, member: CrewMember | undefined): Draft {
@@ -49,7 +53,7 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     : member?.medications?.length ? [] : undefined;
   const scale: Draft['scale'] = {};
   for (const id of SCALE_IDS) scale[id] = values?.[id];
-  return { text, scale, symptoms: values?.symptoms, medicationTaken };
+  return { text, scale, symptoms: values?.symptoms, medicationTaken, reactionTime: values?.reactionTime, sources: { ...values?.sources } };
 }
 
 // Quem acompanha treino resistido digita o exercício em dois campos (M3).
@@ -82,6 +86,8 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       if (chosen !== undefined) Object.assign(values, { [indicator]: chosen });
     } else if (indicator === 'symptoms') {
       if (draft.symptoms !== undefined) values.symptoms = draft.symptoms;
+    } else if (indicator === 'reactionTime') {
+      if (draft.reactionTime !== undefined) values.reactionTime = draft.reactionTime;
     } else if (indicator === 'medication') {
       const taken = draft.medicationTaken;
       if (taken !== undefined && member.medications?.length) {
@@ -99,6 +105,12 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       } else Object.assign(values, { [indicator]: numbers[0] });
     }
   }
+  // Origem só dos valores registrados e vindos de um aparelho.
+  const sources: Partial<Record<IndicatorId, DataSource>> = {};
+  for (const [indicator, source] of Object.entries(draft.sources) as [IndicatorId, DataSource][]) {
+    if (source !== 'manual' && values[indicator] !== undefined) sources[indicator] = source;
+  }
+  if (Object.keys(sources).length > 0) values.sources = sources;
   return values;
 }
 
@@ -149,7 +161,7 @@ function OwnCheckin() {
   if (!member || steps.length === 0) return null;
 
   const values = toValues(steps, draft, member);
-  const filled = Object.keys(values).length;
+  const filled = Object.keys(values).filter((key) => key !== 'sources').length;
 
   const next = () => (index < steps.length - 1 ? setIndex(index + 1) : setStage('review'));
   const back = index > 0 ? () => setIndex(index - 1) : undefined;
@@ -171,6 +183,8 @@ function OwnCheckin() {
         scale: isScale(indicator) ? { ...d.scale, [indicator]: undefined } : d.scale,
         symptoms: indicator === 'symptoms' ? undefined : d.symptoms,
         medicationTaken: indicator === 'medication' ? undefined : d.medicationTaken,
+        reactionTime: indicator === 'reactionTime' ? undefined : d.reactionTime,
+        sources: { ...d.sources, [indicator]: undefined },
       };
     });
     next();
@@ -242,6 +256,7 @@ function OwnCheckin() {
                 <span className={values[indicator] === undefined ? 'muted' : 'num'}>
                   {displayText(values, indicator, SYMPTOM_LABELS) ?? 'Pulado'}
                   {indicator === 'exerciseMinutes' && values.resistanceMinutes !== undefined && ` (${displayText(values, 'resistanceMinutes')} de resistido)`}
+                  {sourceLabel(values, indicator) && ` · ${sourceLabel(values, indicator)}`}
                 </span>
               </li>
             ))}
@@ -292,6 +307,14 @@ function OwnCheckin() {
             <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
             {partialBp && <p className="small muted">Digite os dois números da pressão, ou pule o passo.</p>}
             {partialExercise && <p className="small muted">Digite os dois tempos (use 0 se não fez um deles), ou pule o passo.</p>}
+            {content.sources && (
+              <SourcePicker
+                name={indicator}
+                options={content.sources}
+                value={draft.sources[indicator] ?? 'manual'}
+                onChange={(source) => setDraft((d) => ({ ...d, sources: { ...d.sources, [indicator]: source } }))}
+              />
+            )}
           </>
         )}
         {content.scale && (
@@ -301,6 +324,12 @@ function OwnCheckin() {
             options={content.scale}
             value={isScale(indicator) ? draft.scale[indicator] : undefined}
             onChange={(value) => setDraft((d) => ({ ...d, scale: { ...d.scale, [indicator]: value } }))}
+          />
+        )}
+        {indicator === 'reactionTime' && (
+          <ReactionTestStep
+            value={draft.reactionTime}
+            onResult={(reactionTime) => setDraft((d) => ({ ...d, reactionTime }))}
           />
         )}
         {indicator === 'medication' && (

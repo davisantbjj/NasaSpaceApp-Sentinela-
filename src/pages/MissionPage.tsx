@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { crewHealthContext } from '../content/crewContext';
 import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
-import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, phaseOnDay } from '../content/missions';
+import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, nextGravityChange, phaseOnDay } from '../content/missions';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
+import { weeklyGoals, type WeeklyGoal } from '../lib/weeklyGoals';
+import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { DailyRecord, IndicatorId, MissionProfileId } from '../types';
 import { trackedInOrder } from './helpers';
@@ -14,6 +16,7 @@ const REMINDER_OPTIONS = [
   { value: 1, label: 'Todo dia' },
   { value: 2, label: 'A cada 2 dias' },
   { value: 3, label: 'A cada 3 dias' },
+  { value: 4, label: 'A cada 4 dias' }, // como o teste de reação na estação (M4)
   { value: 7, label: 'Uma vez por semana' },
 ];
 
@@ -36,6 +39,13 @@ function lastMeasured(records: DailyRecord[], indicator: IndicatorId): string | 
   return undefined;
 }
 
+// "5 dos últimos 7 dias na faixa · meta de 5 dias ✓ atingida" ou "1 dos últimos 7 dias na faixa · meta de 5 dias, faltam 4".
+function goalText(goal: WeeklyGoal): string {
+  const missing = goal.targetDays - goal.daysInGreen;
+  const status = goal.met ? ' ✓ atingida' : missing === 1 ? ', falta 1' : `, faltam ${missing}`;
+  return `${goal.daysInGreen} dos últimos ${goal.windowDays} dias na faixa · meta de ${goal.targetDays} dias${status}`;
+}
+
 export function MissionPage() {
   const member = useActiveCrew();
   const { crew, settings, records, session, setEnvironment, setMissionProfile, applyPhaseEnvironment, setReminder, resetDemo } = useAppStore();
@@ -54,6 +64,10 @@ export function MissionPage() {
   const crewDay = missionDay(missionStart, today);
   const phase = profile ? phaseOnDay(profile, crewDay) : undefined;
   const offPhase = !!phase && settings.environment !== phase.environment;
+  const goals = weeklyGoals(records, today, rules).filter((g) => member.trackedIndicators.includes(g.indicator));
+  // Readaptação (M11): próxima mudança de gravidade e se já está perto.
+  const gravity = profile ? nextGravityChange(profile, crewDay) : undefined;
+  const gravitySoon = !!gravity && gravity.inDays <= (rules.context?.readaptation?.noticeDaysBefore ?? 0);
 
   return (
     <div className="page">
@@ -81,8 +95,39 @@ export function MissionPage() {
         </div>
       </section>
 
+      {goals.length > 0 && (
+        <section className="card stack">
+          <div>
+            <h2>Metas da semana</h2>
+            <p className="small muted">Em quantos dos últimos {goals[0].windowDays} dias, contando hoje, cada indicador ficou na faixa verde. A meta é de {goals[0].targetDays} dias, para deixar folga para dias fora da rotina. Meta de demonstração, não é prescrição: o plano de cada tripulante vem da equipe médica.</p>
+          </div>
+          <ul className="summary-list">
+            {goals.map((goal) => (
+              <li key={goal.indicator}>
+                <span>{goal.label} ({goal.greenText})</span>
+                <span className="num">
+                  {goalText(goal)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="card stack">
         <h2>Contexto de readaptação à gravidade</h2>
+        {gravity && gravitySoon && (
+          <p className="notice" style={{ color: 'var(--text)' }}>
+            <span className="notice-icon" aria-hidden="true">!</span>
+            <span>
+              <strong>{gravity.label} {gravity.inDays === 0 ? 'hoje' : gravity.inDays === 1 ? 'amanhã' : `em ${gravity.inDays} dias`}.</strong>{' '}
+              Releia a orientação abaixo e combine com o oficial médico o protocolo de readaptação.
+            </span>
+          </p>
+        )}
+        {gravity && !gravitySoon && (
+          <p className="small muted">Próxima mudança de gravidade: {gravity.label}, no dia {gravity.day} da missão (em {gravity.inDays} dias).</p>
+        )}
         <p>{healthContext.text}</p>
         <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA — intolerância ortostática (abre outro site)</a>
       </section>

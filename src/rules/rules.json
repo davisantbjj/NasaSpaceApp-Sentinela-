@@ -256,6 +256,34 @@
       },
       "demo": true
     },
+    "reactionTime": {
+      "label": "Tempo de reação",
+      "region": "mind",
+      "unit": "ms",
+      "useBaseline": true,
+      "deviationDirection": "above",
+      "nasaRisk": "Sleep Loss, Circadian Desynchronization and Work Overload",
+      "hazards": ["isolation", "hostileEnvironment"],
+      "messages": {
+        "whyItMatters": "No Reaction Self Test usado na estação, uma reação mais lenta que o padrão da própria pessoa é sinal de fadiga. Num estudo com 24 astronautas, dormir 6 horas ou menos veio junto com reação mais lenta.",
+        "whatToDo": {
+          "yellow": "Priorize o próximo período de sono e repita o teste amanhã. Se continuar mais lento, converse com o oficial médico sobre medidas contra a fadiga.",
+          "red": "Avise o oficial médico agora."
+        }
+      },
+      "sourceUrl": "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
+        ],
+        "green": "Sem faixa geral: o tempo de reação varia entre pessoas e aparelhos. Só a comparação com o padrão pessoal é usada.",
+        "yellow": "Mais de 15% acima do padrão pessoal por 3 registros: algoritmo de demonstração, não o critério de corte do Reaction Self Test.",
+        "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
+      },
+      "demo": true
+    },
     "exerciseMinutes": {
       "label": "Exercício",
       "region": "musculoskeletal",
@@ -456,9 +484,19 @@
     },
     "radiationTotal": {
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"
+    },
+    "weeklyGoals": {
+      "windowDays": 7,
+      "targetDays": 5,
+      "indicators": ["sleepHours", "exerciseMinutes"],
+      "demo": true
+    },
+    "readaptation": {
+      "noticeDaysBefore": 7
     }
   },
   "correlationPairs": [
+    ["sleepHours", "reactionTime"],
     ["sleepHours", "mood"],
     ["exerciseMinutes", "mood"],
     ["sleepHours", "heartRate"]

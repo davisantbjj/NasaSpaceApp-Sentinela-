@@ -57,7 +57,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | `docs/pesquisa/` | Pesquisa e proposta originais, de onde saem os números e as fontes |
 | `docs/pesquisa/riscos-nasa-links-completo.md` | As 17 páginas de risco da NASA, as fichas do Human Research Roadmap, o Human System Risk Board e os artigos linkados. Comece pela tabela "O que mais importa para o Sentinela" |
 
-## Os catorze indicadores
+## Os quinze indicadores
 
 | Id | Indicador | Unidade | Região do corpo |
 | --- | --- | --- | --- |
@@ -69,6 +69,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 | `mood` | Humor | escala de 1 a 5 | `mind` |
 | `stress` | Estresse | escala de 1 a 5 (5 = muito alto) | `mind` |
 | `workload` | Carga de trabalho | escala de 1 a 5 (5 = excessiva) | `mind` |
+| `reactionTime` | Tempo de reação | ms, média do teste de reação do app | `mind` |
 | `exerciseMinutes` | Exercício | minutos por dia (total: aeróbico + resistido) | `musculoskeletal` |
 | `resistanceMinutes` | Treino resistido | minutos por dia, digitados no passo de exercício | `musculoskeletal` |
 | `radiationDose` | Radiação | microsieverts por dia | `wholeBody` |
@@ -98,6 +99,7 @@ O astronauta registra indicadores de saúde todo dia, vê o estado de cada siste
 - Não crie regra que mude o nível por ambiente da missão.
 - O valor de cerca de 150 microsieverts por dia (Radi-N2) é só de nêutrons, medido na estação espacial. Use como contexto em texto, nunca como faixa de alerta.
 - Correlações entre indicadores são mostradas como "mudaram juntos". Nunca escreva que um causou o outro.
+- A origem de um valor (`values.sources`: digitado, sensor vestível ou dosímetro) é informada pela pessoa. O app não lê aparelhos; não escreva que lê.
 - O motor de regras (`src/rules/engine.ts`) é feito de funções puras, sem acesso a banco nem a React.
 - Componentes não acessam o Dexie direto. Passam pelos repositórios em `src/data/`.
 - Toda tela que mostra nível de alerta usa cor e também texto ou ícone. A cor nunca é o único sinal.

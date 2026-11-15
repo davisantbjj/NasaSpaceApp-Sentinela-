@@ -78,6 +78,30 @@ export function daysByEnvironment(profile: MissionProfile, day: number): Partial
   return result;
 }
 
+// Próxima mudança para um ambiente com gravidade (M11): pouso na Lua ou em Marte depois de uma fase sem
+// gravidade, ou a volta à Terra no fim da missão. `inDays` 0 é hoje. Sem próxima mudança, undefined.
+export interface GravityChange {
+  label: string;
+  day: number;
+  inDays: number;
+}
+
+const WITH_GRAVITY: Environment[] = ['moon', 'mars'];
+const LANDING_LABEL: Partial<Record<Environment, string>> = { moon: 'Pouso na Lua', mars: 'Pouso em Marte' };
+
+export function nextGravityChange(profile: MissionProfile, day: number): GravityChange | undefined {
+  const changes: { label: string; day: number }[] = [];
+  profile.phases.forEach((phase, i) => {
+    const previous = profile.phases[i - 1];
+    if (previous && WITH_GRAVITY.includes(phase.environment) && !WITH_GRAVITY.includes(previous.environment)) {
+      changes.push({ label: LANDING_LABEL[phase.environment] ?? 'Pouso', day: phase.fromDay });
+    }
+  });
+  changes.push({ label: 'Volta à Terra', day: profile.durationDays + 1 });
+  const next = changes.find((c) => c.day >= day);
+  return next ? { ...next, inDays: next.day - day } : undefined;
+}
+
 // Início da missão: o mais antigo entre os tripulantes.
 export function missionStartOf(crew: CrewMember[]): string | undefined {
   return crew.map((c) => c.missionStart).sort()[0];

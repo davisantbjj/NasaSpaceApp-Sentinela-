@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { BodyMap } from '../components/body/BodyMap';
 import { RegionPanel, type RegionItem } from '../components/body/RegionPanel';
-import { displayValue } from '../content/format';
+import { displayValue, sourceLabel } from '../content/format';
 import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
 import { daysByEnvironment, MISSION_PROFILES } from '../content/missions';
 import { estimateBoneLoss } from '../lib/boneEstimate';
@@ -54,6 +54,7 @@ export function DashboardPage() {
         value,
         level: alert?.level ?? (value ? 'green' : undefined),
         baselineNote: baselineNote(indicator, baselines),
+        sourceNote: latest && sourceLabel(latest.values, indicator) ? `Origem: ${sourceLabel(latest.values, indicator)!.toLowerCase()}` : undefined,
       };
     });
 

@@ -149,6 +149,12 @@ export class SentinelaDB extends Dexie {
         if (tracked.includes('exerciseMinutes') && !tracked.includes('resistanceMinutes')) tracked.push('resistanceMinutes');
       }),
     );
+    // v11: teste de reação (M4) para todos os tripulantes já gravados. Os dias antigos ficam sem esse valor.
+    this.version(11).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (!member.trackedIndicators.includes('reactionTime')) member.trackedIndicators.push('reactionTime');
+      }),
+    );
   }
 }
 
