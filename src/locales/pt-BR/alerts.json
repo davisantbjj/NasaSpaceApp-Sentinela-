@@ -9,7 +9,8 @@
     "general": "{{name}} está em {{value}}",
     "baseline": "{{name}} está {{percent}}% {{side}} do seu padrão há {{days}} dias (hoje: {{value}})",
     "symptoms": "Sintomas relatados: {{symptoms}}",
-    "missedMedication": "Dose não tomada hoje: {{doses}}"
+    "missedMedication": "Dose não tomada hoje: {{doses}}",
+    "bodyMassLoss": "Massa corporal: {{percent}}% abaixo do início ({{value}} kg agora; {{start}} kg no início)"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -30,7 +31,8 @@
     "expected": "Esperado: {{value}}",
     "baseline": "Seu padrão pessoal: {{value}} ({{days}} dias)",
     "noSymptoms": "Esperado: nenhum sintoma",
-    "medication": "Esperado: todas as doses previstas no dia"
+    "medication": "Esperado: todas as doses previstas no dia",
+    "bodyMass": "Valor inicial: {{start}} {{unit}} · amarelo acima de {{yellow}}% de perda · vermelho acima de {{red}}%"
   },
   "confidence": {
     "baselineForming": "Linha de base em formação ({{sampleDays}} de {{baselineDays}} dias)",
@@ -150,7 +152,11 @@
     "symptoms": {
       "whyItMatters": "Longe da Terra, um sintoma registrado cedo dá tempo para agir com os recursos de bordo.",
       "yellow": "Anote quando começou e como evolui, e registre de novo amanhã.",
-      "red": "Avise o médico de bordo agora."
+      "red": "Avise o médico de bordo agora.",
+      "co2High": {
+        "yellow": "Como o CO2 da cabine está acima de 3 mmHg, confira a ventilação da cabine e avise o oficial médico sobre o sintoma.",
+        "red": "Como o CO2 da cabine está acima de 3 mmHg, confira a ventilação da cabine e avise o oficial médico agora."
+      }
     },
     "reactionTime": {
       "whyItMatters": "Um estudo com 24 astronautas encontrou associação entre sono de 6 horas ou menos e reação mais lenta. O teste deste app é demonstrativo, não equivalente ao protocolo validado do Reaction Self Test e não diagnostica fadiga.",
@@ -161,6 +167,11 @@
       "whyItMatters": "O treino resistido é o que mais protege os ossos no voo. Um estudo da NASA na estação mostrou que o treino resistido reduz a perda óssea, mas sozinho não a impede.",
       "yellow": "Reponha a sessão de treino resistido conforme o seu plano individual.",
       "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
+    },
+    "bodyMassKg": {
+      "whyItMatters": "A massa corporal é um indicador de nutrição durante o voo. A comparação é com o valor inicial desta missão, não com uma faixa universal.",
+      "yellow": "Revise alimentação, hidratação e o plano com o oficial médico.",
+      "red": "Avise o oficial médico agora para revisar nutrição e o plano da missão."
     }
   },
   "symptoms": {

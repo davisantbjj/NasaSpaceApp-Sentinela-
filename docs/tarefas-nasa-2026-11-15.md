@@ -112,7 +112,7 @@ As quatro exigem versão nova do banco (v12) e recriar a demonstração. Fazer j
 
 ### N11. Massa corporal
 
-- [ ] **N11.** Indicador periódico em kg, comparado com o valor inicial da missão (`startBodyMassKg` no tripulante).
+- [x] **N11.** Indicador periódico em kg, comparado com o valor inicial da missão (`startBodyMassKg` no tripulante).
   - **Por quê:** é o indicador real de nutrição em voo. Em 25 tripulantes, a perda média foi de 2,8% a 4,4% em relação ao pré-voo, concentrada nos primeiros 30 dias, e a ingestão fica em cerca de 80% da necessidade ([Zwart et al., 2014](https://www.ncbi.nlm.nih.gov/pubmed/25197887)).
   - **Proposta de demonstração:** amarelo acima de 5% de perda, vermelho acima de 10%. Região: corpo inteiro. Risco: alimentação e nutrição inadequadas.
   - **Aceite:** o alerta cita o percentual perdido e o valor inicial, não só o peso de hoje.
@@ -125,7 +125,7 @@ As quatro exigem versão nova do banco (v12) e recriar a demonstração. Fazer j
 
 ### N13. CO2 da cabine
 
-- [ ] **N13.** Dado da missão, não da pessoa, em mmHg, informado na tela de Missão. Acima de 3 mmHg, aviso geral. Quando alguém marcar dor de cabeça ou nariz entupido, a orientação inclui conferir o CO2 da cabine.
+- [x] **N13.** Dado da missão, não da pessoa, em mmHg, informado na tela de Missão. Acima de 3 mmHg, aviso geral. Quando alguém marcar dor de cabeça ou nariz entupido, a orientação inclui conferir o CO2 da cabine.
   - **Por quê:** a norma limita a média de 1 hora a 3 mmHg, justamente para conter dores de cabeça ([OCHMO](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf)). Tripulantes relataram sintomas a partir de 2,3 mmHg, e os médicos perguntam sobre isso nas conferências semanais ([NASA](https://ntrs.nasa.gov/archive/nasa/casi.ntrs.nasa.gov/20150019624.pdf)).
   - **Arquivos:** `src/types/index.ts` (`Settings`), `src/pages/MissionPage.tsx`, `src/rules/engine.ts`.
   - **Aceite:** o alerta de dor de cabeça muda de texto quando o CO2 está acima de 3 mmHg.

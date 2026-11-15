@@ -39,7 +39,7 @@ export function sourceContent(source: DataSource) {
 // próprio: é o segundo campo do passo de exercício.
 export const CHECKIN_ORDER: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'glucose', 'sleepHours',
-  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'medication', 'symptoms',
+  'mood', 'stress', 'workload', 'reactionTime', 'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'vision', 'medication', 'symptoms',
 ];
 
 export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
@@ -149,6 +149,13 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     whyMeasureKey: 'indicators:radiationDose.whyMeasure',
     input: { min: 0, max: 100000, step: 1 },
     sources: ['manual', 'dosimeter'],
+  },
+  bodyMassKg: {
+    labelKey: 'indicators:bodyMassKg.label',
+    unit: 'kg',
+    howToMeasureKey: 'indicators:bodyMassKg.howToMeasure',
+    whyMeasureKey: 'indicators:bodyMassKg.whyMeasure',
+    input: { min: 20, max: 300, step: 0.1 },
   },
   vision: {
     labelKey: 'indicators:vision.label',

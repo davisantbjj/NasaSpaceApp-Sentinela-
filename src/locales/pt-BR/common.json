@@ -155,6 +155,14 @@
     "writeMedical": "Escrever ao oficial médico",
     "environment": "Ambiente da missão",
     "environmentIntro": "O ambiente muda a explicação dos alertas, nunca o nível. As faixas são as mesmas em todos.",
+    "cabinCo2": {
+      "title": "CO2 da cabine",
+      "intro": "Dado da missão, não de uma pessoa. Informe a média de uma hora em mmHg.",
+      "value": "Média de CO2",
+      "warning": "Aviso geral: {{value}} mmHg está acima do limite demonstrativo de 3 mmHg.",
+      "note": "Acima de 3 mmHg, a cabine pede atenção. Se houver dor de cabeça ou nariz entupido, confira este valor.",
+      "source": "Fonte NASA sobre CO2 da cabine (abre outro site)"
+    },
     "reminders": "Lembretes de medida",
     "remindersIntro": "Para indicadores que não precisam ser medidos todo dia.",
     "indicator": "Indicador",

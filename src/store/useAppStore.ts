@@ -78,6 +78,7 @@ interface AppState extends Derived {
   lock: (notice?: string) => void;
   switchCrew: (crewId: string) => Promise<void>;
   setEnvironment: (environment: Environment) => Promise<void>;
+  setCabinCo2Mmhg: (value: number | undefined) => Promise<void>;
   setMissionProfile: (profile: MissionProfileId | undefined) => Promise<void>;
   applyPhaseEnvironment: () => Promise<void>;
   saveCheckin: (values: DailyValues) => Promise<Alert[]>;
@@ -94,10 +95,15 @@ interface AppState extends Derived {
 }
 
 // Único ponto que junta dados, linha de base e motor de regras.
-function derive(crewId: string, records: DailyRecord[], environment: Environment): Derived {
+function derive(crewId: string, records: DailyRecord[], environment: Environment, member?: CrewMember, cabinCo2Mmhg?: number): Derived {
   const baselines = computeBaselines(crewId, records, rules);
   const latest = records[records.length - 1];
-  const alerts = latest ? evaluateRecord(latest, records.slice(0, -1), baselines, rules, environment) : [];
+  const alerts = latest
+    ? evaluateRecord(latest, records.slice(0, -1), baselines, rules, environment, {
+        startBodyMassKg: member?.startBodyMassKg,
+        cabinCo2Mmhg,
+      })
+    : [];
   return {
     baselines,
     alerts,
@@ -113,7 +119,7 @@ function phaseEnvironment(profileId: MissionProfileId, crew: CrewMember[]): Envi
   return phaseOnDay(MISSION_PROFILES[profileId], day).environment;
 }
 
-const EMPTY_SETTINGS: Settings = { environment: 'station', activeCrewId: '', reminders: [] };
+const EMPTY_SETTINGS: Settings = { environment: 'station', activeCrewId: '', reminders: [], cabinCo2Mmhg: 2.3 };
 
 const EMPTY_DATA = { records: [], reviews: [], sync: { outbox: [], packets: [], delivered: [] }, ...derive('', [], 'station') };
 
@@ -138,7 +144,7 @@ export const useAppStore = create<AppState>((set, get) => {
     const session = get().session;
     const crewId = settings.activeCrewId;
     if (!session || !canViewCrew(session, crewId)) {
-      set({ settings, records: [], reviews: [], ...derive(crewId, [], settings.environment) });
+      set({ settings, records: [], reviews: [], ...derive(crewId, [], settings.environment, get().crew.find((c) => c.id === crewId), settings.cabinCo2Mmhg) });
       return;
     }
     const [records, reviews] = await Promise.all([listRecords(crewId), listReviews(crewId)]);
@@ -148,7 +154,7 @@ export const useAppStore = create<AppState>((set, get) => {
       settings,
       records: visible,
       reviews: visibleReviews(session, reviews),
-      ...derive(crewId, visible, settings.environment),
+      ...derive(crewId, visible, settings.environment, get().crew.find((c) => c.id === crewId), settings.cabinCo2Mmhg),
     });
   }
 
@@ -191,7 +197,7 @@ export const useAppStore = create<AppState>((set, get) => {
     const member = get().crew.find((c) => c.id === crewId);
     if (!member) return;
     try {
-      await composeForDay(member, date, get().settings.environment);
+      await composeForDay(member, date, get().settings.environment, get().settings.cabinCo2Mmhg);
     } catch (error) {
       console.error('Sentinela: não foi possível montar o pacote para a Terra', error);
       set({ sync: { ...get().sync, lastError: 'Não foi possível montar o pacote para a Terra deste registro.' } });
@@ -296,13 +302,18 @@ export const useAppStore = create<AppState>((set, get) => {
       const manual = !!get().settings.missionProfile;
       const settings = await updateSettings({ environment, environmentManual: manual });
       const { records } = get();
-      set({ settings, ...derive(settings.activeCrewId, records, environment) });
+      set({ settings, ...derive(settings.activeCrewId, records, environment, get().crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });
+    },
+
+    setCabinCo2Mmhg: async (value) => {
+      const settings = await updateSettings({ cabinCo2Mmhg: value });
+      set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment, get().crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });
     },
 
     setMissionProfile: async (missionProfile) => {
       const environment = missionProfile ? phaseEnvironment(missionProfile, get().crew) : get().settings.environment;
       const settings = await updateSettings({ missionProfile, environment, environmentManual: false });
-      set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment) });
+      set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment, get().crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });
     },
 
     applyPhaseEnvironment: async () => {
@@ -406,7 +417,7 @@ export const useAppStore = create<AppState>((set, get) => {
         const [all, reviews] = await Promise.all([listRecords(member.id), listReviews(member.id)]);
         assertCurrent(started);
         const records = visibleRecords(session, member.id, all);
-        const { alerts } = derive(member.id, records, settings.environment);
+        const { alerts } = derive(member.id, records, settings.environment, member, settings.cabinCo2Mmhg);
         const visible = visibleReviews(session, reviews);
         const lastDate = records[records.length - 1]?.date;
         result.push({

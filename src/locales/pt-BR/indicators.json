@@ -83,6 +83,11 @@
     "howToMeasure": "Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor em microsieverts.",
     "whyMeasure": "A radiação espacial aumenta o risco de câncer ao longo da vida. Para dar uma ideia de escala: o detector Radi-N2 mediu cerca de 150 µSv por dia só de nêutrons na estação."
   },
+  "bodyMassKg": {
+    "label": "Massa corporal",
+    "howToMeasure": "Pese-se no equipamento da nave, de preferência no mesmo horário e condição, e informe o valor em quilogramas.",
+    "whyMeasure": "A massa corporal ajuda a acompanhar nutrição e adaptação ao voo. O valor é comparado com a massa no início da missão."
+  },
   "vision": {
     "label": "Visão",
     "howToMeasure": "Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão.",

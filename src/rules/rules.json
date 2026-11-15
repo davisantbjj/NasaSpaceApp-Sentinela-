@@ -381,6 +381,32 @@
       },
       "demo": true
     },
+    "bodyMassKg": {
+      "labelKey": "indicators:bodyMassKg.label",
+      "region": "wholeBody",
+      "unit": "kg",
+      "useBaseline": false,
+      "nasaRisk": "Nutrition and body mass",
+      "hazards": ["nutrition"],
+      "messages": {
+        "whyItMatters": "alerts:rules.bodyMassKg.whyItMatters",
+        "whatToDo": {
+          "yellow": "alerts:rules.bodyMassKg.yellow",
+          "red": "alerts:rules.bodyMassKg.red"
+        }
+      },
+      "sourceUrl": "https://pubmed.ncbi.nlm.nih.gov/25197887/",
+      "rangeEvidence": {
+        "status": "demo-not-clinically-validated",
+        "generalReferenceUrls": [
+          "https://pubmed.ncbi.nlm.nih.gov/25197887/"
+        ],
+        "green": "Perda menor ou igual a 5% do valor inicial: escolha de demonstração, não uma faixa clínica.",
+        "yellow": "Perda acima de 5%: proposta de demonstração baseada no valor inicial da missão.",
+        "red": "Perda acima de 10%: proposta de demonstração; não representa urgência clínica."
+      },
+      "demo": true
+    },
     "vision": {
       "labelKey": "indicators:vision.label",
       "region": "head",

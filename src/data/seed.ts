@@ -2,7 +2,7 @@ import { addDays, missionDay, todayISO } from '../lib/dates';
 import { createDataKey, createKeyPair, exportPublicKey } from '../lib/crypto';
 import { composeForDay } from '../sync/compose';
 import type { CrewMember, DailyRecord, DailyValues, IndicatorId, Profile, Settings } from '../types';
-import { db, DEMO_MEDICATIONS, DEMO_TABLES } from './db';
+import { db, DEMO_MEDICATIONS, DEMO_START_BODY_MASS_KG, DEMO_TABLES } from './db';
 import { clearSessionKeys, setSessionKeys } from './keyring';
 import { buildProfile } from './profilesRepo';
 import { sealRecord } from './recordsRepo';
@@ -14,7 +14,7 @@ const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
-  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'vision', 'symptoms',
+  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'vision', 'symptoms',
 ];
 
 // Gerador pseudoaleatório com semente, para a demonstração ser sempre igual.
@@ -31,7 +31,7 @@ function mulberry32(seed: number): () => number {
 interface SeedProfile {
   member: Omit<CrewMember, 'missionStart'>;
   seed: number;
-  base: { systolic: number; diastolic: number; heartRate: number; glucose: number; temperature: number; sleepHours: number; exerciseMinutes: number; radiationDose: number };
+  base: { systolic: number; diastolic: number; heartRate: number; glucose: number; temperature: number; sleepHours: number; exerciseMinutes: number; radiationDose: number; bodyMassKg: number };
   // Ajusta os valores dos últimos dias. `daysLeft` é 0 no registro mais recente.
   story?: (values: DailyValues, daysLeft: number) => void;
 }
@@ -39,9 +39,9 @@ interface SeedProfile {
 const PROFILES: SeedProfile[] = [
   {
     // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
-    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.ana },
+    member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.ana, startBodyMassKg: DEMO_START_BODY_MASS_KG.ana },
     seed: 11,
-    base: { systolic: 116, diastolic: 74, heartRate: 66, glucose: 88, temperature: 36.6, sleepHours: 7.5, exerciseMinutes: 88, radiationDose: 420 },
+    base: { systolic: 116, diastolic: 74, heartRate: 66, glucose: 88, temperature: 36.6, sleepHours: 7.5, exerciseMinutes: 88, radiationDose: 420, bodyMassKg: 67.2 },
     story: (values, daysLeft) => {
       const sleep = [5.2, 5.3, 5.6, 5.9, 6.3, 6.7, 7.0];
       const mood = [3, 3, 3, 3, 4, 4, 4] as const;
@@ -56,15 +56,15 @@ const PROFILES: SeedProfile[] = [
   },
   {
     // Tudo dentro do esperado. É o único que acompanha glicemia.
-    member: { id: 'kenji', name: 'Kenji Mori', role: 'Médico de bordo', sex: 'male', trackedIndicators: ['glucose', ...ALL_BUT_GLUCOSE] },
+    member: { id: 'kenji', name: 'Kenji Mori', role: 'Médico de bordo', sex: 'male', trackedIndicators: ['glucose', ...ALL_BUT_GLUCOSE], startBodyMassKg: DEMO_START_BODY_MASS_KG.kenji },
     seed: 23,
-    base: { systolic: 121, diastolic: 78, heartRate: 71, glucose: 86, temperature: 36.5, sleepHours: 7.8, exerciseMinutes: 95, radiationDose: 415 },
+    base: { systolic: 121, diastolic: 78, heartRate: 71, glucose: 86, temperature: 36.5, sleepHours: 7.8, exerciseMinutes: 95, radiationDose: 415, bodyMassKg: 77.2 },
   },
   {
     // Mudança leve na visão nos últimos dias, com dor de cabeça.
-    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.lia },
+    member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.lia, startBodyMassKg: DEMO_START_BODY_MASS_KG.lia },
     seed: 37,
-    base: { systolic: 112, diastolic: 72, heartRate: 74, glucose: 90, temperature: 36.7, sleepHours: 7.6, exerciseMinutes: 82, radiationDose: 425 },
+    base: { systolic: 112, diastolic: 72, heartRate: 74, glucose: 90, temperature: 36.7, sleepHours: 7.6, exerciseMinutes: 82, radiationDose: 425, bodyMassKg: 61.2 },
     story: (values, daysLeft) => {
       if (daysLeft < 2) values.vision = 1;
       if (daysLeft === 0) values.symptoms = ['headache'];
@@ -102,6 +102,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
         mood: random() < 0.75 ? 4 : 5,
         exerciseMinutes: around(base.exerciseMinutes, 7),
         radiationDose: around(base.radiationDose, 20),
+        bodyMassKg: around(base.bodyMassKg, 0.4, 1),
         vision: 0,
         symptoms: [],
         // Histórico com todas as doses tomadas: a medicação não muda os casos preparados da demonstração.
@@ -142,7 +143,7 @@ export function buildSeed(today: string): { crew: CrewMember[]; records: DailyRe
   return {
     crew,
     records,
-    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [], missionProfile: 'station', environmentManual: false },
+    settings: { environment: 'station', activeCrewId: crew[0].id, reminders: [], missionProfile: 'station', environmentManual: false, cabinCo2Mmhg: 2.3 },
   };
 }
 
@@ -208,7 +209,7 @@ async function writeSeed(): Promise<void> {
   try {
     for (const member of seed.crew) {
       const last = seed.records.filter((r) => r.crewId === member.id).at(-1);
-      if (last) await composeForDay(member, last.date, seed.settings.environment);
+      if (last) await composeForDay(member, last.date, seed.settings.environment, seed.settings.cabinCo2Mmhg);
     }
   } finally {
     clearSessionKeys();

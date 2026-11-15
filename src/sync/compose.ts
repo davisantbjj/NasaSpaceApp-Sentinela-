@@ -16,7 +16,7 @@ import { buildPacketPayload, packetPriority } from './packets';
 // move essas caixas, sem precisar de chave nenhuma, então um vermelho nunca espera alguém entrar.
 //
 // O pacote e o resumo só saem depois que o registro (e as anotações) chegam à central (`waitsFor`).
-export async function composeForDay(member: CrewMember, date: string, environment: Environment): Promise<void> {
+export async function composeForDay(member: CrewMember, date: string, environment: Environment, cabinCo2Mmhg?: number): Promise<void> {
   // `strict`: um registro ilegível faz falhar, em vez de mudar a linha de base em silêncio.
   const records = await listRecords(member.id, true);
   const index = records.findIndex((r) => r.date === date);
@@ -24,7 +24,10 @@ export async function composeForDay(member: CrewMember, date: string, environmen
   const history = records.slice(0, index + 1);
   const record = records[index];
   const baselines = computeBaselines(member.id, history, rules);
-  const alerts = evaluateRecord(record, history.slice(0, -1), baselines, rules, environment);
+  const alerts = evaluateRecord(record, history.slice(0, -1), baselines, rules, environment, {
+    startBodyMassKg: member.startBodyMassKg,
+    cabinCo2Mmhg,
+  });
   const reviews = (await listReviews(member.id)).filter((r) => r.date === date && r.note.trim() !== '');
   const payload = buildPacketPayload(member, record, alerts, reviews, environment);
   const waitsFor = [record.id, ...reviews.map((r) => r.id)];

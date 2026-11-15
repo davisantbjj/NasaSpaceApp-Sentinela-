@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { addDays } from '../lib/dates';
-import type { Alert, DailyRecord, DailyValues, Rules } from '../types';
+import type { Alert, DailyRecord, DailyValues, MissionRuleContext, Rules } from '../types';
 import { computeBaselines, findBaseline } from './baseline';
 import { findCorrelations } from './correlation';
 import { evaluateRecord, levelByRegion, levelForRange } from './engine';
@@ -16,11 +16,16 @@ function records(days: DailyValues[], crewId = 'c1'): DailyRecord[] {
   });
 }
 
-function evaluateLast(days: DailyValues[], environment: 'station' | 'mars' = 'station', r: Rules = rules) {
+function evaluateLast(
+  days: DailyValues[],
+  environment: 'station' | 'mars' = 'station',
+  r: Rules = rules,
+  context?: MissionRuleContext,
+) {
   const all = records(days);
   const last = all[all.length - 1];
   const baselines = computeBaselines('c1', all, r);
-  return evaluateRecord(last, all.slice(0, -1), baselines, r, environment);
+  return evaluateRecord(last, all.slice(0, -1), baselines, r, environment, context);
 }
 
 const repeat = (values: DailyValues, times: number): DailyValues[] => Array.from({ length: times }, () => values);
@@ -264,6 +269,24 @@ describe('evaluateRecord', () => {
       }
     }
     expect(alertedDays).toBe(0);
+  });
+
+  it('massa corporal compara a perda com o valor inicial da missão (N11)', () => {
+    const [yellow] = evaluateLast([{ bodyMassKg: 94 }], 'station', rules, { startBodyMassKg: 100 });
+    expect(yellow).toMatchObject({
+      indicator: 'bodyMassKg',
+      level: 'yellow',
+      trigger: 'generalRange',
+    });
+    expect(yellow.whatChanged.params).toMatchObject({ percent: 6, value: 94, start: 100 });
+
+    const [red] = evaluateLast([{ bodyMassKg: 89.9 }], 'station', rules, { startBodyMassKg: 100 });
+    expect(red.level).toBe('red');
+  });
+
+  it('sintoma respiratório inclui orientação de CO2 quando a cabine passa de 3 mmHg (N13)', () => {
+    const [alert] = evaluateLast([{ symptoms: ['headache'] }], 'station', rules, { cabinCo2Mmhg: 3.1 });
+    expect(alert.whatToDo).toBe('alerts:rules.symptoms.co2High.yellow');
   });
 
   it('medicação: alerta só quando uma dose prevista não foi tomada', () => {

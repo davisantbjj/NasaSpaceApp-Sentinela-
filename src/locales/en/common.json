@@ -155,6 +155,14 @@
     "writeMedical": "Write to the medical officer",
     "environment": "Mission environment",
     "environmentIntro": "The environment changes alert explanations, never the level. Ranges are the same in all environments.",
+    "cabinCo2": {
+      "title": "Cabin CO2",
+      "intro": "Mission data, not a person's measurement. Enter the one-hour average in mmHg.",
+      "value": "CO2 average",
+      "warning": "General warning: {{value}} mmHg is above the demo threshold of 3 mmHg.",
+      "note": "Above 3 mmHg, the cabin needs attention. If there is a headache or nasal congestion, check this value.",
+      "source": "NASA cabin CO2 source (opens another site)"
+    },
     "reminders": "Measurement reminders",
     "remindersIntro": "For indicators that do not need to be measured every day.",
     "indicator": "Indicator",

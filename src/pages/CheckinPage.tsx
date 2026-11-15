@@ -39,7 +39,7 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
   if (values) {
     text.systolic = str(values.bloodPressure?.systolic);
     text.diastolic = str(values.bloodPressure?.diastolic);
-    for (const id of ['heartRate', 'temperature', 'glucose', 'sleepHours', 'exerciseMinutes', 'radiationDose'] as const) {
+    for (const id of ['heartRate', 'temperature', 'glucose', 'sleepHours', 'exerciseMinutes', 'radiationDose', 'bodyMassKg'] as const) {
       text[id] = str(values[id]);
     }
     // Exercício em dois campos: o aeróbico é o total menos o resistido.

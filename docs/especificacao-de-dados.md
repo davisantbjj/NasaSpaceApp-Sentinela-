@@ -18,7 +18,7 @@ A regra que sustenta tudo: quem monta uma caixa selada não consegue reabri-la. 
 
 ## Catálogo de indicadores
 
-São os 15 valores de `IndicatorId`. A coluna "linha de base" diz se o valor também é comparado com o padrão da própria pessoa, e em que sentido o desvio preocupa.
+São os 16 valores de `IndicatorId`. A coluna "linha de base" diz se o valor também é comparado com o padrão da própria pessoa, e em que sentido o desvio preocupa.
 
 | id | Unidade | Entrada | Verde | Amarelo | Linha de base | Região |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -34,6 +34,7 @@ São os 15 valores de `IndicatorId`. A coluna "linha de base" diz se o valor tam
 | `exerciseMinutes` | min | número, 0 a 600 | 60–150 | 30–180 | sim, para baixo | ossos e músculos |
 | `resistanceMinutes` | min | número, 0 a 600 | sem faixa geral | sem faixa geral | sim, para baixo | ossos e músculos |
 | `radiationDose` | µSv | número, 0 a 100000 | sem faixa geral | sem faixa geral | sim, para cima | corpo inteiro |
+| `bodyMassKg` | kg | número, 20 a 300 | até 5% de perda | acima de 5%; vermelho acima de 10% | não | corpo inteiro |
 | `vision` | escala | 0 a 2 | 0 | 1 | não | olhos |
 | `symptoms` | lista | caixas de marcar | nenhum marcado | ver tabela de sintomas | não | corpo inteiro |
 | `medication` | lista | tomou ou não, por dose prevista | todas tomadas | dose esquecida | não | corpo inteiro |
@@ -61,6 +62,10 @@ interface DailyValues {
   exerciseMinutes?: number;        // total do dia
   resistanceMinutes?: number;      // parte do total feita em treino resistido
   radiationDose?: number;
+  bodyMassKg?: number;             // massa periódica, comparada ao início da missão
+  mealsCompleted?: number;         // preparado para N12
+  waterSufficient?: boolean;       // preparado para N12
+  sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
   vision?: 0 | 1 | 2;
   symptoms?: string[];             // ids definidos em rules.json
   medication?: MedicationDose[];
@@ -219,6 +224,7 @@ interface CrewMember {
   trackedIndicators: IndicatorId[];
   sex?: 'female' | 'male';
   medications?: PlannedMedication[];
+  startBodyMassKg?: number;           // referência da N11
 }
 ```
 
@@ -233,6 +239,7 @@ interface Settings {
   reminders: { indicator: IndicatorId; everyDays: number }[];
   missionProfile?: MissionProfileId;
   environmentManual?: boolean;
+  cabinCo2Mmhg?: number;              // média de uma hora, dado da missão (N13)
 }
 ```
 
@@ -430,17 +437,15 @@ Cada indicador carrega, além das faixas: a região do corpo, o risco correspond
 
 Três tripulantes fictícios e 60 dias gerados por código com semente fixa, o que faz a demonstração sair igual toda vez. Nenhum valor vem de pessoa real. Os registros vão até ontem, para o check-in de hoje ficar pendente na tela.
 
-A Ana tem um caso preparado: o sono cai durante vários dias e o humor cai depois. É o que mostra correlação e desvio sustentado numa demonstração curta.
+A Ana tem um caso preparado: o sono cai durante vários dias e o humor cai depois. É o que mostra correlação e desvio sustentado numa demonstração curta. A massa corporal simulada de cada tripulante é comparada ao valor inicial da missão; o CO2 começa em 2,3 mmHg e pode ser alterado na tela Missão.
 
 ## O que ainda não existe
 
-Da pesquisa com as fontes da NASA, seis dados foram identificados como faltantes e ainda não entraram no modelo. Cada um tem tarefa em [tarefas-nasa-2026-11-15.md](tarefas-nasa-2026-11-15.md).
+Da pesquisa com as fontes da NASA, quatro dados ainda não têm interface completa. Cada um tem tarefa em [tarefas-nasa-2026-11-15.md](tarefas-nasa-2026-11-15.md).
 
 | Dado | Como entraria |
 | --- | --- |
-| Massa corporal | número em kg, periódico, comparado com o valor inicial da missão |
 | Alimentação e água | refeições completas no dia e água suficiente |
-| CO2 da cabine | dado da missão, não da pessoa, em mmHg |
 | Qualidade do sono | escala ao lado das horas |
 | Grade de Amsler | substituiria a nota de 0 a 2 da visão |
 | Condicionamento | percentual do valor de antes do voo, periódico |

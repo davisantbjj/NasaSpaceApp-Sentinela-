@@ -2,7 +2,7 @@ import { compareLevels, worstLevel } from '../lib/levels';
 import { formatNumber, inRange, rangesFor, seriesPoints, seriesValue } from '../lib/series';
 import type {
   Alert, Baseline, BodyRegion, BpComponent, DailyRecord, Environment, IndicatorId, LocalizedText,
-  IndicatorRule, Level, Range, Rules,
+  IndicatorRule, Level, MissionRuleContext, Range, Rules,
 } from '../types';
 import { deviationPercent, findBaseline, isBaselineReady, isDeviation } from './baseline';
 
@@ -207,6 +207,7 @@ function evaluateSymptoms(
   record: DailyRecord,
   rules: Rules,
   environment: Environment,
+  context?: MissionRuleContext,
 ): Alert | undefined {
   const reported = (record.values.symptoms ?? [])
     .map((id) => rules.symptoms.find((s) => s.id === id))
@@ -214,6 +215,8 @@ function evaluateSymptoms(
   if (reported.length === 0) return undefined;
 
   const level = worstLevel(...reported.map((s) => s.level)) as 'yellow' | 'red';
+  const cabinCo2High = (context?.cabinCo2Mmhg ?? 0) > 3
+    && reported.some((s) => s.id === 'headache' || s.id === 'congestion');
   return {
     id: `${record.id}_symptoms`,
     crewId: record.crewId,
@@ -228,10 +231,47 @@ function evaluateSymptoms(
     },
     reference: { key: 'alerts:reference.noSymptoms' },
     whyItMatters: rule.messages.whyItMatters,
-    whatToDo: rule.messages.whatToDo[level],
+    whatToDo: cabinCo2High ? `alerts:rules.symptoms.co2High.${level}` : rule.messages.whatToDo[level],
     environmentNote: rules.environmentNotes.symptoms?.[environment],
     confidence: 'low',
     confidenceNote: { key: 'alerts:confidence.selfReported' },
+    notifyGround: level === 'red',
+    sourceUrl: rule.sourceUrl,
+  };
+}
+
+function evaluateBodyMass(
+  rule: IndicatorRule,
+  record: DailyRecord,
+  context?: MissionRuleContext,
+): Alert | undefined {
+  const start = context?.startBodyMassKg;
+  const current = record.values.bodyMassKg;
+  if (start === undefined || !Number.isFinite(start) || start <= 0 || current === undefined || !Number.isFinite(current)) return undefined;
+
+  const lossPercent = ((start - current) / start) * 100;
+  const level: Level = lossPercent > 10 ? 'red' : lossPercent > 5 ? 'yellow' : 'green';
+  if (level === 'green') return undefined;
+
+  return {
+    id: `${record.id}_bodyMassKg`,
+    crewId: record.crewId,
+    date: record.date,
+    indicator: 'bodyMassKg',
+    region: rule.region,
+    level,
+    trigger: 'generalRange',
+    whatChanged: {
+      key: 'alerts:change.bodyMassLoss',
+      params: { percent: lossPercent, value: current, start },
+    },
+    reference: {
+      key: 'alerts:reference.bodyMass',
+      params: { start, yellow: 5, red: 10, unit: rule.unit },
+    },
+    whyItMatters: rule.messages.whyItMatters,
+    whatToDo: rule.messages.whatToDo[level],
+    confidence: 'normal',
     notifyGround: level === 'red',
     sourceUrl: rule.sourceUrl,
   };
@@ -280,6 +320,7 @@ export function evaluateRecord(
   baselines: Baseline[],
   rules: Rules,
   environment: Environment,
+  context?: MissionRuleContext,
 ): Alert[] {
   const previous = history
     .filter((r) => r.crewId === record.crewId && r.date < record.date)
@@ -292,9 +333,11 @@ export function evaluateRecord(
     const indicator = id as IndicatorId;
     const alert =
       indicator === 'symptoms'
-        ? evaluateSymptoms(rule, record, rules, environment)
+        ? evaluateSymptoms(rule, record, rules, environment, context)
         : indicator === 'medication'
           ? evaluateMedication(rule, record, rules, environment)
+          : indicator === 'bodyMassKg'
+            ? evaluateBodyMass(rule, record, context)
           : evaluateIndicator(indicator, rule, record, previous, own, rules, environment);
     if (alert) alerts.push(alert);
   }

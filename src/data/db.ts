@@ -63,6 +63,12 @@ export const DEMO_MEDICATIONS: Record<string, PlannedMedication[]> = {
   ],
 };
 
+export const DEMO_START_BODY_MASS_KG: Record<string, number> = {
+  ana: 68,
+  lia: 62,
+  kenji: 78,
+};
+
 // Tabelas com dados da demonstração. As preferências (aviso de privacidade lido) ficam fora.
 export const DEMO_TABLES = [
   'crew', 'records', 'settings', 'profiles', 'reviews', 'accessLog', 'packets',
@@ -155,6 +161,20 @@ export class SentinelaDB extends Dexie {
         if (!member.trackedIndicators.includes('reactionTime')) member.trackedIndicators.push('reactionTime');
       }),
     );
+    // v12: massa inicial da missão e CO2 da cabine (N11/N13). Os registros antigos
+    // permanecem legíveis; a demonstração recriada passa a incluir a nova série.
+    this.version(12).upgrade(async (tx) => {
+      await tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        const startMass = DEMO_START_BODY_MASS_KG[member.id];
+        if (member.startBodyMassKg === undefined && startMass !== undefined) member.startBodyMassKg = startMass;
+        if (!member.trackedIndicators.includes('bodyMassKg')) member.trackedIndicators.push('bodyMassKg');
+      });
+      const settings = await tx.table<SettingsRow, string>('settings').get('app');
+      if (settings && settings.value.cabinCo2Mmhg === undefined) {
+        settings.value.cabinCo2Mmhg = 2.3;
+        await tx.table<SettingsRow, string>('settings').put(settings);
+      }
+    });
   }
 }
 

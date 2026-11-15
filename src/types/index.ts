@@ -5,7 +5,7 @@ export type Level = 'green' | 'yellow' | 'red';
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
   | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'reactionTime' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
-  | 'vision' | 'symptoms' | 'medication';
+  | 'bodyMassKg' | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
   | 'head' | 'heart' | 'musculoskeletal' | 'immune'
@@ -28,6 +28,7 @@ export interface CrewMember {
   sex?: 'female' | 'male'; // figura e contexto educativo; não muda nenhuma faixa
   medications?: PlannedMedication[]; // medicação prevista; sem lista, o check-in não pergunta
   priorCareerDoseMsv?: number; // dose acumulada em missões anteriores em mSv (N2)
+  startBodyMassKg?: number; // massa no início da missão, usada pela N11
 }
 
 // Medicação prevista para o tripulante. Na demonstração os nomes são fictícios.
@@ -67,6 +68,10 @@ export interface DailyValues {
   exerciseMinutes?: number; // total do dia (aeróbico + resistido)
   resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
   radiationDose?: number;
+  bodyMassKg?: number;
+  mealsCompleted?: number; // preparado para N12: refeições completas no dia
+  waterSufficient?: boolean; // preparado para N12: água suficiente no dia
+  sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
   vision?: 0 | 1 | 2;
   symptoms?: string[]; // ids de sintomas definidos em rules.json
   medication?: MedicationDose[]; // doses previstas no dia
@@ -183,6 +188,11 @@ export interface Alert {
   sourceUrl: string;
 }
 
+export interface MissionRuleContext {
+  startBodyMassKg?: number;
+  cabinCo2Mmhg?: number;
+}
+
 export interface LocalizedText {
   key: string;
   params?: Record<string, string | number | string[] | LocalizedText>;
@@ -202,6 +212,7 @@ export interface Settings {
   reminders: { indicator: IndicatorId; everyDays: number }[];
   missionProfile?: MissionProfileId; // sem perfil, o ambiente é só o escolhido à mão
   environmentManual?: boolean; // true quando alguém trocou o ambiente à mão, fora da fase da missão
+  cabinCo2Mmhg?: number; // média de CO2 da cabine em mmHg, dado da missão (N13)
 }
 
 // Resumo que o comandante pode ver de cada colega. Fica selado para o comandante.

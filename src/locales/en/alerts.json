@@ -9,7 +9,8 @@
     "general": "{{name}} is {{value}}",
     "baseline": "{{name}} is {{percent}}% {{side}} your usual pattern for {{days}} days (today: {{value}})",
     "symptoms": "Reported symptoms: {{symptoms}}",
-    "missedMedication": "Dose not taken today: {{doses}}"
+    "missedMedication": "Dose not taken today: {{doses}}",
+    "bodyMassLoss": "Body mass: {{percent}}% below the start ({{value}} kg now; {{start}} kg at start)"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -30,7 +31,8 @@
     "expected": "Expected: {{value}}",
     "baseline": "Your personal pattern: {{value}} ({{days}} days)",
     "noSymptoms": "Expected: no symptoms",
-    "medication": "Expected: all scheduled doses for the day"
+    "medication": "Expected: all scheduled doses for the day",
+    "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%"
   },
   "confidence": {
     "baselineForming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
@@ -150,7 +152,11 @@
     "symptoms": {
       "whyItMatters": "Far from Earth, recording a symptom early gives the crew time to act with onboard resources.",
       "yellow": "Note when it started and how it changes, then record it again tomorrow.",
-      "red": "Notify the onboard medical officer now."
+      "red": "Notify the onboard medical officer now.",
+      "co2High": {
+        "yellow": "Because cabin CO2 is above 3 mmHg, check cabin ventilation and tell the medical officer about the symptom.",
+        "red": "Because cabin CO2 is above 3 mmHg, check cabin ventilation and notify the medical officer now."
+      }
     },
     "reactionTime": {
       "whyItMatters": "A study of 24 astronauts found an association between sleeping 6 hours or less and slower reactions. This app's test is a demo, not equivalent to the validated Reaction Self Test protocol, and does not diagnose fatigue.",
@@ -161,6 +167,11 @@
       "whyItMatters": "Resistance training protects bones the most in flight. A NASA study on the station showed that resistance training reduces bone loss, but does not prevent it on its own.",
       "yellow": "Make up the resistance training session according to your individual plan.",
       "red": "Talk with the onboard medical officer before resuming or changing your exercise plan."
+    },
+    "bodyMassKg": {
+      "whyItMatters": "Body mass is an indicator of nutrition during flight. The comparison is with this mission's starting value, not a universal range.",
+      "yellow": "Review food, hydration, and the plan with the medical officer.",
+      "red": "Notify the medical officer now to review nutrition and the mission plan."
     }
   },
   "symptoms": {

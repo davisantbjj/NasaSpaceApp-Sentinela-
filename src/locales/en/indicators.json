@@ -83,6 +83,11 @@
     "howToMeasure": "Read today's accumulated dose on your personal dosimeter and enter the value in microsieverts.",
     "whyMeasure": "Space radiation increases lifetime cancer risk. For scale, the Radi-N2 detector measured about 150 µSv per day of neutrons alone on the station."
   },
+  "bodyMassKg": {
+    "label": "Body mass",
+    "howToMeasure": "Use the spacecraft's weighing equipment, preferably at the same time and under the same conditions, and enter the value in kilograms.",
+    "whyMeasure": "Body mass helps track nutrition and adaptation to flight. The value is compared with mass at the start of the mission."
+  },
   "vision": {
     "label": "Vision",
     "howToMeasure": "Read the near-vision card with one eye at a time and compare it with what you saw at the start of the mission.",
