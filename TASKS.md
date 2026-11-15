@@ -115,7 +115,7 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 - [x] **D1. Central de bordo:** simulada no navegador. A sincronização é automática, sem opção de ligar ou desligar. Além disso, um backend simples na Terra guarda e sincroniza os pacotes (só isso), para a tripulação não perder dados em longos períodos sem comunicação.
 - [x] **D2. Comandante:** decidido: vê só "check-in feito ou pendente" e se há alerta vermelho (sim/não). Dos próprios dados vê tudo, como tripulante.
 - [ ] **D3. Regiões do corpo:** passar de 7 para 5 (mente e sono; olhos e visão; coração e circulação; ossos e músculos; corpo inteiro)? Chegou a ser feito e foi desfeito: a equipe quer o painel como era.
-- [ ] **D4. Predição:** projeção linear simples na tela de tendências, com o rótulo "projeção, não previsão", ou o app só mede e compara?
+- [ ] **D4. Predição:** projeção linear simples na tela de tendências, com o rótulo "projeção, não previsão", ou o app só mede e compara? Recomendação (14/11): só medir e comparar, como já diz `docs/apresentacao.md`.
 
 `CONTEXTO-IA.md`, `docs/arquitetura.md` e os diagramas já refletem as decisões D1 e D2.
 
@@ -169,16 +169,27 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 
 ### Lorena: idiomas, horários e escalonamento
 
+Revisado em 14/11 depois das melhorias da fase 11 (M1 medicação e M2 estresse e carga de trabalho) e dos papéis do Davi, que já estão no código.
+
 - [ ] i18n com `react-i18next`: inglês como padrão e português como tradução, arquivos em `src/locales/en/` e `src/locales/pt-BR/` por área (comum, check-in, alertas, indicadores)
-- [ ] Passar para chaves os textos de `src/content/indicators.ts`, das telas e os textos de alerta do `rules.json` (as faixas numéricas ficam no `rules.json`)
+- [ ] Passar para chaves os textos de `src/content/indicators.ts`, das telas e os textos de alerta do `rules.json` (as faixas numéricas ficam no `rules.json`). Incluir os textos novos de medicação, estresse e carga de trabalho (M1 e M2)
 - [ ] Datas e números com `Intl` (5.2 h em inglês, 5,2 h em português); a digitação continua aceitando vírgula e ponto
 - [ ] Atualizar o `lang` do `<html>` ao trocar de idioma (WCAG 3.1.1) e um teste que falha se faltar chave em um dos idiomas
+
+**Horários e lembretes.** O banner e o som são os mesmos dos alarmes da Talita: combinar uma função única (ex.: `raiseAlarm(level, text)`) para não existirem dois banners.
+
 - [ ] Horário do check-in por tripulante na tela de missão, com lembrete antes, alerta de atraso e aviso ao oficial médico se o atraso passar do limite
-- [ ] Lembrete recorrente "a cada X horas" (ex.: hidratação), com banner e som; os lembretes atuais "a cada N dias" continuam como opção
-- [ ] Notificação do sistema quando a aba está em segundo plano e, ao abrir o app, conferir o que ficou atrasado
-- [ ] Escalonamento por nível (depende dos papéis do Davi): amarelo entra no resumo do oficial médico; amarelo por 3 dias vira pendência dele; vermelho e sintoma vermelho avisam na hora e mostram "Chame o oficial médico agora"
-- [ ] Texto do vermelho por ambiente: na estação "o solo será avisado no próximo contato"; em Marte "a decisão é de bordo; o solo recebe em cerca de N minutos"
-- [ ] 🔒 D4. Projeção linear na tela de tendências ("se continuar no ritmo dos últimos 7 dias, sai da faixa em cerca de N dias"), com confiança baixa e rótulo "projeção, não previsão"
+- [ ] Lembrete recorrente "a cada X horas", com banner e som, usado primeiro para as **doses do plano de medicação** (M1; ex.: o colírio da Lia, 2 vezes ao dia) e também para outros casos, como hidratação. Os lembretes atuais "a cada N dias" continuam como opção
+- [ ] Notificação do sistema quando a aba está em segundo plano e, ao abrir o app, conferir o que ficou atrasado. No iPhone só funciona com o app instalado na tela inicial e com permissão; na demonstração, o banner dentro do app é o que garante o aviso
+
+**Escalonamento.** Os papéis já existem no código, então estas tarefas não estão mais bloqueadas.
+
+- [ ] Escalonamento por nível: amarelo entra no resumo do oficial médico; amarelo por 3 dias vira pendência dele (vale também para **estresse e carga de trabalho**, da M2); **dose não tomada** (M1) entra no resumo do oficial médico no mesmo dia, sem esperar 3 dias; vermelho e sintoma vermelho avisam na hora e mostram "Chame o oficial médico agora"
+- [ ] Texto do vermelho por ambiente, usando o `signalDelayLabel` de `ENVIRONMENTS` (`src/content/indicators.ts`) em vez de escrever o atraso à mão. Na estação: "o solo será avisado no próximo contato". Em Marte, por exemplo: "a decisão é de bordo; o alerta leva de 3 a 22 minutos para chegar à Terra (só a ida)". O atraso é por sentido, não é tempo de resposta do médico (`docs/apresentacao.md`). O texto muda, o nível não (decisão 7)
+
+**Predição.**
+
+- [ ] 🔒 D4. Projeção linear na tela de tendências ("se continuar no ritmo dos últimos 7 dias, sai da faixa em cerca de N dias"), com confiança baixa e rótulo "projeção, não previsão". **Recomendação: decidir que não.** A apresentação diz "não anunciar projeção" e o recado central é "o app mede e compara, não prediz"; o tempo rende mais no escalonamento
 
 ### Larissa: pesquisa, LGPD e apresentação
 
