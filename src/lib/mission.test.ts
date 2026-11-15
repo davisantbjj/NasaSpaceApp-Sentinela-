@@ -5,7 +5,7 @@ import { daysByEnvironment, MISSION_PROFILES, nextGravityChange, phaseOnDay } fr
 import { rules } from '../rules/rules';
 import { estimateBoneLoss } from './boneEstimate';
 import { radiationTotal } from './radiationTotal';
-import { weeklyGoals } from './weeklyGoals';
+import { exerciseVolumeSummary, weeklyGoals } from './weeklyGoals';
 
 // Os textos abaixo são conferidos em português; o teste em inglês fica no fim.
 beforeAll(async () => {
@@ -119,6 +119,20 @@ describe('metas semanais (M9)', () => {
     const [sleep, exercise] = weeklyGoals(records, '2026-11-15', rules);
     expect(sleep).toMatchObject({ indicator: 'sleepHours', daysInGreen: 5, windowDays: 7, targetDays: 5, met: true, greenText: '7 a 9 h' });
     expect(exercise).toMatchObject({ indicator: 'exerciseMinutes', daysInGreen: 4, met: false });
+  });
+
+  it('soma sessões e compara com plano e linha de base', () => {
+    const records = [
+      rec('2026-10-30', 8, 60), rec('2026-10-31', 8, 90),
+      { ...rec('2026-11-09', 8), values: { sleepHours: 8, exerciseSession: { type: 'aerobic' as const, durationMinutes: 45 } } },
+      { ...rec('2026-11-10', 8), values: { sleepHours: 8, exerciseSession: { type: 'both' as const, durationMinutes: 60, resistanceStatus: 'completed' as const } } },
+    ];
+    expect(exerciseVolumeSummary(records, '2026-11-15', rules)).toEqual({
+      weekMinutes: 105,
+      planMinutes: 300,
+      baselineMinutes: 525,
+      baselineDays: 2,
+    });
   });
 });
 

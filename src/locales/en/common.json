@@ -194,7 +194,9 @@
       "progress": "{{days}} of the last {{window}} days in range · goal of {{target}} days",
       "met": " ✓ met",
       "missing_one": ", {{count}} to go",
-      "missing_other": ", {{count}} to go"
+      "missing_other": ", {{count}} to go",
+      "exerciseVolume": "Exercise: {{week}} min this week · demo plan: {{plan}} min · baseline: {{baseline}} min.",
+      "noBaseline": "not available yet"
     },
     "gravityChange": {
       "today": "today",

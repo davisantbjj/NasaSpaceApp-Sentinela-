@@ -142,14 +142,14 @@ Mexem em como se mede, não só no que se guarda. Precisam de decisão da equipe
 
 ### N15. Visão com grade de Amsler
 
-- [ ] **N15.** Trocar a nota de 0 a 2 por uma grade de Amsler na tela, um olho de cada vez, com três perguntas: linhas tortas, áreas faltando, piora na leitura de perto. Cadência nos dias 30, 90, 180 e 270 de missão e 30 antes do retorno.
+- [x] **N15.** Trocar a nota de 0 a 2 por uma grade de Amsler na tela, um olho de cada vez, com três perguntas: linhas tortas, áreas faltando, piora na leitura de perto. A tela permite pular e avisa que não diagnostica SANS; a cadência nos dias de missão fica na N18.
   - **Por quê:** a bordo se faz acuidade de longe no laptop, cartão de perto na mão e grade de Amsler no laptop ([NASA](https://ntrs.nasa.gov/api/citations/20170009173/downloads/20170009173.pdf)), nesse calendário ([OCHMO](https://www.nasa.gov/wp-content/uploads/2023/03/longitudinal-health-surveillance-technical-brief-ochmo.pdf)).
   - **Acessibilidade:** é um teste visual. Precisa poder ser pulado, como já foi feito no teste de reação (M4).
   - **Aceite:** o autoteste diz que não diagnostica SANS e indica quando pedir exame.
 
 ### N16. Exercício por sessão
 
-- [ ] **N16.** Três campos: tipo de sessão (aeróbico, resistido ou os dois); minutos e frequência cardíaca média do aeróbico; sessão resistida feita, parcial ou não feita. Comparar o volume da semana com o plano e com a linha de base, em vez de faixa fixa de minutos.
+- [x] **N16.** Três campos: tipo de sessão (aeróbico, resistido ou os dois); minutos e frequência cardíaca média do aeróbico; sessão resistida feita, parcial ou não feita. A tela de missão compara o volume da semana com o plano demonstrativo e com a linha de base, em vez de usar apenas uma faixa fixa de minutos.
   - **Por quê:** a NASA registra cada sessão por aparelho, com frequência cardíaca, velocidade e carga ([NASA](https://ntrs.nasa.gov/api/citations/20160012791/downloads/20160012791.pdf)). Dados reais: sessões de 26 a 27 minutos, frequência média de 131 a 135 bpm, cerca de 600 minutos por semana ([Scott et al., 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC9898566)).
   - A revisão da Larissa já avisa que duração sozinha não diz nada sobre intensidade.
 

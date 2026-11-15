@@ -194,7 +194,9 @@
       "progress": "{{days}} dos últimos {{window}} dias na faixa · meta de {{target}} dias",
       "met": " ✓ atingida",
       "missing_one": ", falta {{count}}",
-      "missing_other": ", faltam {{count}}"
+      "missing_other": ", faltam {{count}}",
+      "exerciseVolume": "Exercício: {{week}} min nesta semana · plano demonstrativo: {{plan}} min · linha de base: {{baseline}} min.",
+      "noBaseline": "ainda sem dados"
     },
     "gravityChange": {
       "today": "hoje",

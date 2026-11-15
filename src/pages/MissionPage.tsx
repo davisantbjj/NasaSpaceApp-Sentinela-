@@ -5,7 +5,7 @@ import { ENVIRONMENT_ORDER, environmentContent, indicatorContent } from '../cont
 import { MISSION_PROFILE_ORDER, MISSION_PROFILES, missionStartOf, nextGravityChange, phaseOnDay } from '../content/missions';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
-import { weeklyGoals, type WeeklyGoal } from '../lib/weeklyGoals';
+import { exerciseVolumeSummary, weeklyGoals, type WeeklyGoal } from '../lib/weeklyGoals';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { DailyRecord, IndicatorId, MissionProfileId } from '../types';
@@ -73,6 +73,9 @@ export function MissionPage() {
   const phase = profile ? phaseOnDay(profile, crewDay) : undefined;
   const offPhase = !!phase && settings.environment !== phase.environment;
   const goals = weeklyGoals(records, today, rules).filter((g) => member.trackedIndicators.includes(g.indicator));
+  const exerciseVolume = member.trackedIndicators.includes('exerciseMinutes')
+    ? exerciseVolumeSummary(records, today, rules)
+    : undefined;
   // Readaptação (M11): próxima mudança de gravidade e se já está perto.
   const gravity = profile ? nextGravityChange(profile, crewDay) : undefined;
   const gravitySoon = !!gravity && gravity.inDays <= (rules.context?.readaptation?.noticeDaysBefore ?? 0);
@@ -119,6 +122,15 @@ export function MissionPage() {
               </li>
             ))}
           </ul>
+          {exerciseVolume && (
+            <p className="small muted">
+              {i18n.t('mission.goals.exerciseVolume', {
+                week: exerciseVolume.weekMinutes,
+                plan: exerciseVolume.planMinutes,
+                baseline: exerciseVolume.baselineMinutes === undefined ? i18n.t('mission.goals.noBaseline') : Math.round(exerciseVolume.baselineMinutes),
+              })}
+            </p>
+          )}
         </section>
       )}
 

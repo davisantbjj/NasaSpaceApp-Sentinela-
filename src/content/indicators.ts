@@ -162,11 +162,6 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     unit: '',
     howToMeasureKey: 'indicators:vision.howToMeasure',
     whyMeasureKey: 'indicators:vision.whyMeasure',
-    scale: [
-      { value: 0, labelKey: 'indicators:vision.scale.0', symbol: '0' },
-      { value: 1, labelKey: 'indicators:vision.scale.1', symbol: '1' },
-      { value: 2, labelKey: 'indicators:vision.scale.2', symbol: '2' },
-    ],
   },
   medication: {
     labelKey: 'indicators:medication.label',
