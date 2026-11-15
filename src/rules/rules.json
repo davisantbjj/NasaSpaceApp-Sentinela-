@@ -495,12 +495,12 @@
           "red": "alerts:rules.conditioning.red"
         }
       },
-      "sourceUrl": "https://www.nasa.gov/?p=808462",
+      "sourceUrl": "https://www.nasa.gov/reference/4-0-human-performance/",
       "rangeEvidence": {
         "status": "official-threshold-not-demo-range",
-        "generalReferenceUrls": ["https://www.nasa.gov/?p=808462"],
-        "green": "Pelo menos 80% do valor de antes do voo, conforme a referência OCHMO.",
-        "yellow": "Abaixo de 80%: critério de acompanhamento da capacidade aeróbica ou força durante o voo.",
+        "generalReferenceUrls": ["https://www.nasa.gov/reference/4-0-human-performance/"],
+        "green": "Pelo menos 80% do valor pré-missão: requisito NASA de manutenção de capacidade aeróbica e força. O app recebe percentuais informados, sem medir a capacidade nem conferir protocolo ou comparabilidade com o pré-voo. O valor 200 é limite da entrada demonstrativa, não máximo fisiológico oficial.",
+        "yellow": "Abaixo de 80% em qualquer componente gera amarelo no app. O requisito oficial sustenta o número, mas não valida essa classificação, o método de entrada ou uma decisão individual de aptidão. demo false identifica a origem do corte, não valida o protótipo.",
         "red": "Não há segundo corte definido nesta tarefa; o motor gera alerta amarelo abaixo de 80%."
       },
       "demo": false
@@ -597,7 +597,7 @@
     },
     "radiationTotal": {
       "careerLimitMsv": 600,
-      "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"
+      "sourceUrl": "https://www.nasa.gov/sites/default/files/atoms/files/radiation_protection_technical_brief_ochmo.pdf"
     },
     "weeklyGoals": {
       "windowDays": 7,

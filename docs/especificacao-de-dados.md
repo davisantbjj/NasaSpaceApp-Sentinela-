@@ -2,7 +2,7 @@
 
 Descreve todo dado que o Sentinela guarda: o que é cada campo, o tipo, a unidade, de onde vem, quem pode ver, onde fica gravado e como vira alerta. Escrito em 15/11/2026 a partir do código, então descreve o que existe hoje e marca separadamente o que ainda não existe.
 
-As faixas numéricas são escolhas de demonstração. Nenhuma foi validada por profissional de saúde, e todas carregam `demo: true` e a evidência em `rangeEvidence` (ver [revisão das faixas](pesquisa/revisao-faixas.md)).
+As faixas do protótipo não passaram por validação clínica. A maioria carrega `demo: true`; N17 tem `demo: false` por usar a referência oficial de 80%, sem que isso valide a avaliação inserida ou a classificação de alerta do app. Evidências e limites em [revisão das faixas](pesquisa/revisao-faixas.md).
 
 Relacionados: [arquitetura](arquitetura.md), [como funciona](como-funciona.md), [privacidade](privacidade.md), [tarefas da pesquisa de 15/11](tarefas-nasa-2026-11-15.md).
 
@@ -18,14 +18,14 @@ A regra que sustenta tudo: quem monta uma caixa selada não consegue reabri-la. 
 
 ## Catálogo de indicadores
 
-São os 16 valores de `IndicatorId`. A coluna "linha de base" diz se o valor também é comparado com o padrão da própria pessoa, e em que sentido o desvio preocupa.
+São os 18 valores de `IndicatorId`. Qualidade do sono e água são campos adicionais dos passos de sono e alimentação. A coluna "linha de base" diz se o valor também é comparado com o padrão da própria pessoa, e em que sentido o desvio preocupa.
 
 | id | Unidade | Entrada | Verde | Amarelo | Linha de base | Região |
 | --- | --- | --- | --- | --- | --- | --- |
 | `bloodPressure` | mmHg | dois números, 40 a 250 | sist. 100–130, diast. 60–85 | sist. 90–140, diast. 55–90 | sim, nos dois sentidos | coração |
 | `heartRate` | bpm | número, 20 a 250 | 60–100 | 50–120 | sim, nos dois sentidos | coração |
 | `glucose` | mg/dL | número, 20 a 600 | 70–99 | 60–125 | sim, nos dois sentidos | metabolismo |
-| `temperature` | °C | número, 30 a 45, passo 0,1 | 36,1–37,2 | 35,5–37,9 | não | defesas |
+| `temperature` | °C | número, 30 a 45, passo 0,1 | 36,1–37,2 | 35,5–37,9 | sim, para cima, desvio específico de 1% | defesas |
 | `sleepHours` | h | número, 0 a 24, passo 0,1 | 7–9 | 5–10 | sim, para baixo | mente |
 | `mood` | escala | 1 a 5, com rostos | 4–5 | 3 | não | mente |
 | `stress` | escala | 1 a 5 | 1–3 | 4–5 | não | mente |
@@ -35,11 +35,13 @@ São os 16 valores de `IndicatorId`. A coluna "linha de base" diz se o valor tam
 | `resistanceMinutes` | min | número, 0 a 600 | sem faixa geral | sem faixa geral | sim, para baixo | ossos e músculos |
 | `radiationDose` | µSv | número, 0 a 100000 | sem faixa geral | sem faixa geral | sim, para cima | corpo inteiro |
 | `bodyMassKg` | kg | número, 20 a 300 | até 5% de perda | acima de 5%; vermelho acima de 10% | não | corpo inteiro |
+| `mealsCompleted` | contagem | 0 a 3; 3 = 3 ou mais | sem sequência de dois dias zerados | zero refeições em dois dias consecutivos | não | corpo inteiro |
+| `conditioning` | % pré-voo | capacidade aeróbica e força, com aparelho declarado | ambos ≥80% | qualquer componente <80%; sem vermelho | não | ossos e músculos |
 | `vision` | resumo da Amsler | 0 a 2, derivado das respostas | 0 | 1 | não | olhos |
 | `symptoms` | lista | caixas de marcar | nenhum marcado | ver tabela de sintomas | não | corpo inteiro |
 | `medication` | lista | tomou ou não, por dose prevista | todas tomadas | dose esquecida | não | corpo inteiro |
 
-Os limites de entrada (40 a 250 para pressão, por exemplo) evitam erro de digitação e não são faixas clínicas. Ficam em `src/content/indicators.ts`; as faixas clínicas ficam em `src/rules/rules.json`.
+Os limites de entrada (40 a 250 para pressão, por exemplo) evitam erro de digitação e não são faixas clínicas. Ficam em `src/content/indicators.ts`; as regras de alerta ficam em `src/rules/rules.json`.
 
 Cada tripulante acompanha só os indicadores de `trackedIndicators`. O check-in não pergunta o resto, e o motor não avalia o que não foi perguntado.
 
@@ -246,6 +248,7 @@ interface CrewMember {
   sex?: 'female' | 'male';
   medications?: PlannedMedication[];
   startBodyMassKg?: number;           // referência da N11
+  priorCareerDoseMsv?: number;        // dose anterior informada; ausente entra como zero na conta
 }
 ```
 
@@ -320,7 +323,7 @@ O que fica aberto é o mínimo para a central conseguir ordenar e mover as caixa
 
 ## As tabelas do banco
 
-O banco se chama `sentinela` e está na versão 11.
+O banco se chama `sentinela` e está na versão 14. A v12 acrescenta massa inicial fictícia, indicador de massa e CO₂ de demonstração. A v13 inclui alimentação e a medicação fictícia de sono; a v14 acrescenta condicionamento e concilia cadastros atualizados por versões paralelas. Não preenchem retrospectivamente os valores diários antigos.
 
 | Tabela | Chave | Guarda |
 | --- | --- | --- |
@@ -460,16 +463,18 @@ Três tripulantes fictícios e 60 dias gerados por código com semente fixa, o q
 
 A Ana tem um caso preparado: o sono cai durante vários dias e o humor cai depois. É o que mostra correlação e desvio sustentado numa demonstração curta. A massa corporal simulada de cada tripulante é comparada ao valor inicial da missão; o CO2 começa em 2,3 mmHg e pode ser alterado na tela Missão.
 
-## O que ainda não existe
+## Estado dos dados novos após a fase 12
 
-Da pesquisa com as fontes da NASA, quatro dados ainda não têm interface completa. Cada um tem tarefa em [tarefas-nasa-2026-11-15.md](tarefas-nasa-2026-11-15.md).
+Os quatro dados abaixo já têm interface na base `2769fb5`. Isso não conclui validação clínica, cadência ou avaliação de acessibilidade. Tarefas em [tarefas-nasa-2026-11-15.md](tarefas-nasa-2026-11-15.md).
 
-| Dado | Como entraria |
+| Dado | Implementação atual |
 | --- | --- |
-| Alimentação e água | refeições completas no dia e água suficiente |
-| Qualidade do sono | escala ao lado das horas |
-| Grade de Amsler | substituiria a nota de 0 a 2 da visão |
-| Condicionamento | percentual do valor de antes do voo, periódico |
+| Alimentação e água | refeições completas no dia e água suficiente; só refeições geram alerta próprio |
+| Qualidade do sono | escala 1–5 ao lado das horas, sem alerta próprio |
+| Grade de Amsler | perguntas por olho e resumo 0–2; não diagnostica SANS |
+| Condicionamento | percentuais aeróbico/força e aparelhos; abaixo de 80% gera amarelo |
+
+N7 (novos sintomas), N18 (cadência) e N19 (bloco mensal) permanecem pendentes. Massa/dose anterior ficam no cadastro aberto e exportado; valores diários ficam cifrados. CO₂ fica compartilhado em `settings` e fora da cópia individual. Ver [privacidade](privacidade.md).
 
 ## Regras que o código precisa garantir
 
@@ -480,6 +485,6 @@ Valem como lista de verificação para quem for mexer no modelo:
 3. O que o comandante vê nunca contém valor nem nome de indicador.
 4. Alerta, linha de base e correlação são derivados, nunca gravados.
 5. Todo texto visível é chave de tradução, nunca frase pronta no código.
-6. Toda faixa nova nasce com `demo: true` e `rangeEvidence` preenchido.
+6. Toda regra nova precisa de `rangeEvidence` preenchido; escolhas do protótipo usam `demo: true`. Em N17, `demo: false` identifica o corte oficial de 80%, sem certificar o método do app.
 7. Indicador fora de `trackedIndicators` não é perguntado nem avaliado.
 8. Campo novo em `DailyValues` entra como opcional, e os dias antigos continuam válidos sem ele.

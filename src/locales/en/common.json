@@ -349,7 +349,7 @@
     "sections": {
       "stored": {
         "title": "What stays in this browser",
-        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records."
+        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, medication plan, check-in values and symptoms, medical officer notes, messages, access log, deletion requests, and preferences. Check-in values, notes, and message text are encrypted. Alerts, correlations, and baseline are calculated from the records. Daily values also include body mass, meals, water, sleep quality, visual responses for each eye, exercise session, and conditioning assessment, when recorded."
       },
       "purpose": {
         "title": "Purpose",
@@ -377,7 +377,7 @@
       },
       "missionContext": {
         "title": "Calculated mission context",
-        "text": "The mission profile and environment stay in the device's shared preferences, without encryption. The bone estimate and the sum of recorded radiation doses are calculated on screen, without creating a new measurement. The JSON copy includes the recorded daily doses, but not these calculations or the shared mission preferences. The demo data is simulated."
+        "text": "The mission profile and environment stay in the device's shared preferences, without encryption. The bone estimate and the sum of recorded radiation doses are calculated on screen, without creating a new measurement. The JSON copy includes the recorded daily doses, but not these calculations or the shared mission preferences. The demo data is simulated. Initial body mass and prior mission dose are stored unencrypted in the profile and included in the individual copy; only the medical officer can edit them through the interface. Cabin CO₂ is shared in unencrypted settings and excluded from that copy. There is no continuous device monitoring."
       },
       "reactionAndSource": {
         "title": "Reaction test and declared source",

@@ -1,12 +1,12 @@
 # Privacidade e comunicação no protótipo
 
-Revisado por Larissa em 15/11/2026 sobre a branch da Talita até `ec23abd`, com M1–M11 implementadas. Use somente dados fictícios. O protótipo não oferece serviço de saúde nem declaração de conformidade integral com a LGPD.
+Revisado por Larissa em 15/11/2026 até a base integrada `2769fb5`, incluindo os novos dados da fase 12. Use somente dados fictícios. O protótipo não oferece serviço de saúde nem declaração de conformidade integral com a LGPD.
 
 ## Primeira entrada
 
 Antes de criar a demonstração ou liberar o login, o app apresenta finalidade, armazenamento, acesso, retenção e limites da base legal. O botão registra a leitura em `preferences`, no IndexedDB. Isso não identifica uma pessoa nem constitui consentimento genérico. Outro navegador tem sua própria leitura. A recriação da demonstração preserva essa preferência.
 
-O aviso foi atualizado para `2026-11-15-v6`, incluindo teste de reação e origem declarada, mantendo os limites de cifra e cálculos da missão. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
+O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12 e as referências de massa/dose anterior guardadas sem cifra. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
 
 ## Dados armazenados e proteção real
 
@@ -19,7 +19,7 @@ O aviso foi atualizado para `2026-11-15-v6`, incluindo teste de reação e orige
 | Registro de acesso, pedidos de exclusão e preferências | Sem cifra | Também precisam de uma política de proteção e retenção para uso real. |
 | Arquivo JSON exportado | Legível e sem cifra fora do banco | O PIN não protege o arquivo baixado. O usuário precisa cuidar das cópias. |
 | Perfil de missão e substituição manual do ambiente (M8) | Preferências compartilhadas em `settings`, sem cifra | Qualquer perfil de bordo pode alterar pela interface atual; a definição de permissões continua com Davi. Não integram a cópia individual. |
-| Estimativa óssea e soma de radiação (M5–M6) | Calculadas no painel, sem nova tabela | Não são novas medições. O JSON contém as doses diárias registradas e o início da missão no cadastro, mas não exporta essas contas nem um histórico real das fases. |
+| Estimativa óssea e soma/percentual de radiação (M5–M6/N2) | Calculados em tela, sem nova tabela | Não são novas medições. O JSON contém doses diárias, início da missão e dose anterior informada no cadastro, mas não exporta essas contas nem um histórico real das fases. |
 
 ## Reação, origem e cálculos novos
 
@@ -30,6 +30,16 @@ M10 guarda `values.sources`, também cifrado e exportado: origem declarada como 
 Metas semanais, associação entre sono e reação e aviso de readaptação são derivados, sem nova tabela. Não integram o JSON como diagnósticos; seus valores de origem são exportados quando registrados. Preferências de missão continuam compartilhadas e fora da cópia individual. A migração v11 acrescenta o acompanhamento da reação aos cadastros, sem inventar resultados passados. Não há nova categoria de destinatário ou envio criada por esta revisão.
 
 ## Seus dados
+
+### Novos campos da fase 12: fluxo conferido no código
+
+- Dentro de `DailyValues`, massa diária, refeições, água, qualidade do sono, respostas da Amsler por olho, sessão de exercício e avaliação de condicionamento ficam cifrados com o check-in. `asNeeded` e `sleepAid` são copiados nas marcações de medicação. O exportador inclui os registros abertos pelos repositórios: esses campos aparecem no JSON quando presentes, sem uma lista de campos novos a filtrar.
+- `startBodyMassKg` e `priorCareerDoseMsv` ficam no cadastro `crew` **sem cifra** e são incluídos na cópia individual. Na interface atual, só o oficial médico pode editá-los; essa restrição de interface não cifra o armazenamento. Dose anterior ausente não comprova exposição zero.
+- `cabinCo2Mmhg` fica em `settings`, compartilhado e sem cifra; não integra a cópia individual. O app não grava série de amostras, sensor ou hora da leitura de CO₂. Não é um monitor ambiental contínuo.
+- Os valores diários entram em `PacketPayload.values`, selados para o solo, sob o fluxo atual de sincronização; isso não garante que cada campo já tenha uma apresentação específica na tela do solo. O comandante não recebe os valores clínicos de colegas. Não foi criado outro destinatário.
+- Migrações v12–v14 acrescentam referências fictícias e indicadores aos cadastros, sem preencher retroativamente valores diários antigos. A v14 concilia as migrações feitas em paralelo. Não há nova tabela de leituras contínuas.
+
+Esta é uma conferência estática de tipos, repositórios, migrações e composição de pacotes; não representa um novo teste de navegador, migração de bancos antigos ou validação jurídica. O script histórico abaixo não cobre integralmente os campos da fase 12.
 
 A rota `/#/your-data`, acessível no menu, no rodapé e em Missão, opera sobre o perfil de quem entrou, inclusive quando o oficial médico está consultando outro tripulante:
 

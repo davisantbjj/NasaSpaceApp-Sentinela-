@@ -1,5 +1,13 @@
 # Continuidade da Larissa — 15/11/2026
 
+## Revisão independente da fase 12 — base `2769fb5`
+
+Concluída a conferência documental dos itens implementados N1/N2/N8/N11/N12/N13/N14/N17. Fontes primárias e limites estão em `docs/pesquisa/revisao-faixas.md`. Foram esclarecidos a linha de base fixa e o percentual em °C da temperatura, a diferença entre soma de leituras e dose efetiva de carreira, os cortes demonstrativos de massa/alimentação, a média de uma hora de CO₂ e a diferença entre requisito oficial de condicionamento e validação do app. Nenhum corte ou nível foi alterado.
+
+Especificação corrigida para 18 indicadores e banco v14, com os quatro dados antes anunciados como futuros já reconhecidos como implementados. Privacidade ampliada aos novos campos: valores diários cifrados e exportados; massa inicial/dose anterior no cadastro sem cifra e exportadas; CO₂ compartilhado sem cifra fora da cópia individual. Aviso v7 nos dois idiomas exige nova leitura, sem apagar registros. A exportação foi conferida pelo fluxo de código, sem novo teste no navegador ou de migração.
+
+Validação: **123 testes em dez arquivos passaram**, build TypeScript/PWA passou e `git diff --check` sem erros. Permanece o aviso de pacote principal acima de 500 kB. N10 continua aberta apenas quanto a N7; N19 depende de definição/implementação. Mensagens com Davi, apresentação final, roteiro, capturas e slides não foram adiantados nesta etapa.
+
 ## Nova conferência da main remota — 15/11/2026
 
 Consulta a `origin/main`: `7de0df1`, de Talita Santos, implementa N12 (alimentação e água) e N14 (qualidade do sono). O repositório já estava mesclando esse commit, com as resoluções no índice e sem conflitos pendentes. A integração foi conferida preservando as revisões da Larissa (`1072f49`) e as integrações anteriores, incluindo N17, de Davi.

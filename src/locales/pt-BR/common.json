@@ -349,7 +349,7 @@
     "sections": {
       "stored": {
         "title": "O que fica neste navegador",
-        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros."
+        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros. Os valores diários também incluem massa corporal, refeições, água, qualidade do sono, respostas visuais por olho, sessão de exercício e avaliação de condicionamento, quando registrados."
       },
       "purpose": {
         "title": "Para quê",
@@ -377,7 +377,7 @@
       },
       "missionContext": {
         "title": "Contexto calculado da missão",
-        "text": "O perfil e o ambiente da missão ficam nas preferências compartilhadas do aparelho, sem criptografia. A estimativa óssea e a soma das doses registradas de radiação são calculadas na tela, sem criar uma nova medição. A cópia JSON inclui as doses diárias registradas, mas não essas contas nem as preferências compartilhadas da missão. Os dados da demonstração são simulados."
+        "text": "O perfil e o ambiente da missão ficam nas preferências compartilhadas do aparelho, sem criptografia. A estimativa óssea e a soma das doses registradas de radiação são calculadas na tela, sem criar uma nova medição. A cópia JSON inclui as doses diárias registradas, mas não essas contas nem as preferências compartilhadas da missão. Os dados da demonstração são simulados. A massa inicial e a dose de missões anteriores ficam no cadastro sem cifra e entram na cópia individual; só o oficial médico pode alterá-las pela interface. O CO₂ é compartilhado em configurações sem cifra e fica fora dessa cópia. Não há leitura contínua de aparelhos."
       },
       "reactionAndSource": {
         "title": "Teste de reação e origem declarada",

@@ -144,7 +144,9 @@ Conferência local de 15/11 após integrar a base remota `7de0df1`: N3, N4, N5, 
 
 Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`. Revisão documental não equivale a aprovação clínica.
 
-- [ ] Revisão documental das faixas novas e alteradas da fase 12 (N1, N2, N7, N8, N10, N11, N13, N17 e as perguntas do N19)
+- [x] Revisão documental do escopo já implementado da fase 12: N1, N2, N8, N11, N12, N13, N14 e N17. Evidências e limites em `docs/pesquisa/revisao-faixas.md`; sem alterar cortes ou níveis
+- [x] Conferir especificação, privacidade e exportação pelo código para os novos campos; banco v14 e 18 indicadores documentados; aviso de privacidade v7 em português/inglês
+- [ ] Completar N10 após implementar N7; revisar as perguntas e o compartilhamento do N19 quando definidos. Revisão clínica permanece pendente
 - [ ] Entrega da mensagem ao oficial médico. Fazer junto com o Davi
 - [ ] Atualizar "De onde vêm os indicadores" em `docs/apresentacao.md`: revisar o texto do teste de reação (a frase "o app não aplica o teste de reação" deixou de ser verdade com a M4) e acrescentar a origem do dado (M10)
 - [ ] Reforçar "Como a NASA mede" com os aparelhos reais: dosímetro ativo e pulseira de actigrafia do Artemis II; esteira, bicicleta e aparelho resistido da ISS (cerca de 2 h por dia); flywheel compacto da Orion (cerca de 30 min por dia). Combinar com a N21 da Talita

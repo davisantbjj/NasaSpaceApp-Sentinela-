@@ -109,6 +109,7 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 ### N10. Atualizar a revisão das faixas
 
 - [ ] **N10.** Registrar em `docs/pesquisa/revisao-faixas.md` tudo que mudou em N1 a N8, com as fontes novas.
+  - Larissa, 15/11, base `2769fb5`: revisão de N1/N2 concluída e conciliada com M6; N3–N6/N8 já documentadas. Também revisados N11/N12/N13/N14/N17, especificação e privacidade v7. Fechamento da N10 aguarda N7; não representa aprovação clínica.
 
 ## Fase 2: dados novos simples
 
