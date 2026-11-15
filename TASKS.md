@@ -264,6 +264,20 @@ Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente m
 - **No tema, manter:** alarmes e banner (Talita), escalonamento e texto do vermelho por ambiente (Lorena), horário do check-in e lembretes (Lorena), revisão das faixas, acessibilidade, teste offline e publicação.
 - **Fora do tema, congelar até a entrega** (não apagar): backend no Railway e variáveis de deploy, recuperar dados em aparelho novo, prender o conteúdo cifrado ao registro, solo sem a chave de bordo, testes do store e da central. O i18n completo só se os jurados avaliarem em inglês; nesse caso, ao menos as telas principais.
 
+## Futuro: leitura automática dos aparelhos
+
+Hoje a origem do dado (M10) é **declarada** pela pessoa: o app não lê aparelhos. Para ler sem digitar, faltaria:
+
+- [ ] **Acesso aos dados:** autorização da agência e uma interface com o sistema de dados da nave (como o CHP-IDSP da NASA). Os aparelhos das missões (Bio-Monitor, pulseira de actigrafia, dosímetro ativo) não têm API pública. Alternativas técnicas: importar o arquivo exportado pelo aparelho (CSV ou JSON) ou Bluetooth direto (Web Bluetooth; só sensores com perfil padrão, como frequência cardíaca, e não funciona no Safari do iPhone)
+- [ ] **Camada de leitura:** interface única por aparelho (ex.: `DeviceSource.read(desde)`, no estilo do `SyncAdapter`), com uma versão simulada para a demonstração
+- [ ] **Conversão e resumo do dia:** unidades (segundos de sono em horas, mSv em µSv) e muitas leituras num valor diário (sono que atravessa a meia-noite, frequência "em repouso" em leitura contínua)
+- [ ] **Modelo de dados:** tabela cifrada de medições brutas, com hora, aparelho e qualidade da leitura (tempo de uso, falhas); o valor do dia passa a ser calculado delas. Hora oficial da missão (a ISS usa UTC)
+- [ ] **Conflito entre fontes:** regra para quando há valor digitado e valor do aparelho no mesmo dia
+- [ ] **Check-in pré-preenchido:** campos vindos do aparelho, marcados como tal, que a pessoa confirma ou corrige
+- [ ] **Regras de alerta:** linha de base separada por origem (pulseira e digitado podem diferir), frequência de avaliação sem excesso de alertas e validação da precisão dos aparelhos em microgravidade
+- [ ] **Segurança e privacidade:** pareamento só de aparelhos autorizados, integridade da leitura e atualização de `docs/privacidade.md` para leituras contínuas
+- [ ] **Passo possível no hackathon:** importar um arquivo de exemplo fictício de sensor vestível (sono) e preencher o check-in com a origem marcada
+
 ## Limitações conhecidas
 
 - A lista de medicação prevista fica no registro do tripulante, que não é cifrado (como a lista de indicadores acompanhados). Só os registros diários, com as doses tomadas, são cifrados. Num produto real, o plano de medicação também seria cifrado.
