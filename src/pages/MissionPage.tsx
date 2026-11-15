@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { crewHealthContext } from '../content/crewContext';
-import { ENVIRONMENT_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
+import { ENVIRONMENT_ORDER, environmentContent, indicatorContent } from '../content/indicators';
 import { addDays, diffDays, formatDate, missionDay, todayISO } from '../lib/dates';
 import { hasValue } from '../lib/series';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { DailyRecord, IndicatorId } from '../types';
 import { trackedInOrder } from './helpers';
+import i18n from '../i18n';
 
 const REMINDER_OPTIONS = [
-  { value: 0, label: 'Sem lembrete' },
-  { value: 1, label: 'Todo dia' },
-  { value: 2, label: 'A cada 2 dias' },
-  { value: 3, label: 'A cada 3 dias' },
-  { value: 7, label: 'Uma vez por semana' },
+  { value: 0, label: 'noReminder' },
+  { value: 1, label: 'everyDay' },
+  { value: 2, label: 'everyTwoDays' },
+  { value: 3, label: 'everyThreeDays' },
+  { value: 7, label: 'weekly' },
 ];
 
 // Dias seguidos com check-in, terminando hoje ou ontem.
@@ -50,54 +51,54 @@ export function MissionPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Missão e rotina</span>
-        <h1>Missão de {member.name.split(' ')[0]}</h1>
+        <span className="eyebrow">{i18n.t('mission.title')}</span>
+        <h1>{i18n.t('mission.of', { name: member.name.split(' ')[0] })}</h1>
       </header>
 
       <section className="card stat-row">
         <div className="metric">
-          <span className="small muted">Dia da missão</span>
+          <span className="small muted">{i18n.t('mission.day')}</span>
           <span className="metric-value">{missionDay(member.missionStart, today)}</span>
         </div>
         <div className="metric">
-          <span className="small muted">Início</span>
+          <span className="small muted">{i18n.t('mission.start')}</span>
           <span className="metric-value">{formatDate(member.missionStart)}</span>
         </div>
         <div className="metric">
-          <span className="small muted">Check-ins seguidos</span>
+          <span className="small muted">{i18n.t('mission.streak')}</span>
           <span className="metric-value">{streak(records, today)}<span className="unit">dias</span></span>
         </div>
         <div className="metric">
-          <span className="small muted">Registros</span>
+          <span className="small muted">{i18n.t('mission.records')}</span>
           <span className="metric-value">{records.length}</span>
         </div>
       </section>
 
       <section className="card stack">
-        <h2>Contexto de readaptação à gravidade</h2>
+        <h2>{i18n.t('mission.gravity')}</h2>
         <p>{healthContext.text}</p>
-        <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">Fonte: NASA — intolerância ortostática (abre outro site)</a>
+        <a href={healthContext.sourceUrl} target="_blank" rel="noreferrer">{i18n.t('mission.gravitySource')}</a>
       </section>
 
       <section className="card stack">
-        <h2>Privacidade e comunicação</h2>
-        <p>Consulte os dados deste perfil ou escreva uma mensagem para mostrar à equipe de bordo.</p>
-        <div className="row"><Link className="btn" to="/your-data">Seus dados</Link><Link className="btn" to="/medical-contact">Escrever ao oficial médico</Link></div>
+        <h2>{i18n.t('mission.privacy')}</h2>
+        <p>{i18n.t('mission.privacyIntro')}</p>
+        <div className="row"><Link className="btn" to="/your-data">{i18n.t('mission.yourData')}</Link><Link className="btn" to="/medical-contact">{i18n.t('mission.writeMedical')}</Link></div>
       </section>
 
       <section className="card stack" style={{ gap: 14 }}>
         <div>
-          <h2>Ambiente da missão</h2>
-          <p className="small muted">O ambiente muda a explicação dos alertas, nunca o nível. As faixas são as mesmas em todos.</p>
+          <h2>{i18n.t('mission.environment')}</h2>
+          <p className="small muted">{i18n.t('mission.environmentIntro')}</p>
         </div>
         <fieldset className="env-grid options">
-          <legend className="visually-hidden">Ambiente da missão</legend>
+          <legend className="visually-hidden">{i18n.t('mission.environment')}</legend>
           {ENVIRONMENT_ORDER.map((env) => (
             <label key={env} className="option">
               <input type="radio" name="environment" checked={settings.environment === env} onChange={() => setEnvironment(env)} />
               <span className="option-face">
-                {ENVIRONMENTS[env].label}
-                <span>{ENVIRONMENTS[env].description}</span>
+                {environmentContent(env).label}
+                <span>{environmentContent(env).description}</span>
               </span>
             </label>
           ))}
@@ -106,13 +107,13 @@ export function MissionPage() {
 
       <section className="card stack" style={{ gap: 14 }}>
         <div>
-          <h2>Lembretes de medida</h2>
-          <p className="small muted">Para indicadores que não precisam ser medidos todo dia.</p>
+          <h2>{i18n.t('mission.reminders')}</h2>
+          <p className="small muted">{i18n.t('mission.remindersIntro')}</p>
         </div>
         <div className="table-wrap">
           <table className="reminders-table">
             <thead>
-              <tr><th>Indicador</th><th>Última medida</th><th>Lembrete</th></tr>
+              <tr><th>{i18n.t('mission.indicator')}</th><th>{i18n.t('mission.lastMeasure')}</th><th>{i18n.t('mission.reminder')}</th></tr>
             </thead>
             <tbody>
               {tracked.map((indicator) => {
@@ -121,19 +122,19 @@ export function MissionPage() {
                 const due = reminder && (!last || diffDays(last, today) >= reminder.everyDays);
                 return (
                   <tr key={indicator}>
-                    <td style={{ fontVariantNumeric: 'normal' }}>{INDICATORS[indicator].label}</td>
+                    <td style={{ fontVariantNumeric: 'normal' }}>{indicatorContent(indicator).label}</td>
                     <td>
-                      {last ? formatDate(last) : 'Nunca'}
-                      {due && <span className="chip" style={{ marginLeft: 8, color: 'var(--level-yellow)' }}>! Medir hoje</span>}
+                      {last ? formatDate(last) : i18n.t('mission.never')}
+                      {due && <span className="chip" style={{ marginLeft: 8, color: 'var(--level-yellow)' }}>! {i18n.t('mission.measureToday')}</span>}
                     </td>
                     <td>
                       <select
                         className="select"
-                        aria-label={`Lembrete de ${INDICATORS[indicator].label}`}
+                        aria-label={i18n.t('mission.reminderFor', { indicator: indicatorContent(indicator).label })}
                         value={reminder?.everyDays ?? 0}
                         onChange={(event) => setReminder(indicator, Number(event.target.value))}
                       >
-                        {REMINDER_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                        {REMINDER_OPTIONS.map((o) => <option key={o.value} value={o.value}>{i18n.t(`mission.${o.label}`)}</option>)}
                       </select>
                     </td>
                   </tr>
@@ -146,22 +147,22 @@ export function MissionPage() {
 
       <section className="card stack">
         <div>
-          <h2>Dados da demonstração</h2>
+          <h2>{i18n.t('mission.demoData')}</h2>
           <p className="small muted">
-            Os três tripulantes e os 60 dias de registros são simulados. Recriar a demonstração apaga os check-ins, mensagens, pedidos de exclusão e o registro de acesso de todos os perfis neste navegador, e cria chaves novas. O aviso de privacidade permanece registrado.
+            {i18n.t('mission.demoExplanation')}
           </p>
-          {!canReset && <p className="small muted">Só o oficial médico de bordo pode recriar a demonstração.</p>}
+          {!canReset && <p className="small muted">{i18n.t('mission.medicalOnly')}</p>}
         </div>
         {canReset && <div className="row">
           {confirmReset ? (
             <>
               <button type="button" className="btn btn-danger" onClick={() => { setConfirmReset(false); void resetDemo(); }}>
-                Sim, apagar e recriar
+                {i18n.t('mission.resetConfirm')}
               </button>
-              <button type="button" className="btn btn-ghost" onClick={() => setConfirmReset(false)}>Cancelar</button>
+              <button type="button" className="btn btn-ghost" onClick={() => setConfirmReset(false)}>{i18n.t('buttons.cancel')}</button>
             </>
           ) : (
-            <button type="button" className="btn" onClick={() => setConfirmReset(true)}>Recriar dados de demonstração</button>
+            <button type="button" className="btn" onClick={() => setConfirmReset(true)}>{i18n.t('mission.reset')}</button>
           )}
         </div>}
       </section>

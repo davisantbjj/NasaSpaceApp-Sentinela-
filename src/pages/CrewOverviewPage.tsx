@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { formatDate, todayISO } from '../lib/dates';
 import { useAppStore, type CrewOverview } from '../store/useAppStore';
+import i18n from '../i18n';
 
 // Grade do oficial médico: todos os tripulantes num lugar só.
 // Os dados dos outros só aparecem depois que chegam à central de bordo.
@@ -38,18 +39,16 @@ export function CrewOverviewPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Oficial médico de bordo</span>
-        <h1>Tripulação</h1>
-        <p className="muted">
-          Nível geral, check-in de hoje e alertas ainda não vistos de cada tripulante. Abrir os dados de alguém fica no registro de acesso da pessoa.
-        </p>
+        <span className="eyebrow">{i18n.t('crewOverview.officer')}</span>
+        <h1>{i18n.t('crewOverview.title')}</h1>
+        <p className="muted">{i18n.t('crewOverview.intro')}</p>
         <div className="row">
-          <button type="button" className="btn" onClick={() => void load()}>Atualizar</button>
+          <button type="button" className="btn" onClick={() => void load()}>{i18n.t('buttons.update')}</button>
         </div>
       </header>
 
       {error && <p className="notice" role="alert">{error}</p>}
-      {!rows && !error && <div className="loading" style={{ minHeight: 200 }}>Carregando a tripulação…</div>}
+      {!rows && !error && <div className="loading" style={{ minHeight: 200 }}>{i18n.t('crewOverview.loading')}</div>}
 
       {rows && (
         <ul className="crew-grid">
@@ -60,27 +59,27 @@ export function CrewOverviewPage() {
               <li key={member.id} className="card stack crew-card level-color" data-level={level}>
                 <div className="row-between">
                   <div>
-                    <h2 style={{ color: 'var(--text)' }}>{member.name}{own && <span className="small muted"> (você)</span>}</h2>
+                    <h2 style={{ color: 'var(--text)' }}>{member.name}{own && <span className="small muted"> {i18n.t('crewOverview.you')}</span>}</h2>
                     <p className="small muted">{member.role}</p>
                   </div>
                   <LevelBadge
                     level={level}
-                    label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`}
+                    label={alerts.length === 0 ? i18n.t('crewOverview.allExpected') : i18n.t('dashboard.alerts', { count: alerts.length })}
                   />
                 </div>
                 <div className="hero-meta" style={{ marginTop: 0 }}>
                   <span className="chip" style={checkinToday ? undefined : { color: 'var(--level-yellow)' }}>
-                    {checkinToday ? '✓ Check-in de hoje feito' : '! Check-in de hoje pendente'}
+                    {checkinToday ? i18n.t('crewOverview.checkinDone') : i18n.t('crewOverview.checkinPending')}
                   </span>
-                  {lastDate && lastDate !== today && <span className="chip num">Último registro: {formatDate(lastDate)}</span>}
-                  {red > 0 && <span className="chip" style={{ color: 'var(--level-red)' }}>▲ {red} de atenção imediata</span>}
-                  {openAlerts > 0 && <span className="chip num">{openAlerts} não {openAlerts === 1 ? 'visto' : 'vistos'}</span>}
+                  {lastDate && lastDate !== today && <span className="chip num">{i18n.t('status.lastRecord', { date: formatDate(lastDate) })}</span>}
+                  {red > 0 && <span className="chip" style={{ color: 'var(--level-red)' }}>{i18n.t('crewOverview.immediate', { count: red })}</span>}
+                  {openAlerts > 0 && <span className="chip num">{i18n.t('crewOverview.unseen', { count: openAlerts })}</span>}
                 </div>
                 <div className="row">
-                  <button type="button" className="btn" onClick={() => void open(member.id)}>Abrir painel</button>
+                  <button type="button" className="btn" onClick={() => void open(member.id)}>{i18n.t('crewOverview.openDashboard')}</button>
                   {alerts.length > 0 && (
                     <button type="button" className="btn btn-ghost" onClick={() => void switchCrew(member.id).then(() => navigate('/alerts'))}>
-                      Ver alertas
+                      {i18n.t('crewOverview.viewAlerts')}
                     </button>
                   )}
                 </div>

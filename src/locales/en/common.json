@@ -1,0 +1,350 @@
+{
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "ptBR": "Português (Brasil)"
+  },
+  "app": {
+    "skipToContent": "Skip to content",
+    "idleLock": "The screen was locked after 5 minutes of inactivity."
+  },
+  "roles": {
+    "crew": "Crew member",
+    "commander": "Commander",
+    "medicalOfficer": "Onboard medical officer",
+    "groundSurgeon": "Ground physician"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "checkin": "Check-in",
+    "alerts": "Alerts",
+    "trends": "Trends",
+    "mission": "Mission",
+    "crew": "Crew",
+    "ground": "Ground view",
+    "main": "Main navigation",
+    "alert_one": "alert",
+    "alert_other": "alerts",
+    "missionEnvironment": "Mission environment"
+  },
+  "level": {
+    "green": "Within expected range",
+    "yellow": "Monitor",
+    "red": "Immediate attention"
+  },
+  "status": {
+    "noData": "No data",
+    "noRecords": "No records to review",
+    "ok": "OK",
+    "lastRecord": "Latest record: {{date}}",
+    "missionDay": "Mission day {{day}}",
+    "recordsNone": "No records to assess",
+    "notMeasured": "Not measured in the latest record",
+    "skipped": "Skipped"
+  },
+  "baseline": {
+    "forming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
+    "personal": "Your personal pattern: {{value}}{{unit}} ({{details}})",
+    "days_one": "{{count}} day",
+    "days_other": "{{count}} days",
+    "excludedDays_one": "{{count}} excluded",
+    "excludedDays_other": "{{count}} excluded"
+  },
+  "dashboard": {
+    "eyebrow": "Crew dashboard",
+    "allExpected": "Everything is within the expected range",
+    "alerts_one": "{{count}} alert",
+    "alerts_other": "{{count}} alerts",
+    "checkinDone": "Redo today's check-in",
+    "checkinPending": "Complete today's check-in →",
+    "checkinOtherPending": "Today's check-in has not reached the onboard hub. The dashboard shows the record from {{date}}.",
+    "checkinOwnPending": "Today's check-in is pending. The dashboard shows the record from {{date}}.",
+    "systems": "Body systems",
+    "regionHint": "Select a region to view its indicators."
+  },
+  "regionPanel": {
+    "selected": "Selected region",
+    "noTracked": "This crew member does not track indicators in this region.",
+    "viewAlert": "View alert →",
+    "history": "View history →",
+    "togetherNote": "This does not mean one caused the other."
+  },
+  "bodyMap": {
+    "label": "Status of each body region",
+    "noData": "no data"
+  },
+  "trends": {
+    "title": "Trends",
+    "indicator": "Indicator",
+    "latest": "Latest value",
+    "average": "Average over {{days}} days",
+    "period": "Period",
+    "days": "{{days}} days",
+    "noMeasurements": "No measurements for this indicator in this period yet.",
+    "radiationNote": "Radiation has no general range: the dose is compared with your own history. The roughly 150 µSv per day measured by Radi-N2 is neutrons only, measured on the station, and is for context only.",
+    "table": "View values in a table",
+    "date": "Date",
+    "missionDay": "Mission day",
+    "value": "Value",
+    "systolic": "Systolic",
+    "diastolic": "Diastolic",
+    "generalRange": "General range",
+    "personalPattern": "Your personal pattern"
+  },
+  "errors": {
+    "openLocal": "Could not open local data",
+    "preparing": "Preparing crew data…",
+    "loadingCharts": "Loading charts…"
+  },
+  "buttons": {
+    "update": "Refresh",
+    "cancel": "Cancel",
+    "save": "Save",
+    "loading": "Loading…"
+  },
+  "menu": {
+    "open": "Open menu",
+    "mission": "Mission and routine",
+    "sync": "Synchronization",
+    "yourData": "Your data",
+    "medicalContact": "Write to the medical officer",
+    "lock": "Lock and switch profile",
+    "queue": "{{count}} queued",
+    "language": "Language"
+  },
+  "crewSwitcher": {
+    "label": "View data for"
+  },
+  "layout": {
+    "viewingOther": "You are viewing {{name}}'s data as the medical officer. This access is recorded, and {{firstName}} can see the log.",
+    "backToMine": "Return to my data",
+    "disclaimer": "Prototype, not a medical device. Decision support, no diagnosis. Simulated crew data and demo ranges. CosmoTI team · NASA Space Apps Challenge 2026.",
+    "footerYourData": "Your data",
+    "footerContact": "Text communication"
+  },
+  "login": {
+    "title": "Who is using the app?",
+    "intro": "Choose your profile and enter the PIN. Each role only sees what it needs.",
+    "profile": "Profile",
+    "pin": "PIN for {{name}}",
+    "access": "access",
+    "opening": "Opening…",
+    "enter": "Sign in",
+    "pinLength": "PIN must contain 4 to 6 digits.",
+    "wrongPinPaused": "Incorrect PIN {{count}} times. Wait 30 seconds before trying again.",
+    "wrongPinRemaining_one": "Incorrect PIN. {{count}} attempt remains before a 30-second pause.",
+    "wrongPinRemaining_other": "Incorrect PIN. {{count}} attempts remain before a 30-second pause.",
+    "retryIn": "Try again in {{seconds}} s.",
+    "demoPins": "Demo PINs",
+    "security": "Data is encrypted on this device and can only be opened with the PIN. The screen locks automatically after 5 minutes of inactivity. A real product would use the agency's sign-in system."
+  },
+  "mission": {
+    "title": "Mission and routine",
+    "of": "{{name}}'s mission",
+    "day": "Mission day",
+    "start": "Start",
+    "streak": "Consecutive check-ins",
+    "records": "Records",
+    "gravity": "Gravity readaptation context",
+    "gravitySource": "Source: NASA — orthostatic intolerance (opens another site)",
+    "privacy": "Privacy and communication",
+    "privacyIntro": "Review this profile's data or write a message to show the onboard team.",
+    "yourData": "Your data",
+    "writeMedical": "Write to the medical officer",
+    "environment": "Mission environment",
+    "environmentIntro": "The environment changes alert explanations, never the level. Ranges are the same in all environments.",
+    "reminders": "Measurement reminders",
+    "remindersIntro": "For indicators that do not need to be measured every day.",
+    "indicator": "Indicator",
+    "lastMeasure": "Last measurement",
+    "reminder": "Reminder",
+    "never": "Never",
+    "measureToday": "Measure today",
+    "reminderFor": "Reminder for {{indicator}}",
+    "noReminder": "No reminder",
+    "everyDay": "Every day",
+    "everyTwoDays": "Every 2 days",
+    "everyThreeDays": "Every 3 days",
+    "weekly": "Once a week",
+    "demoData": "Demo data",
+    "demoExplanation": "The three crew members and 60 days of records are simulated. Recreating the demo deletes check-ins, messages, deletion requests, and access logs for all profiles in this browser, and creates new keys. The privacy notice acknowledgement remains.",
+    "medicalOnly": "Only the onboard medical officer can recreate the demo.",
+    "resetConfirm": "Yes, delete and recreate",
+    "reset": "Recreate demo data",
+    "gravityContext": {
+      "female": "Dizziness when standing can occur after returning to gravity following a period in microgravity. Report symptoms to the onboard team and follow your individual readaptation protocol. NASA describes greater susceptibility to orthostatic intolerance among women in the cited studies; this does not determine individual risk or change this app's ranges.",
+      "other": "Dizziness when standing can occur after returning to gravity following a period in microgravity. Report symptoms to the onboard team and follow your individual readaptation protocol. Responses vary between people; this note does not estimate individual risk or change this app's ranges."
+    }
+  },
+  "crewOverview": {
+    "officer": "Onboard medical officer",
+    "title": "Crew",
+    "intro": "Overall level, today's check-in, and alerts not yet reviewed for each crew member. Opening someone's data is recorded in their access log.",
+    "loading": "Loading crew…",
+    "you": "(you)",
+    "allExpected": "Everything is within the expected range",
+    "checkinDone": "✓ Today's check-in complete",
+    "checkinPending": "! Today's check-in pending",
+    "immediate_one": "▲ {{count}} immediate attention",
+    "immediate_other": "▲ {{count}} immediate attention",
+    "unseen_one": "{{count}} not reviewed",
+    "unseen_other": "{{count}} not reviewed",
+    "openDashboard": "Open dashboard",
+    "viewAlerts": "View alerts"
+  },
+  "crewStatus": {
+    "commander": "Commander",
+    "title": "Crew",
+    "intro": "Here you can only see whether each crewmate completed today's check-in and whether there is a red alert. The commander cannot see health data. If there is a red alert, call the onboard medical officer.",
+    "empty": "No other crew members to show.",
+    "checkinDone": "✓ Check-in complete",
+    "pending": "! Pending",
+    "hasRed": "▲ Red alert present",
+    "noRed": "No red alert",
+    "callMedical": "Call the onboard medical officer.",
+    "accessLog": "Only information that has reached the onboard hub is counted. This view is recorded in each crewmate's access log."
+  },
+  "sync": {
+    "communication": "Communication",
+    "title": "Synchronization",
+    "intro": "Everything happens automatically. The check-in goes from the device to the onboard hub over the ship's network, and the hub sends one packet per day to the medical team on Earth whenever there is a connection. Without a connection, packets wait and leave when it returns. Alerts never wait for Earth; immediate decisions are made onboard.",
+    "lastSync": "Last synchronization: {{date}}",
+    "failed": "The last synchronization failed ({{error}}). It will retry automatically every 5 seconds.",
+    "hub": "Onboard hub",
+    "hubIntro": "Receives records from all devices on the ship.",
+    "arrived": "Everything reached the hub",
+    "sending": "Sending to the hub",
+    "checkin": "Check-in",
+    "medicalNote": "Medical officer's note",
+    "queued": "Queued",
+    "earth": "Connection to Earth",
+    "delay": "One-way delay in the current environment ({{environment}}): {{delay}}. Red alerts are prioritized.",
+    "offline": "No connection. Packets wait at the hub and are sent automatically when the connection returns.",
+    "simulated": "Simulated in this browser",
+    "noServer": " · No Earth server configured. Packets only appear to arrive here for the demo.",
+    "checking": "Checking the Earth server…",
+    "connected": "Connected to the Earth server",
+    "unreachable": "The Earth server did not respond. Packets wait at the hub and sending is retried automatically.",
+    "destination": "Destination: {{name}}",
+    "checked": " · checked {{date}}",
+    "lastError": " · last error {{date}}: {{error}}",
+    "deliverNow": "Deliver now (demo)",
+    "packets": "Packets for Earth",
+    "yourPackets": "Your packets for Earth",
+    "recentPackets": "Most recent packets. Queued packets appear first, in sending order.",
+    "noPackets": "No packets yet.",
+    "crewMember": "Crew member",
+    "day": "Day",
+    "priority": "Priority",
+    "situation": "Status",
+    "redPriority": "Red priority",
+    "normal": "Normal",
+    "hubQueue": "At the hub",
+    "inTransit": "In transit, arrives in {{duration}}",
+    "arrivedAt": "✓ Arrived {{date}}"
+  },
+  "ground": {
+    "notice": "Data arrives in packets when a communication window is available, with a one-way delay of {{delay}} ({{environment}}). Information here may have changed onboard. Immediate decisions are always made onboard.",
+    "allCrew": "← All crew",
+    "title": "Ground view",
+    "physician": "Ground physician",
+    "noCrewPacket": "No packet from this crew member has arrived yet.",
+    "noPacket": "No packet",
+    "recorded": "Data from",
+    "arrived": "Arrived",
+    "delay": "Delay",
+    "packetsComing_one": "{{count}} packet in transit",
+    "packetsComing_other": "{{count}} packets in transit",
+    "openPacket": "Open packet →",
+    "packetTitle": "Packet from {{date}} · mission day {{day}}",
+    "recordedAt": "Record made at {{date}}",
+    "sent": "Sent from the spacecraft {{sent}} · arrived {{arrived}} · environment: {{environment}}",
+    "alerts": "Alerts",
+    "noAlerts": "No alerts in this record.",
+    "notes": "Medical officer's notes",
+    "noNotes": "No notes in this packet.",
+    "previous": "Previous packets"
+  },
+  "privacy": {
+    "before": "Before you begin",
+    "title": "Your privacy in Sentinela",
+    "intro": "A local demo with simulated profiles. Do not enter real personal or health information.",
+    "readError": "Could not record that you read the notice. Try again.",
+    "opening": "Opening…",
+    "acknowledge": "I have read the notice — open demo",
+    "law": "Read the LGPD — articles 11 and 18 (opens another site)",
+    "sections": {
+      "stored": {
+        "title": "What stays in this browser",
+        "text": "Fictional profile (name, role, sex, and mission start), tracked indicators, check-in values and symptoms, medical officer notes, typed messages, data access log, deletion requests, and preferences. Health data is encrypted and can only be opened with the PIN. Alerts, correlations, and baseline are calculated from the records."
+      },
+      "purpose": {
+        "title": "Purpose",
+        "text": "To demonstrate indicator monitoring, comparison with ranges and personal patterns, and the organization of information for a discussion with the medical officer. Use fictional information only; this prototype does not provide health care."
+      },
+      "access": {
+        "title": "Who can see it",
+        "text": "Each person signs in with their own profile and PIN. In the app, crew members see only their own data; the onboard medical officer sees everyone's; the commander sees only whether each crewmate checked in and whether there is a red alert; the medical team on Earth receives one encrypted packet per crew member each day. Each view of your data is recorded in Your data. Your data is encrypted with a key that belongs to you and can be opened with your PIN and the medical officer's PIN; another crewmate's PIN cannot open it. Prototype limitations: someone who copies the database may discover the short PIN, and the ground physician's key is in this same browser because everything runs on one device. Exporting creates a file under your control; opening external sources accesses those websites."
+      },
+      "retention": {
+        "title": "How long data is kept",
+        "text": "Health data is a mission record and stays on the device until browser storage is cleared or the demo is recreated; sent packets are also held by the team on Earth. The browser may remove its storage. Downloaded JSON files are separate copies and must be deleted where they were saved."
+      },
+      "legal": {
+        "title": "Legal basis and prototype limitations",
+        "text": "For a real service, Brazil's LGPD provides for health protection under article 11, II, f, exclusively in procedures carried out by health professionals, health services, or a health authority. This basis does not automatically apply to this demo. Before using real data, the responsible organization must define the legal basis and required safeguards. Continuing here records only that you read this notice, not generic consent to process health data."
+      },
+      "rights": {
+        "title": "Your rights",
+        "text": "Article 18 of the LGPD provides rights such as access, correction, and, where legally applicable, deletion. The Your data screen offers a JSON copy and a way to register a deletion request for the team to review: crew members cannot delete their own health history. This app does not promise remote care or full LGPD compliance."
+      }
+    }
+  },
+  "yourData": {
+    "eyebrow": "Privacy · {{name}}",
+    "title": "Your data",
+    "intro": "The actions below apply only to your data, for the profile you used to sign in.",
+    "encryption": "Your data is encrypted with a key that belongs to you and can be opened with your PIN and the medical officer's PIN. A crewmate's PIN cannot open your data. Prototype limitation: someone who copies the database may discover the short PIN.",
+    "actions": "Copy and deletion request",
+    "copyIncludes": "The copy includes your profile, check-ins, medical officer notes, messages, access log, and deletion request. It does not include other crew members' data. This copy is for review only; it does not support import or regulated portability.",
+    "export": "Export my data as JSON",
+    "request": "Register deletion request",
+    "requestRecorded": "Request recorded locally",
+    "exportDone": "JSON file prepared for download. It contains only this profile's data.",
+    "requestDone": "Request recorded. Nothing was deleted: the health history belongs to the mission, and the request is for the team to review.",
+    "requestPending": "Request from {{date}} — pending. Local reference: {{id}}.",
+    "noDelete": "Crew members cannot delete their own health history: it is a mission record. The deletion request is recorded for the team to review under LGPD article 18; nothing is deleted immediately.",
+    "processing": "Processing…",
+    "readError": "Could not read the deletion request.",
+    "operationError": "Could not complete the operation in local storage. Try again.",
+    "accessTitle": "Who opened your data",
+    "accessIntro": "In the app, the onboard medical officer sees your values and alerts, the medical team on Earth sees daily packets, and the commander sees only whether you checked in and whether there is a red alert. Each view is recorded here.",
+    "loading": "Loading…",
+    "nobody": "No one other than you has opened your data.",
+    "when": "When",
+    "who": "Who",
+    "what": "What"
+  },
+  "medicalContact": {
+    "eyebrow": "Text communication · {{name}}",
+    "title": "Message to the medical officer",
+    "intro": "If you cannot speak, write a message to show the onboard medical officer.",
+    "urgent": "This app does not send messages or provide care. In an urgent situation, contact the onboard team using the available method. Do not wait for a response on this screen.",
+    "prompt": "What would you like to communicate? Use only a fictional example.",
+    "help": "You can describe what you felt and when it started. {{count}}/{{max}} characters. There is no sending, read receipt, or response-time estimate.",
+    "saving": "Saving…",
+    "save": "Save message on this device",
+    "saved": "Message saved only on this device. It was not sent to the medical officer. Show them this screen.",
+    "saveError": "Could not save. Check the text and try again.",
+    "messages": "Messages to show the team",
+    "none": "No messages saved for this profile.",
+    "local": "Saved locally — not sent",
+    "export": "Export or delete these messages in Your data →"
+  },
+  "disclaimer": {
+    "lead": "Prototype, not a medical device.",
+    "details": "Decision support, no diagnosis. Simulated crew data and demo ranges. CosmoTI team · NASA Space Apps Challenge 2026.",
+    "yourData": "Your data",
+    "contact": "Text communication"
+  }
+}

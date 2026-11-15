@@ -1,7 +1,7 @@
 import { compareLevels, worstLevel } from '../lib/levels';
 import { formatNumber, inRange, rangesFor, seriesPoints, seriesValue } from '../lib/series';
 import type {
-  Alert, Baseline, BodyRegion, BpComponent, DailyRecord, Environment, IndicatorId,
+  Alert, Baseline, BodyRegion, BpComponent, DailyRecord, Environment, IndicatorId, LocalizedText,
   IndicatorRule, Level, Range, Rules,
 } from '../types';
 import { deviationPercent, findBaseline, isBaselineReady, isDeviation } from './baseline';
@@ -9,8 +9,6 @@ import { deviationPercent, findBaseline, isBaselineReady, isDeviation } from './
 const REGIONS: BodyRegion[] = [
   'head', 'heart', 'musculoskeletal', 'immune', 'metabolism', 'mind', 'wholeBody',
 ];
-
-const COMPONENT_LABEL: Record<BpComponent, string> = { systolic: 'sistólica', diastolic: 'diastólica' };
 
 // Dentro de `green` é verde; fora de `green` e dentro de `yellow` é amarelo; fora de `yellow` é vermelho.
 export function levelForRange(value: number, green?: Range, yellow?: Range): Level {
@@ -27,28 +25,58 @@ interface SeriesResult {
   sustained?: { percent: number; days: number }; // desvio pessoal mantido
 }
 
-function withUnit(text: string, unit: string): string {
-  return unit ? `${text} ${unit}` : text;
-}
-
-function valueText(rule: IndicatorRule, results: SeriesResult[]): string {
-  if (rule.components) return withUnit(results.map((r) => formatNumber(r.value)).join('/'), rule.unit);
+function valueText(rule: IndicatorRule, results: SeriesResult[]): LocalizedText {
+  if (rule.components) {
+    return {
+      key: 'alerts:values.bloodPressure',
+      params: { systolic: results[0].value, diastolic: results[1].value, unit: rule.unit },
+    };
+  }
   const value = results[0].value;
-  const label = rule.valueLabels?.[String(value)];
-  if (label) return rule.unit ? `${formatNumber(value)} ${rule.unit} (${label})` : label;
-  return withUnit(formatNumber(value), rule.unit);
+  const labelKey = rule.valueLabels?.[String(value)];
+  if (labelKey && !rule.unit && !rule.unitKey) {
+    return { key: 'alerts:values.label', params: { labelKey } };
+  }
+  return {
+    key: 'alerts:values.number',
+    params: {
+      value,
+      unit: rule.unitKey ?? rule.unit,
+      labelKey: labelKey ?? '',
+    },
+  };
 }
 
-function rangeText(rule: IndicatorRule): string {
+function rangeText(rule: IndicatorRule): LocalizedText {
   if (rule.components) {
     const { systolic, diastolic } = rule.components;
-    return `Faixa geral: ${systolic.green.min} a ${systolic.green.max} por ${diastolic.green.min} a ${diastolic.green.max} ${rule.unit}`;
+    return {
+      key: 'alerts:reference.bloodPressure',
+      params: {
+        systolicMin: systolic.green.min,
+        systolicMax: systolic.green.max,
+        diastolicMin: diastolic.green.min,
+        diastolicMax: diastolic.green.max,
+        unit: rule.unit,
+      },
+    };
   }
   const green = rule.green!;
   if (green.min === green.max) {
-    return `Esperado: ${rule.valueLabels?.[String(green.min)] ?? formatNumber(green.min)}`;
+    const labelKey = rule.valueLabels?.[String(green.min)];
+    return {
+      key: 'alerts:reference.expected',
+      params: {
+        value: labelKey
+          ? { key: 'alerts:values.label', params: { labelKey } }
+          : { key: 'alerts:values.number', params: { value: green.min, unit: rule.unitKey ?? rule.unit, labelKey: '' } },
+      },
+    };
   }
-  return withUnit(`Faixa geral: ${formatNumber(green.min)} a ${formatNumber(green.max)}`, rule.unit);
+  return {
+    key: 'alerts:reference.general',
+    params: { min: green.min, max: green.max, unit: rule.unitKey ?? rule.unit },
+  };
 }
 
 // Desvio pessoal mantido: os últimos `sustainedDays` valores (incluindo o de hoje)
@@ -105,27 +133,44 @@ function evaluateIndicator(
 
   const byRange = compareLevels(rangeLevel, 'green') > 0;
   const text = valueText(rule, results);
-  let whatChanged: string;
-  let reference: string;
+  let whatChanged: LocalizedText;
+  let reference: LocalizedText;
 
   if (byRange) {
-    whatChanged = `${rule.label} está em ${text}`;
+    whatChanged = { key: 'alerts:change.general', params: { nameKey: rule.labelKey, value: text } };
     reference = rangeText(rule);
   } else {
     const { sustained, baseline, component } = deviating!;
-    const name = component ? `${rule.label} ${COMPONENT_LABEL[component]}` : rule.label;
-    const side = sustained!.percent < 0 ? 'abaixo' : 'acima';
-    whatChanged = `${name} está ${formatNumber(Math.abs(sustained!.percent))}% ${side} do seu padrão há ${sustained!.days} dias (hoje: ${text})`;
-    reference = `Seu padrão pessoal: ${withUnit(formatNumber(baseline!.mean), rule.unit)} (${baseline!.sampleDays} dias)`;
+    whatChanged = {
+      key: 'alerts:change.baseline',
+      params: {
+        nameKey: rule.labelKey,
+        componentKey: component ? `alerts:components.${component}` : '',
+        percent: Math.abs(sustained!.percent),
+        sideKey: sustained!.percent < 0 ? 'alerts:side.below' : 'alerts:side.above',
+        days: sustained!.days,
+        value: text,
+      },
+    };
+    reference = {
+      key: 'alerts:reference.baseline',
+      params: {
+        value: {
+          key: 'alerts:values.number',
+          params: { value: baseline!.mean, unit: rule.unitKey ?? rule.unit, labelKey: '' },
+        },
+        days: baseline!.sampleDays,
+      },
+    };
   }
 
   // Confiança do dado.
   let confidenceNote: string | undefined;
   const firstBaseline = results[0].baseline;
   if (rule.useBaseline && !isBaselineReady(firstBaseline, rules)) {
-    confidenceNote = `Linha de base em formação (${firstBaseline?.sampleDays ?? 0} de ${rules.config.baselineDays} dias)`;
+    confidenceNote = 'alerts:confidence.baselineForming';
   } else if (!previous.some((r) => seriesPoints(r.values, indicator).length > 0)) {
-    confidenceNote = 'Medida única, sem histórico para comparar';
+    confidenceNote = 'alerts:confidence.singleMeasure';
   }
 
   return {
@@ -142,7 +187,15 @@ function evaluateIndicator(
     whatToDo: rule.messages.whatToDo[level],
     environmentNote: rules.environmentNotes[indicator]?.[environment],
     confidence: confidenceNote ? 'low' : 'normal',
-    confidenceNote,
+    confidenceNote: confidenceNote
+      ? {
+          key: confidenceNote,
+          params: {
+            sampleDays: firstBaseline?.sampleDays ?? 0,
+            baselineDays: rules.config.baselineDays,
+          },
+        }
+      : undefined,
     notifyGround: level === 'red',
     sourceUrl: rule.sourceUrl,
   };
@@ -168,13 +221,16 @@ function evaluateSymptoms(
     region: rule.region,
     level,
     trigger: 'symptom',
-    whatChanged: `Sintomas relatados: ${reported.map((s) => s.label.toLowerCase()).join(', ')}`,
-    reference: 'Esperado: nenhum sintoma',
+    whatChanged: {
+      key: 'alerts:change.symptoms',
+      params: { symptomKeys: reported.map((s) => s.labelKey) },
+    },
+    reference: { key: 'alerts:reference.noSymptoms' },
     whyItMatters: rule.messages.whyItMatters,
     whatToDo: rule.messages.whatToDo[level],
     environmentNote: rules.environmentNotes.symptoms?.[environment],
     confidence: 'low',
-    confidenceNote: 'Autorrelato, sem medida objetiva',
+    confidenceNote: { key: 'alerts:confidence.selfReported' },
     notifyGround: level === 'red',
     sourceUrl: rule.sourceUrl,
   };
@@ -200,13 +256,16 @@ function evaluateMedication(
     region: rule.region,
     level,
     trigger: 'missedMedication',
-    whatChanged: `Dose não tomada hoje: ${missed.map((dose) => dose.label).join(', ')}`,
-    reference: 'Esperado: todas as doses previstas no dia',
+    whatChanged: {
+      key: 'alerts:change.missedMedication',
+      params: { doses: missed.map((dose) => dose.label).join(', ') },
+    },
+    reference: { key: 'alerts:reference.medication' },
     whyItMatters: rule.messages.whyItMatters,
     whatToDo: rule.messages.whatToDo[level],
     environmentNote: rules.environmentNotes.medication?.[environment],
     confidence: 'low',
-    confidenceNote: 'Autorrelato, sem conferência do estoque de bordo',
+    confidenceNote: { key: 'alerts:confidence.medicationSelfReported' },
     notifyGround: level === 'red',
     sourceUrl: rule.sourceUrl,
   };

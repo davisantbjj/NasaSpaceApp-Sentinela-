@@ -1,6 +1,7 @@
 import { formatNumber } from '../lib/series';
 import type { DailyValues, IndicatorId } from '../types';
-import { INDICATORS } from './indicators';
+import i18n from '../i18n';
+import { indicatorContent } from './indicators';
 
 export interface DisplayValue {
   text: string; // "118/76", "7,4", "Bem"
@@ -13,29 +14,34 @@ export function displayValue(
   indicator: IndicatorId,
   symptomLabels: Record<string, string> = {},
 ): DisplayValue | undefined {
-  const content = INDICATORS[indicator];
+  const content = indicatorContent(indicator);
 
   if (indicator === 'bloodPressure') {
     const bp = values.bloodPressure;
-    return bp ? { text: `${bp.systolic}/${bp.diastolic}`, unit: content.unit } : undefined;
+    return bp ? { text: `${formatNumber(bp.systolic)}/${formatNumber(bp.diastolic)}`, unit: content.unit } : undefined;
   }
   if (indicator === 'symptoms') {
     const symptoms = values.symptoms;
     if (!symptoms) return undefined;
-    if (symptoms.length === 0) return { text: 'Nenhum', unit: '' };
+    if (symptoms.length === 0) return { text: i18n.t('indicators:display.noSymptoms'), unit: '' };
     return { text: symptoms.map((id) => symptomLabels[id] ?? id).join(', '), unit: '' };
   }
   if (indicator === 'medication') {
     const doses = values.medication;
     if (!doses) return undefined;
     const missed = doses.filter((dose) => !dose.taken);
-    if (missed.length === 0) return { text: doses.length === 0 ? 'Nenhuma prevista' : 'Todas tomadas', unit: '' };
-    return { text: `Não tomada: ${missed.map((dose) => dose.label).join(', ')}`, unit: '' };
+    if (missed.length === 0) {
+      return { text: i18n.t(doses.length === 0 ? 'indicators:display.noMedication' : 'indicators:display.allDosesTaken'), unit: '' };
+    }
+    return { text: i18n.t('indicators:display.doseNotTaken', { doses: missed.map((dose) => dose.label).join(', ') }), unit: '' };
   }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
   const option = content.scale?.find((o) => o.value === value);
-  if (option) return { text: option.label, unit: content.unit === 'de 5' ? `(${value} ${content.unit})` : '' };
+  if (option) {
+    const unit = content.unitKey ? `(${formatNumber(value)} ${content.unit})` : '';
+    return { text: option.label, unit };
+  }
   return { text: formatNumber(value), unit: content.unit };
 }
 

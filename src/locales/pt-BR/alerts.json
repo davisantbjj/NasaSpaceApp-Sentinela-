@@ -1,0 +1,175 @@
+{
+  "trigger": {
+    "generalRange": "Fora da faixa geral",
+    "baselineDeviation": "Desvio do padrão pessoal",
+    "symptom": "Sintoma relatado",
+    "missedMedication": "Dose não tomada"
+  },
+  "change": {
+    "general": "{{name}} está em {{value}}",
+    "baseline": "{{name}} está {{percent}}% {{side}} do seu padrão há {{days}} dias (hoje: {{value}})",
+    "symptoms": "Sintomas relatados: {{symptoms}}",
+    "missedMedication": "Dose não tomada hoje: {{doses}}"
+  },
+  "values": {
+    "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
+    "number": "{{value}}{{unitSuffix}}{{labelSuffix}}",
+    "label": "{{label}}"
+  },
+  "components": {
+    "systolic": "sistólica",
+    "diastolic": "diastólica"
+  },
+  "side": {
+    "below": "abaixo",
+    "above": "acima"
+  },
+  "reference": {
+    "general": "Faixa geral: {{min}} a {{max}} {{unit}}",
+    "bloodPressure": "Faixa geral: {{systolicMin}} a {{systolicMax}} por {{diastolicMin}} a {{diastolicMax}} {{unit}}",
+    "expected": "Esperado: {{value}}",
+    "baseline": "Seu padrão pessoal: {{value}} ({{days}} dias)",
+    "noSymptoms": "Esperado: nenhum sintoma",
+    "medication": "Esperado: todas as doses previstas no dia"
+  },
+  "confidence": {
+    "baselineForming": "Linha de base em formação ({{sampleDays}} de {{baselineDays}} dias)",
+    "singleMeasure": "Medida única, sem histórico para comparar",
+    "selfReported": "Autorrelato, sem medida objetiva",
+    "medicationSelfReported": "Autorrelato, sem conferência do estoque de bordo"
+  },
+  "level": {
+    "green": "Dentro do esperado",
+    "yellow": "Acompanhar",
+    "red": "Atenção imediata"
+  },
+  "correlation": "{{first}} e {{second}} mudaram juntos nos últimos {{days}} dias",
+  "card": {
+    "action": "O que fazer",
+    "reference": "Em relação a",
+    "why": "Por que importa",
+    "confidence": "Confiança do dado",
+    "low": "Baixa",
+    "normal": "Normal",
+    "environment": "No ambiente atual",
+    "groundPriority": "Este pacote passa na frente da fila para a equipe médica na Terra.",
+    "history": "Ver histórico →",
+    "source": "Fonte: NASA Human Research Program ↗",
+    "review": {
+      "seen": "Visto pelo oficial médico",
+      "unsynced": "ainda neste aparelho",
+      "notSeen": "Ainda não visto pelo oficial médico.",
+      "note": "Conduta:",
+      "optional": "Conduta (opcional)",
+      "placeholder": "Ex.: conversei com a tripulante, repetir a medida amanhã.",
+      "saving": "Salvando…",
+      "update": "Atualizar anotação",
+      "markSeen": "Marcar como visto",
+      "saved": "Salvo. Vai para a central e para a Terra no próximo pacote.",
+      "saveError": "Não foi possível salvar: {{error}}"
+    }
+  },
+  "page": {
+    "title": "Alertas e ações",
+    "none": "Nenhum alerta",
+    "inLatest": "{{count}} alerta no último registro",
+    "inLatest_other": "{{count}} alertas no último registro",
+    "record": "Registro de {{date}}, dia {{day}} da missão.",
+    "redCount": "{{count}} de atenção imediata",
+    "yellowCount": "{{count}} para acompanhar",
+    "contact": "Não pode falar? Escreva para mostrar ao oficial médico →",
+    "allWithin": "Todos os indicadores medidos estão dentro da faixa geral e do padrão pessoal.",
+    "noRecords": "Sem registros para avaliar. Faça um check-in para acompanhar os indicadores.",
+    "back": "Voltar ao painel →",
+    "together": "Mudaram juntos",
+    "togetherExplanation": "Indicadores que se afastaram do esperado nos mesmos dias. Não quer dizer que um causou o outro, e não muda o nível de nenhum alerta.",
+    "noTogether": "Nenhum par de indicadores mudou junto nos últimos dias.",
+    "dateRange": "({{from}} a {{to}})"
+  },
+  "rules": {
+    "bloodPressure": {
+      "whyItMatters": "Sem gravidade, os líquidos do corpo sobem para a cabeça e o coração trabalha de outro jeito. A pressão pode variar com o contexto da missão.",
+      "yellow": "Repita a medida após 10 minutos de repouso e registre de novo.",
+      "red": "Repita a medida, fique em repouso e avise o médico de bordo."
+    },
+    "heartRate": {
+      "whyItMatters": "A falta de gravidade altera a circulação e o funcionamento do coração.",
+      "yellow": "Repita a medida após 10 minutos de repouso e registre de novo.",
+      "red": "Descanse e avise o médico de bordo."
+    },
+    "glucose": {
+      "whyItMatters": "A alimentação de bordo é limitada e precisa sustentar a tripulação por toda a missão. A glicemia em jejum ajuda a acompanhar a nutrição.",
+      "yellow": "Registre o que comeu e quando, e meça de novo em jejum conforme o protocolo.",
+      "red": "Meça de novo agora e avise o médico de bordo."
+    },
+    "temperature": {
+      "whyItMatters": "O estresse do voo altera a resposta imunológica e pode reativar vírus dormentes no corpo.",
+      "yellow": "Meça de novo em 1 hora e observe outros sintomas.",
+      "red": "Avise o médico de bordo e siga o protocolo médico da missão."
+    },
+    "sleepHours": {
+      "whyItMatters": "Na estação a tripulação vê cerca de 16 nasceres do sol por dia, o que desregula o relógio do corpo. Dormir pouco reduz a atenção e o desempenho.",
+      "yellow": "Proteja o horário de descanso de hoje e ajuste a luz da cabine conforme o protocolo.",
+      "red": "Avise o médico de bordo e evite tarefas críticas até descansar."
+    },
+    "mood": {
+      "whyItMatters": "Isolamento, confinamento e distância da Terra pesam no humor ao longo da missão. O que importa é a tendência, não um dia isolado.",
+      "yellow": "Use o diário de bordo e mantenha o contato previsto com a equipe e a família.",
+      "red": "Converse com o médico de bordo ou com o apoio psicológico da missão."
+    },
+    "stress": {
+      "whyItMatters": "Isolamento, confinamento e distância da Terra aumentam o estresse ao longo da missão. Num estudo com 24 astronautas na estação, dormir 6 horas ou menos veio junto com mais estresse.",
+      "yellow": "Reserve um tempo de descanso hoje e converse com alguém da tripulação ou da família no próximo contato.",
+      "red": "Converse com o médico de bordo ou com o apoio psicológico da missão."
+    },
+    "workload": {
+      "whyItMatters": "Excesso de trabalho é um dos fatores do risco de sono ruim e horários irregulares da NASA. Carga pesada por vários dias reduz a atenção e o desempenho.",
+      "yellow": "Veja com o comandante se dá para redistribuir tarefas e proteja o horário de sono de hoje.",
+      "red": "Avise o comandante e o médico de bordo para rever a escala de trabalho."
+    },
+    "exerciseMinutes": {
+      "whyItMatters": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção.",
+      "yellow": "Registre o tipo de treino e reponha a sessão conforme o seu plano individual.",
+      "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
+    },
+    "radiationDose": {
+      "whyItMatters": "A radiação espacial aumenta o risco de câncer ao longo da vida. A dose do dia é comparada com o seu próprio histórico na missão.",
+      "yellow": "Passe mais tempo nas áreas mais protegidas e siga o protocolo de radiação da missão.",
+      "red": "Vá para a área de abrigo e avise o médico de bordo."
+    },
+    "vision": {
+      "whyItMatters": "Cerca de 70% dos astronautas da estação têm inchaço no fundo do olho. Um autoteste não diagnostica nada, mas mostra quando pedir um exame.",
+      "yellow": "Registre o que mudou e repita o autoteste amanhã no mesmo horário.",
+      "red": "Avise o médico de bordo e peça uma avaliação ocular."
+    },
+    "medication": {
+      "whyItMatters": "Longe da Terra não há reposição rápida e o corpo muda no voo, o que pode mudar o efeito dos remédios. Saber se cada dose prevista foi tomada ajuda o médico de bordo a avaliar o tratamento.",
+      "yellow": "Veja no plano de medicação se ainda dá para tomar a dose hoje. Se tiver dúvida, fale com o oficial médico antes de tomar duas doses juntas.",
+      "red": "Avise o oficial médico agora."
+    },
+    "symptoms": {
+      "whyItMatters": "Longe da Terra, um sintoma registrado cedo dá tempo para agir com os recursos de bordo.",
+      "yellow": "Anote quando começou e como evolui, e registre de novo amanhã.",
+      "red": "Avise o médico de bordo agora."
+    }
+  },
+  "symptoms": {
+    "headache": "Dor de cabeça",
+    "nausea": "Enjoo",
+    "dizziness": "Tontura",
+    "fatigue": "Cansaço fora do comum",
+    "backPain": "Dor nas costas",
+    "congestion": "Nariz entupido",
+    "skinRash": "Irritação na pele",
+    "chestPain": "Dor no peito",
+    "shortBreath": "Falta de ar"
+  },
+  "environmentNotes": {
+    "radiationDose": {
+      "station": "A estação fica dentro da magnetosfera, que bloqueia boa parte da radiação.",
+      "transit": "Fora da magnetosfera a exposição é maior. Siga o protocolo de abrigo da missão.",
+      "moon": "A Lua fica fora da magnetosfera. Use as áreas mais protegidas do habitat.",
+      "mars": "Fora da magnetosfera e com resposta do solo de até 20 minutos."
+    }
+  }
+}

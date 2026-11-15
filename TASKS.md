@@ -171,10 +171,10 @@ Estas tarefas travam outras. Até a equipe decidir, as tarefas marcadas com 🔒
 
 Revisado em 14/11 depois das melhorias da fase 11 (M1 medicação e M2 estresse e carga de trabalho) e dos papéis do Davi, que já estão no código.
 
-- [ ] i18n com `react-i18next`: inglês como padrão e português como tradução, arquivos em `src/locales/en/` e `src/locales/pt-BR/` por área (comum, check-in, alertas, indicadores)
-- [ ] Passar para chaves os textos de `src/content/indicators.ts`, das telas e os textos de alerta do `rules.json` (as faixas numéricas ficam no `rules.json`). Incluir os textos novos de medicação, estresse e carga de trabalho (M1 e M2)
-- [ ] Datas e números com `Intl` (5.2 h em inglês, 5,2 h em português); a digitação continua aceitando vírgula e ponto
-- [ ] Atualizar o `lang` do `<html>` ao trocar de idioma (WCAG 3.1.1) e um teste que falha se faltar chave em um dos idiomas
+- [x] i18n com `react-i18next`: inglês como padrão e português como tradução, arquivos em `src/locales/en/` e `src/locales/pt-BR/` por área (comum, check-in, alertas, indicadores)
+- [x] Passar para chaves os textos de `src/content/indicators.ts`, das telas e os textos de alerta do `rules.json` (as faixas numéricas ficam no `rules.json`). Incluir os textos novos de medicação, estresse e carga de trabalho (M1 e M2)
+- [x] Datas e números com `Intl` (5.2 h em inglês, 5,2 h em português); a digitação continua aceitando vírgula e ponto
+- [x] Atualizar o `lang` do `<html>` ao trocar de idioma (WCAG 3.1.1) e um teste que falha se faltar chave em um dos idiomas
 
 **Horários e lembretes.** O banner e o som são os mesmos dos alarmes da Talita: combinar uma função única (ex.: `raiseAlarm(level, text)`) para não existirem dois banners.
 

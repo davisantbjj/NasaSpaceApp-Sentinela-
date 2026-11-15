@@ -53,7 +53,7 @@ describe('evaluateRecord', () => {
     expect(alert.level).toBe('yellow');
     expect(alert.trigger).toBe('generalRange');
     expect(alert.region).toBe('heart');
-    expect(alert.reference).toBe('Faixa geral: 60 a 100 bpm');
+    expect(alert.reference).toEqual({ key: 'alerts:reference.general', params: { min: 60, max: 100, unit: 'bpm' } });
     expect(alert.notifyGround).toBe(false);
     expect(alert.confidence).toBe('normal');
   });
@@ -78,8 +78,24 @@ describe('evaluateRecord', () => {
     const [alert] = evaluateLast(days);
     expect(alert.level).toBe('yellow');
     expect(alert.trigger).toBe('baselineDeviation');
-    expect(alert.whatChanged).toContain('acima do seu padrão há 3 dias');
-    expect(alert.reference).toBe('Seu padrão pessoal: 65 bpm (7 dias)');
+    expect(alert.whatChanged).toEqual({
+      key: 'alerts:change.baseline',
+      params: {
+        nameKey: 'indicators:heartRate.label',
+        componentKey: '',
+        percent: expect.any(Number),
+        sideKey: 'alerts:side.above',
+        days: 3,
+        value: { key: 'alerts:values.number', params: { value: 80, unit: 'bpm', labelKey: '' } },
+      },
+    });
+    expect(alert.reference).toEqual({
+      key: 'alerts:reference.baseline',
+      params: {
+        value: { key: 'alerts:values.number', params: { value: 65, unit: 'bpm', labelKey: '' } },
+        days: 7,
+      },
+    });
   });
 
   it('desvio por menos de sustainedDays dias não gera alerta', () => {
@@ -111,7 +127,10 @@ describe('evaluateRecord', () => {
   it('linha de base incompleta marca confidence low', () => {
     const [alert] = evaluateLast([...repeat({ heartRate: 70 }, 3), { heartRate: 110 }]);
     expect(alert.confidence).toBe('low');
-    expect(alert.confidenceNote).toBe('Linha de base em formação (3 de 7 dias)');
+    expect(alert.confidenceNote).toEqual({
+      key: 'alerts:confidence.baselineForming',
+      params: { sampleDays: 3, baselineDays: 7 },
+    });
   });
 
   it('pressão arterial usa o pior dos dois números', () => {
@@ -120,14 +139,29 @@ describe('evaluateRecord', () => {
       { bloodPressure: { systolic: 120, diastolic: 95 } },
     ]);
     expect(alert.level).toBe('red');
-    expect(alert.whatChanged).toBe('Pressão arterial está em 120/95 mmHg');
+    expect(alert.whatChanged).toEqual({
+      key: 'alerts:change.general',
+      params: {
+        nameKey: 'indicators:bloodPressure.label',
+        value: { key: 'alerts:values.bloodPressure', params: { systolic: 120, diastolic: 95, unit: 'mmHg' } },
+      },
+    });
   });
 
   it('escalas mostram o texto do valor', () => {
     const [alert] = evaluateLast([{ vision: 1 }]);
     expect(alert.level).toBe('yellow');
-    expect(alert.whatChanged).toBe('Visão está em mudança leve');
-    expect(alert.reference).toBe('Esperado: sem mudança');
+    expect(alert.whatChanged).toEqual({
+      key: 'alerts:change.general',
+      params: {
+        nameKey: 'indicators:vision.label',
+        value: { key: 'alerts:values.label', params: { labelKey: 'indicators:vision.scale.1' } },
+      },
+    });
+    expect(alert.reference).toEqual({
+      key: 'alerts:reference.expected',
+      params: { value: { key: 'alerts:values.label', params: { labelKey: 'indicators:vision.scale.0' } } },
+    });
   });
 
   it('sintomas usam o pior nível entre os marcados', () => {
@@ -137,7 +171,10 @@ describe('evaluateRecord', () => {
     expect(yellow.trigger).toBe('symptom');
     const [red] = evaluateLast([{ symptoms: ['headache', 'chestPain'] }]);
     expect(red.level).toBe('red');
-    expect(red.whatChanged).toBe('Sintomas relatados: dor de cabeça, dor no peito');
+    expect(red.whatChanged).toEqual({
+      key: 'alerts:change.symptoms',
+      params: { symptomKeys: ['alerts:symptoms.headache', 'alerts:symptoms.chestPain'] },
+    });
   });
 
   it('estresse e carga de trabalho: 1 a 3 é verde, 4 e 5 são amarelos e nunca vermelhos', () => {
@@ -145,7 +182,13 @@ describe('evaluateRecord', () => {
     const alerts = evaluateLast([{ stress: 5, workload: 4 }]);
     expect(alerts.map((a) => [a.indicator, a.level])).toEqual([['stress', 'yellow'], ['workload', 'yellow']]);
     expect(alerts.every((a) => a.region === 'mind')).toBe(true);
-    expect(alerts[0].whatChanged).toBe('Estresse está em 5 na escala de 1 a 5 (muito alto)');
+    expect(alerts[0].whatChanged).toEqual({
+      key: 'alerts:change.general',
+      params: {
+        nameKey: 'indicators:stress.label',
+        value: { key: 'alerts:values.number', params: { value: 5, unit: 'indicators:units.scaleOfFive', labelKey: 'indicators:stress.scale.5' } },
+      },
+    });
   });
 
   it('medicação: alerta só quando uma dose prevista não foi tomada', () => {
@@ -158,7 +201,10 @@ describe('evaluateRecord', () => {
     expect(alert.level).toBe('yellow');
     expect(alert.region).toBe('wholeBody');
     expect(alert.trigger).toBe('missedMedication');
-    expect(alert.whatChanged).toBe('Dose não tomada hoje: Suplemento de vitamina D');
+    expect(alert.whatChanged).toEqual({
+      key: 'alerts:change.missedMedication',
+      params: { doses: 'Suplemento de vitamina D' },
+    });
     expect(alert.confidence).toBe('low');
     expect(alert.notifyGround).toBe(false);
   });
@@ -213,9 +259,16 @@ describe('findCorrelations', () => {
     const all = records([...repeat({ sleepHours: 7.5, mood: 4 }, 8), ...repeat({ sleepHours: 5.5, mood: 3 }, 4)]);
     const [correlation] = findCorrelations(all, computeBaselines('c1', all, rules), rules);
     expect(correlation.indicators).toEqual(['sleepHours', 'mood']);
-    expect(correlation.description).toBe('Sono e humor mudaram juntos nos últimos 4 dias');
+    expect(correlation.description).toEqual({
+      key: 'alerts:correlation',
+      params: {
+        firstKey: 'indicators:sleepHours.label',
+        secondKey: 'indicators:mood.label',
+        days: 4,
+      },
+    });
     expect(correlation.fromDate).toBe(addDays(START, 8));
-    expect(correlation.description).not.toMatch(/caus|porque|por causa/i);
+    expect(correlation.description.key).toBe('alerts:correlation');
   });
 
   it('não aponta nada se durou menos que sustainedDays', () => {

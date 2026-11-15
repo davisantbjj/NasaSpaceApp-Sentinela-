@@ -5,6 +5,8 @@ import { formatDate } from '../lib/dates';
 import { currentReview } from '../lib/reviews';
 import { useAppStore } from '../store/useAppStore';
 import { latestRecord } from './helpers';
+import i18n from '../i18n';
+import { translateText } from '../content/localize';
 
 export function AlertsPage() {
   const { alerts, correlations, records, reviews, session, reviewAlert } = useAppStore();
@@ -16,25 +18,25 @@ export function AlertsPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Alertas e ações</span>
-        <h1>{alerts.length === 0 ? 'Nenhum alerta' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'} no último registro`}</h1>
+        <span className="eyebrow">{i18n.t('alerts:page.title')}</span>
+        <h1>{alerts.length === 0 ? i18n.t('alerts:page.none') : i18n.t('alerts:page.inLatest', { count: alerts.length })}</h1>
         {latest && (
-          <p className="muted num">Registro de {formatDate(latest.date)}, dia {latest.missionDay} da missão.</p>
+          <p className="muted num">{i18n.t('alerts:page.record', { date: formatDate(latest.date), day: latest.missionDay })}</p>
         )}
         {alerts.length > 0 && (
           <div className="row" style={{ marginTop: 6 }}>
-            {red > 0 && <LevelBadge level="red" label={`${red} de atenção imediata`} />}
-            {yellow > 0 && <LevelBadge level="yellow" label={`${yellow} para acompanhar`} />}
+            {red > 0 && <LevelBadge level="red" label={i18n.t('alerts:page.redCount', { count: red })} />}
+            {yellow > 0 && <LevelBadge level="yellow" label={i18n.t('alerts:page.yellowCount', { count: yellow })} />}
           </div>
         )}
       </header>
-      <p><Link to="/medical-contact">Não pode falar? Escreva para mostrar ao oficial médico →</Link></p>
+      <p><Link to="/medical-contact">{i18n.t('alerts:page.contact')}</Link></p>
 
       {alerts.length === 0 ? (
         <section className="card empty">
           {latest && <LevelBadge level="green" />}
-          <p className="muted">{latest ? 'Todos os indicadores medidos estão dentro da faixa geral e do padrão pessoal.' : 'Sem registros para avaliar. Faça um check-in para acompanhar os indicadores.'}</p>
-          <Link className="link-arrow" to="/">Voltar ao painel →</Link>
+          <p className="muted">{i18n.t(latest ? 'alerts:page.allWithin' : 'alerts:page.noRecords')}</p>
+          <Link className="link-arrow" to="/">{i18n.t('alerts:page.back')}</Link>
         </section>
       ) : (
         <div className="stack" style={{ gap: 16 }}>
@@ -51,19 +53,19 @@ export function AlertsPage() {
 
       <section className="card stack">
         <div>
-          <h2>Mudaram juntos</h2>
+          <h2>{i18n.t('alerts:page.together')}</h2>
           <p className="small muted">
-            Indicadores que se afastaram do esperado nos mesmos dias. Não quer dizer que um causou o outro, e não muda o nível de nenhum alerta.
+            {i18n.t('alerts:page.togetherExplanation')}
           </p>
         </div>
         {correlations.length === 0 ? (
-          <p className="muted">Nenhum par de indicadores mudou junto nos últimos dias.</p>
+          <p className="muted">{i18n.t('alerts:page.noTogether')}</p>
         ) : (
           correlations.map((c) => (
             <p key={c.indicators.join('-')} className="notice">
               <span className="notice-icon" aria-hidden="true">≈</span>
               <span>
-                {c.description} <span className="muted num">({formatDate(c.fromDate, true)} a {formatDate(c.toDate, true)})</span>
+                {translateText(c.description)} <span className="muted num">{i18n.t('alerts:page.dateRange', { from: formatDate(c.fromDate, true), to: formatDate(c.toDate, true) })}</span>
               </span>
             </p>
           ))

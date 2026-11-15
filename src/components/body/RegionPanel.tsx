@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
-import { INDICATORS, REGIONS } from '../../content/indicators';
+import { indicatorContent, regionContent } from '../../content/indicators';
 import type { DisplayValue } from '../../content/format';
 import { hasHistoryChart } from '../../lib/series';
-import type { Alert, BodyRegion, IndicatorId, Level } from '../../types';
+import type { Alert, BodyRegion, IndicatorId, Level, LocalizedText } from '../../types';
 import { LevelBadge } from '../alerts/LevelBadge';
+import { translateText } from '../../content/localize';
+import i18n from '../../i18n';
 
 export interface RegionItem {
   indicator: IndicatorId;
@@ -17,23 +19,24 @@ interface Props {
   level?: Level;
   items: RegionItem[];
   alerts: Alert[];
-  togetherNotes: string[]; // "mudaram juntos"
+  togetherNotes: LocalizedText[];
 }
 
 // Detalhe da região selecionada na figura humana.
 export function RegionPanel({ region, level, items, alerts, togetherNotes }: Props) {
+  const regionText = regionContent(region);
   return (
     <section className="card stack" style={{ gap: 16 }} aria-live="polite">
       <div className="row-between">
         <div>
-          <span className="eyebrow">Região selecionada</span>
-          <h2>{REGIONS[region].label}</h2>
+          <span className="eyebrow">{i18n.t('regionPanel.selected')}</span>
+          <h2>{regionText.label}</h2>
         </div>
-        {level ? <LevelBadge level={level} /> : <span className="chip">Sem dados</span>}
+        {level ? <LevelBadge level={level} /> : <span className="chip">{i18n.t('status.noData')}</span>}
       </div>
 
       {items.length === 0 && (
-        <p className="muted">Este tripulante não acompanha indicadores desta região.</p>
+        <p className="muted">{i18n.t('regionPanel.noTracked')}</p>
       )}
 
       {items.map((item) => {
@@ -42,28 +45,28 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
           <div key={item.indicator} className="card-inner stack">
             <div className="row-between">
               <div className="metric">
-                <span className="small muted">{INDICATORS[item.indicator].label}</span>
+                <span className="small muted">{indicatorContent(item.indicator).label}</span>
                 {item.value ? (
                   <span className="metric-value">
                     {item.value.text}
                     {item.value.unit && <span className="unit">{item.value.unit}</span>}
                   </span>
                 ) : (
-                  <span className="muted">Não medido no último registro</span>
+                  <span className="muted">{i18n.t('status.notMeasured')}</span>
                 )}
               </div>
               {item.level && <LevelBadge level={item.level} />}
             </div>
             {alert && (
               <p className="small">
-                <strong>{alert.whatChanged}.</strong> {alert.whatToDo}
+                <strong>{translateText(alert.whatChanged)}.</strong> {i18n.t(alert.whatToDo)}
               </p>
             )}
             {item.baselineNote && <p className="small muted">{item.baselineNote}</p>}
             <div className="row">
-              {alert && <Link className="link-arrow" to="/alerts">Ver alerta →</Link>}
+              {alert && <Link className="link-arrow" to="/alerts">{i18n.t('regionPanel.viewAlert')}</Link>}
               {hasHistoryChart(item.indicator) && (
-                <Link className="link-arrow" to={`/trends/${item.indicator}`}>Ver histórico →</Link>
+                <Link className="link-arrow" to={`/trends/${item.indicator}`}>{i18n.t('regionPanel.history')}</Link>
               )}
             </div>
           </div>
@@ -71,9 +74,9 @@ export function RegionPanel({ region, level, items, alerts, togetherNotes }: Pro
       })}
 
       {togetherNotes.map((note) => (
-        <p key={note} className="notice">
+        <p key={`${note.key}_${JSON.stringify(note.params)}`} className="notice">
           <span className="notice-icon" aria-hidden="true">≈</span>
-          <span>{note}. Isso não quer dizer que um causou o outro.</span>
+          <span>{translateText(note)}. {i18n.t('regionPanel.togetherNote')}</span>
         </p>
       ))}
     </section>

@@ -4,13 +4,14 @@ import { LevelBadge } from '../components/alerts/LevelBadge';
 import { BodyMap } from '../components/body/BodyMap';
 import { RegionPanel, type RegionItem } from '../components/body/RegionPanel';
 import { displayValue } from '../content/format';
-import { ENVIRONMENTS, REGION_ORDER, REGIONS } from '../content/indicators';
+import { environmentContent, REGION_ORDER, regionContent } from '../content/indicators';
 import { formatDate, missionDay, todayISO } from '../lib/dates';
 import { compareLevels, worstLevel } from '../lib/levels';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
 import type { BodyRegion } from '../types';
-import { baselineNote, latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
+import { baselineNote, latestRecord, symptomLabels, trackedInOrder } from './helpers';
+import i18n from '../i18n';
 
 export function DashboardPage() {
   const member = useActiveCrew();
@@ -44,7 +45,7 @@ export function DashboardPage() {
   const items: RegionItem[] = trackedInOrder(member)
     .filter((id) => rules.indicators[id]?.region === region)
     .map((indicator) => {
-      const value = latest ? displayValue(latest.values, indicator, SYMPTOM_LABELS) : undefined;
+      const value = latest ? displayValue(latest.values, indicator, symptomLabels()) : undefined;
       const alert = alerts.find((a) => a.indicator === indicator);
       return {
         indicator,
@@ -62,21 +63,21 @@ export function DashboardPage() {
     <div className="page">
       <section className="card hero">
         <div>
-          <span className="eyebrow">Painel do tripulante</span>
+          <span className="eyebrow">{i18n.t('dashboard.eyebrow')}</span>
           <h1>{member.name}</h1>
           <div className="hero-meta">
             <span className="chip">{member.role}</span>
-            <span className="chip num">Dia {missionDay(member.missionStart, today)} da missão</span>
-            <span className="chip">{ENVIRONMENTS[settings.environment].label}</span>
-            {latest && <span className="chip num">Último registro: {formatDate(latest.date)}</span>}
+            <span className="chip num">{i18n.t('status.missionDay', { day: missionDay(member.missionStart, today) })}</span>
+            <span className="chip">{environmentContent(settings.environment).label}</span>
+            {latest && <span className="chip num">{i18n.t('status.lastRecord', { date: formatDate(latest.date) })}</span>}
           </div>
         </div>
         <div className="stack" style={{ justifyItems: 'start' }}>
-          {latest ? <LevelBadge level={overall} label={alerts.length === 0 ? 'Tudo dentro do esperado' : `${alerts.length} ${alerts.length === 1 ? 'alerta' : 'alertas'}`} /> : <span className="chip">Sem registros para avaliar</span>}
+          {latest ? <LevelBadge level={overall} label={alerts.length === 0 ? i18n.t('dashboard.allExpected') : i18n.t('dashboard.alerts', { count: alerts.length })} /> : <span className="chip">{i18n.t('status.recordsNone')}</span>}
           {viewingOther ? null : checkinDone ? (
-            <Link className="btn" to="/checkin">Refazer check-in de hoje</Link>
+            <Link className="btn" to="/checkin">{i18n.t('dashboard.checkinDone')}</Link>
           ) : (
-            <Link className="btn btn-primary" to="/checkin">Fazer o check-in de hoje →</Link>
+            <Link className="btn btn-primary" to="/checkin">{i18n.t('dashboard.checkinPending')}</Link>
           )}
         </div>
       </section>
@@ -86,8 +87,8 @@ export function DashboardPage() {
           <span className="notice-icon" aria-hidden="true">!</span>
           <span>
             {viewingOther
-              ? `O check-in de hoje ainda não chegou à central. O painel mostra o registro de ${latest ? formatDate(latest.date) : 'nenhum dia'}.`
-              : `O check-in de hoje está pendente. O painel mostra o registro de ${latest ? formatDate(latest.date) : 'nenhum dia'}.`}
+              ? i18n.t('dashboard.checkinOtherPending', { date: latest ? formatDate(latest.date) : i18n.t('status.noRecords') })
+              : i18n.t('dashboard.checkinOwnPending', { date: latest ? formatDate(latest.date) : i18n.t('status.noRecords') })}
           </span>
         </p>
       )}
@@ -95,8 +96,8 @@ export function DashboardPage() {
       <div className="dashboard">
         <section className="card stack" style={{ gap: 16 }}>
           <div>
-            <h2>Sistemas do corpo</h2>
-            <p className="small muted">Toque numa região para ver os indicadores.</p>
+            <h2>{i18n.t('dashboard.systems')}</h2>
+            <p className="small muted">{i18n.t('dashboard.regionHint')}</p>
           </div>
           <div className="body-layout">
             <BodyMap
@@ -109,8 +110,8 @@ export function DashboardPage() {
               {REGION_ORDER.map((r) => (
                 <li key={r}>
                   <button type="button" className="region-button" aria-pressed={region === r} onClick={() => choose(r)}>
-                    <span className="region-name">{REGIONS[r].label}</span>
-                    {latest ? <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? 'OK' : undefined} /> : <span className="chip">Sem dados</span>}
+                    <span className="region-name">{regionContent(r).label}</span>
+                    {latest ? <LevelBadge level={regionLevels[r]} label={regionLevels[r] === 'green' ? i18n.t('status.ok') : undefined} /> : <span className="chip">{i18n.t('status.noData')}</span>}
                   </button>
                 </li>
               ))}

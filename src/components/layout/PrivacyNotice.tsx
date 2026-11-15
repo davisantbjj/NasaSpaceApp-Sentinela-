@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { LGPD_URL, PRIVACY_SECTIONS } from '../../content/privacy';
 import { useAppStore } from '../../store/useAppStore';
+import i18n from '../../i18n';
+import { LanguageSelect } from './LanguageSelect';
 
 export function PrivacyExplanation() {
   return <>
     {PRIVACY_SECTIONS.map((section) => (
-      <div className="stack" key={section.title}>
-        <h2>{section.title}</h2>
-        <p>{section.text}</p>
+      <div className="stack" key={section.titleKey}>
+        <h2>{i18n.t(section.titleKey)}</h2>
+        <p>{i18n.t(section.textKey)}</p>
       </div>
     ))}
-    <a href={LGPD_URL} target="_blank" rel="noreferrer">Consultar a LGPD — arts. 11 e 18 (abre outro site)</a>
+    <a href={LGPD_URL} target="_blank" rel="noreferrer">{i18n.t('privacy.law')}</a>
   </>;
 }
 
@@ -21,20 +23,21 @@ export function PrivacyNotice() {
   async function proceed() {
     setBusy(true);
     try { await acknowledge(); }
-    catch { setError('Não foi possível registrar a leitura. Tente novamente.'); setBusy(false); }
+    catch { setError(i18n.t('privacy.readError')); setBusy(false); }
   }
   return (
     <section className="page privacy-page" aria-labelledby="privacy-title">
       <header className="page-header">
-        <span className="eyebrow">Antes de começar</span>
-        <h1 id="privacy-title">Sua privacidade no Sentinela</h1>
-        <p>Uma demonstração local com perfis simulados. Não digite informações pessoais ou de saúde reais.</p>
+        <span className="eyebrow">{i18n.t('privacy.before')}</span>
+        <h1 id="privacy-title">{i18n.t('privacy.title')}</h1>
+        <p>{i18n.t('privacy.intro')}</p>
       </header>
       <div className="card stack">
+        <LanguageSelect />
         <PrivacyExplanation />
         {error && <p role="alert">{error}</p>}
         <button className="btn btn-primary" type="button" disabled={busy} onClick={proceed}>
-          {busy ? 'Abrindo…' : 'Li o aviso — abrir demonstração'}
+          {busy ? i18n.t('privacy.opening') : i18n.t('privacy.acknowledge')}
         </button>
       </div>
     </section>

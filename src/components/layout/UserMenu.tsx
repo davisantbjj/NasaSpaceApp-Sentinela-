@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ROLE_LABELS } from '../../lib/access';
 import type { Session } from '../../types';
+import i18n from '../../i18n';
+import { LanguageSelect } from './LanguageSelect';
 
 interface Props {
   session: Session;
@@ -36,32 +38,33 @@ export function UserMenu({ session, pendingSync, onLock }: Props) {
 
   return (
     <details ref={ref} className="user-menu">
-      <summary aria-label={`${session.name}, ${ROLE_LABELS[session.role]}. Abrir menu`}>
+      <summary aria-label={`${session.name}, ${i18n.t(ROLE_LABELS[session.role])}. ${i18n.t('menu.open')}`}>
         <span className="avatar" aria-hidden="true">{session.name.slice(0, 1)}</span>
         {pendingSync > 0 && <span className="user-menu-dot" aria-hidden="true" />}
       </summary>
       <div className="user-menu-panel">
         <div className="user-menu-who">
           <strong>{session.name}</strong>
-          <span className="small muted">{ROLE_LABELS[session.role]}</span>
+          <span className="small muted">{i18n.t(ROLE_LABELS[session.role])}</span>
         </div>
+        <LanguageSelect />
         {onBoard && (
           <>
-            <Link to="/mission" onClick={close}>Missão e rotina</Link>
+            <Link to="/mission" onClick={close}>{i18n.t('menu.mission')}</Link>
             <Link to="/sync" onClick={close}>
-              Sincronização
-              {pendingSync > 0 && <span className="chip num">{pendingSync} na fila</span>}
+              {i18n.t('menu.sync')}
+              {pendingSync > 0 && <span className="chip num">{i18n.t('menu.queue', { count: pendingSync })}</span>}
             </Link>
             {session.crewId && (
               <>
-                <Link to="/your-data" onClick={close}>Seus dados</Link>
-                <Link to="/medical-contact" onClick={close}>Escrever ao oficial médico</Link>
+                <Link to="/your-data" onClick={close}>{i18n.t('menu.yourData')}</Link>
+                <Link to="/medical-contact" onClick={close}>{i18n.t('menu.medicalContact')}</Link>
               </>
             )}
           </>
         )}
         <button type="button" className="btn btn-ghost" onClick={() => { close(); onLock(); }}>
-          <span aria-hidden="true">🔒</span> Bloquear e trocar de perfil
+          <span aria-hidden="true">🔒</span> {i18n.t('menu.lock')}
         </button>
       </div>
     </details>

@@ -17,6 +17,10 @@ A nave nunca depende da Terra. "Offline" quer dizer sem a Terra, não sem rede: 
 
 O diagrama está em `diagramas/01-visao-geral.md`.
 
+## Idiomas
+
+O app usa `react-i18next`, com inglês como idioma padrão e português brasileiro como tradução. Os catálogos são separados por área em `src/locales/en/` e `src/locales/pt-BR/`; `src/i18n.ts` inicializa os recursos e mantém o atributo `lang` do documento sincronizado com o idioma ativo. `src/content/localize.ts` traduz textos do domínio com parâmetros numéricos formatados para o idioma atual. Datas, horários, números e durações são formatados com `Intl` conforme o idioma ativo. `rules.json` mantém as faixas numéricas e referencia textos de alerta por chave.
+
 ## Tipos de domínio
 
 Definidos em `src/types/index.ts`.
@@ -26,12 +30,12 @@ export type Level = 'green' | 'yellow' | 'red';
 
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
-  | 'sleepHours' | 'mood' | 'exerciseMinutes' | 'radiationDose'
-  | 'vision' | 'symptoms';
+  | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'exerciseMinutes'
+  | 'radiationDose' | 'vision' | 'symptoms' | 'medication';
 
 export type BodyRegion =
-  | 'head' | 'heart' | 'musculoskeletal'
-  | 'mind' | 'wholeBody';
+  | 'head' | 'heart' | 'musculoskeletal' | 'immune'
+  | 'metabolism' | 'mind' | 'wholeBody';
 
 export type Environment = 'station' | 'transit' | 'moon' | 'mars';
 
@@ -42,6 +46,19 @@ export interface CrewMember {
   missionStart: string;        // data ISO, AAAA-MM-DD
   trackedIndicators: IndicatorId[];   // o check-in só pede estes
   sex?: 'female' | 'male';     // só escolhe a figura do painel; não muda faixa
+  medications?: PlannedMedication[];
+}
+
+export interface PlannedMedication {
+  id: string;
+  label: string;
+  schedule: string;
+}
+
+export interface MedicationDose {
+  id: string;
+  label: string;
+  taken: boolean;
 }
 
 export interface DailyRecord {
@@ -56,10 +73,13 @@ export interface DailyRecord {
     temperature?: number;
     sleepHours?: number;
     mood?: 1 | 2 | 3 | 4 | 5;
+    stress?: 1 | 2 | 3 | 4 | 5;
+    workload?: 1 | 2 | 3 | 4 | 5;
     exerciseMinutes?: number;
     radiationDose?: number;
     vision?: 0 | 1 | 2;
     symptoms?: string[];       // ids de sintomas definidos em rules.json
+    medication?: MedicationDose[];
   };
   createdAt: string;
   syncedAt?: string;           // quando chegou à central de bordo; vazio = só no aparelho
@@ -80,16 +100,21 @@ export interface Alert {
   indicator: IndicatorId;
   region: BodyRegion;
   level: Level;
-  trigger: 'generalRange' | 'baselineDeviation' | 'symptom';
-  whatChanged: string;         // "Sono caiu para 5,2 h"
-  reference: string;           // "Seu padrão pessoal: 7,4 h (7 dias)" ou "Faixa geral: 7 a 9 h"
-  whyItMatters: string;
-  whatToDo: string;
-  environmentNote?: string;    // contexto do ambiente atual, só texto
+  trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication';
+  whatChanged: LocalizedText;
+  reference: LocalizedText;
+  whyItMatters: string;        // chave de tradução
+  whatToDo: string;            // chave de tradução
+  environmentNote?: string;    // chave de tradução
   confidence: 'normal' | 'low';
-  confidenceNote?: string;     // "Linha de base com só 4 dias" ou "Medida manual única"
+  confidenceNote?: LocalizedText;
   notifyGround: boolean;
   sourceUrl: string;
+}
+
+export interface LocalizedText {
+  key: string;
+  params?: Record<string, string | number | string[] | LocalizedText>;
 }
 
 export interface Correlation {
@@ -97,7 +122,7 @@ export interface Correlation {
   indicators: [IndicatorId, IndicatorId];
   fromDate: string;
   toDate: string;
-  description: string;         // "Sono e humor caíram juntos nos últimos 4 dias"
+  description: LocalizedText;
 }
 
 export interface Settings {

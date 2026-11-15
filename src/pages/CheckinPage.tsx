@@ -6,12 +6,14 @@ import { fieldError, NumberStep, parseNumber, type NumberField } from '../compon
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
 import { displayText } from '../content/format';
-import { INDICATORS } from '../content/indicators';
+import { indicatorContent } from '../content/indicators';
+import { translateText } from '../content/localize';
+import i18n from '../i18n';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
 import type { Alert, CrewMember, DailyValues, IndicatorId } from '../types';
-import { latestRecord, SYMPTOM_LABELS, trackedInOrder } from './helpers';
+import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
 const SCALE_IDS = ['mood', 'stress', 'workload', 'vision'] as const;
@@ -46,12 +48,12 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
 }
 
 function fieldsFor(indicator: IndicatorId, draft: Draft): NumberField[] {
-  const content = INDICATORS[indicator];
+  const content = indicatorContent(indicator);
   const input = content.input!;
   if (indicator === 'bloodPressure') {
     return [
-      { id: 'systolic', label: 'Sistólica (máxima)', unit: content.unit, value: draft.text.systolic ?? '', ...input },
-      { id: 'diastolic', label: 'Diastólica (mínima)', unit: content.unit, value: draft.text.diastolic ?? '', ...input },
+      { id: 'systolic', label: i18n.t('checkin:systolic'), unit: content.unit, value: draft.text.systolic ?? '', ...input },
+      { id: 'diastolic', label: i18n.t('checkin:diastolic'), unit: content.unit, value: draft.text.diastolic ?? '', ...input },
     ];
   }
   return [{ id: indicator, label: content.label, unit: content.unit, value: draft.text[indicator] ?? '', ...input }];
@@ -92,12 +94,12 @@ export function CheckinPage() {
     return (
       <div className="page checkin">
         <section className="card step">
-          <span className="eyebrow">Check-in diário</span>
-          <h1>O check-in é de cada tripulante</h1>
-          <p className="muted">Você está vendo os dados de {member?.name ?? 'outro tripulante'}. Para fazer o seu check-in, volte aos seus dados.</p>
+          <span className="eyebrow">{i18n.t('checkin:title')}</span>
+          <h1>{i18n.t('checkin:crewOwn')}</h1>
+          <p className="muted">{i18n.t('checkin:crewOwnExplanation', { name: member?.name ?? i18n.t('roles.crew') })}</p>
           {session?.crewId && (
             <div className="row">
-              <button type="button" className="btn btn-primary" onClick={() => void switchCrew(session.crewId!)}>Voltar aos meus dados</button>
+              <button type="button" className="btn btn-primary" onClick={() => void switchCrew(session.crewId!)}>{i18n.t('checkin:backToMine')}</button>
             </div>
           )}
         </section>
@@ -164,11 +166,11 @@ function OwnCheckin() {
     return (
       <div className="page checkin">
         <section className="card step">
-          <span className="eyebrow">Check-in salvo</span>
+          <span className="eyebrow">{i18n.t('checkin:saved')}</span>
           <h1>
             {result.length === 0
-              ? 'Tudo dentro do esperado hoje'
-              : `${result.length} ${result.length === 1 ? 'alerta' : 'alertas'} no registro de hoje`}
+              ? i18n.t('checkin:allExpected')
+              : i18n.t('checkin:alerts', { count: result.length })}
           </h1>
           {result.length === 0 ? (
             <LevelBadge level="green" />
@@ -176,15 +178,15 @@ function OwnCheckin() {
             <ul className="summary-list">
               {result.map((alert) => (
                 <li key={alert.id}>
-                  <span>{alert.whatChanged}</span>
+                  <span>{translateText(alert.whatChanged)}</span>
                   <LevelBadge level={alert.level} />
                 </li>
               ))}
             </ul>
           )}
           <div className="step-actions">
-            <Link className="btn" to="/">Ver o painel</Link>
-            {result.length > 0 && <Link className="btn btn-primary" to="/alerts">Ver alertas e ações →</Link>}
+            <Link className="btn" to="/">{i18n.t('checkin:dashboard')}</Link>
+            {result.length > 0 && <Link className="btn btn-primary" to="/alerts">{i18n.t('checkin:viewAlerts')}</Link>}
           </div>
         </section>
       </div>
@@ -196,8 +198,8 @@ function OwnCheckin() {
       <div className="page checkin">
         <section className="card step">
           <div>
-            <span className="eyebrow">Revisão</span>
-            <h1>Confira antes de salvar</h1>
+            <span className="eyebrow">{i18n.t('checkin:reviewTitle')}</span>
+            <h1>{i18n.t('checkin:reviewBeforeSave')}</h1>
           </div>
           <ul className="summary-list">
             {steps.map((indicator, i) => (
@@ -211,20 +213,20 @@ function OwnCheckin() {
                     setStage('steps');
                   }}
                 >
-                  {INDICATORS[indicator].label}
+                  {indicatorContent(indicator).label}
                 </button>
                 <span className={values[indicator] === undefined ? 'muted' : 'num'}>
-                  {displayText(values, indicator, SYMPTOM_LABELS) ?? 'Pulado'}
+                  {displayText(values, indicator, symptomLabels()) ?? i18n.t('checkin:skipped')}
                 </span>
               </li>
             ))}
           </ul>
-          {existing && <p className="small muted">Você já fez o check-in hoje. Salvar de novo substitui o registro anterior.</p>}
-          {filled === 0 && <p className="field-error">Preencha pelo menos um indicador para salvar.</p>}
+          {existing && <p className="small muted">{i18n.t('checkin:alreadyCheckedIn')}</p>}
+          {filled === 0 && <p className="field-error">{i18n.t('checkin:atLeastOne')}</p>}
           <div className="step-actions">
-            <button type="button" className="btn btn-ghost" onClick={() => setStage('steps')}>← Voltar</button>
+            <button type="button" className="btn btn-ghost" onClick={() => setStage('steps')}>{i18n.t('checkin:back')}</button>
             <button type="button" className="btn btn-primary" disabled={filled === 0 || saving} onClick={save}>
-              {saving ? 'Salvando…' : 'Salvar check-in'}
+              {saving ? i18n.t('checkin:saving') : i18n.t('checkin:save')}
             </button>
           </div>
         </section>
@@ -233,15 +235,15 @@ function OwnCheckin() {
   }
 
   const indicator = steps[index];
-  const content = INDICATORS[indicator];
+  const content = indicatorContent(indicator);
   const fields = content.input ? fieldsFor(indicator, draft) : [];
   const partialBp = indicator === 'bloodPressure' && fields.filter((f) => f.value.trim() !== '').length === 1;
 
   return (
     <div className="page checkin">
       <header className="page-header">
-        <span className="eyebrow">Check-in diário · {member.name}</span>
-        <p className="small muted">Só aparecem os indicadores que você acompanha. Qualquer passo pode ser pulado.</p>
+        <span className="eyebrow">{i18n.t('checkin:title')} · {member.name}</span>
+        <p className="small muted">{i18n.t('checkin:trackedOnly')}</p>
       </header>
 
       <StepShell
@@ -254,13 +256,13 @@ function OwnCheckin() {
         onBack={back}
         onSkip={skip}
         onNext={next}
-        nextLabel={index === steps.length - 1 ? 'Revisar' : 'Avançar'}
+        nextLabel={index === steps.length - 1 ? i18n.t('checkin:review') : i18n.t('checkin:next')}
         nextDisabled={fields.some((f) => fieldError(f)) || partialBp}
       >
         {content.input && (
           <>
             <NumberStep fields={fields} onChange={(id, value) => setDraft((d) => ({ ...d, text: { ...d.text, [id]: value } }))} />
-            {partialBp && <p className="small muted">Digite os dois números da pressão, ou pule o passo.</p>}
+            {partialBp && <p className="small muted">{i18n.t('checkin:partialPressure')}</p>}
           </>
         )}
         {content.scale && (
@@ -274,7 +276,7 @@ function OwnCheckin() {
         )}
         {indicator === 'medication' && (
           <ChecklistStep
-            legend="Doses de hoje"
+            legend={i18n.t('checkin:doseList')}
             options={(member.medications ?? []).map((m) => ({ id: m.id, label: `${m.label} · ${m.schedule}` }))}
             value={draft.medicationTaken ?? []}
             onChange={(medicationTaken) => setDraft((d) => ({ ...d, medicationTaken }))}
@@ -282,8 +284,8 @@ function OwnCheckin() {
         )}
         {indicator === 'symptoms' && (
           <ChecklistStep
-            legend="Sintomas de hoje"
-            options={rules.symptoms}
+            legend={i18n.t('checkin:symptomList')}
+            options={rules.symptoms.map((symptom) => ({ id: symptom.id, label: i18n.t(symptom.labelKey) }))}
             value={draft.symptoms ?? []}
             onChange={(symptoms) => setDraft((d) => ({ ...d, symptoms }))}
           />

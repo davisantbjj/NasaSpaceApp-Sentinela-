@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom';
-import { INDICATORS } from '../../content/indicators';
+import { indicatorContent } from '../../content/indicators';
+import { translateText } from '../../content/localize';
+import i18n from '../../i18n';
 import { hasHistoryChart } from '../../lib/series';
 import type { Alert, AlertReview } from '../../types';
 import { AlertReviewBox } from './AlertReviewBox';
 import { LevelBadge } from './LevelBadge';
 
 const TRIGGER_TEXT: Record<Alert['trigger'], string> = {
-  generalRange: 'Fora da faixa geral',
-  baselineDeviation: 'Desvio do padrão pessoal',
-  symptom: 'Sintoma relatado',
-  missedMedication: 'Dose não tomada',
+  generalRange: 'alerts:trigger.generalRange',
+  baselineDeviation: 'alerts:trigger.baselineDeviation',
+  symptom: 'alerts:trigger.symptom',
+  missedMedication: 'alerts:trigger.missedMedication',
 };
 
 // As seis partes de todo alerta: o que mudou, a referência, por que importa,
@@ -21,41 +23,42 @@ interface Props {
 }
 
 export function AlertCard({ alert, review, onReview }: Props) {
+  const content = indicatorContent(alert.indicator);
   return (
     <article className="card alert-card level-color" data-level={alert.level}>
       <div className="row-between">
         <div className="stack" style={{ gap: 4 }}>
-          <span className="eyebrow">{INDICATORS[alert.indicator].label} · {TRIGGER_TEXT[alert.trigger]}</span>
-          <h2 style={{ color: 'var(--text)' }}>{alert.whatChanged}</h2>
+          <span className="eyebrow">{content.label} · {i18n.t(TRIGGER_TEXT[alert.trigger])}</span>
+          <h2 style={{ color: 'var(--text)' }}>{translateText(alert.whatChanged)}</h2>
         </div>
         <LevelBadge level={alert.level} />
       </div>
 
       <p className="alert-action card-inner">
-        <strong>O que fazer</strong>
-        {alert.whatToDo}
+        <strong>{i18n.t('alerts:card.action')}</strong>
+        {i18n.t(alert.whatToDo)}
       </p>
 
       <dl className="alert-parts">
         <div>
-          <dt>Em relação a</dt>
-          <dd>{alert.reference}</dd>
+          <dt>{i18n.t('alerts:card.reference')}</dt>
+          <dd>{translateText(alert.reference)}</dd>
         </div>
         <div>
-          <dt>Por que importa</dt>
-          <dd className="muted">{alert.whyItMatters}</dd>
+          <dt>{i18n.t('alerts:card.why')}</dt>
+          <dd className="muted">{i18n.t(alert.whyItMatters)}</dd>
         </div>
         <div>
-          <dt>Confiança do dado</dt>
+          <dt>{i18n.t('alerts:card.confidence')}</dt>
           <dd className="muted">
-            {alert.confidence === 'low' ? 'Baixa' : 'Normal'}
-            {alert.confidenceNote ? `: ${alert.confidenceNote.toLowerCase()}` : ''}
+            {i18n.t(alert.confidence === 'low' ? 'alerts:card.low' : 'alerts:card.normal')}
+            {alert.confidenceNote ? `: ${translateText(alert.confidenceNote).toLocaleLowerCase(i18n.language)}` : ''}
           </dd>
         </div>
         {alert.environmentNote && (
           <div>
-            <dt>No ambiente atual</dt>
-            <dd className="muted">{alert.environmentNote}</dd>
+            <dt>{i18n.t('alerts:card.environment')}</dt>
+            <dd className="muted">{i18n.t(alert.environmentNote)}</dd>
           </div>
         )}
       </dl>
@@ -63,7 +66,7 @@ export function AlertCard({ alert, review, onReview }: Props) {
       {alert.notifyGround && (
         <p className="notice" style={{ color: 'var(--text)' }}>
           <span className="notice-icon" aria-hidden="true">↗</span>
-          <span>Vai na frente da fila de pacotes para a equipe médica na Terra.</span>
+          <span>{i18n.t('alerts:card.groundPriority')}</span>
         </p>
       )}
 
@@ -71,10 +74,10 @@ export function AlertCard({ alert, review, onReview }: Props) {
 
       <div className="row-between">
         {hasHistoryChart(alert.indicator) ? (
-          <Link className="link-arrow" to={`/trends/${alert.indicator}`}>Ver histórico →</Link>
+          <Link className="link-arrow" to={`/trends/${alert.indicator}`}>{i18n.t('alerts:card.history')}</Link>
         ) : <span />}
         <a className="link-arrow muted small" href={alert.sourceUrl} target="_blank" rel="noreferrer">
-          Fonte: NASA Human Research Program ↗
+          {i18n.t('alerts:card.source')}
         </a>
       </div>
     </article>

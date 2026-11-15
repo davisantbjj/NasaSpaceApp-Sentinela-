@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAppStore, type CrewStatusRow } from '../store/useAppStore';
+import i18n from '../i18n';
 
 // Tela do comandante: só mostra se cada colega fez o check-in de hoje e se há alerta vermelho.
 // Nada de valores, alertas amarelos, textos de alerta ou tendências.
@@ -27,21 +28,18 @@ export function CrewStatusPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Comandante</span>
-        <h1>Tripulação</h1>
-        <p className="muted">
-          Aqui você vê só se cada colega já fez o check-in de hoje e se há alerta vermelho. O comandante não vê dados de saúde.
-          Havendo alerta vermelho, chame o oficial médico de bordo.
-        </p>
+        <span className="eyebrow">{i18n.t('crewStatus.commander')}</span>
+        <h1>{i18n.t('crewStatus.title')}</h1>
+        <p className="muted">{i18n.t('crewStatus.intro')}</p>
         <div className="row">
-          <button type="button" className="btn" onClick={() => void load()}>Atualizar</button>
+          <button type="button" className="btn" onClick={() => void load()}>{i18n.t('buttons.update')}</button>
         </div>
       </header>
 
       {error && <p className="notice" role="alert">{error}</p>}
-      {!rows && !error && <div className="loading" style={{ minHeight: 200 }}>Carregando a tripulação…</div>}
+      {!rows && !error && <div className="loading" style={{ minHeight: 200 }}>{i18n.t('crewOverview.loading')}</div>}
       {rows && rows.length === 0 && (
-        <div className="card empty"><p className="muted">Nenhum outro tripulante para mostrar.</p></div>
+        <div className="card empty"><p className="muted">{i18n.t('crewStatus.empty')}</p></div>
       )}
 
       {rows && rows.length > 0 && (
@@ -54,18 +52,18 @@ export function CrewStatusPage() {
               </div>
               <div className="hero-meta" style={{ marginTop: 0 }}>
                 <span className="chip" style={row.checkinToday ? undefined : { color: 'var(--level-yellow)' }}>
-                  {row.checkinToday ? '✓ Check-in feito' : '! Pendente'}
+                  {row.checkinToday ? i18n.t('crewStatus.checkinDone') : i18n.t('crewStatus.pending')}
                 </span>
                 <span className="chip" style={row.hasRed ? { color: 'var(--level-red)' } : undefined}>
-                  {row.hasRed ? '▲ Há alerta vermelho' : 'Sem alerta vermelho'}
+                  {row.hasRed ? i18n.t('crewStatus.hasRed') : i18n.t('crewStatus.noRed')}
                 </span>
               </div>
-              {row.hasRed && <p className="small">Chame o oficial médico de bordo.</p>}
+              {row.hasRed && <p className="small">{i18n.t('crewStatus.callMedical')}</p>}
             </li>
           ))}
         </ul>
       )}
-      <p className="small muted">Só conta o que já chegou à central de bordo. Esta consulta fica no registro de acesso de cada colega.</p>
+      <p className="small muted">{i18n.t('crewStatus.accessLog')}</p>
     </div>
   );
 }

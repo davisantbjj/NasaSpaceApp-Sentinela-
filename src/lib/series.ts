@@ -1,4 +1,7 @@
 import type { BpComponent, DailyValues, IndicatorId, IndicatorRule, Range } from '../types';
+import { formatNumber } from './format';
+
+export { formatNumber } from './format';
 
 // Uma série é uma sequência de números no tempo. Pressão arterial tem duas (sistólica e diastólica).
 export interface SeriesPoint {
@@ -47,8 +50,4 @@ export function rangesFor(rule: IndicatorRule, component?: BpComponent): { green
 
 export function inRange(value: number, range: Range): boolean {
   return value >= range.min && value <= range.max;
-}
-
-export function formatNumber(value: number): string {
-  return value.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
 }

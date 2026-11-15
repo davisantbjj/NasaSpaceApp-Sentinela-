@@ -41,10 +41,14 @@ sentinela/
 └── src/
     ├── main.tsx                # ponto de entrada
     ├── App.tsx                 # rotas e layout base
+    ├── i18n.ts                 # inglês padrão, português brasileiro e lang do documento
+    ├── locales/
+    │   ├── en/                 # traduções em inglês por área
+    │   └── pt-BR/              # traduções em português brasileiro por área
     ├── types/
     │   └── index.ts            # todos os tipos de domínio
     ├── rules/
-    │   ├── rules.json          # faixas, textos de alerta e fontes
+    │   ├── rules.json          # faixas, chaves dos textos de alerta e fontes
     │   ├── rules.ts            # exporta o rules.json com tipo
     │   ├── engine.ts           # avalia um registro e devolve alertas
     │   ├── baseline.ts         # calcula a linha de base pessoal
@@ -106,12 +110,15 @@ sentinela/
     │       ├── NavBar.tsx
     │       ├── CrewSwitcher.tsx # só para o oficial médico
     │       ├── UserMenu.tsx    # menu do avatar: missão, sincronização, seus dados, bloquear
+    │       ├── LanguageSelect.tsx # troca de idioma
     │       └── Disclaimer.tsx
     ├── content/
-    │   ├── indicators.ts       # nome, unidade, como medir, por que medir, regiões, ambientes
-    │   └── format.ts           # valor de um indicador pronto para mostrar
+    │   ├── indicators.ts       # chaves dos textos de indicadores, regiões e ambientes
+    │   ├── format.ts           # valor de um indicador pronto para mostrar
+    │   └── localize.ts         # traduz textos do domínio com chaves e parâmetros
     ├── lib/
     │   ├── dates.ts            # dia de missão, janelas de dias
+    │   ├── format.ts           # números localizados com Intl
     │   ├── levels.ts           # ordenação e combinação de níveis
     │   ├── series.ts           # séries numéricas (pressão em duas) e faixas
     │   ├── access.ts           # quem vê o quê, por papel

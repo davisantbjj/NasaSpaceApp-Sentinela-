@@ -8,10 +8,10 @@ import type { AlertReview, DailyRecord, Role, Session } from '../types';
 // Médico do solo: não abre o painel de ninguém; vê só os pacotes que chegaram à Terra.
 
 export const ROLE_LABELS: Record<Role, string> = {
-  crew: 'Tripulante',
-  commander: 'Comandante',
-  medicalOfficer: 'Oficial médico de bordo',
-  groundSurgeon: 'Médico do solo',
+  crew: 'roles.crew',
+  commander: 'roles.commander',
+  medicalOfficer: 'roles.medicalOfficer',
+  groundSurgeon: 'roles.groundSurgeon',
 };
 
 export function isOnBoard(session: Session): boolean {

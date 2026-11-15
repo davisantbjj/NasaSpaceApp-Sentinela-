@@ -1,0 +1,175 @@
+{
+  "trigger": {
+    "generalRange": "Outside the general range",
+    "baselineDeviation": "Change from personal baseline",
+    "symptom": "Reported symptom",
+    "missedMedication": "Dose not taken"
+  },
+  "change": {
+    "general": "{{name}} is {{value}}",
+    "baseline": "{{name}} is {{percent}}% {{side}} your usual pattern for {{days}} days (today: {{value}})",
+    "symptoms": "Reported symptoms: {{symptoms}}",
+    "missedMedication": "Dose not taken today: {{doses}}"
+  },
+  "values": {
+    "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
+    "number": "{{value}}{{unitSuffix}}{{labelSuffix}}",
+    "label": "{{label}}"
+  },
+  "components": {
+    "systolic": "systolic",
+    "diastolic": "diastolic"
+  },
+  "side": {
+    "below": "below",
+    "above": "above"
+  },
+  "reference": {
+    "general": "General range: {{min}} to {{max}} {{unit}}",
+    "bloodPressure": "General range: {{systolicMin}} to {{systolicMax}} over {{diastolicMin}} to {{diastolicMax}} {{unit}}",
+    "expected": "Expected: {{value}}",
+    "baseline": "Your personal pattern: {{value}} ({{days}} days)",
+    "noSymptoms": "Expected: no symptoms",
+    "medication": "Expected: all scheduled doses for the day"
+  },
+  "confidence": {
+    "baselineForming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
+    "singleMeasure": "Single measurement, no history to compare",
+    "selfReported": "Self-reported, not objectively measured",
+    "medicationSelfReported": "Self-reported, without onboard inventory confirmation"
+  },
+  "level": {
+    "green": "Within expected range",
+    "yellow": "Monitor",
+    "red": "Immediate attention"
+  },
+  "correlation": "{{first}} and {{second}} changed together over the last {{days}} days",
+  "card": {
+    "action": "What to do",
+    "reference": "Compared with",
+    "why": "Why it matters",
+    "confidence": "Data confidence",
+    "low": "Low",
+    "normal": "Normal",
+    "environment": "In the current environment",
+    "groundPriority": "This packet is prioritized for the medical team on Earth.",
+    "history": "View history →",
+    "source": "Source: NASA Human Research Program ↗",
+    "review": {
+      "seen": "Reviewed by the medical officer",
+      "unsynced": "still on this device",
+      "notSeen": "Not yet reviewed by the medical officer.",
+      "note": "Action taken:",
+      "optional": "Action taken (optional)",
+      "placeholder": "e.g. spoke with the crew member; repeat the measurement tomorrow.",
+      "saving": "Saving…",
+      "update": "Update note",
+      "markSeen": "Mark as reviewed",
+      "saved": "Saved. It will reach the onboard hub and Earth in the next packet.",
+      "saveError": "Could not save: {{error}}"
+    }
+  },
+  "page": {
+    "title": "Alerts and actions",
+    "none": "No alerts",
+    "inLatest": "{{count}} alert in the latest record",
+    "inLatest_other": "{{count}} alerts in the latest record",
+    "record": "Record from {{date}}, mission day {{day}}.",
+    "redCount": "{{count}} immediate attention",
+    "yellowCount": "{{count}} to monitor",
+    "contact": "Can't speak? Write a message to show the medical officer →",
+    "allWithin": "All measured indicators are within the general range and personal pattern.",
+    "noRecords": "No records to review. Complete a check-in to track your indicators.",
+    "back": "Back to dashboard →",
+    "together": "Changed together",
+    "togetherExplanation": "Indicators that moved away from expected values on the same days. This does not mean one caused the other, and it does not change any alert level.",
+    "noTogether": "No pair of indicators changed together in recent days.",
+    "dateRange": "({{from}} to {{to}})"
+  },
+  "rules": {
+    "bloodPressure": {
+      "whyItMatters": "Without gravity, body fluids shift toward the head and the heart works differently. Blood pressure can vary with mission context.",
+      "yellow": "Rest for 10 minutes, repeat the measurement, and record it again.",
+      "red": "Repeat the measurement, rest, and notify the onboard medical officer."
+    },
+    "heartRate": {
+      "whyItMatters": "Microgravity changes circulation and how the heart works.",
+      "yellow": "Rest for 10 minutes, repeat the measurement, and record it again.",
+      "red": "Rest and notify the onboard medical officer."
+    },
+    "glucose": {
+      "whyItMatters": "Onboard food is limited and must sustain the crew for the whole mission. Fasting glucose helps track nutrition.",
+      "yellow": "Record what and when you ate, then measure again while fasting according to the protocol.",
+      "red": "Measure again now and notify the onboard medical officer."
+    },
+    "temperature": {
+      "whyItMatters": "Spaceflight stress affects the immune response and can reactivate dormant viruses in the body.",
+      "yellow": "Measure again in 1 hour and watch for other symptoms.",
+      "red": "Notify the onboard medical officer and follow the mission medical protocol."
+    },
+    "sleepHours": {
+      "whyItMatters": "The crew sees about 16 sunrises a day on the station, which disrupts the body clock. Too little sleep reduces alertness and performance.",
+      "yellow": "Protect today's rest period and adjust cabin lighting according to protocol.",
+      "red": "Notify the onboard medical officer and avoid critical tasks until rested."
+    },
+    "mood": {
+      "whyItMatters": "Isolation, confinement, and distance from Earth can weigh on mood during a mission. The trend matters, not one isolated day.",
+      "yellow": "Use the journal and keep planned contact with the team and family.",
+      "red": "Talk with the onboard medical officer or mission psychological support."
+    },
+    "stress": {
+      "whyItMatters": "Isolation, confinement, and distance from Earth can increase stress during a mission. In a study of 24 astronauts on the station, sleeping 6 hours or less occurred alongside higher stress.",
+      "yellow": "Set aside time to rest today and talk with a crewmate or family at the next contact.",
+      "red": "Talk with the onboard medical officer or mission psychological support."
+    },
+    "workload": {
+      "whyItMatters": "Work overload is one factor in NASA's risk of poor sleep and irregular schedules. Heavy workload over several days can reduce alertness and performance.",
+      "yellow": "Ask the commander whether tasks can be redistributed, and protect tonight's sleep period.",
+      "red": "Notify the commander and onboard medical officer to review the work schedule."
+    },
+    "exerciseMinutes": {
+      "whyItMatters": "Without gravity, bones lose 1% to 1.5% of their density per month and muscles weaken. Exercise is the main protection.",
+      "yellow": "Record the type of exercise and make up the session according to your individual plan.",
+      "red": "Talk with the onboard medical officer before resuming or changing your exercise plan."
+    },
+    "radiationDose": {
+      "whyItMatters": "Space radiation increases lifetime cancer risk. Today's dose is compared with your own mission history.",
+      "yellow": "Spend more time in better-shielded areas and follow the mission radiation protocol.",
+      "red": "Go to the shelter area and notify the onboard medical officer."
+    },
+    "vision": {
+      "whyItMatters": "About 70% of station astronauts experience swelling at the back of the eye. A self-test is not a diagnosis, but can show when to ask for an exam.",
+      "yellow": "Record what changed and repeat the self-test tomorrow at the same time.",
+      "red": "Notify the onboard medical officer and request an eye evaluation."
+    },
+    "medication": {
+      "whyItMatters": "There is no rapid resupply far from Earth, and the body changes during flight, which can affect how medication works. Knowing whether each scheduled dose was taken helps the onboard medical officer assess treatment.",
+      "yellow": "Check your medication plan to see whether you can still take today's dose. If unsure, ask the medical officer before taking two doses together.",
+      "red": "Notify the medical officer now."
+    },
+    "symptoms": {
+      "whyItMatters": "Far from Earth, recording a symptom early gives the crew time to act with onboard resources.",
+      "yellow": "Note when it started and how it changes, then record it again tomorrow.",
+      "red": "Notify the onboard medical officer now."
+    }
+  },
+  "symptoms": {
+    "headache": "Headache",
+    "nausea": "Nausea",
+    "dizziness": "Dizziness",
+    "fatigue": "Unusual fatigue",
+    "backPain": "Back pain",
+    "congestion": "Nasal congestion",
+    "skinRash": "Skin irritation",
+    "chestPain": "Chest pain",
+    "shortBreath": "Shortness of breath"
+  },
+  "environmentNotes": {
+    "radiationDose": {
+      "station": "The station is inside the magnetosphere, which blocks much of the radiation.",
+      "transit": "Outside the magnetosphere, exposure is higher. Follow the mission shelter protocol.",
+      "moon": "The Moon is outside the magnetosphere. Use the habitat's better-shielded areas.",
+      "mars": "Outside the magnetosphere, with ground response times of up to 20 minutes."
+    }
+  }
+}

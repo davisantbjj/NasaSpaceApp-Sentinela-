@@ -1,10 +1,11 @@
 import type { Level } from '../../types';
+import i18n from '../../i18n';
 
 // Único componente que traduz nível em cor, ícone e texto. A cor nunca é o único sinal.
 export const LEVEL_TEXT: Record<Level, { label: string; mark: string }> = {
-  green: { label: 'Dentro do esperado', mark: '✓' },
-  yellow: { label: 'Acompanhar', mark: '!' },
-  red: { label: 'Atenção imediata', mark: '▲' },
+  green: { label: 'common:level.green', mark: '✓' },
+  yellow: { label: 'common:level.yellow', mark: '!' },
+  red: { label: 'common:level.red', mark: '▲' },
 };
 
 export const LEVEL_ICON_PATH: Record<Level, string> = {
@@ -27,7 +28,7 @@ export function LevelBadge({ level, label }: { level: Level; label?: string }) {
   return (
     <span className="level-badge" data-level={level}>
       <LevelIcon level={level} />
-      <span className="level-text">{label ?? LEVEL_TEXT[level].label}</span>
+      <span className="level-text">{label ?? i18n.t(LEVEL_TEXT[level].label)}</span>
     </span>
   );
 }

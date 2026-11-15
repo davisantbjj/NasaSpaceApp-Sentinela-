@@ -1,0 +1,133 @@
+{
+  "units": {
+    "scaleOfFive": "of 5"
+  },
+  "display": {
+    "noSymptoms": "None",
+    "noMedication": "None scheduled",
+    "allDosesTaken": "All taken",
+    "doseNotTaken": "Not taken: {{doses}}"
+  },
+  "bloodPressure": {
+    "label": "Blood pressure",
+    "howToMeasure": "Sit secured to your seat, rest for 5 minutes, and use the arm monitor. Enter both numbers.",
+    "whyMeasure": "Without gravity, body fluids shift toward the head and the heart adapts. Blood pressure helps show how that adaptation is going."
+  },
+  "heartRate": {
+    "label": "Heart rate",
+    "howToMeasure": "Measure at rest, before exercising. Use the finger oximeter or count your pulse for 1 minute.",
+    "whyMeasure": "Microgravity changes circulation. Resting heart rate is a simple sign of how your heart is responding."
+  },
+  "temperature": {
+    "label": "Temperature",
+    "howToMeasure": "Use the onboard thermometer at the same time each day and away from exercise.",
+    "whyMeasure": "Spaceflight stress can affect the body's defenses and reactivate dormant viruses. Fever is one early sign."
+  },
+  "glucose": {
+    "label": "Blood glucose",
+    "howToMeasure": "Measure while fasting with the finger-stick meter, before your first meal.",
+    "whyMeasure": "Onboard food is limited and must last the whole mission. Glucose helps track nutrition for people who have been asked to measure it."
+  },
+  "sleepHours": {
+    "label": "Sleep",
+    "howToMeasure": "Enter how many hours you slept during your most recent rest period, not time spent awake in the sleeping bag.",
+    "whyMeasure": "The crew sees about 16 sunrises a day on the station, which can confuse the body clock. Too little sleep reduces alertness."
+  },
+  "mood": {
+    "label": "Mood",
+    "howToMeasure": "Choose the face that best describes how you felt for most of the day.",
+    "whyMeasure": "Isolation, confinement, and distance from Earth can weigh on people over time. Tracking the trend helps the crew act early.",
+    "scale": {
+      "1": "Very bad",
+      "2": "Bad",
+      "3": "Neutral",
+      "4": "Good",
+      "5": "Very good"
+    }
+  },
+  "stress": {
+    "label": "Stress",
+    "howToMeasure": "Choose the number that best describes your stress for most of the day.",
+    "whyMeasure": "On the station, NASA asks astronauts to rate stress in the Reaction Self Test. A study of 24 astronauts linked sleeping 6 hours or less with higher stress.",
+    "scale": {
+      "1": "Very low",
+      "2": "Low",
+      "3": "Moderate",
+      "4": "High",
+      "5": "Very high"
+    }
+  },
+  "workload": {
+    "label": "Workload",
+    "howToMeasure": "Choose the number that best describes today's workload.",
+    "whyMeasure": "Work overload is part of NASA's risk for poor sleep and irregular schedules. Tracking workload helps the commander redistribute tasks before fatigue builds up.",
+    "scale": {
+      "1": "Very light",
+      "2": "Light",
+      "3": "Manageable",
+      "4": "Heavy",
+      "5": "Excessive"
+    }
+  },
+  "exerciseMinutes": {
+    "label": "Exercise",
+    "howToMeasure": "Add the minutes spent on the treadmill, bike, and resistance training today.",
+    "whyMeasure": "Without gravity, bones lose 1% to 1.5% of their density per month and muscles weaken. Exercise is the main protection."
+  },
+  "radiationDose": {
+    "label": "Radiation",
+    "howToMeasure": "Read today's accumulated dose on your personal dosimeter and enter the value in microsieverts.",
+    "whyMeasure": "Space radiation increases lifetime cancer risk. For scale, the Radi-N2 detector measured about 150 µSv per day of neutrons alone on the station."
+  },
+  "vision": {
+    "label": "Vision",
+    "howToMeasure": "Read the near-vision card with one eye at a time and compare it with what you saw at the start of the mission.",
+    "whyMeasure": "About 70% of station astronauts experience swelling at the back of the eye. This self-test is not a diagnosis, but can show when to ask for an exam.",
+    "scale": {
+      "0": "No change",
+      "1": "Slight change",
+      "2": "Clear change"
+    }
+  },
+  "medication": {
+    "label": "Medication",
+    "howToMeasure": "Mark each dose scheduled for today that you have taken. Any unmarked dose counts as not taken.",
+    "whyMeasure": "There is no rapid resupply far from Earth, and the body changes during flight. Recording each dose helps the onboard medical officer know whether the treatment is being followed."
+  },
+  "symptoms": {
+    "label": "Symptoms",
+    "howToMeasure": "Mark everything you felt today. If you did not feel anything, continue without marking.",
+    "whyMeasure": "Far from Earth, recording a symptom early gives the crew time to act with onboard resources."
+  },
+  "regions": {
+    "mind": { "label": "Mind and sleep", "description": "Sleep, mood, stress, and workload" },
+    "head": { "label": "Eyes and vision", "description": "Vision self-test" },
+    "heart": { "label": "Heart", "description": "Blood pressure and heart rate" },
+    "immune": { "label": "Body defenses", "description": "Temperature" },
+    "metabolism": { "label": "Metabolism", "description": "Blood glucose" },
+    "musculoskeletal": { "label": "Bones and muscles", "description": "Exercise" },
+    "wholeBody": { "label": "Whole body", "description": "Radiation, symptoms, and medication" }
+  },
+  "environments": {
+    "station": {
+      "label": "Station",
+      "description": "Low Earth orbit, inside the magnetosphere.",
+      "signalDelayLabel": "about 0.24 s"
+    },
+    "transit": {
+      "label": "Transit",
+      "description": "Deep-space travel, outside the magnetosphere.",
+      "signalDelayLabel": "increases with distance (2 min in this demo)"
+    },
+    "moon": {
+      "label": "Moon",
+      "description": "Lunar surface, with one-sixth of Earth's gravity.",
+      "signalDelayLabel": "about 1.28 s"
+    },
+    "mars": {
+      "label": "Mars",
+      "description": "Martian surface, with ground response times of up to 20 minutes.",
+      "signalDelayLabel": "3 to 22 min (12 min in this demo)"
+    }
+  }
+}

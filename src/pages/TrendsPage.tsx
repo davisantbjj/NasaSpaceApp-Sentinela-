@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { IndicatorChart, type ChartBand, type ChartSeries } from '../components/charts/IndicatorChart';
 import { displayText } from '../content/format';
-import { INDICATORS } from '../content/indicators';
+import { indicatorContent } from '../content/indicators';
 import { formatDate } from '../lib/dates';
 import { formatNumber, hasHistoryChart, rangesFor, seriesValue } from '../lib/series';
 import { findBaseline, isBaselineReady } from '../rules/baseline';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore } from '../store/useAppStore';
 import type { BpComponent, IndicatorId } from '../types';
-import { baselineNote, trackedInOrder } from './helpers';
+import { baselineNote, symptomLabels, trackedInOrder } from './helpers';
+import i18n from '../i18n';
 
 const PERIODS = [14, 30, 60];
 
@@ -25,7 +26,7 @@ export function TrendsPage() {
   if (!member || !indicator) return null;
 
   const rule = rules.indicators[indicator]!;
-  const content = INDICATORS[indicator];
+  const content = indicatorContent(indicator);
   const components: (BpComponent | undefined)[] = rule.components ? ['systolic', 'diastolic'] : [undefined];
   const keyOf = (c?: BpComponent) => c ?? 'value';
   const window = records.slice(-period);
@@ -37,7 +38,7 @@ export function TrendsPage() {
 
   const series: ChartSeries[] = components.map((c, i) => ({
     key: keyOf(c),
-    label: c === 'systolic' ? 'Sistólica' : c === 'diastolic' ? 'Diastólica' : content.label,
+    label: c === 'systolic' ? i18n.t('trends.systolic') : c === 'diastolic' ? i18n.t('trends.diastolic') : content.label,
     color: i === 0 ? 'var(--chart-1)' : 'var(--chart-2)',
   }));
 
@@ -62,15 +63,15 @@ export function TrendsPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Tendências</span>
+        <span className="eyebrow">{i18n.t('trends.title')}</span>
         <h1>{content.label}</h1>
         <p className="muted">{content.whyMeasure}</p>
       </header>
 
-      <nav className="tabs" aria-label="Indicador">
+      <nav className="tabs" aria-label={i18n.t('trends.indicator')}>
         {options.map((id) => (
           <Link key={id} to={`/trends/${id}`} className={`tab${id === indicator ? ' active' : ''}`} aria-current={id === indicator ? 'page' : undefined}>
-            {INDICATORS[id].label}
+            {indicatorContent(id).label}
           </Link>
         ))}
       </nav>
@@ -79,48 +80,48 @@ export function TrendsPage() {
         <div className="row-between">
           <div className="stat-row" style={{ flex: 1 }}>
             <div className="metric">
-              <span className="small muted">Último valor</span>
-              <span className="metric-value">{last ? displayText(last.values, indicator) : '–'}</span>
+              <span className="small muted">{i18n.t('trends.latest')}</span>
+              <span className="metric-value">{last ? displayText(last.values, indicator, symptomLabels()) : '–'}</span>
             </div>
             {!scaleLabels && (
               <div className="metric">
-                <span className="small muted">Média em {period} dias</span>
+                <span className="small muted">{i18n.t('trends.average', { days: period })}</span>
                 <span className="metric-value">{average.join('/')}<span className="unit">{rule.unit}</span></span>
               </div>
             )}
           </div>
-          <div className="row" role="group" aria-label="Período">
+          <div className="row" role="group" aria-label={i18n.t('trends.period')}>
             {PERIODS.map((p) => (
               <button key={p} type="button" className="tab num" aria-pressed={p === period} onClick={() => setPeriod(p)}>
-                {p} dias
+                {i18n.t('trends.days', { days: p })}
               </button>
             ))}
           </div>
         </div>
 
         {measured.length === 0 ? (
-          <p className="muted">Ainda não há medidas deste indicador no período.</p>
+          <p className="muted">{i18n.t('trends.noMeasurements')}</p>
         ) : (
           <IndicatorChart data={data} series={series} unit={rule.unit} bands={bands} baselines={baselineLines} scaleLabels={scaleLabels} />
         )}
 
-        {baselineNote(indicator, baselines) && <p className="small muted">{baselineNote(indicator, baselines)}.</p>}
+        {baselineNote(indicator, baselines) &&         <p className="small muted">{baselineNote(indicator, baselines)}.</p>}
         {indicator === 'radiationDose' && (
           <p className="small muted">
-            A radiação não tem faixa geral: a dose é comparada com o seu próprio histórico. Os cerca de 150 µSv por dia do detector Radi-N2 são só de nêutrons, medidos na estação, e servem apenas como escala.
+            {i18n.t('trends.radiationNote')}
           </p>
         )}
 
         <details>
-          <summary>Ver os valores em tabela</summary>
+          <summary>{i18n.t('trends.table')}</summary>
           <div className="table-wrap">
             <table>
               <thead>
-                <tr><th>Data</th><th>Dia da missão</th><th>Valor</th></tr>
+                <tr><th>{i18n.t('trends.date')}</th><th>{i18n.t('trends.missionDay')}</th><th>{i18n.t('trends.value')}</th></tr>
               </thead>
               <tbody>
                 {[...measured].reverse().map((r) => (
-                  <tr key={r.id}><td>{formatDate(r.date)}</td><td>{r.missionDay}</td><td>{displayText(r.values, indicator)}</td></tr>
+                  <tr key={r.id}><td>{formatDate(r.date)}</td><td>{r.missionDay}</td><td>{displayText(r.values, indicator, symptomLabels())}</td></tr>
                 ))}
               </tbody>
             </table>

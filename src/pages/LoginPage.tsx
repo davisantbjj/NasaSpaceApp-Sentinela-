@@ -4,6 +4,7 @@ import { DEMO_PROFILES } from '../data/seed';
 import { useNow } from '../hooks/useNow';
 import { ROLE_LABELS } from '../lib/access';
 import { useAppStore } from '../store/useAppStore';
+import i18n from '../i18n';
 
 const MAX_ATTEMPTS = 5;
 const WAIT_MS = 30_000;
@@ -57,7 +58,7 @@ export function LoginPage() {
     event.preventDefault();
     if (waiting || busy) return;
     if (!/^\d{4,6}$/.test(pin)) {
-      setError('O PIN tem de 4 a 6 números.');
+      setError(i18n.t('login.pinLength'));
       return;
     }
     setBusy(true);
@@ -71,11 +72,11 @@ export function LoginPage() {
         setError(e instanceof Error ? e.message : String(e));
       } else if (guard.attempts + 1 >= MAX_ATTEMPTS) {
         setGuard({ attempts: 0, waitUntil: Date.now() + WAIT_MS });
-        setError(`PIN incorreto ${MAX_ATTEMPTS} vezes. Espere 30 segundos para tentar de novo.`);
+        setError(i18n.t('login.wrongPinPaused', { count: MAX_ATTEMPTS }));
       } else {
         const left = MAX_ATTEMPTS - guard.attempts - 1;
         setGuard({ attempts: guard.attempts + 1, waitUntil: 0 });
-        setError(`PIN incorreto. ${left === 1 ? 'Resta 1 tentativa' : `Restam ${left} tentativas`} antes de uma pausa de 30 segundos.`);
+        setError(i18n.t('login.wrongPinRemaining', { count: left }));
       }
     } finally {
       setBusy(false);
@@ -88,8 +89,8 @@ export function LoginPage() {
     <div className="page login">
       <header className="page-header">
         <span className="eyebrow">Sentinela</span>
-        <h1>Quem está usando?</h1>
-        <p className="muted">Escolha o seu perfil e digite o PIN. Cada papel vê só o que precisa.</p>
+        <h1>{i18n.t('login.title')}</h1>
+        <p className="muted">{i18n.t('login.intro')}</p>
       </header>
 
       {lockNotice && (
@@ -101,7 +102,7 @@ export function LoginPage() {
 
       <form className="card stack" style={{ gap: 18 }} onSubmit={submit}>
         <fieldset className="options list login-profiles">
-          <legend className="visually-hidden">Perfil</legend>
+          <legend className="visually-hidden">{i18n.t('login.profile')}</legend>
           {profiles.map((p) => (
             <label key={p.id} className="option">
               <input
@@ -115,7 +116,7 @@ export function LoginPage() {
                 <span className="avatar" aria-hidden="true">{p.name.slice(0, 1)}</span>
                 <span className="stack" style={{ gap: 0 }}>
                   {p.name}
-                  <span className="small muted" style={{ fontWeight: 400 }}>{ROLE_LABELS[p.role]}</span>
+                  <span className="small muted" style={{ fontWeight: 400 }}>{i18n.t(ROLE_LABELS[p.role])}</span>
                 </span>
               </span>
             </label>
@@ -126,7 +127,7 @@ export function LoginPage() {
         <input type="text" name="username" autoComplete="username" value={selected?.name ?? ''} readOnly hidden />
 
         <div className="field">
-          <label htmlFor="pin">PIN de {selected?.name ?? 'acesso'}</label>
+          <label htmlFor="pin">{i18n.t('login.pin', { name: selected?.name ?? i18n.t('login.access') })}</label>
           <div className="field-input">
             <input
               id="pin"
@@ -142,26 +143,25 @@ export function LoginPage() {
               disabled={waiting}
             />
             <button type="submit" className="btn btn-primary" disabled={busy || waiting || pin.length < 4}>
-              {busy ? 'Abrindo…' : 'Entrar'}
+              {busy ? i18n.t('login.opening') : i18n.t('login.enter')}
             </button>
           </div>
           {error && <p id="pin-error" className="field-error" role="alert">{error}</p>}
-          {waiting && <p className="small muted num">Tente de novo em {Math.ceil((waitUntil - now) / 1000)} s.</p>}
+          {waiting && <p className="small muted num">{i18n.t('login.retryIn', { seconds: Math.ceil((waitUntil - now) / 1000) })}</p>}
         </div>
 
         <details>
-          <summary>PINs da demonstração</summary>
+          <summary>{i18n.t('login.demoPins')}</summary>
           <ul className="summary-list">
             {DEMO_PROFILES.map((p) => (
-              <li key={p.id}><span>{p.name} · {ROLE_LABELS[p.role]}</span><span className="num">{p.pin}</span></li>
+              <li key={p.id}><span>{p.name} · {i18n.t(ROLE_LABELS[p.role])}</span><span className="num">{p.pin}</span></li>
             ))}
           </ul>
         </details>
       </form>
 
       <p className="small muted">
-        Os dados ficam cifrados neste aparelho e só abrem com o PIN. A tela bloqueia sozinha depois de 5 minutos sem uso.
-        Num produto real, a entrada seria a do sistema da agência.
+        {i18n.t('login.security')}
       </p>
     </div>
   );

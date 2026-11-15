@@ -1,0 +1,133 @@
+{
+  "units": {
+    "scaleOfFive": "de 5"
+  },
+  "display": {
+    "noSymptoms": "Nenhum",
+    "noMedication": "Nenhuma prevista",
+    "allDosesTaken": "Todas tomadas",
+    "doseNotTaken": "Não tomada: {{doses}}"
+  },
+  "bloodPressure": {
+    "label": "Pressão arterial",
+    "howToMeasure": "Sente-se preso ao assento, descanse 5 minutos e use o medidor de braço. Digite os dois números.",
+    "whyMeasure": "Sem gravidade, os líquidos do corpo sobem para a cabeça e o coração se adapta. A pressão mostra como essa adaptação está indo."
+  },
+  "heartRate": {
+    "label": "Frequência cardíaca",
+    "howToMeasure": "Meça em repouso, antes do exercício. Use o oxímetro de dedo ou conte os batimentos por 1 minuto.",
+    "whyMeasure": "A falta de gravidade muda a circulação. O ritmo em repouso é um sinal simples de como o coração está respondendo."
+  },
+  "temperature": {
+    "label": "Temperatura",
+    "howToMeasure": "Use o termômetro de bordo, sempre no mesmo horário e longe do exercício.",
+    "whyMeasure": "O estresse do voo altera as defesas do corpo e pode reativar vírus dormentes. Febre é um dos primeiros sinais."
+  },
+  "glucose": {
+    "label": "Glicemia",
+    "howToMeasure": "Meça em jejum, com o medidor de ponta de dedo, antes da primeira refeição.",
+    "whyMeasure": "A comida de bordo é limitada e precisa durar a missão toda. A glicemia ajuda a acompanhar a nutrição de quem tem indicação para medir."
+  },
+  "sleepHours": {
+    "label": "Sono",
+    "howToMeasure": "Informe quantas horas dormiu no último período de descanso, sem contar o tempo acordado no saco de dormir.",
+    "whyMeasure": "Na estação a tripulação vê cerca de 16 nasceres do sol por dia, o que confunde o relógio do corpo. Dormir pouco reduz a atenção."
+  },
+  "mood": {
+    "label": "Humor",
+    "howToMeasure": "Escolha o rosto que melhor descreve como você se sentiu na maior parte do dia.",
+    "whyMeasure": "Isolamento, confinamento e distância da Terra pesam com o tempo. Acompanhar a tendência ajuda a agir cedo.",
+    "scale": {
+      "1": "Muito mal",
+      "2": "Mal",
+      "3": "Neutro",
+      "4": "Bem",
+      "5": "Muito bem"
+    }
+  },
+  "stress": {
+    "label": "Estresse",
+    "howToMeasure": "Escolha o número que melhor descreve o seu estresse na maior parte do dia.",
+    "whyMeasure": "Na estação, a NASA pede aos astronautas notas de estresse no Reaction Self Test. Um estudo com 24 astronautas ligou dormir 6 horas ou menos a mais estresse.",
+    "scale": {
+      "1": "Muito baixo",
+      "2": "Baixo",
+      "3": "Moderado",
+      "4": "Alto",
+      "5": "Muito alto"
+    }
+  },
+  "workload": {
+    "label": "Carga de trabalho",
+    "howToMeasure": "Escolha o número que melhor descreve o volume de trabalho de hoje.",
+    "whyMeasure": "Excesso de trabalho faz parte do risco de sono ruim e horários irregulares da NASA. Acompanhar a carga ajuda o comandante a redistribuir tarefas antes do cansaço acumular.",
+    "scale": {
+      "1": "Muito leve",
+      "2": "Leve",
+      "3": "Adequada",
+      "4": "Pesada",
+      "5": "Excessiva"
+    }
+  },
+  "exerciseMinutes": {
+    "label": "Exercício",
+    "howToMeasure": "Some os minutos de esteira, bicicleta e treino resistido feitos hoje.",
+    "whyMeasure": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção."
+  },
+  "radiationDose": {
+    "label": "Radiação",
+    "howToMeasure": "Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor em microsieverts.",
+    "whyMeasure": "A radiação espacial aumenta o risco de câncer ao longo da vida. Para dar uma ideia de escala: o detector Radi-N2 mediu cerca de 150 µSv por dia só de nêutrons na estação."
+  },
+  "vision": {
+    "label": "Visão",
+    "howToMeasure": "Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão.",
+    "whyMeasure": "Cerca de 70% dos astronautas da estação têm inchaço no fundo do olho. O autoteste não diagnostica, mas mostra quando pedir um exame.",
+    "scale": {
+      "0": "Sem mudança",
+      "1": "Mudança leve",
+      "2": "Mudança clara"
+    }
+  },
+  "medication": {
+    "label": "Medicação",
+    "howToMeasure": "Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada.",
+    "whyMeasure": "Longe da Terra não há reposição rápida, e o corpo muda no voo. Registrar cada dose ajuda o médico de bordo a saber se o tratamento está sendo seguido."
+  },
+  "symptoms": {
+    "label": "Sintomas",
+    "howToMeasure": "Marque tudo o que sentiu hoje. Se não sentiu nada, avance sem marcar.",
+    "whyMeasure": "Longe da Terra, registrar um sintoma cedo dá tempo para agir com os recursos de bordo."
+  },
+  "regions": {
+    "mind": { "label": "Mente e sono", "description": "Sono, humor, estresse e carga de trabalho" },
+    "head": { "label": "Olhos e visão", "description": "Autoteste de visão" },
+    "heart": { "label": "Coração", "description": "Pressão arterial e frequência cardíaca" },
+    "immune": { "label": "Defesas do corpo", "description": "Temperatura" },
+    "metabolism": { "label": "Metabolismo", "description": "Glicemia" },
+    "musculoskeletal": { "label": "Ossos e músculos", "description": "Exercício" },
+    "wholeBody": { "label": "Corpo inteiro", "description": "Radiação, sintomas e medicação" }
+  },
+  "environments": {
+    "station": {
+      "label": "Estação",
+      "description": "Órbita baixa da Terra, dentro da magnetosfera.",
+      "signalDelayLabel": "cerca de 0,24 s"
+    },
+    "transit": {
+      "label": "Trânsito",
+      "description": "Viagem no espaço profundo, fora da magnetosfera.",
+      "signalDelayLabel": "cresce com a distância (2 min na demonstração)"
+    },
+    "moon": {
+      "label": "Lua",
+      "description": "Superfície lunar, com um sexto da gravidade da Terra.",
+      "signalDelayLabel": "cerca de 1,28 s"
+    },
+    "mars": {
+      "label": "Marte",
+      "description": "Superfície de Marte, com resposta do solo de até 20 minutos.",
+      "signalDelayLabel": "de 3 a 22 min (12 min na demonstração)"
+    }
+  }
+}

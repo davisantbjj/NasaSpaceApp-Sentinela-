@@ -34,14 +34,19 @@ export function findCorrelations(history: DailyRecord[], baselines: Baseline[], 
     }
     if (days < rules.config.sustainedDays) continue;
 
-    const labelA = rules.indicators[a]!.label;
-    const labelB = rules.indicators[b]!.label.toLowerCase();
     correlations.push({
       crewId: records[0].crewId,
       indicators: [a, b],
       fromDate: records[records.length - days].date,
       toDate: records[records.length - 1].date,
-      description: `${labelA} e ${labelB} mudaram juntos nos últimos ${days} dias`,
+      description: {
+        key: 'alerts:correlation',
+        params: {
+          firstKey: rules.indicators[a]!.labelKey,
+          secondKey: rules.indicators[b]!.labelKey,
+          days,
+        },
+      },
     });
   }
   return correlations;
