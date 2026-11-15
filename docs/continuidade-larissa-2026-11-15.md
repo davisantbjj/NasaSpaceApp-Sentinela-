@@ -1,5 +1,15 @@
 # Continuidade da Larissa — 15/11/2026
 
+## Integração local das atualizações de Davi — 15/11/2026
+
+Base local: `main` em `755187b`. Após consultar `origin`, foi identificado e integrado o commit de Davi `0d185ad`, com N15 (grade de Amsler, perguntas por olho e opção de pular) e N16 (exercício por sessão e comparação semanal com plano demonstrativo e linha de base). A cadência da visão continua pendente em N18. O merge ocorreu sem conflitos.
+
+Antes da integração, as revisões da Larissa foram preservadas no commit local `1072f49`: N3, N4, N5, N6 e N8, com textos em português/inglês, evidências e documentação. Nenhuma faixa ou nível foi alterado nessa revisão. N10 permanece parcial; apresentação final, roteiro, capturas e slides continuam para o encerramento do escopo.
+
+Validação após integrar Davi: **96 testes em oito arquivos passaram**, build com TypeScript e PWA passou e `git diff --check` sem erros. O build informa pacote principal acima de 500 kB. Não foi executada uma nova verificação de navegador para as interfaces N15/N16; os testes não equivalem a validação clínica. Integração somente local, sem publicar commits no remoto.
+
+O histórico abaixo descreve a branch anterior da Larissa; não substitui este estado integrado na `main` local.
+
 Branch: `feat/larissa-revisao-privacidade-fase-11`.
 
 ## Estado atual após integrar Talita até `ec23abd`
