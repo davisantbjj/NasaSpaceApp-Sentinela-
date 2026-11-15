@@ -12,6 +12,7 @@ const TRIGGER_TEXT: Record<Alert['trigger'], string> = {
   baselineDeviation: 'alerts:trigger.baselineDeviation',
   symptom: 'alerts:trigger.symptom',
   missedMedication: 'alerts:trigger.missedMedication',
+  missedMeals: 'alerts:trigger.missedMeals',
 };
 
 // As seis partes de todo alerta: o que mudou, a referência, por que importa,

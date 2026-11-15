@@ -10,7 +10,11 @@
     "reactionShort": "short",
     "reactionFull": "full",
     "reactionInterrupted": ", interrupted",
-    "reactionUnknownMode": "mode not recorded"
+    "reactionUnknownMode": "mode not recorded",
+    "asNeededTaken": "as needed, taken: {{doses}}",
+    "waterSufficient": "enough water",
+    "waterInsufficient": "not enough water",
+    "sleepQuality": "quality: {{quality}}"
   },
   "bloodPressure": {
     "label": "Blood pressure",
@@ -34,7 +38,7 @@
   },
   "sleepHours": {
     "label": "Sleep",
-    "howToMeasure": "Enter how many hours you slept during your most recent rest period, not time spent awake in the sleeping bag. If you use a wearable sleep sensor, copy the hours it recorded.",
+    "howToMeasure": "Enter how many hours you slept during your most recent rest period, not time spent awake in the sleeping bag. If you use a wearable sleep sensor, copy the hours it recorded. Then choose how your sleep quality was.",
     "whyMeasure": "The crew sees about 16 sunrises a day on the station, which can confuse the body clock. Too little sleep reduces alertness."
   },
   "mood": {
@@ -100,7 +104,7 @@
   },
   "medication": {
     "label": "Medication",
-    "howToMeasure": "Mark each dose scheduled for today that you have taken. Any unmarked dose counts as not taken.",
+    "howToMeasure": "Mark each dose scheduled for today that you have taken. Any unmarked dose counts as not taken. \"As needed\" medication counts only when marked.",
     "whyMeasure": "There is no rapid resupply far from Earth, and the body changes during flight. Recording each dose helps the onboard medical officer know whether the treatment is being followed."
   },
   "symptoms": {
@@ -115,7 +119,7 @@
     "immune": { "label": "Body defenses", "description": "Temperature" },
     "metabolism": { "label": "Metabolism", "description": "Blood glucose" },
     "musculoskeletal": { "label": "Bones and muscles", "description": "Exercise and resistance training" },
-    "wholeBody": { "label": "Whole body", "description": "Radiation, symptoms, and medication" }
+    "wholeBody": { "label": "Whole body", "description": "Radiation, body mass, food, symptoms, and medication" }
   },
   "environments": {
     "station": {
@@ -168,6 +172,34 @@
     "dosimeter": {
       "label": "Personal dosimeter",
       "example": "e.g. an active dosimeter carried in a pocket, as on Artemis II"
+    }
+  },
+  "mealsCompleted": {
+    "label": "Food and water",
+    "meals": "Complete meals today",
+    "water": "Did you drink enough water today?",
+    "howToMeasure": "Count the meals you ate in full today and say whether you drank enough water. No calorie counting needed.",
+    "whyMeasure": "Astronauts log what they eat in a tablet app. Eating less than needed is common in flight and leads to body mass loss.",
+    "scale": {
+      "0": "None",
+      "1": "1 meal",
+      "2": "2 meals",
+      "3": "3 or more"
+    },
+    "waterOptions": {
+      "yes": "Yes",
+      "no": "No"
+    }
+  },
+  "sleepQuality": {
+    "label": "Sleep quality",
+    "question": "How was your sleep quality?",
+    "scale": {
+      "1": "Very poor",
+      "2": "Poor",
+      "3": "Fair",
+      "4": "Good",
+      "5": "Very good"
     }
   }
 }

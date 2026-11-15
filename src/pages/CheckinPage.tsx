@@ -5,13 +5,14 @@ import { AmslerStep } from '../components/checkin/AmslerStep';
 import { ExerciseSessionStep } from '../components/checkin/ExerciseSessionStep';
 import { ConditioningStep } from '../components/checkin/ConditioningStep';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
+import { NutritionStep } from '../components/checkin/NutritionStep';
 import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
 import { SourcePicker } from '../components/checkin/SourcePicker';
 import { fieldError, NumberStep, parseNumber, type NumberField } from '../components/checkin/NumberStep';
 import { ScaleStep } from '../components/checkin/ScaleStep';
 import { StepShell } from '../components/checkin/StepShell';
-import { displayText, sourceLabel } from '../content/format';
-import { indicatorContent } from '../content/indicators';
+import { displayText, sleepQualityText, sourceLabel } from '../content/format';
+import { indicatorContent, sleepQualityOptions } from '../content/indicators';
 import { translateText } from '../content/localize';
 import i18n from '../i18n';
 import { todayISO } from '../lib/dates';
@@ -36,6 +37,9 @@ interface Draft {
   amsler?: AmslerVisionResult;
   exerciseSession?: ExerciseSession;
   conditioning?: ConditioningAssessment;
+  meals?: number; // refeições completas (N12)
+  water?: boolean; // água suficiente (N12)
+  sleepQuality?: number; // qualidade do sono, no passo de sono (N14)
   sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
@@ -68,6 +72,9 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     amsler: values?.visionAmsler,
     exerciseSession: values?.exerciseSession,
     conditioning: values?.conditioning,
+    meals: values?.mealsCompleted,
+    water: values?.waterSufficient,
+    sleepQuality: values?.sleepQuality,
     symptoms: values?.symptoms,
     medicationTaken,
     reactionTime: values?.reactionTime,
@@ -101,7 +108,13 @@ function fieldsFor(indicator: IndicatorId, draft: Draft, member: CrewMember): Nu
 function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): DailyValues {
   const values: DailyValues = {};
   for (const indicator of steps) {
-    if (indicator === 'exerciseMinutes' && draft.exerciseSession) {
+    if (indicator === 'sleepHours' && draft.sleepQuality !== undefined) {
+      values.sleepQuality = draft.sleepQuality as DailyValues['sleepQuality'];
+    }
+    if (indicator === 'mealsCompleted') {
+      if (draft.meals !== undefined) values.mealsCompleted = draft.meals;
+      if (draft.water !== undefined) values.waterSufficient = draft.water;
+    } else if (indicator === 'exerciseMinutes' && draft.exerciseSession) {
       const session = draft.exerciseSession;
       const resistanceDone = session.resistanceStatus !== 'notDone';
       values.exerciseSession = session;
@@ -131,7 +144,13 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
     } else if (indicator === 'medication') {
       const taken = draft.medicationTaken;
       if (taken !== undefined && member.medications?.length) {
-        values.medication = member.medications.map((m) => ({ id: m.id, label: m.label, taken: taken.includes(m.id) }));
+        values.medication = member.medications.map((m) => ({
+          id: m.id,
+          label: m.label,
+          taken: taken.includes(m.id),
+          ...(m.asNeeded ? { asNeeded: true } : {}),
+          ...(m.sleepAid ? { sleepAid: true } : {}),
+        }));
       }
     } else {
       const fields = fieldsFor(indicator, draft, member);
@@ -228,6 +247,9 @@ function OwnCheckin() {
         amsler: indicator === 'vision' ? undefined : d.amsler,
         exerciseSession: indicator === 'exerciseMinutes' ? undefined : d.exerciseSession,
         conditioning: indicator === 'conditioning' ? undefined : d.conditioning,
+        meals: indicator === 'mealsCompleted' ? undefined : d.meals,
+        water: indicator === 'mealsCompleted' ? undefined : d.water,
+        sleepQuality: indicator === 'sleepHours' ? undefined : d.sleepQuality,
         sources: { ...d.sources, [indicator]: undefined },
       };
     });
@@ -299,6 +321,7 @@ function OwnCheckin() {
                 </button>
                 <span className={values[indicator] === undefined ? 'muted' : 'num'}>
                   {displayText(values, indicator, symptomLabels()) ?? i18n.t('checkin:skipped')}
+                  {indicator === 'sleepHours' && sleepQualityText(values) && ` · ${sleepQualityText(values)}`}
                   {indicator === 'exerciseMinutes' && values.resistanceMinutes !== undefined && ` ${i18n.t('checkin:resistancePart', { value: displayText(values, 'resistanceMinutes') })}`}
                   {sourceLabel(values, indicator) && ` · ${sourceLabel(values, indicator)}`}
                 </span>
@@ -366,9 +389,30 @@ function OwnCheckin() {
                 onChange={(source) => setDraft((d) => ({ ...d, sources: { ...d.sources, [indicator]: source } }))}
               />
             )}
+            {indicator === 'sleepHours' && (
+              <div className="stack" style={{ gap: 8 }}>
+                <p className="small muted" aria-hidden="true">{i18n.t('indicators:sleepQuality.question')}</p>
+                <ScaleStep
+                  name="sleepQuality"
+                  legend={i18n.t('indicators:sleepQuality.question')}
+                  options={sleepQualityOptions()}
+                  value={draft.sleepQuality}
+                  onChange={(sleepQuality) => setDraft((d) => ({ ...d, sleepQuality }))}
+                />
+              </div>
+            )}
           </>
         )}
-        {content.scale && indicator !== 'vision' && (
+        {indicator === 'mealsCompleted' && content.scale && (
+          <NutritionStep
+            mealOptions={content.scale}
+            meals={draft.meals}
+            water={draft.water}
+            onMeals={(meals) => setDraft((d) => ({ ...d, meals }))}
+            onWater={(water) => setDraft((d) => ({ ...d, water }))}
+          />
+        )}
+        {content.scale && indicator !== 'vision' && indicator !== 'mealsCompleted' && (
           <ScaleStep
             name={indicator}
             legend={content.label}

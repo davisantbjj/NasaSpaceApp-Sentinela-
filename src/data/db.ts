@@ -56,7 +56,11 @@ const DEMO_CREW_SEX: Record<string, NonNullable<CrewMember['sex']>> = {
 
 // Medicação prevista FICTÍCIA da demonstração (seed.ts), usada também para atualizar o banco já gravado (v8).
 export const DEMO_MEDICATIONS: Record<string, PlannedMedication[]> = {
-  ana: [{ id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' }],
+  ana: [
+    { id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' },
+    // Remédio para dormir FICTÍCIO, só quando necessário (N14): não marcar não é dose esquecida.
+    { id: 'sleepAid', label: 'Remédio para dormir', schedule: 'Só quando necessário', asNeeded: true, sleepAid: true },
+  ],
   lia: [
     { id: 'vitaminD', label: 'Suplemento de vitamina D', schedule: '1 vez ao dia' },
     { id: 'eyeDrops', label: 'Colírio lubrificante', schedule: '2 vezes ao dia' },
@@ -175,6 +179,18 @@ export class SentinelaDB extends Dexie {
         await tx.table<SettingsRow, string>('settings').put(settings);
       }
     });
+    // v13: alimentação e água (N12) para todos e o remédio para dormir fictício da Ana (N14).
+    // Os campos ficaram previstos na v12; esta versão só atualiza o cadastro já gravado.
+    // Os dias antigos ficam sem esses valores.
+    this.version(13).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (!member.trackedIndicators.includes('mealsCompleted')) member.trackedIndicators.push('mealsCompleted');
+        const sleepAid = DEMO_MEDICATIONS[member.id]?.find((m) => m.sleepAid);
+        if (sleepAid && member.medications && !member.medications.some((m) => m.id === sleepAid.id)) {
+          member.medications.push(sleepAid);
+        }
+      }),
+    );
   }
 }
 
