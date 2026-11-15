@@ -53,6 +53,8 @@ O [roteiro da demonstração](docs/roteiro-demonstracao.md) e a [base de conteú
 | [TASKS.md](TASKS.md) | Tarefas feitas e pendentes |
 | [CONTEXTO-IA.md](CONTEXTO-IA.md) | Resumo do projeto e regras para assistentes de IA |
 | [docs/arquitetura.md](docs/arquitetura.md) | Camadas, tipos de dados, motor de regras |
+| [docs/especificacao-de-dados.md](docs/especificacao-de-dados.md) | Todo dado guardado: campos, tipos, unidades, cifra, tabelas e pacotes |
+| [docs/tarefas-nasa-2026-11-15.md](docs/tarefas-nasa-2026-11-15.md) | Tarefas da revisão com as fontes da NASA (N1 a N21) |
 | [docs/estrutura-do-projeto.md](docs/estrutura-do-projeto.md) | Árvore de pastas e papel de cada arquivo |
 | [docs/diagramas/](docs/diagramas/) | Visão geral, fluxo do check-in, dados, níveis e navegação |
 | [docs/pesquisa/](docs/pesquisa/) | Pesquisa e proposta que deram origem ao projeto |
