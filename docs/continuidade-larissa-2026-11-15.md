@@ -2,7 +2,31 @@
 
 Branch: `feat/larissa-revisao-privacidade-fase-11`.
 
-## Atualização após os novos commits da Talita
+## Estado atual após integrar Talita até `ec23abd`
+
+Integrados `9466cee` (M4/M7/M9), `6667dba` (M10/M11) e `ec23abd` (tarefas futuras de leitura de aparelhos), preservando as duas revisões anteriores da Larissa. M1–M11 agora têm implementação; isso não significa conclusão do projeto inteiro nem aprovação clínica.
+
+### Entregue sem depender de Davi
+
+- Revisão documental de reação, correlação com sono, metas semanais, origem declarada e destaque de readaptação, com NASA e estudo original de Jones et al. (2022). O app não é equivalente ao RST validado e não diagnostica fadiga. A meta de cinco em sete dias e a antecedência de sete dias para readaptação são demonstrativas.
+- M7 documentada como correlação genérica por três registros afastados do esperado, sem regra específica de sono ≤6 h. Nenhum corte clínico foi criado ou alterado.
+- Resultado de reação registra modo curto/completo, conclusão, duração decorrida, respostas válidas e antecipações. Sessões curtas/interrompidas e legado sem modo não entram em série, gráfico, linha de base, alertas ou correlações; continuam legíveis na consulta e no JSON. Números antigos não recebem protocolo inventado. O seed preserva os números simulados sem modo; a comparação de reação exige novos testes completos.
+- O teste agora encerra ao atingir a duração mesmo sem outra resposta. Menos de três respostas válidas não salva resultado. O preenchimento pode ser pulado.
+- Privacidade v6 inclui resultado e metadados de reação e origem declarada, cifrados com o check-in. Não há leitura automática, identificação de aparelho ou gravação de cada toque. Exportação individual conferida.
+- Testes ampliados: modo completo interrompido e modo curto de 30 s no navegador, média e metadados no JSON, origem vestível/dosímetro, exclusão de curto da série, associação M7 e limites da janela M11.
+
+### Verificação atual
+
+Build com checagem TypeScript passou; **75 testes em 5 arquivos passaram**; integração no Edge passou com perfil temporário, sem acessar o navegador pessoal; `git diff --check` sem erros. O teste no Edge usou respostas automatizadas: prova o fluxo, não precisão clínica. Nenhuma captura foi regenerada. O servidor de desenvolvimento que Larissa pediu para visualizar foi mantido.
+
+### Pendências preservadas
+
+- Com Davi: cifrar plano de medicação com migração e testes, entregar mensagens pela central e definir quem altera missão/fase. Não foi alterada a arquitetura de segurança nesta etapa.
+- Aprovação clínica, requisitos jurídicos/operacionais e avaliação de acessibilidade continuam pendentes; testes não certificam conformidade integral com LGPD.
+- Apresentação, revisão final do roteiro, capturas, slides e envio somente após concluir o escopo, conforme Larissa. As mudanças de apresentação vindas da Talita foram preservadas pelo merge; esta revisão não produziu material novo.
+- Integração real de aparelhos é futuro; a origem atual é informada pela pessoa. Importação de arquivo de exemplo não foi implementada.
+
+## Histórico: atualização anterior até `097d2fd`
 
 Integrados `8587439` (M8 perfil de missão e M5 estimativa óssea) e `097d2fd` (M6 soma de radiação) por merge, preservando o commit anterior da Larissa `412cb19`. Não houve conflitos. A branch da Talita não foi modificada.
 

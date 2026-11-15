@@ -178,7 +178,7 @@ O app acompanha quatro pares de indicadores:
 - sono e humor;
 - exercício e humor;
 - sono e frequência cardíaca;
-- sono e tempo de reação (fadiga: num estudo com 24 astronautas na estação, dormir 6 horas ou menos veio junto com reação mais lenta).
+- sono e tempo de reação (o estudo encontrou associação com sono ≤6 h; o app usa o afastamento genérico do esperado, sem corte exclusivo de 6 h ou diagnóstico de fadiga).
 
 Num dia, um indicador "se afastou" se saiu da faixa verde geral ou passou do limite de desvio pessoal no sentido que preocupa. Se os dois indicadores de um par se afastaram nos mesmos dias, por **3 registros seguidos ou mais** até o mais recente, o app mostra, por exemplo: "Sono e humor mudaram juntos nos últimos 4 dias".
 
@@ -210,6 +210,10 @@ No painel, a região **Ossos e músculos** mostra uma conta ilustrativa, **estim
 
 No painel, a região **Corpo inteiro** mostra a soma dos valores diários informados e válidos (finitos, não negativos), em µSv ou, a partir de 1.000 µSv, em mSv. Zero é válido. Havendo dias sem leitura, o total registrado é incompleto; a exposição desses dias não é conhecida. Os dados são simulados, sem conexão com dosímetro. É contexto, **não limite**: o app não avalia limites de carreira ou eventos de radiação intensa e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
 
+### Comparação do teste de reação
+
+O resultado identifica modo curto/completo, conclusão, duração, respostas válidas e antecipações. Só sessões completas de três minutos concluídas entram em série, gráfico, linha de base, alertas e correlações. Curto, interrompido e registros antigos sem modo ficam para consulta/exportação, sem comparação pessoal. Um teste com menos de três respostas válidas não salva resultado. A execução termina ao atingir a duração, mesmo sem nova resposta. Este teste não é uma reprodução clinicamente validada do RST NASA; latências do aparelho e forma de interação influenciam a média.
+
 ### Origem do dado
 
 Nos passos de **sono**, **frequência cardíaca** e **radiação**, o check-in pergunta "De onde veio o valor?": digitado, sensor vestível (ex.: pulseira de actigrafia) ou dosímetro pessoal. O app **não lê aparelhos**: a pessoa informa onde leu o número. A origem aparece na revisão do check-in e no painel ("Origem: sensor vestível"), fica cifrada junto com os valores do dia e não muda nenhum nível. Na demonstração, o sono vem de um sensor vestível e a radiação do dosímetro. É o primeiro passo para, no futuro, receber os dados direto dos aparelhos.
@@ -240,7 +244,7 @@ Na primeira abertura, o app cria três tripulantes fictícios com **60 dias de r
 
 | Tripulante | Função | Caso preparado | Resultado no app |
 | --- | --- | --- | --- |
-| Ana Ribeiro | Comandante | O sono cai nos últimos 7 dias (de 7,0 até 5,2 h), o humor cai junto (de 4 para 3) e, nos 4 dias com 6 h de sono ou menos, a reação fica mais lenta (de cerca de 306 para 360 a 372 ms) | 3 alertas amarelos (sono, humor e tempo de reação), "Sono e humor mudaram juntos nos últimos 4 dias" e "Sono e tempo de reação mudaram juntos nos últimos 4 dias" |
+| Ana Ribeiro | Comandante | O sono cai nos últimos 7 dias (de 7,0 até 5,2 h), o humor cai junto (de 4 para 3) e há números simulados de reação sem modo registrado | 2 alertas amarelos (sono e humor) e "Sono e humor mudaram juntos"; reação simulada sem modo fica para consulta e não gera comparação ou alerta |
 | Lia Santos | Engenheira de voo | Mudança leve na visão nos últimos 2 dias e dor de cabeça no último | 2 alertas amarelos (visão e sintomas) |
 | Kenji Mori | Médico de bordo | Tudo normal. É o único que acompanha glicemia | Nenhum alerta |
 

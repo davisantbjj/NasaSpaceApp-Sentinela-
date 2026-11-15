@@ -265,20 +265,20 @@
       "nasaRisk": "Sleep Loss, Circadian Desynchronization and Work Overload",
       "hazards": ["isolation", "hostileEnvironment"],
       "messages": {
-        "whyItMatters": "No Reaction Self Test usado na estação, uma reação mais lenta que o padrão da própria pessoa é sinal de fadiga. Num estudo com 24 astronautas, dormir 6 horas ou menos veio junto com reação mais lenta.",
+        "whyItMatters": "Um estudo com 24 astronautas encontrou associação entre sono de 6 horas ou menos e reação mais lenta. O teste deste app é demonstrativo, não equivalente ao protocolo validado do Reaction Self Test e não diagnostica fadiga.",
         "whatToDo": {
           "yellow": "Priorize o próximo período de sono e repita o teste amanhã. Se continuar mais lento, converse com o oficial médico sobre medidas contra a fadiga.",
           "red": "Avise o oficial médico agora."
         }
       },
-      "sourceUrl": "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+      "sourceUrl": "https://techport.nasa.gov/projects/23201",
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://ntrs.nasa.gov/api/citations/20140000075/downloads/20140000075.pdf",
+          "https://techport.nasa.gov/projects/23201",
           "https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197"
         ],
-        "green": "Sem faixa geral: o tempo de reação varia entre pessoas e aparelhos. Só a comparação com o padrão pessoal é usada.",
+        "green": "Sem faixa geral: só testes completos concluídos com modo registrado entram na comparação pessoal. Curto, interrompido e legado sem modo ficam fora da série; ausência de alerta não atesta atenção ou aptidão.",
         "yellow": "Mais de 15% acima do padrão pessoal por 3 registros: algoritmo de demonstração, não o critério de corte do Reaction Self Test.",
         "red": "Não é gerado: sem faixa geral, o motor só chega ao amarelo."
       },

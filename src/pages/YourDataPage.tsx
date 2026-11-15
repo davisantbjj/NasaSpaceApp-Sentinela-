@@ -57,7 +57,7 @@ export function YourDataPage() {
       <section className="card stack"><PrivacyExplanation /></section>
       <section className="card stack" aria-labelledby="data-actions-title">
         <h2 id="data-actions-title">Cópia e pedido de exclusão</h2>
-        <p>A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho e tempos de exercício, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.</p>
+        <p>A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho, exercício, resultado e detalhes do teste de reação e origem declarada, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.</p>
         <div className="row">
           <button type="button" className="btn" disabled={busy} onClick={() => void run(download)}>Exportar meus dados em JSON</button>
           <button type="button" className="btn" disabled={busy || !!request} onClick={() => void run(async () => {

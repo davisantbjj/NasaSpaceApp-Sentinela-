@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { ReactionTestDetails } from '../../types';
 
 // Teste de reação (M4), na linha do Reaction Self Test da NASA: esperar o sinal e responder o mais
 // rápido possível, repetidas vezes. O resultado é a média, em milissegundos, das respostas válidas.
@@ -16,20 +17,23 @@ type Phase = 'idle' | 'waiting' | 'signal' | 'done';
 
 interface Props {
   value?: number; // resultado já salvo hoje, em ms
-  onResult: (ms: number | undefined) => void;
+  details?: ReactionTestDetails;
+  onResult: (ms: number | undefined, details?: ReactionTestDetails) => void;
 }
 
-export function ReactionTestStep({ value, onResult }: Props) {
+export function ReactionTestStep({ value, details, onResult }: Props) {
   const [phase, setPhase] = useState<Phase>(value !== undefined ? 'done' : 'idle');
   const [secondsLeft, setSecondsLeft] = useState(0);
   const [summary, setSummary] = useState<string | undefined>(
-    value !== undefined ? `Resultado salvo hoje: ${value} ms.` : undefined,
+    value !== undefined ? `Resultado salvo hoje: ${value} ms. ${details ? `${details.mode === 'short' ? 'Modo curto' : 'Modo completo'}${details.completed ? '' : ', interrompido'}.` : 'Modo não registrado; fora da comparação pessoal.'}` : undefined,
   );
 
   const target = useRef<HTMLButtonElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const ticker = useRef<number | undefined>(undefined);
   const endAt = useRef(0);
+  const startedAt = useRef(0);
+  const duration = useRef(FULL_SECONDS);
   const signalAt = useRef(0);
   const times = useRef<number[]>([]);
   const early = useRef(0);
@@ -57,9 +61,16 @@ export function ReactionTestStep({ value, onResult }: Props) {
       return;
     }
     const mean = Math.round(valid.reduce((sum, t) => sum + t, 0) / valid.length);
-    const earlyText = early.current === 0 ? '' : `; ${early.current} ${early.current === 1 ? 'antecipação' : 'antecipações'} fora da conta`;
-    setSummary(`Resultado: ${mean} ms (média de ${valid.length} respostas${earlyText}).`);
-    onResult(mean);
+    const completed = performance.now() >= endAt.current;
+    const resultDetails: ReactionTestDetails = {
+      mode: duration.current === FULL_SECONDS ? 'full' : 'short',
+      completed,
+      elapsedSeconds: Math.round((performance.now() - startedAt.current) / 1000),
+      validResponses: valid.length,
+      anticipations: early.current,
+    };
+    setSummary(`Resultado: ${mean} ms (${resultDetails.mode === 'short' ? 'modo curto' : 'modo completo'}${completed ? '' : ', interrompido'}; ${valid.length} respostas válidas).`);
+    onResult(mean, resultDetails);
   };
 
   const scheduleSignal = () => {
@@ -81,10 +92,13 @@ export function ReactionTestStep({ value, onResult }: Props) {
     early.current = 0;
     setSummary(undefined);
     onResult(undefined);
-    endAt.current = performance.now() + seconds * 1000;
+    startedAt.current = performance.now();
+    duration.current = seconds;
+    endAt.current = startedAt.current + seconds * 1000;
     setSecondsLeft(seconds);
     ticker.current = window.setInterval(() => {
       setSecondsLeft(Math.max(0, Math.ceil((endAt.current - performance.now()) / 1000)));
+      if (performance.now() >= endAt.current) finish();
     }, 250);
     scheduleSignal();
     // Leva o foco para a área de resposta, para quem usa teclado.
@@ -109,6 +123,7 @@ export function ReactionTestStep({ value, onResult }: Props) {
 
   return (
     <div className="stack" style={{ gap: 12 }}>
+      <p className="small muted">Teste demonstrativo, sem validação equivalente ao Reaction Self Test da NASA. Só testes completos de 3 minutos concluídos entram na comparação pessoal; o modo curto e testes interrompidos ficam para consulta.</p>
       {running ? (
         <>
           <button

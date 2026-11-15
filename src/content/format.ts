@@ -34,6 +34,11 @@ export function displayValue(
   }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
+  if (indicator === 'reactionTime') {
+    const details = values.reactionTest;
+    const mode = details ? `${details.mode === 'short' ? 'curto' : 'completo'}${details.completed ? '' : ', interrompido'}` : 'modo não registrado';
+    return { text: `${formatNumber(value)} (${mode})`, unit: content.unit };
+  }
   const option = content.scale?.find((o) => o.value === value);
   if (option) return { text: option.label, unit: content.unit === 'de 5' ? `(${value} ${content.unit})` : '' };
   return { text: formatNumber(value), unit: content.unit };

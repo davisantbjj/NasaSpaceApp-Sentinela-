@@ -99,6 +99,14 @@ describe('metas semanais (M9)', () => {
 });
 
 describe('readaptação à gravidade (M11)', () => {
+  it('o aviso usa a janela configurada, inclui o dia e não inventa evento após o retorno', () => {
+    const profile = MISSION_PROFILES.station;
+    const window = rules.context!.readaptation!.noticeDaysBefore;
+    expect(nextGravityChange(profile, 173)!.inDays).toBeGreaterThan(window);
+    expect(nextGravityChange(profile, 174)!.inDays).toBe(window);
+    expect(nextGravityChange(profile, 181)!.inDays).toBe(0);
+    expect(nextGravityChange(profile, 182)).toBeUndefined();
+  });
   it('acha o próximo pouso ou a volta à Terra', () => {
     expect(nextGravityChange(MISSION_PROFILES.mars, 60)).toEqual({ label: 'Pouso em Marte', day: 181, inDays: 121 });
     expect(nextGravityChange(MISSION_PROFILES.mars, 181)).toEqual({ label: 'Pouso em Marte', day: 181, inDays: 0 });

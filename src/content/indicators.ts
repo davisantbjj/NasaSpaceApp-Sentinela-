@@ -113,7 +113,7 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     label: 'Tempo de reação',
     unit: 'ms',
     howToMeasure: 'Faça o teste num lugar calmo. Quando aparecer o sinal, toque na área ou aperte espaço o mais rápido que puder. Não responda antes do sinal. O teste completo leva 3 minutos.',
-    whyMeasure: 'Na estação, os astronautas fazem um teste parecido, o Reaction Self Test, para perceber a fadiga cedo. Reação mais lenta que o seu padrão é um sinal para descansar.',
+    whyMeasure: 'O Reaction Self Test da NASA acompanha atenção e desempenho. Este teste é demonstrativo e não foi validado como equivalente; o tempo também depende do aparelho e da interação. Um resultado isolado não diagnostica fadiga nem comprova aptidão.',
   },
   exerciseMinutes: {
     label: 'Exercício',

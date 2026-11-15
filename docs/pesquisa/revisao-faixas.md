@@ -53,9 +53,31 @@ A [NASA: risco de câncer induzido por radiação](https://www.nasa.gov/referenc
 
 O resultado é **soma dos valores informados**, não medição direta da exposição total. Dias sem leitura tornam o registro incompleto: não é possível quantificar esses dias nem afirmar estritamente que a dose real seja maior. Não há conexão com dosímetro, correção por tipo de radiação ou comparação com limite ocupacional. Não misturar componentes distintos de dose nem aplicar os 150 µSv/dia de nêutrons do Radi-N2 como dose total universal. Os dados atuais são fictícios. Nenhum alerta é gerado pela soma.
 
-### Itens que aguardam implementação
+## Complemento após Talita `ec23abd`: M4, M7, M9, M10 e M11
 
-M4 (teste de reação), M7 (fadiga), M9 (metas semanais), M10 (origem do dado) e M11 (destaque de readaptação) não estão implementadas nesta base. M5–M6 foram revisadas documentalmente e M8 está integrada; isso não constitui aprovação clínica. Não antecipar uma validação a partir de tarefas planejadas. Apresentação, roteiro e material da entrega serão revisados após a conclusão do escopo, conforme Larissa.
+Consulta documental em 15/11/2026. Todas as melhorias M1–M11 agora têm implementação na base integrada; a revisão abaixo descreve os limites efetivos, sem aprovação clínica. Apresentação e material da entrega continuam para depois da conclusão do escopo.
+
+### Reação e associação com sono (M4/M7)
+
+A [NASA: PVT/RST](https://techport.nasa.gov/projects/23201) descreve um protocolo breve com características específicas de temporização e análise, validado em relação ao PVT de dez minutos. Ter três minutos de duração não torna o teste do app equivalente. Latência do navegador, tela, aparelho, método de resposta e interrupções podem afetar a média. Espera aleatória de 1–4 s, exclusão de respostas abaixo de 100 ms e mínimo de três respostas são escolhas desta implementação, não critérios clínicos aprovados.
+
+O estudo original de [Jones et al., Sleep, 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/) acompanhou 24 astronautas em missões de cerca de seis meses. Usou PVT breve e autorrelato, com sessões matutinas/noturnas a cada quatro dias. Encontrou associação entre sono de seis horas ou menos e pior desempenho; não valida o modo curto de 30 s, média isolada ou corte de 15% do Sentinela. O lembrete de quatro dias é uma opção inspirada no estudo, não uma prescrição para todos.
+
+No app, o alerta continua demonstrativo: sete amostras para formar linha de base e mais de 15% de lentidão por três registros válidos, sem faixa geral e sem vermelho. Apenas testes completos concluídos com modo registrado entram na série, linha de base, alertas e correlações. Modo curto, interrompido e legado sem identificação são preservados para consulta/exportação, sem comparação. Os números simulados antigos não recebem um protocolo retroativamente; a linha de base pode precisar ser formada novamente. Mesmo entre testes completos, usar o mesmo aparelho e forma de resposta reduz uma fonte de variação, sem validar o método.
+
+**M7 usa a correlação genérica:** ambos os indicadores precisam se afastar do esperado nos últimos três registros. Sono pode se afastar por faixa geral (atualmente abaixo de 7 ou acima de 9 h) ou desvio pessoal; não existe regra exclusiva `sono ≤ 6 h`. A reação precisa de linha de base pronta. Não é um coeficiente estatístico nem diagnóstico de fadiga; não altera nível, não afirma causa e os registros não precisam ser dias consecutivos. O texto da task foi ajustado para não prometer a regra específica que o código não implementa.
+
+### Metas semanais (M9)
+
+O código conta, nos últimos sete dias incluindo hoje, quantos registros de sono e exercício total caem nas faixas verdes gerais existentes. A meta de cinco dias em sete é escolha de demonstração, sem referência que valide esse número como prescrição. A faixa de sono é referência geral; os limites de exercício continuam demonstrativos. Dias sem dado não contam como êxito e não comprovam descumprimento de um plano médico. Não há meta independente de sessões resistidas. A conquista não certifica saúde, adesão ou aptidão; não modifica alertas. Ausência de registro e valor fora da faixa devem ser interpretados separadamente pela equipe.
+
+### Origem declarada (M10)
+
+`values.sources` indica onde a pessoa diz ter lido ou copiado o valor: `wearable` ou `dosimeter`. `manual`/ausente significa digitado; campos antigos não permitem inferir retrospectivamente um aparelho. Todos os valores continuam inseridos manualmente; não há API, pareamento, identificação do aparelho, dado bruto ou verificação de autenticidade. Não tratar a etiqueta como garantia de precisão. A privacidade e a exportação foram atualizadas sem anunciar leitura automática.
+
+### Readaptação (M11)
+
+O [brief NASA sobre intolerância ortostática](https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-019-orthostatic-intolerance.pdf) sustenta orientar sobre dificuldades ao voltar à gravidade. O app destaca a nota nos sete dias anteriores e no dia de um pouso previsto ou retorno à Terra; esse intervalo é escolha de interface, não limiar clínico. Usa fases planejadas, não detecção de pouso ou sintoma. Após a data, não garante acompanhamento: pode deixar de haver próxima mudança. Não mede pressão ao levantar, não diagnostica intolerância nem define tratamento; não muda níveis. Dias em Lua/Marte são contexto de missão, sem extrapolar incidência humana observada no retorno à Terra.
 
 ## O que ainda depende da equipe
 

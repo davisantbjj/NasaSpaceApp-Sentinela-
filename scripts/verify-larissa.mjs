@@ -39,7 +39,7 @@ try {
   };
   const command = (method, params = {}) => new Promise((resolve, reject) => {
     const id = ++nextId;
-    const timeout = setTimeout(() => { pending.delete(id); reject(new Error(`CDP sem resposta: ${method}`)); }, 30_000);
+    const timeout = setTimeout(() => { pending.delete(id); reject(new Error(`CDP sem resposta: ${method}`)); }, 45_000);
     pending.set(id, { resolve, reject, timeout });
     socket.send(JSON.stringify({ id, method, params }));
   });
@@ -94,7 +94,7 @@ try {
   await waitFor("document.body.innerText.includes('Li o aviso')");
   assert.equal(await inspect('return await db.crew.count();'), 0, 'Seed criado antes da leitura');
   assert.ok(await evaluate("document.body.innerText.includes('sem criptografia')"));
-  await inspect("await db.preferences.put({ key: 'privacyNotice', value: '2026-11-15-v4' });");
+  await inspect("await db.preferences.put({ key: 'privacyNotice', value: '2026-11-15-v5' });");
   await command('Page.reload');
   await waitFor("document.body.innerText.includes('Li o aviso')");
   assert.equal(await inspect('return await privacy.hasAcknowledgedPrivacyNotice();'), false);
@@ -104,6 +104,7 @@ try {
 
   await evaluate("location.hash = '#/mission'");
   await waitFor(`!!document.querySelector('select[aria-label="Perfil da missão"]')`);
+  assert.ok(await evaluate("document.body.innerText.includes('Metas da semana') && document.body.innerText.includes('não é prescrição')"));
   await evaluate(`(() => {
     const select = document.querySelector('select[aria-label="Perfil da missão"]');
     Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(select, 'lunarFlyby');
@@ -129,7 +130,42 @@ try {
     if (!title) throw new Error('Passo inesperado antes da revisão');
     visited.push(title);
     let skip = false;
-    if (await evaluate("!!document.querySelector('input[name=stress]')")) {
+    if (title === 'Tempo de reação') {
+      // Respostas de automação verificam o fluxo, não a precisão clínica do teste.
+      await click('Começar o teste (3 min)');
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await waitFor("document.querySelector('form.step [aria-live=assertive]')?.textContent.includes('Toque agora')");
+        await delay(180);
+        await evaluate("document.querySelector('form.step [aria-live=assertive]').closest('button').dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }))");
+      }
+      await click('Encerrar agora');
+      await waitFor("document.querySelector('form.step').textContent.includes('modo completo, interrompido')");
+      await click('Versão curta (30 s, para demonstração)');
+      // Aguarda os 30 s reais. O sinal é respondido após 180 ms, sem mudar o relógio do app.
+      await evaluate(`new Promise((resolve, reject) => {
+        let responding = false;
+        const deadline = Date.now() + 40000;
+        const interval = setInterval(() => {
+          const signal = document.querySelector('form.step [aria-live=assertive]');
+          if (!signal) { clearInterval(interval); resolve(true); return; }
+          if (Date.now() > deadline) { clearInterval(interval); reject(new Error('Teste curto não terminou')); return; }
+          if (!responding && signal.textContent.includes('Toque agora')) {
+            responding = true;
+            setTimeout(() => {
+              signal.closest('button')?.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+              responding = false;
+            }, 180);
+          }
+        }, 50);
+      })`);
+      await waitFor("document.querySelector('form.step').textContent.includes('modo curto;')");
+    } else if (await evaluate("!!document.querySelector('#heartRate')")) {
+      await fill('#heartRate', '70');
+      await evaluate("[...document.querySelectorAll('form.step label')].find(l => l.textContent.includes('Sensor vestível')).querySelector('input').click()");
+    } else if (await evaluate("!!document.querySelector('#radiationDose')")) {
+      await fill('#radiationDose', '400');
+      await evaluate("[...document.querySelectorAll('form.step label')].find(l => l.textContent.includes('Dosímetro pessoal')).querySelector('input').click()");
+    } else if (await evaluate("!!document.querySelector('input[name=stress]')")) {
       await evaluate(`document.querySelector('input[name=stress][value="4"]').click()`);
     } else if (await evaluate("!!document.querySelector('input[name=workload]')")) {
       await evaluate(`document.querySelector('input[name=workload][value="3"]').click()`);
@@ -144,7 +180,7 @@ try {
     await waitFor(`!document.querySelector('form.step') || document.querySelector('form.step h2').textContent !== ${JSON.stringify(title)}`);
     if (await evaluate("document.body.innerText.includes('Confira antes de salvar')")) break;
   }
-  for (const title of ['Estresse', 'Carga de trabalho', 'Exercício', 'Medicação']) assert.ok(visited.includes(title), `Passo não percorrido: ${title}`);
+  for (const title of ['Estresse', 'Carga de trabalho', 'Exercício', 'Medicação', 'Tempo de reação']) assert.ok(visited.includes(title), `Passo não percorrido: ${title}`);
   await waitFor("document.body.innerText.includes('Confira antes de salvar')");
   await click('Salvar check-in');
   await waitFor("document.body.innerText.toLowerCase().includes('check-in salvo')");
@@ -199,6 +235,16 @@ try {
   assert.ok(today, 'Valores novos ausentes na exportação');
   assert.equal(today.values.exerciseMinutes, 50);
   assert.equal(today.values.resistanceMinutes, 20);
+  assert.ok(today.values.reactionTime >= 100);
+  assert.equal(today.values.reactionTest.mode, 'short');
+  assert.equal(today.values.reactionTest.completed, true);
+  assert.ok(today.values.reactionTest.elapsedSeconds >= 30);
+  assert.ok(today.values.reactionTest.validResponses >= 3);
+  assert.equal(today.values.sources.heartRate, 'wearable');
+  assert.equal(today.values.sources.radiationDose, 'dosimeter');
+  assert.ok(await inspect(`const { seriesPoints, hasValue } = await import('/src/lib/series.ts');
+    const values = (await privacy.exportCrewData('lia')).records.find(r => r.id === ${JSON.stringify(today.id)}).values;
+    return hasValue(values, 'reactionTime') && seriesPoints(values, 'reactionTime').length === 0;`));
   assert.equal(today.values.medication.find((m) => m.id === 'eyeDrops').taken, false);
   assert.equal(today.values.medication.find((m) => m.id === 'vitaminD').taken, true);
   assert.equal('sealed' in today, false);
@@ -209,7 +255,7 @@ try {
       && await db.records.where('crewId').equals('kenji').count() === 60;`));
   await command('Emulation.setDeviceMetricsOverride', { width: 1280, height: 1000, deviceScaleFactor: 1, mobile: false });
   await screenshot('seus-dados-desktop');
-  console.log('PASS: mensagens como texto, pedido idempotente sem exclusão e download JSON legível e isolado com M1–M3');
+  console.log('PASS: JSON isolado com resultado/modo de reação e origens declaradas; teste curto fora da série pessoal; mensagens e pedido preservados');
 
   await command('Page.reload');
   await login('lia', '3333');

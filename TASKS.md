@@ -149,7 +149,7 @@ Revisado em 15/11 considerando a fase 11 inteira (M1 a M11) como feita. Tarefas 
 - [ ] Decidir quem pode mudar o **perfil e a fase da missão** (hoje qualquer tripulante muda o ambiente para todos). Com a M8, o ambiente passa a vir da fase da missão; sugestão: só o comandante e o oficial médico
 - [ ] O perfil do médico do solo roda o ciclo de bordo, porque tudo está num navegador só. Num produto real o solo não teria a chave de bordo
 - [ ] Buscar pacotes do servidor para recuperar dados num aparelho novo (a rota já existe; falta o app usar e resolver como a chave chega ao aparelho novo)
-- [x] Larissa: adaptar `scripts/verify-larissa.mjs` ao login por PIN, pedido de exclusão sem apagar histórico e check-in já implementado (M1–M3: estresse, carga, exercício em dois campos e medicação). Teste de reação permanece pendente até M4 existir
+- [x] Larissa: adaptar `scripts/verify-larissa.mjs` ao login por PIN, pedido sem exclusão, check-in M1–M3, reação curta/interrompida e origem declarada, incluindo os novos campos no JSON. Concluído após integrar M4/M10
 - [ ] Entregar as mensagens ao oficial médico pela central de bordo (hoje ficam só no aparelho do tripulante, cifradas). Fazer junto com a Larissa, que tem a mesma tarefa
 - [ ] **(fase 11)** Levar o perfil de missão (M8) para o pacote do solo e para a "Visão do solo": nave, dia da missão de N e fase. O atraso mostrado passa a vir da fase
 - [ ] **(fase 11)** Conferir se os valores novos (medicação, estresse, carga, treino resistido, teste de reação, origem do dado) chegam legíveis na "Visão do solo" e se o resumo do comandante continua sem nenhum dado clínico
@@ -202,18 +202,20 @@ Revisado em 14/11 depois das melhorias M1 e M2 e dos papéis do Davi, que já es
 
 ### Larissa: pesquisa, LGPD e apresentação
 
-Revisado em 15/11 após integrar a branch da Talita até `097d2fd`: M1–M3, M5, M6 e M8 estão feitas. Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`.
+Revisado em 15/11 após integrar a branch da Talita até `ec23abd`: M1–M11 têm implementação. Revisão documental não equivale a aprovação clínica. Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`.
 
 - [x] Revisão **documental** das faixas, com referências e limites de evidência por nível em `rules.json` (`rangeEvidence`) e `docs/pesquisa/revisao-faixas.md`. Aprovação clínica da fase 2 continua pendente; nenhum corte numérico foi alterado
 - [x] **(fase 11, M1–M3)** Revisão documental de medicação, estresse, carga e treino resistido em `docs/pesquisa/revisao-faixas.md`, com NASA e estudos originais, limites de evidência e referências no `rangeEvidence`. Cortes mantidos; não constitui aprovação clínica
 - [x] **(fase 11, M5–M6)** Revisão documental da taxa óssea NASA e sua população/período, com estudo original complementar; avisos de extrapolação e conta ilustrativa. Revisados também os limites da soma de radiação: valores informados, dias ausentes e ausência de conexão com dosímetro ou limite de carreira. Sem alterar cortes de alerta
-- [ ] **(fase 11, depende de implementação)** Completar revisão de teste de reação (M4), fadiga (M7) e metas semanais (M9). Essas melhorias ainda não estão implementadas nesta base
+- [x] **(fase 11, M4/M7/M9)** Revisão do teste de reação, associação genérica com sono e metas de cinco em sete dias. Registrados limites, critérios demonstrativos e diferenças em relação ao RST NASA; sem diagnóstico de fadiga. M7 não implementa corte específico de sono ≤6 h
+- [x] **(fase 11, M4)** Guardar modo, conclusão, duração e contagens do teste; curto, interrompido e legado sem modo ficam para consulta/exportação e fora da série pessoal. Não inventar protocolo para números antigos
+- [x] **(fase 11, M11)** Conferir evento planejado, janela de sete dias e dia do retorno; documentar que é orientação educativa, sem detectar pouso nem definir risco individual
 - [x] Nota educativa pelo sexo em Missão, com fonte NASA e orientação de readaptação à gravidade. Não muda faixas nem níveis; sem `sex`, usa texto geral
 - [x] Texto e tela "Seus dados": finalidade, acesso real no protótipo, retenção, cópia JSON por perfil e pedido local de exclusão. O tripulante não exclui o próprio histórico (decisão da equipe em 14/11). Limites em `docs/privacidade.md`
 - [x] **(fase 11, M1–M3)** Privacidade em `docs/privacidade.md`, aviso versionado e "Seus dados": plano de medicação sem cifra, valores diários cifrados e JSON baixado legível sem cifra. Corrigida a promessa de exclusão imediata de mensagens
 - [x] **(fase 11, M5–M6/M8)** Privacidade dos cálculos derivados e das preferências de missão compartilhadas sem cifra, fora da cópia individual; aviso v5. Script de integração ampliado ao perfil de missão e ao contexto ósseo/radiação
-- [ ] **(fase 11, depende de implementação)** Rever privacidade e exportação para teste de reação (M4) e origem do dado (M10), quando existirem
-- [x] Corrigir e executar `scripts/verify-larissa.mjs`: login por PIN, check-in M1–M3, download JSON legível e restrito ao perfil, pedido sem exclusão, persistência e reset pelo oficial médico. M4 ainda pendente
+- [x] **(fase 11, M4/M10)** Privacidade e exportação do resultado e detalhes do teste de reação e origem declarada cifrados junto do registro; aviso v6. Sem alegar conexão com aparelhos
+- [x] Corrigir e executar `scripts/verify-larissa.mjs`: login por PIN, check-in, reação curta e interrompida, origem declarada, JSON legível e restrito ao perfil, pedido sem exclusão, persistência e reset pelo oficial médico
 - [x] Aviso antes da primeira entrada: finalidade e limites da base legal (art. 11, II, f), sem presumir tutela da saúde ou consentimento genérico para o hackathon
 - [x] Composição e histórico local de mensagem para **mostrar** ao oficial médico, com indicação de não enviada, validação, exportação e exclusão
 - [ ] Entrega da mensagem ao oficial médico. Não está mais bloqueada: os papéis e a central de bordo do Davi já existem. Fazer junto com o Davi, que tem a mesma tarefa
@@ -247,7 +249,7 @@ Valem as decisões de `CONTEXTO-IA.md`: faixas só em `rules.json`, o ambiente m
 
 - [x] **M5. Perda óssea estimada pelo dia de missão** (média de 1% a 1,5% ao mês), mostrada como "estimativa, não medida". Só contexto, sem faixa de alerta. Esforço baixo
 - [x] **M6. Radiação acumulada na missão**: soma das doses do dia, como contexto, sem faixa nova. Esforço baixo
-- [x] **M7. Fadiga**: sono de 6 h ou menos junto com reação mais lenta aparece como "mudaram juntos", sem afirmar causa. Base: estudo com 24 astronautas em missões de 6 meses na ISS. Esforço baixo; depende de M4
+- [x] **M7. Sono e reação mudaram juntos**: usa a correlação genérica dos indicadores afastados do esperado por três registros, sem afirmar causa ou diagnosticar fadiga. O estudo com 24 astronautas encontrou associação com sono ≤6 h, mas esse corte específico não foi implementado como regra do app. Revisão em `docs/pesquisa/revisao-faixas.md`
 - [x] **M8. Perfil de missão**: nave, tamanho da tripulação, duração e fases (ida, superfície, volta), com modelos ISS (cerca de 6 meses), Artemis II (Orion, 4 pessoas, cerca de 10 dias) e Marte (marcado como referência, não missão real). A tela de missão mostra "Dia 45 de 180, fase trânsito", e a fase define o ambiente. Quem pode mudar o perfil e a fase fica na tarefa do Davi. Esforço médio
 
 ### Agir
