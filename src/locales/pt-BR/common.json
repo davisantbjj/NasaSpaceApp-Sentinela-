@@ -140,7 +140,7 @@
   },
   "login": {
     "title": "Quem está usando?",
-    "intro": "Escolha o seu perfil e digite o PIN. Cada papel vê só o que precisa.",
+    "intro": "Escolha o seu perfil e toque em Entrar. Cada papel vê só o que precisa.",
     "profile": "Perfil",
     "pin": "PIN de {{name}}",
     "access": "acesso",
@@ -151,8 +151,7 @@
     "wrongPinRemaining_one": "PIN incorreto. Resta {{count}} tentativa antes de uma pausa de 30 segundos.",
     "wrongPinRemaining_other": "PIN incorreto. Restam {{count}} tentativas antes de uma pausa de 30 segundos.",
     "retryIn": "Tente de novo em {{seconds}} s.",
-    "demoPins": "PINs da demonstração",
-    "security": "Os valores dos check-ins ficam cifrados e abrem com o PIN; o cadastro e o plano de medicação ficam sem criptografia. A tela bloqueia sozinha depois de 5 minutos sem uso. Num produto real, a entrada seria a do sistema da agência."
+    "security": "Os valores dos check-ins ficam cifrados e abrem com o PIN; o cadastro e o plano de medicação ficam sem criptografia. Na demonstração, os perfis de exemplo entram sem digitar o PIN. A tela bloqueia sozinha depois de 5 minutos sem uso. Num produto real, a entrada seria a do sistema da agência."
   },
   "mission": {
     "editorsOnly": "Só o comandante e o oficial médico alteram o perfil, a fase, o ambiente e o CO2 da missão.",
@@ -368,7 +367,7 @@
       },
       "access": {
         "title": "Quem consegue ver",
-        "text": "Cada pessoa entra com o próprio perfil e PIN. Pelo app, o tripulante vê só os próprios dados; o oficial médico de bordo vê os de todos; o comandante vê só se cada colega fez o check-in e se há alerta vermelho; a equipe médica na Terra recebe um pacote diário cifrado por tripulante. Cada consulta aos seus dados fica registrada em Seus dados. Os seus dados ficam cifrados com uma chave só sua, que abre com o seu PIN e com o do oficial médico; o PIN de um colega não abre. Limites do protótipo: o PIN curto pode ser descoberto por quem copiar o banco, e a chave do solo fica neste mesmo navegador porque tudo roda num aparelho só. Exportar cria um arquivo sob seu controle; abrir fontes externas acessa os respectivos sites."
+        "text": "Cada pessoa entra com o próprio perfil. Na demonstração, os perfis de exemplo entram só com um toque, sem digitar o PIN: qualquer pessoa com este aparelho abre qualquer perfil, inclusive o do oficial médico, e vê o que esse papel vê. Pelo app, o tripulante vê só os próprios dados; o oficial médico de bordo vê os de todos; o comandante vê só se cada colega fez o check-in e se há alerta vermelho; a equipe médica na Terra recebe um pacote diário cifrado por tripulante. Cada consulta aos seus dados fica registrada em Seus dados. Os seus dados ficam cifrados com uma chave só sua, que abre com o seu PIN e com o do oficial médico; o PIN de um colega não abre. Na demonstração, o app usa esses PINs sozinho, então a cifra não separa quem usa o aparelho. Limites do protótipo: o PIN curto pode ser descoberto por quem copiar o banco, e a chave do solo fica neste mesmo navegador porque tudo roda num aparelho só. Exportar cria um arquivo sob seu controle; abrir fontes externas acessa os respectivos sites."
       },
       "retention": {
         "title": "Por quanto tempo",

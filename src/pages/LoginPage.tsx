@@ -9,6 +9,10 @@ import i18n from '../i18n';
 const MAX_ATTEMPTS = 5;
 const WAIT_MS = 30_000;
 
+// PIN dos perfis de exemplo: na demonstração ele é usado por baixo dos panos, então basta
+// escolher o perfil e confirmar. Perfis fora da demonstração continuam pedindo o PIN.
+const demoPinOf = (profileId: string) => DEMO_PROFILES.find((p) => p.id === profileId)?.pin;
+
 // Tentativas erradas por perfil, guardadas na sessão do navegador: recarregar a página ou
 // trocar de perfil não zera a pausa. (Quem copia o banco testa PINs fora do app; esse limite
 // está documentado em src/lib/crypto.ts.)
@@ -57,14 +61,15 @@ export function LoginPage() {
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     if (waiting || busy) return;
-    if (!/^\d{4,6}$/.test(pin)) {
+    const value = demoPinOf(profileId) ?? pin;
+    if (!/^\d{4,6}$/.test(value)) {
       setError(i18n.t('login.pinLength'));
       return;
     }
     setBusy(true);
     setError(undefined);
     try {
-      await login(profileId, pin);
+      await login(profileId, value);
       setGuard({ attempts: 0, waitUntil: 0 });
     } catch (e) {
       setPin('');
@@ -84,6 +89,7 @@ export function LoginPage() {
   };
 
   const selected = profiles.find((p) => p.id === profileId);
+  const isDemo = demoPinOf(profileId) !== undefined;
 
   return (
     <div className="page login">
@@ -126,6 +132,15 @@ export function LoginPage() {
         {/* Nome de usuário para o gerenciador de senhas associar o PIN ao perfil. */}
         <input type="text" name="username" autoComplete="username" value={selected?.name ?? ''} readOnly hidden />
 
+        {isDemo ? (
+          <div className="field">
+            <button type="submit" className="btn btn-primary" disabled={busy || waiting}>
+              {busy ? i18n.t('login.opening') : i18n.t('login.enter')}
+            </button>
+            {error && <p className="field-error" role="alert">{error}</p>}
+            {waiting && <p className="small muted num">{i18n.t('login.retryIn', { seconds: Math.ceil((waitUntil - now) / 1000) })}</p>}
+          </div>
+        ) : (
         <div className="field">
           <label htmlFor="pin">{i18n.t('login.pin', { name: selected?.name ?? i18n.t('login.access') })}</label>
           <div className="field-input">
@@ -149,15 +164,7 @@ export function LoginPage() {
           {error && <p id="pin-error" className="field-error" role="alert">{error}</p>}
           {waiting && <p className="small muted num">{i18n.t('login.retryIn', { seconds: Math.ceil((waitUntil - now) / 1000) })}</p>}
         </div>
-
-        <details>
-          <summary>{i18n.t('login.demoPins')}</summary>
-          <ul className="summary-list">
-            {DEMO_PROFILES.map((p) => (
-              <li key={p.id}><span>{p.name} · {i18n.t(ROLE_LABELS[p.role])}</span><span className="num">{p.pin}</span></li>
-            ))}
-          </ul>
-        </details>
+        )}
       </form>
 
       <p className="small muted">

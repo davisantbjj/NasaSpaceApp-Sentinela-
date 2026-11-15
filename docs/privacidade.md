@@ -6,7 +6,7 @@ Revisado por Larissa em 15/11/2026 até a base integrada `2769fb5`, incluindo os
 
 Antes de criar a demonstração ou liberar o login, o app apresenta finalidade, armazenamento, acesso, retenção e limites da base legal. O botão registra a leitura em `preferences`, no IndexedDB. Isso não identifica uma pessoa nem constitui consentimento genérico. Outro navegador tem sua própria leitura. A recriação da demonstração preserva essa preferência.
 
-O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12 e as referências de massa/dose anterior guardadas sem cifra. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
+O aviso foi atualizado para `2026-11-15-v7`, incluindo os novos dados da fase 12 e as referências de massa/dose anterior guardadas sem cifra. Na `2026-11-15-v8`, o aviso passou a dizer que os perfis de exemplo entram só com um toque, sem digitar o PIN. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
 
 ## Dados armazenados e proteção real
 
@@ -58,7 +58,7 @@ Não há entrega, notificação, confirmação de leitura ou resposta médica. P
 
 ## Acesso e retenção
 
-Os valores cifrados de um tripulante abrem com as chaves protegidas pelo PIN do dono e do oficial médico. O comandante recebe somente check-in feito/pendente e alerta vermelho sim/não; o solo abre pacotes entregues. Consultas de outros papéis são registradas. O PIN curto (4–6 dígitos) pode ser descoberto por quem copiar o banco. A chave privada do solo fica neste mesmo navegador, protegida pelo PIN do solo, porque a demonstração usa um único aparelho.
+Os valores cifrados de um tripulante abrem com as chaves protegidas pelo PIN do dono e do oficial médico. O comandante recebe somente check-in feito/pendente e alerta vermelho sim/não; o solo abre pacotes entregues. Consultas de outros papéis são registradas. Na demonstração, os perfis de exemplo entram sem digitar o PIN (o app usa o PIN de exemplo sozinho), então qualquer pessoa com o aparelho abre qualquer perfil; a separação por papel continua, mas não protege contra quem usa o mesmo aparelho. Perfis fora da demonstração continuam pedindo o PIN. O PIN curto (4–6 dígitos) pode ser descoberto por quem copiar o banco. A chave privada do solo fica neste mesmo navegador, protegida pelo PIN do solo, porque a demonstração usa um único aparelho.
 
 Os dados locais permanecem até limpeza/remoção do armazenamento ou recriação da demonstração. Não há política de retenção institucional ou fluxo de atendimento ao pedido implementados. O backend, quando configurado, recebe pacotes cifrados. Abrir fontes externas e baixar cópias são ações separadas do usuário.
 

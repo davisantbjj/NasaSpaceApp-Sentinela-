@@ -140,7 +140,7 @@
   },
   "login": {
     "title": "Who is using the app?",
-    "intro": "Choose your profile and enter the PIN. Each role only sees what it needs.",
+    "intro": "Choose your profile and tap Sign in. Each role only sees what it needs.",
     "profile": "Profile",
     "pin": "PIN for {{name}}",
     "access": "access",
@@ -151,8 +151,7 @@
     "wrongPinRemaining_one": "Incorrect PIN. {{count}} attempt remains before a 30-second pause.",
     "wrongPinRemaining_other": "Incorrect PIN. {{count}} attempts remain before a 30-second pause.",
     "retryIn": "Try again in {{seconds}} s.",
-    "demoPins": "Demo PINs",
-    "security": "Check-in values are encrypted and open with the PIN; the profile and the medication plan are not encrypted. The screen locks by itself after 5 minutes without use. In a real product, sign-in would use the agency's system."
+    "security": "Check-in values are encrypted and open with the PIN; the profile and the medication plan are not encrypted. In the demo, the sample profiles sign in without typing the PIN. The screen locks by itself after 5 minutes without use. In a real product, sign-in would use the agency's system."
   },
   "mission": {
     "editorsOnly": "Only the commander and the medical officer change the mission profile, phase, environment, and CO2.",
@@ -368,7 +367,7 @@
       },
       "access": {
         "title": "Who can see it",
-        "text": "Each person signs in with their own profile and PIN. In the app, crew members see only their own data; the onboard medical officer sees everyone's; the commander sees only whether each crewmate checked in and whether there is a red alert; the medical team on Earth receives one encrypted packet per crew member each day. Each view of your data is recorded in Your data. Your data is encrypted with a key that belongs to you and can be opened with your PIN and the medical officer's PIN; another crewmate's PIN cannot open it. Prototype limitations: someone who copies the database may discover the short PIN, and the ground physician's key is in this same browser because everything runs on one device. Exporting creates a file under your control; opening external sources accesses those websites."
+        "text": "Each person signs in with their own profile. In the demo, the sample profiles sign in with one tap, without typing the PIN: anyone with this device can open any profile, including the medical officer's, and see what that role sees. In the app, crew members see only their own data; the onboard medical officer sees everyone's; the commander sees only whether each crewmate checked in and whether there is a red alert; the medical team on Earth receives one encrypted packet per crew member each day. Each view of your data is recorded in Your data. Your data is encrypted with a key that belongs to you and can be opened with your PIN and the medical officer's PIN; another crewmate's PIN cannot open it. In the demo, the app uses these PINs by itself, so encryption does not separate the people using the device. Prototype limitations: someone who copies the database may discover the short PIN, and the ground physician's key is in this same browser because everything runs on one device. Exporting creates a file under your control; opening external sources accesses those websites."
       },
       "retention": {
         "title": "How long data is kept",
