@@ -17,7 +17,7 @@ export function translateText(text: string | LocalizedText): string {
     } else if (key === 'value' && typeof value === 'number') {
       params.value = formatNumber(value);
     } else if ((key === 'min' || key === 'max' || key.endsWith('Min') || key.endsWith('Max') ||
-      key === 'systolic' || key === 'diastolic' || key === 'percent' || key === 'days' ||
+      key === 'systolic' || key === 'diastolic' || key === 'percent' || key === 'days' || key === 'start' ||
       key === 'sampleDays' || key === 'baselineDays') && typeof value === 'number') {
       params[key] = formatNumber(value);
     } else if (key === 'value' && typeof value === 'object' && !Array.isArray(value)) {

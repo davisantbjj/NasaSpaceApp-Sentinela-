@@ -10,8 +10,8 @@
     "baseline": "{{name}} is {{percent}}% {{side}} your usual pattern for {{days}} days (today: {{value}})",
     "symptoms": "Reported symptoms: {{symptoms}}",
     "missedMedication": "Dose not taken today: {{doses}}",
-    "bodyMassLoss": "Body mass: {{percent}}% below the start ({{value}} kg now; {{start}} kg at start)"
-    ,"conditioning": "{{name}} is {{value}} of the preflight value"
+    "bodyMassLoss": "Body mass: {{percent}}% below the start ({{value}} kg now; {{start}} kg at start)",
+    "conditioning": "{{name}} is {{value}} of the preflight value"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -33,8 +33,8 @@
     "baseline": "Your personal pattern: {{value}} ({{days}} days)",
     "noSymptoms": "Expected: no symptoms",
     "medication": "Expected: all scheduled doses for the day",
-    "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%"
-    ,"conditioning": "Reference: at least 80% of the preflight value"
+    "bodyMass": "Starting value: {{start}} {{unit}} · yellow above {{yellow}}% loss · red above {{red}}%",
+    "conditioning": "Reference: at least {{min}}{{unit}} of the preflight value"
   },
   "confidence": {
     "baselineForming": "Baseline forming ({{sampleDays}} of {{baselineDays}} days)",
@@ -156,8 +156,8 @@
       "yellow": "Note when it started and how it changes, then record it again tomorrow.",
       "red": "Notify the onboard medical officer now.",
       "co2High": {
-        "yellow": "Because cabin CO2 is above 3 mmHg, check cabin ventilation and tell the medical officer about the symptom.",
-        "red": "Because cabin CO2 is above 3 mmHg, check cabin ventilation and notify the medical officer now."
+        "yellow": "Because cabin CO2 is above the mission attention threshold, check cabin ventilation and tell the medical officer about the symptom.",
+        "red": "Because cabin CO2 is above the mission attention threshold, check cabin ventilation and notify the medical officer now."
       }
     },
     "reactionTime": {

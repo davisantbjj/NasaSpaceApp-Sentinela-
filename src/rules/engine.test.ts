@@ -3,7 +3,7 @@ import { addDays } from '../lib/dates';
 import type { Alert, DailyRecord, DailyValues, MissionRuleContext, Rules } from '../types';
 import { computeBaselines, findBaseline } from './baseline';
 import { findCorrelations } from './correlation';
-import { evaluateRecord, levelByRegion, levelForRange } from './engine';
+import { evaluateRecord, isCabinCo2High, levelByRegion, levelForRange } from './engine';
 import { rules } from './rules';
 
 const START = '2026-01-01';
@@ -58,6 +58,12 @@ describe('levelForRange', () => {
       expect(alerts).toHaveLength(2);
       expect(alerts.map((alert) => alert.level)).toEqual(['yellow', 'yellow']);
       expect(alerts.every((alert) => alert.indicator === 'conditioning')).toBe(true);
+    });
+
+    it('o corte de 80% vem da faixa verde do rules.json', () => {
+      const custom = structuredClone(rules);
+      custom.indicators.conditioning!.green = { min: 70, max: 200 };
+      expect(evaluateLast([assessment(75, 72)], 'station', custom)).toEqual([]);
     });
 
     it('não alerta quando as duas capacidades atingem 80%', () => {
@@ -304,6 +310,24 @@ describe('evaluateRecord', () => {
 
     const [red] = evaluateLast([{ bodyMassKg: 89.9 }], 'station', rules, { startBodyMassKg: 100 });
     expect(red.level).toBe('red');
+  });
+
+  it('massa corporal usa os limites de perda do rules.json (N11)', () => {
+    const custom = structuredClone(rules);
+    custom.indicators.bodyMassKg!.lossPercent = { yellow: 2, red: 4 };
+    const [alert] = evaluateLast([{ bodyMassKg: 97 }], 'station', custom, { startBodyMassKg: 100 });
+    expect(alert.level).toBe('yellow');
+    expect(alert.reference.params).toMatchObject({ yellow: 2, red: 4 });
+  });
+
+  it('limite de CO2 vem do rules.json e só vale para os sintomas ligados ao CO2 (N13)', () => {
+    expect(isCabinCo2High(3, rules)).toBe(false);
+    expect(isCabinCo2High(3.1, rules)).toBe(true);
+    expect(isCabinCo2High(undefined, rules)).toBe(false);
+    const custom = structuredClone(rules);
+    custom.context!.cabinCo2!.attentionMmhg = 2;
+    const [alert] = evaluateLast([{ symptoms: ['headache'] }], 'station', custom, { cabinCo2Mmhg: 2.5 });
+    expect(alert.whatToDo).toBe('alerts:rules.symptoms.co2High.yellow');
   });
 
   it('sintoma respiratório inclui orientação de CO2 quando a cabine passa de 3 mmHg (N13)', () => {

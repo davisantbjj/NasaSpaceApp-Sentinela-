@@ -71,6 +71,7 @@ export type ResistanceStatus = 'completed' | 'partial' | 'notDone';
 export interface ExerciseSession {
   type: ExerciseSessionType;
   durationMinutes: number;
+  resistanceMinutes?: number; // só em 'both': parte da duração feita em treino resistido
   averageHeartRate?: number;
   resistanceStatus?: ResistanceStatus;
 }
@@ -318,6 +319,7 @@ export interface IndicatorRule {
   demo: boolean;
   rangeEvidence?: RangeEvidence;
   missedLevel?: 'yellow' | 'red'; // medicação: nível quando uma dose prevista não foi tomada
+  lossPercent?: { yellow: number; red: number }; // massa corporal (N11): perda em relação ao início
 }
 
 export interface Rules {
@@ -341,6 +343,7 @@ export interface Rules {
       sourceUrl: string;
       demo: boolean;
     };
+    cabinCo2?: { attentionMmhg: number; symptoms: string[]; sourceUrl: string }; // N13: CO2 da cabine e sintomas ligados a ele
     radiationTotal?: { careerLimitMsv?: number; sourceUrl: string }; // M6 e N2: soma das doses do dia e percentual dos 600 mSv de carreira
     weeklyGoals?: { windowDays: number; targetDays: number; indicators: IndicatorId[]; demo: boolean }; // M9
     readaptation?: { noticeDaysBefore: number }; // M11: quantos dias antes da mudança de gravidade destacar

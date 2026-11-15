@@ -10,8 +10,8 @@
     "baseline": "{{name}} está {{percent}}% {{side}} do seu padrão há {{days}} dias (hoje: {{value}})",
     "symptoms": "Sintomas relatados: {{symptoms}}",
     "missedMedication": "Dose não tomada hoje: {{doses}}",
-    "bodyMassLoss": "Massa corporal: {{percent}}% abaixo do início ({{value}} kg agora; {{start}} kg no início)"
-    ,"conditioning": "{{name}} está em {{value}} do valor antes do voo"
+    "bodyMassLoss": "Massa corporal: {{percent}}% abaixo do início ({{value}} kg agora; {{start}} kg no início)",
+    "conditioning": "{{name}} está em {{value}} do valor antes do voo"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -33,8 +33,8 @@
     "baseline": "Seu padrão pessoal: {{value}} ({{days}} dias)",
     "noSymptoms": "Esperado: nenhum sintoma",
     "medication": "Esperado: todas as doses previstas no dia",
-    "bodyMass": "Valor inicial: {{start}} {{unit}} · amarelo acima de {{yellow}}% de perda · vermelho acima de {{red}}%"
-    ,"conditioning": "Referência: pelo menos 80% do valor antes do voo"
+    "bodyMass": "Valor inicial: {{start}} {{unit}} · amarelo acima de {{yellow}}% de perda · vermelho acima de {{red}}%",
+    "conditioning": "Referência: pelo menos {{min}}{{unit}} do valor antes do voo"
   },
   "confidence": {
     "baselineForming": "Linha de base em formação ({{sampleDays}} de {{baselineDays}} dias)",
@@ -156,8 +156,8 @@
       "yellow": "Anote quando começou e como evolui, e registre de novo amanhã.",
       "red": "Avise o médico de bordo agora.",
       "co2High": {
-        "yellow": "Como o CO2 da cabine está acima de 3 mmHg, confira a ventilação da cabine e avise o oficial médico sobre o sintoma.",
-        "red": "Como o CO2 da cabine está acima de 3 mmHg, confira a ventilação da cabine e avise o oficial médico agora."
+        "yellow": "Como o CO2 da cabine está acima do limite de atenção da missão, confira a ventilação da cabine e avise o oficial médico sobre o sintoma.",
+        "red": "Como o CO2 da cabine está acima do limite de atenção da missão, confira a ventilação da cabine e avise o oficial médico agora."
       }
     },
     "reactionTime": {

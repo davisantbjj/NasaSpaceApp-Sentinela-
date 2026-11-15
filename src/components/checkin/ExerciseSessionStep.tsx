@@ -50,6 +50,28 @@ export function ExerciseSessionStep({ value, onChange }: Props) {
             <span className="muted">min</span>
           </div>
         </div>
+        {session.type === 'both' && (
+          <div className="field">
+            <label htmlFor="exercise-session-resistance-minutes">{i18n.t('checkin:exerciseSession.resistanceMinutes')}</label>
+            <div className="field-input">
+              <input
+                id="exercise-session-resistance-minutes"
+                className="input"
+                type="number"
+                min="0"
+                max={session.durationMinutes || 1440}
+                step="1"
+                value={session.resistanceMinutes ?? ''}
+                aria-invalid={(session.resistanceMinutes ?? 0) > session.durationMinutes}
+                onChange={(event) => update({ resistanceMinutes: event.target.value === '' ? undefined : Number(event.target.value) })}
+              />
+              <span className="muted">min</span>
+            </div>
+            {(session.resistanceMinutes ?? 0) > session.durationMinutes && (
+              <p className="field-error">{i18n.t('checkin:exerciseSession.resistanceTooLong')}</p>
+            )}
+          </div>
+        )}
         {hasAerobic && (
           <div className="field">
             <label htmlFor="exercise-session-heart-rate">{i18n.t('checkin:exerciseSession.heartRate')}</label>

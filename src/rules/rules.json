@@ -386,6 +386,7 @@
       "region": "wholeBody",
       "unit": "kg",
       "useBaseline": false,
+      "lossPercent": { "yellow": 5, "red": 10 },
       "nasaRisk": "Nutrition and body mass",
       "hazards": ["nutrition"],
       "messages": {
@@ -549,6 +550,11 @@
       "studiedMonths": { "min": 4, "max": 6 },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
       "demo": true
+    },
+    "cabinCo2": {
+      "attentionMmhg": 3,
+      "symptoms": ["headache", "congestion"],
+      "sourceUrl": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-004-carbon-dioxide.pdf"
     },
     "radiationTotal": {
       "careerLimitMsv": 600,

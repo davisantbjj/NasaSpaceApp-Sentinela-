@@ -44,6 +44,7 @@
     "right": "Right eye",
     "grid": "Amsler grid",
     "questions": "Noticed changes",
+    "noneMarked": "If you mark nothing and continue, the record will be \"no change\" in both eyes.",
     "distorted": "Did any lines look bent or wavy?",
     "missing": "Was any area or part of the grid missing?",
     "near": "Did near reading seem worse?",
@@ -55,6 +56,8 @@
     "resistance": "Resistance",
     "both": "Aerobic and resistance",
     "minutes": "Session duration",
+    "resistanceMinutes": "Resistance minutes",
+    "resistanceTooLong": "The resistance part cannot be longer than the session.",
     "heartRate": "Average heart rate",
     "resistanceStatus": "Resistance training",
     "completed": "Completed",
@@ -63,10 +66,12 @@
     "disclaimer": "Record one session from today. The prototype stores type, duration, average aerobic heart rate, and resistance status; it does not assess performance."
   },
   "conditioning": {
+    "invalid": "Use a percentage from 0 to 200.",
+    "apparatusFor": "Apparatus used: {{part}}",
     "instructions": "Enter the periodic assessment as a percentage of the preflight value and select the apparatus used for each part.",
     "aerobic": "Aerobic capacity",
     "strength": "Strength",
-    "disclaimer": "The monitoring threshold is 80% of the preflight value. The medical team sets the assessment frequency; this record is not an automated test.",
+    "disclaimer": "The monitoring threshold is {{min}}% of the preflight value. The medical team sets the assessment frequency; this record is not an automated test.",
     "apparatus": {
       "treadmill": "Treadmill",
       "cycle": "Cycle ergometer",

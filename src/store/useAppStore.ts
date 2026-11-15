@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { listAccess, logAccess } from '../data/accessLogRepo';
-import { listCrew } from '../data/crewRepo';
+import { listCrew, updateCrewMissionData, type CrewMissionData } from '../data/crewRepo';
 import { clearSessionKeys, setSessionKeys } from '../data/keyring';
 import { listPacketMeta, listPacketsForGround, listStatusesForCommander, type PacketMeta } from '../data/packetsRepo';
 import { listProfiles, loadPublicKeys, unlockProfile } from '../data/profilesRepo';
@@ -79,6 +79,7 @@ interface AppState extends Derived {
   switchCrew: (crewId: string) => Promise<void>;
   setEnvironment: (environment: Environment) => Promise<void>;
   setCabinCo2Mmhg: (value: number | undefined) => Promise<void>;
+  setCrewMissionData: (crewId: string, data: CrewMissionData) => Promise<void>;
   setMissionProfile: (profile: MissionProfileId | undefined) => Promise<void>;
   applyPhaseEnvironment: () => Promise<void>;
   saveCheckin: (values: DailyValues) => Promise<Alert[]>;
@@ -308,6 +309,25 @@ export const useAppStore = create<AppState>((set, get) => {
     setCabinCo2Mmhg: async (value) => {
       const settings = await updateSettings({ cabinCo2Mmhg: value });
       set({ settings, ...derive(settings.activeCrewId, get().records, settings.environment, get().crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });
+    },
+
+    // Só o oficial médico altera os dados iniciais (massa no início e dose de missões anteriores).
+    setCrewMissionData: async (crewId, data) => {
+      const session = requireSession();
+      if (session.role !== 'medicalOfficer') throw new Error('Só o oficial médico altera os dados iniciais da missão.');
+      await updateCrewMissionData(crewId, data);
+      if (!isOwnData(session, crewId)) {
+        await logAccess({
+          subjectCrewId: crewId,
+          actorProfileId: session.profileId,
+          actorName: session.name,
+          actorRole: session.role,
+          what: 'Alterou os dados iniciais da missão',
+        });
+      }
+      const crew = await listCrew();
+      const { settings, records } = get();
+      set({ crew, ...derive(settings.activeCrewId, records, settings.environment, crew.find((c) => c.id === settings.activeCrewId), settings.cabinCo2Mmhg) });
     },
 
     setMissionProfile: async (missionProfile) => {

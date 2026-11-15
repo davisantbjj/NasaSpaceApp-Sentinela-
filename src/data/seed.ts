@@ -14,7 +14,7 @@ const SEED_DAYS = 60;
 
 const ALL_BUT_GLUCOSE: IndicatorId[] = [
   'bloodPressure', 'heartRate', 'temperature', 'sleepHours', 'mood', 'stress', 'workload', 'reactionTime',
-  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'vision', 'symptoms',
+  'exerciseMinutes', 'resistanceMinutes', 'radiationDose', 'bodyMassKg', 'vision', 'conditioning', 'symptoms',
 ];
 
 // Gerador pseudoaleatório com semente, para a demonstração ser sempre igual.

@@ -175,6 +175,13 @@ export class SentinelaDB extends Dexie {
         await tx.table<SettingsRow, string>('settings').put(settings);
       }
     });
+    // v13: avaliação periódica de condicionamento (N17) para os tripulantes já gravados.
+    // O passo pode ser pulado nos dias sem avaliação.
+    this.version(13).upgrade((tx) =>
+      tx.table<CrewMember, string>('crew').toCollection().modify((member) => {
+        if (!member.trackedIndicators.includes('conditioning')) member.trackedIndicators.push('conditioning');
+      }),
+    );
   }
 }
 
