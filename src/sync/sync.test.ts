@@ -93,7 +93,7 @@ describe('pacotes para a Terra', () => {
   const member: CrewMember = { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', missionStart: '2026-09-15', trackedIndicators: [] };
   const alert = (level: Alert['level']): Alert => ({
     id: `lia_2026-11-13_${level}`, crewId: 'lia', date: '2026-11-13', indicator: 'vision', region: 'head', level,
-    trigger: 'generalRange', whatChanged: 'Visão mudou', reference: '', whyItMatters: '', whatToDo: '',
+    trigger: 'generalRange', whatChanged: { key: 'alerts:change.general' }, reference: { key: '' }, whyItMatters: '', whatToDo: '',
     confidence: 'normal', notifyGround: level === 'red', sourceUrl: '',
   });
 
@@ -140,7 +140,7 @@ describe('alerta visto pelo oficial médico', () => {
   };
   const alert = (level: Alert['level']): Alert => ({
     id: 'lia_2026-11-14_heartRate', crewId: 'lia', date: '2026-11-14', indicator: 'heartRate', region: 'heart', level,
-    trigger: 'generalRange', whatChanged: '', reference: '', whyItMatters: '', whatToDo: '',
+    trigger: 'generalRange', whatChanged: { key: '' }, reference: { key: '' }, whyItMatters: '', whatToDo: '',
     confidence: 'normal', notifyGround: false, sourceUrl: '',
   });
   const review: AlertReview = {

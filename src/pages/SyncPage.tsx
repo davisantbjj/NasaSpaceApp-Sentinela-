@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { LevelBadge } from '../components/alerts/LevelBadge';
-import { ENVIRONMENTS } from '../content/indicators';
+import { environmentContent } from '../content/indicators';
 import { useNow } from '../hooks/useNow';
 import { formatDate, formatDateTime, formatDuration } from '../lib/dates';
 import { useAppStore } from '../store/useAppStore';
 import { earthLinkStatus } from '../sync/central';
 import { packetStatus, transmitOrder } from '../sync/packets';
 import type { PacketMeta } from '../data/packetsRepo';
+import i18n from '../i18n';
 
 const MAX_PACKETS = 15;
 
@@ -40,7 +41,7 @@ export function SyncPage() {
   const online = useOnline();
   const earth = earthLinkStatus(); // relido a cada segundo junto com `now`
   const name = (crewId: string) => crew.find((c) => c.id === crewId)?.name ?? crewId;
-  const env = ENVIRONMENTS[settings.environment];
+  const env = environmentContent(settings.environment);
   // Só quem cuida da tripulação vê a fila de todos; tripulante e comandante veem só a própria.
   const seesAll = session?.role === 'medicalOfficer';
 
@@ -54,18 +55,14 @@ export function SyncPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Comunicação</span>
-        <h1>Sincronização</h1>
-        <p className="muted">
-          Tudo acontece sozinho. O check-in vai do aparelho para a central de bordo pela rede da nave, e a central manda um
-          pacote por dia para a equipe médica na Terra sempre que há conexão. Sem conexão, os pacotes esperam e saem quando ela
-          volta. O alerta nunca espera a Terra: a decisão imediata é de bordo.
-        </p>
-        {sync.lastRunAt && <p className="small muted num">Última sincronização: {formatDateTime(sync.lastRunAt, true)}</p>}
+        <span className="eyebrow">{i18n.t('sync.communication')}</span>
+        <h1>{i18n.t('sync.title')}</h1>
+        <p className="muted">{i18n.t('sync.intro')}</p>
+        {sync.lastRunAt && <p className="small muted num">{i18n.t('sync.lastSync', { date: formatDateTime(sync.lastRunAt, true) })}</p>}
         {sync.lastError && (
           <p className="notice" role="alert">
             <span className="notice-icon" aria-hidden="true">!</span>
-            <span>A última sincronização falhou ({sync.lastError}). Ela é tentada de novo sozinha a cada 5 segundos.</span>
+            <span>{i18n.t('sync.failed', { error: sync.lastError })}</span>
           </p>
         )}
       </header>
@@ -73,20 +70,20 @@ export function SyncPage() {
       <div className="grid-2">
         <section className="card stack">
           <div>
-            <h2>Central de bordo</h2>
-            <p className="small muted">Recebe os registros de todos os aparelhos da nave.</p>
+            <h2>{i18n.t('sync.hub')}</h2>
+            <p className="small muted">{i18n.t('sync.hubIntro')}</p>
           </div>
-          <Status ok={sync.outbox.length === 0} okText="Tudo chegou à central" waitText="Enviando para a central" />
+          <Status ok={sync.outbox.length === 0} okText={i18n.t('sync.arrived')} waitText={i18n.t('sync.sending')} />
           {sync.outbox.length > 0 && (
             <ul className="summary-list">
               {sync.outbox.map((item) => (
                 <li key={`${item.kind}_${item.id}`}>
                   <span>
-                    {item.kind === 'record' ? 'Check-in' : 'Anotação do oficial médico'}
+                    {i18n.t(item.kind === 'record' ? 'sync.checkin' : 'sync.medicalNote')}
                     {seesAll && ` · ${name(item.crewId)}`}
                     <span className="muted num"> · {formatDate(item.date, true)}</span>
                   </span>
-                  <span className="chip">Na fila</span>
+                  <span className="chip">{i18n.t('sync.queued')}</span>
                 </li>
               ))}
             </ul>
@@ -95,37 +92,34 @@ export function SyncPage() {
 
         <section className="card stack">
           <div>
-            <h2>Ligação com a Terra</h2>
-            <p className="small muted">
-              Atraso de ida no ambiente atual ({env.label}): {env.signalDelayLabel}. Um alerta vermelho passa na frente da fila.
-            </p>
+            <h2>{i18n.t('sync.earth')}</h2>
+            <p className="small muted">{i18n.t('sync.delay', { environment: env.label, delay: env.signalDelayLabel })}</p>
           </div>
           {!online ? (
-            <Status ok={false} okText="" waitText="Sem conexão. Os pacotes esperam na central e saem sozinhos quando ela voltar" />
+            <Status ok={false} okText="" waitText={i18n.t('sync.offline')} />
           ) : earth.mode === 'simulated' ? (
             <p role="status">
-              <strong style={{ color: 'var(--accent)' }}>◎ Simulada neste navegador</strong>
-              <span className="small muted"> · nenhum servidor da Terra configurado. Os pacotes “chegam” só aqui, para a demonstração.</span>
+              <strong style={{ color: 'var(--accent)' }}>◎ {i18n.t('sync.simulated')}</strong>
+              <span className="small muted">{i18n.t('sync.noServer')}</span>
             </p>
           ) : earth.reachable === undefined ? (
-            <p role="status" className="muted">Verificando o servidor da Terra…</p>
+            <p role="status" className="muted">{i18n.t('sync.checking')}</p>
           ) : (
             <Status
               ok={earth.reachable}
-              okText="Conectada ao servidor da Terra"
-              waitText="O servidor da Terra não respondeu. Os pacotes esperam na central e o envio é tentado de novo sozinho"
+              okText={i18n.t('sync.connected')}
+              waitText={i18n.t('sync.unreachable')}
             />
           )}
           <p className="small muted">
-            Destino: {earth.name}
-            {earth.checkedAt && earth.mode === 'server' && <> · verificado {formatDateTime(earth.checkedAt, true)}</>}
-            {earth.lastError && online && earth.mode === 'server' && earth.reachable === false && earth.lastErrorAt && (
-              <> · último erro {formatDateTime(earth.lastErrorAt, true)}: {earth.lastError}</>
-            )}
+            {i18n.t('sync.destination', { name: earth.name })}
+            {earth.checkedAt && earth.mode === 'server' && i18n.t('sync.checked', { date: formatDateTime(earth.checkedAt, true) })}
+            {earth.lastError && online && earth.mode === 'server' && earth.reachable === false && earth.lastErrorAt &&
+              i18n.t('sync.lastError', { date: formatDateTime(earth.lastErrorAt, true), error: earth.lastError })}
           </p>
           {inTransit && (
             <div className="row">
-              <button type="button" className="btn" onClick={() => void deliverNow()}>Fazer chegar agora (demonstração)</button>
+              <button type="button" className="btn" onClick={() => void deliverNow()}>{i18n.t('sync.deliverNow')}</button>
             </div>
           )}
         </section>
@@ -133,16 +127,16 @@ export function SyncPage() {
 
       <section className="card stack">
         <div>
-          <h2>{seesAll ? 'Pacotes para a Terra' : 'Seus pacotes para a Terra'}</h2>
-          <p className="small muted">Os mais recentes. Os da fila aparecem primeiro, na ordem em que vão sair.</p>
+          <h2>{i18n.t(seesAll ? 'sync.packets' : 'sync.yourPackets')}</h2>
+          <p className="small muted">{i18n.t('sync.recentPackets')}</p>
         </div>
         {packets.length === 0 ? (
-          <p className="muted">Nenhum pacote ainda.</p>
+          <p className="muted">{i18n.t('sync.noPackets')}</p>
         ) : (
           <div className="table-wrap">
             <table className="packets-table">
               <thead>
-                <tr><th>Tripulante</th><th>Dia</th><th>Prioridade</th><th>Situação</th></tr>
+                <tr><th>{i18n.t('sync.crewMember')}</th><th>{i18n.t('sync.day')}</th><th>{i18n.t('sync.priority')}</th><th>{i18n.t('sync.situation')}</th></tr>
               </thead>
               <tbody>
                 {packets.map((p) => {
@@ -151,15 +145,15 @@ export function SyncPage() {
                     <tr key={p.id}>
                       <td>{name(p.crewId)}</td>
                       <td>{formatDate(p.date, true)}</td>
-                      <td>{p.priority === 'red' ? <LevelBadge level="red" label="Prioridade vermelha" /> : <span className="muted">Normal</span>}</td>
+                      <td>{p.priority === 'red' ? <LevelBadge level="red" label={i18n.t('sync.redPriority')} /> : <span className="muted">{i18n.t('sync.normal')}</span>}</td>
                       <td>
-                        {status === 'queued' && <span className="chip">Na fila da central</span>}
+                        {status === 'queued' && <span className="chip">{i18n.t('sync.hubQueue')}</span>}
                         {status === 'inTransit' && (
                           <span className="chip" style={{ color: 'var(--accent)' }}>
-                            A caminho, chega em {formatDuration(Date.parse(p.deliverAt!) - now)}
+                            {i18n.t('sync.inTransit', { duration: formatDuration(Date.parse(p.deliverAt!) - now) })}
                           </span>
                         )}
-                        {status === 'delivered' && <span className="muted">✓ Chegou {formatDateTime(p.deliverAt!)}</span>}
+                        {status === 'delivered' && <span className="muted">{i18n.t('sync.arrivedAt', { date: formatDateTime(p.deliverAt!) })}</span>}
                       </td>
                     </tr>
                   );

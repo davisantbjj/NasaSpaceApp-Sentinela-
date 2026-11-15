@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Disclaimer } from './components/layout/Disclaimer';
 import { NavBar } from './components/layout/NavBar';
 import { PrivacyNotice } from './components/layout/PrivacyNotice';
@@ -25,6 +26,7 @@ const IDLE_MS = 5 * 60_000;
 const SYNC_EVERY_MS = 5_000;
 
 function OnBoardRoutes({ activeCrewId, role }: { activeCrewId: string; role: Role }) {
+  const { t } = useTranslation();
   return (
     <Routes>
       <Route path="/" element={<DashboardPage />} />
@@ -33,7 +35,7 @@ function OnBoardRoutes({ activeCrewId, role }: { activeCrewId: string; role: Rol
       <Route path="/alerts" element={<AlertsPage />} />
       <Route
         path="/trends/:indicator?"
-        element={<Suspense fallback={<div className="loading">Carregando gráficos…</div>}><TrendsPage /></Suspense>}
+        element={<Suspense fallback={<div className="loading">{t('errors.loadingCharts')}</div>}><TrendsPage /></Suspense>}
       />
       <Route path="/mission" element={<MissionPage />} />
       <Route path="/sync" element={<SyncPage />} />
@@ -58,6 +60,7 @@ function GroundRoutes() {
 
 // Aviso fixo quando o oficial médico está vendo os dados de outro tripulante.
 function ViewingBanner() {
+  const { t } = useTranslation();
   const { session, crew, settings, switchCrew } = useAppStore();
   if (!session || session.role !== 'medicalOfficer' || settings.activeCrewId === session.crewId) return null;
   const member = crew.find((c) => c.id === settings.activeCrewId);
@@ -66,17 +69,17 @@ function ViewingBanner() {
     <p className="notice viewing-banner" role="status">
       <span className="notice-icon" aria-hidden="true">👁</span>
       <span>
-        Você está vendo os dados de <strong>{member.name}</strong> como oficial médico. Este acesso fica registrado,
-        e {member.name.split(' ')[0]} pode ver o registro.
+        {t('layout.viewingOther', { name: member.name, firstName: member.name.split(' ')[0] })}
       </span>
       {session.crewId && (
-        <button type="button" className="btn btn-ghost" onClick={() => void switchCrew(session.crewId!)}>Voltar aos meus dados</button>
+        <button type="button" className="btn btn-ghost" onClick={() => void switchCrew(session.crewId!)}>{t('layout.backToMine')}</button>
       )}
     </p>
   );
 }
 
 export function App() {
+  const { t } = useTranslation();
   const { ready, privacyAcknowledged, error, session, crew, settings, alerts, sync, loadCrew, switchCrew, lock, syncNow } =
     useAppStore();
 
@@ -85,7 +88,7 @@ export function App() {
   }, [loadCrew]);
 
   // Bloqueio por inatividade.
-  const lockIdle = useCallback(() => lock('A tela foi bloqueada depois de 5 minutos sem uso.'), [lock]);
+  const lockIdle = useCallback(() => lock(t('app.idleLock')), [lock, t]);
   useIdleLock(!!session, IDLE_MS, lockIdle);
 
   // Sincronização em segundo plano enquanto alguém está dentro.
@@ -103,7 +106,7 @@ export function App() {
 
   return (
     <div className="app">
-      <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
+      <a className="skip-link" href="#conteudo">{t('app.skipToContent')}</a>
       {session && (
         <NavBar
           session={session}
@@ -120,11 +123,11 @@ export function App() {
       <main className="app-main" id="conteudo" tabIndex={-1}>
         {error ? (
           <div className="card empty">
-            <h2>Não foi possível abrir os dados locais</h2>
+            <h2>{t('errors.openLocal')}</h2>
             <p className="muted">{error}</p>
           </div>
         ) : !ready ? (
-          <div className="loading">Preparando os dados da tripulação…</div>
+          <div className="loading">{t('errors.preparing')}</div>
         ) : !privacyAcknowledged ? (
           <PrivacyNotice />
         ) : !session ? (

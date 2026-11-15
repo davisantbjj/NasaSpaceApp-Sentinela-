@@ -1,6 +1,7 @@
 import { formatNumber } from '../lib/series';
 import type { DailyValues, IndicatorId } from '../types';
-import { DATA_SOURCES, INDICATORS } from './indicators';
+import i18n from '../i18n';
+import { indicatorContent, sourceContent } from './indicators';
 
 export interface DisplayValue {
   text: string; // "118/76", "7,4", "Bem"
@@ -13,36 +14,48 @@ export function displayValue(
   indicator: IndicatorId,
   symptomLabels: Record<string, string> = {},
 ): DisplayValue | undefined {
-  const content = INDICATORS[indicator];
+  const content = indicatorContent(indicator);
 
   if (indicator === 'bloodPressure') {
     const bp = values.bloodPressure;
-    return bp ? { text: `${bp.systolic}/${bp.diastolic}`, unit: content.unit } : undefined;
+    return bp ? { text: `${formatNumber(bp.systolic)}/${formatNumber(bp.diastolic)}`, unit: content.unit } : undefined;
   }
   if (indicator === 'symptoms') {
     const symptoms = values.symptoms;
     if (!symptoms) return undefined;
-    if (symptoms.length === 0) return { text: 'Nenhum', unit: '' };
+    if (symptoms.length === 0) return { text: i18n.t('indicators:display.noSymptoms'), unit: '' };
     return { text: symptoms.map((id) => symptomLabels[id] ?? id).join(', '), unit: '' };
   }
   if (indicator === 'medication') {
     const doses = values.medication;
     if (!doses) return undefined;
     const missed = doses.filter((dose) => !dose.taken);
-    if (missed.length === 0) return { text: doses.length === 0 ? 'Nenhuma prevista' : 'Todas tomadas', unit: '' };
-    return { text: `Não tomada: ${missed.map((dose) => dose.label).join(', ')}`, unit: '' };
+    if (missed.length === 0) {
+      return { text: i18n.t(doses.length === 0 ? 'indicators:display.noMedication' : 'indicators:display.allDosesTaken'), unit: '' };
+    }
+    return { text: i18n.t('indicators:display.doseNotTaken', { doses: missed.map((dose) => dose.label).join(', ') }), unit: '' };
   }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
+  if (indicator === 'reactionTime') {
+    const details = values.reactionTest;
+    const mode = details
+      ? `${i18n.t(details.mode === 'short' ? 'indicators:display.reactionShort' : 'indicators:display.reactionFull')}${details.completed ? '' : i18n.t('indicators:display.reactionInterrupted')}`
+      : i18n.t('indicators:display.reactionUnknownMode');
+    return { text: `${formatNumber(value)} (${mode})`, unit: content.unit };
+  }
   const option = content.scale?.find((o) => o.value === value);
-  if (option) return { text: option.label, unit: content.unit === 'de 5' ? `(${value} ${content.unit})` : '' };
+  if (option) {
+    const unit = content.unitKey ? `(${formatNumber(value)} ${content.unit})` : '';
+    return { text: option.label, unit };
+  }
   return { text: formatNumber(value), unit: content.unit };
 }
 
 // "Sensor vestível" quando o valor veio de um aparelho; nada quando foi digitado (M10).
 export function sourceLabel(values: DailyValues, indicator: IndicatorId): string | undefined {
   const source = values.sources?.[indicator];
-  return source && source !== 'manual' ? DATA_SOURCES[source].label : undefined;
+  return source && source !== 'manual' ? sourceContent(source).label : undefined;
 }
 
 export function displayText(

@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
-import { ENVIRONMENTS } from '../../content/indicators';
+import { environmentContent } from '../../content/indicators';
+import i18n from '../../i18n';
 import type { CrewMember, Environment, Session } from '../../types';
 import { CrewSwitcher } from './CrewSwitcher';
 import { UserMenu } from './UserMenu';
@@ -30,27 +31,27 @@ const ICONS: Record<string, string> = {
 // No máximo cinco links: no celular eles viram a barra de baixo.
 const LINKS: Record<Session['role'], { to: string; label: string }[]> = {
   crew: [
-    { to: '/', label: 'Painel' },
-    { to: '/checkin', label: 'Check-in' },
-    { to: '/alerts', label: 'Alertas' },
-    { to: '/trends', label: 'Tendências' },
-    { to: '/mission', label: 'Missão' },
+    { to: '/', label: 'nav.dashboard' },
+    { to: '/checkin', label: 'nav.checkin' },
+    { to: '/alerts', label: 'nav.alerts' },
+    { to: '/trends', label: 'nav.trends' },
+    { to: '/mission', label: 'nav.mission' },
   ],
   commander: [
-    { to: '/crew', label: 'Tripulação' },
-    { to: '/', label: 'Painel' },
-    { to: '/checkin', label: 'Check-in' },
-    { to: '/alerts', label: 'Alertas' },
-    { to: '/trends', label: 'Tendências' },
+    { to: '/crew', label: 'nav.crew' },
+    { to: '/', label: 'nav.dashboard' },
+    { to: '/checkin', label: 'nav.checkin' },
+    { to: '/alerts', label: 'nav.alerts' },
+    { to: '/trends', label: 'nav.trends' },
   ],
   medicalOfficer: [
-    { to: '/crew', label: 'Tripulação' },
-    { to: '/', label: 'Painel' },
-    { to: '/checkin', label: 'Check-in' },
-    { to: '/alerts', label: 'Alertas' },
-    { to: '/trends', label: 'Tendências' },
+    { to: '/crew', label: 'nav.crew' },
+    { to: '/', label: 'nav.dashboard' },
+    { to: '/checkin', label: 'nav.checkin' },
+    { to: '/alerts', label: 'nav.alerts' },
+    { to: '/trends', label: 'nav.trends' },
   ],
-  groundSurgeon: [{ to: '/ground', label: 'Visão do solo' }],
+  groundSurgeon: [{ to: '/ground', label: 'nav.ground' }],
 };
 
 function NavIcon({ to }: { to: string }) {
@@ -74,27 +75,28 @@ function Logo() {
 export function NavBar({ session, crew, activeCrewId, environment, alertCount, hasRedAlert = false, pendingSync, onSwitchCrew, onLock }: Props) {
   const onBoard = session.role !== 'groundSurgeon';
   const home = onBoard ? '/' : '/ground';
+  const environmentText = environmentContent(environment);
   return (
     <header className="navbar">
       <Link to={home} className="navbar-brand" style={{ color: 'var(--text)', textDecoration: 'none' }}>
         <Logo />
         Sentinela
       </Link>
-      <nav className="navbar-links" aria-label="Navegação principal">
+      <nav className="navbar-links" aria-label={i18n.t('nav.main')}>
         {LINKS[session.role].map((link) => (
           <NavLink key={link.to} to={link.to} end={link.to === '/'}>
             <NavIcon to={link.to} />
-            <span className="nav-label">{link.label}</span>
+            <span className="nav-label">{i18n.t(link.label)}</span>
             {link.to === '/alerts' && alertCount > 0 && (
-              <span className={hasRedAlert ? 'nav-count nav-count-red' : 'nav-count'}><span className="visually-hidden">, </span>{alertCount}<span className="visually-hidden"> {alertCount === 1 ? 'alerta' : 'alertas'}</span></span>
+              <span className={hasRedAlert ? 'nav-count nav-count-red' : 'nav-count'}><span className="visually-hidden">, </span>{alertCount}<span className="visually-hidden"> {i18n.t('nav.alert', { count: alertCount })}</span></span>
             )}
           </NavLink>
         ))}
       </nav>
       <div className="navbar-tools">
         {onBoard && (
-          <Link to="/mission" className="chip" title="Ambiente da missão">
-            <span aria-hidden="true">◎</span> {ENVIRONMENTS[environment].label}
+          <Link to="/mission" className="chip" title={i18n.t('nav.missionEnvironment')}>
+            <span aria-hidden="true">◎</span> {environmentText.label}
           </Link>
         )}
         {session.role === 'medicalOfficer' && crew.length > 0 && (

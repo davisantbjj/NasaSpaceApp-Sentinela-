@@ -1,4 +1,5 @@
 import type { DailyRecord, Rules } from '../types';
+import i18n from '../i18n';
 import { formatNumber } from './series';
 
 // Radiação ACUMULADA na missão (M6). É contexto, não alerta e não limite: soma as doses do dia
@@ -20,17 +21,15 @@ export function radiationTotal(records: DailyRecord[], missionDay: number, rules
   if (!context) return undefined;
   const doses = records
     .map((r) => r.values.radiationDose)
-    .filter((v): v is number => typeof v === 'number');
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0);
   if (doses.length === 0) return undefined;
 
   const total = doses.reduce((sum, dose) => sum + dose, 0);
   const missing = Math.max(0, missionDay - doses.length);
   const parts = [
-    `Dose acumulada registrada na missão: ${doseText(total)}, somando ${doses.length} ${doses.length === 1 ? 'dia' : 'dias'} com leitura do dosímetro.`,
+    i18n.t('context.radiation.total', { dose: doseText(total), days: i18n.t('context.dayCount', { count: doses.length }) }),
   ];
-  if (missing > 0) {
-    parts.push(`${missing} ${missing === 1 ? 'dia sem leitura não entra' : 'dias sem leitura não entram'} na soma, então o total real é maior.`);
-  }
-  parts.push('É contexto, não limite: o app não avalia limites de dose da carreira nem eventos de radiação intensa.');
+  if (missing > 0) parts.push(i18n.t('context.radiation.missing', { count: missing }));
+  parts.push(i18n.t('context.radiation.notLimit'));
   return { text: parts.join(' '), sourceUrl: context.sourceUrl };
 }

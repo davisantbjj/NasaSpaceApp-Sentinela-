@@ -1,5 +1,7 @@
-// Datas sempre como texto AAAA-MM-DD. Nada de fuso horário: as contas usam UTC só como calendário.
+import i18n from '../i18n';
+import { formatNumber } from './format';
 
+// Datas sempre como texto AAAA-MM-DD. Nada de fuso horário: as contas usam UTC só como calendário.
 const DAY_MS = 86_400_000;
 
 function toUtc(date: string): number {
@@ -36,26 +38,32 @@ export function lastDays(end: string, days: number): string[] {
   return Array.from({ length: days }, (_, i) => addDays(end, i - days + 1));
 }
 
-// "2026-11-12" vira "12/11/2026" (ou "12/11" na forma curta).
 export function formatDate(date: string, short = false): string {
-  const [y, m, d] = date.split('-');
-  return short ? `${d}/${m}` : `${d}/${m}/${y}`;
+  const options: Intl.DateTimeFormatOptions = {
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: 'UTC',
+    ...(short ? {} : { year: 'numeric' }),
+  };
+  return new Intl.DateTimeFormat(i18n.language, options).format(new Date(`${date}T00:00:00Z`));
 }
 
-// Data e hora local de um instante ISO: "14/11 13:05" (ou "14/11/2026 13:05:09" com segundos).
 export function formatDateTime(iso: string, seconds = false): string {
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  const date = seconds ? `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}` : `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
-  const time = `${pad(d.getHours())}:${pad(d.getMinutes())}${seconds ? `:${pad(d.getSeconds())}` : ''}`;
-  return `${date} ${time}`;
+  return new Intl.DateTimeFormat(i18n.language, {
+    month: '2-digit',
+    day: '2-digit',
+    ...(seconds ? { year: 'numeric', second: '2-digit' } : {}),
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(iso));
 }
 
-// "3 min", "12 s", "1 h 05 min": duração curta para atrasos e contagens.
 export function formatDuration(ms: number): string {
   const s = Math.max(0, Math.round(ms / 1000));
-  if (s < 60) return `${s} s`;
+  const unit = (value: number, unit: Intl.NumberFormatOptions['unit']) =>
+    formatNumber(value, { style: 'unit', unit, unitDisplay: 'short', maximumFractionDigits: 0 });
+  if (s < 60) return unit(s, 'second');
   const m = Math.floor(s / 60);
-  if (m < 60) return `${m} min`;
-  return `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')} min`;
+  if (m < 60) return unit(m, 'minute');
+  return `${unit(Math.floor(m / 60), 'hour')} ${unit(m % 60, 'minute')}`;
 }

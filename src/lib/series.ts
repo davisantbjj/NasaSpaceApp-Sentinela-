@@ -1,4 +1,7 @@
 import type { BpComponent, DailyValues, IndicatorId, IndicatorRule, Range } from '../types';
+import { formatNumber } from './format';
+
+export { formatNumber } from './format';
 
 // Uma série é uma sequência de números no tempo. Pressão arterial tem duas (sistólica e diastólica).
 export interface SeriesPoint {
@@ -17,6 +20,7 @@ export function hasHistoryChart(indicator: IndicatorId): boolean {
 
 // Se o indicador foi registrado no dia (para listas, mesmo vazia).
 export function hasValue(values: DailyValues, indicator: IndicatorId): boolean {
+  if (indicator === 'reactionTime') return typeof values.reactionTime === 'number' && Number.isFinite(values.reactionTime);
   if (LIST_INDICATORS.includes(indicator)) return values[indicator] !== undefined;
   return seriesPoints(values, indicator).length > 0;
 }
@@ -24,6 +28,8 @@ export function hasValue(values: DailyValues, indicator: IndicatorId): boolean {
 // Valores numéricos de um indicador num dia. Sintomas e medicação não são numéricos e devolvem lista vazia.
 export function seriesPoints(values: DailyValues, indicator: IndicatorId): SeriesPoint[] {
   if (!hasHistoryChart(indicator)) return [];
+  // Não misturar modos, sessões interrompidas ou registros antigos de protocolo desconhecido.
+  if (indicator === 'reactionTime' && (values.reactionTest?.mode !== 'full' || !values.reactionTest.completed)) return [];
   if (indicator === 'bloodPressure') {
     const bp = values.bloodPressure;
     return bp ? BP_COMPONENTS.map((component) => ({ component, value: bp[component] })) : [];
@@ -47,8 +53,4 @@ export function rangesFor(rule: IndicatorRule, component?: BpComponent): { green
 
 export function inRange(value: number, range: Range): boolean {
   return value >= range.min && value <= range.max;
-}
-
-export function formatNumber(value: number): string {
-  return value.toLocaleString('pt-BR', { maximumFractionDigits: 1 });
 }

@@ -1,3 +1,6 @@
+import i18n from '../../i18n';
+import { formatNumber } from '../../lib/format';
+
 export interface NumberField {
   id: string;
   label: string;
@@ -24,9 +27,13 @@ export function parseNumber(text: string): number | undefined {
 export function fieldError(field: NumberField): string | undefined {
   if (field.value.trim() === '') return undefined;
   const value = parseNumber(field.value);
-  if (value === undefined) return 'Digite só números.';
+  if (value === undefined) return i18n.t('checkin:typingError');
   if (value < field.min || value > field.max) {
-    return `Confira o valor: o campo aceita de ${field.min} a ${field.max} ${field.unit}.`;
+    return i18n.t('checkin:rangeError', {
+      min: formatNumber(field.min),
+      max: formatNumber(field.max),
+      unit: field.unit,
+    });
   }
   return undefined;
 }

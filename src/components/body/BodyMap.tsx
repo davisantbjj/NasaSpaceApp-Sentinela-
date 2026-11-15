@@ -1,9 +1,10 @@
 import { useId, type CSSProperties, type KeyboardEvent } from 'react';
-import { REGIONS } from '../../content/indicators';
+import { regionContent } from '../../content/indicators';
 import type { BodyRegion, Level } from '../../types';
 import { LEVEL_ICON_PATH, LEVEL_TEXT } from '../alerts/LevelBadge';
 import { BODY_FIGURES, type BodyFigure, type BodyRegionDef, type RegionShape } from './bodyRegions';
 import './BodyMap.css';
+import i18n from '../../i18n';
 
 interface Props {
   levels: Partial<Record<BodyRegion, Level>>; // região ausente = sem dados
@@ -69,7 +70,7 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
       className="bodymap"
       viewBox={viewBox}
       role="group"
-      aria-label="Estado de cada região do corpo"
+      aria-label={i18n.t('bodyMap.label')}
       style={{ '--bodymap-glow': `url(#${glowId})` } as CSSProperties}
     >
       <defs>
@@ -86,7 +87,8 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
       {regions.map((def) => {
         const { id, shapes, marker, padHit, outline } = def;
         const level = levels[id];
-        const status = level ? LEVEL_TEXT[level].label : 'sem dados';
+        const status = level ? i18n.t(LEVEL_TEXT[level].label) : i18n.t('bodyMap.noData');
+        const content = regionContent(id);
         const isSelected = selected === id;
         return (
           <g
@@ -96,7 +98,7 @@ export function BodyMap({ levels, selected, onSelect, figure = 'male' }: Props) 
             role="button"
             tabIndex={0}
             aria-pressed={isSelected}
-            aria-label={`${REGIONS[id].label}: ${status}. ${REGIONS[id].description}.`}
+            aria-label={`${content.label}: ${status}. ${content.description}.`}
             onClick={() => onSelect(id)}
             onKeyDown={(event) => onKey(event, id)}
           >

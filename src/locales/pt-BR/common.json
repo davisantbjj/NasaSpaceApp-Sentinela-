@@ -1,0 +1,453 @@
+{
+  "language": {
+    "label": "Idioma",
+    "en": "English",
+    "ptBR": "Português (Brasil)"
+  },
+  "app": {
+    "skipToContent": "Ir para o conteúdo",
+    "idleLock": "A tela foi bloqueada depois de 5 minutos sem uso."
+  },
+  "roles": {
+    "crew": "Tripulante",
+    "commander": "Comandante",
+    "medicalOfficer": "Oficial médico de bordo",
+    "groundSurgeon": "Médico do solo"
+  },
+  "nav": {
+    "dashboard": "Painel",
+    "checkin": "Check-in",
+    "alerts": "Alertas",
+    "trends": "Tendências",
+    "mission": "Missão",
+    "crew": "Tripulação",
+    "ground": "Visão do solo",
+    "main": "Navegação principal",
+    "alert_one": "alerta",
+    "alert_other": "alertas",
+    "missionEnvironment": "Ambiente da missão"
+  },
+  "level": {
+    "green": "Dentro do esperado",
+    "yellow": "Acompanhar",
+    "red": "Atenção imediata"
+  },
+  "status": {
+    "noData": "Sem dados",
+    "noRecords": "Sem registros para avaliar",
+    "ok": "OK",
+    "lastRecord": "Último registro: {{date}}",
+    "missionDay": "Dia {{day}} da missão",
+    "recordsNone": "Sem registros para avaliar",
+    "notMeasured": "Não medido no último registro",
+    "skipped": "Pulado"
+  },
+  "baseline": {
+    "forming": "Linha de base em formação ({{sampleDays}} de {{baselineDays}} dias)",
+    "personal": "Seu padrão pessoal: {{value}}{{unit}} ({{details}})",
+    "days_one": "{{count}} dia",
+    "days_other": "{{count}} dias",
+    "excludedDays_one": "{{count}} descartado",
+    "excludedDays_other": "{{count}} descartados"
+  },
+  "dashboard": {
+    "eyebrow": "Painel do tripulante",
+    "allExpected": "Tudo dentro do esperado",
+    "alerts_one": "{{count}} alerta",
+    "alerts_other": "{{count}} alertas",
+    "checkinDone": "Refazer check-in de hoje",
+    "checkinPending": "Fazer o check-in de hoje →",
+    "checkinOtherPending": "O check-in de hoje ainda não chegou à central. O painel mostra o registro de {{date}}.",
+    "checkinOwnPending": "O check-in de hoje está pendente. O painel mostra o registro de {{date}}.",
+    "systems": "Sistemas do corpo",
+    "regionHint": "Toque numa região para ver os indicadores.",
+    "sourceNote": "Origem: {{source}}"
+  },
+  "regionPanel": {
+    "selected": "Região selecionada",
+    "noTracked": "Este tripulante não acompanha indicadores desta região.",
+    "viewAlert": "Ver alerta →",
+    "history": "Ver histórico →",
+    "togetherNote": "Isso não quer dizer que um causou o outro.",
+    "nasaSource": "Fonte: NASA (abre outro site)"
+  },
+  "bodyMap": {
+    "label": "Estado de cada região do corpo",
+    "noData": "sem dados"
+  },
+  "trends": {
+    "title": "Tendências",
+    "indicator": "Indicador",
+    "latest": "Último valor",
+    "average": "Média em {{days}} dias",
+    "period": "Período",
+    "days": "{{days}} dias",
+    "noMeasurements": "Ainda não há medidas deste indicador no período.",
+    "radiationNote": "A radiação não tem faixa geral: a dose é comparada com o seu próprio histórico. Os cerca de 150 µSv por dia do detector Radi-N2 são só de nêutrons, medidos na estação, e servem apenas como escala.",
+    "table": "Ver os valores em tabela",
+    "date": "Data",
+    "missionDay": "Dia da missão",
+    "value": "Valor",
+    "systolic": "Sistólica",
+    "diastolic": "Diastólica",
+    "generalRange": "Faixa geral",
+    "personalPattern": "Seu padrão pessoal"
+  },
+  "errors": {
+    "openLocal": "Não foi possível abrir os dados locais",
+    "preparing": "Preparando os dados da tripulação…",
+    "loadingCharts": "Carregando gráficos…"
+  },
+  "buttons": {
+    "update": "Atualizar",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "loading": "Carregando…"
+  },
+  "menu": {
+    "open": "Abrir menu",
+    "mission": "Missão e rotina",
+    "sync": "Sincronização",
+    "yourData": "Seus dados",
+    "medicalContact": "Escrever ao oficial médico",
+    "lock": "Bloquear e trocar de perfil",
+    "queue": "{{count}} na fila",
+    "language": "Idioma"
+  },
+  "crewSwitcher": {
+    "label": "Ver os dados de"
+  },
+  "layout": {
+    "viewingOther": "Você está vendo os dados de {{name}} como oficial médico. Este acesso fica registrado, e {{firstName}} pode ver o registro.",
+    "backToMine": "Voltar aos meus dados",
+    "disclaimer": "Protótipo, não é dispositivo médico. Apoio à decisão, sem diagnóstico. Dados da tripulação simulados e faixas de demonstração. Equipe CosmoTI · NASA Space Apps Challenge 2026.",
+    "footerYourData": "Seus dados",
+    "footerContact": "Comunicação por texto"
+  },
+  "login": {
+    "title": "Quem está usando?",
+    "intro": "Escolha o seu perfil e digite o PIN. Cada papel vê só o que precisa.",
+    "profile": "Perfil",
+    "pin": "PIN de {{name}}",
+    "access": "acesso",
+    "opening": "Abrindo…",
+    "enter": "Entrar",
+    "pinLength": "O PIN tem de 4 a 6 números.",
+    "wrongPinPaused": "PIN incorreto {{count}} vezes. Espere 30 segundos para tentar de novo.",
+    "wrongPinRemaining_one": "PIN incorreto. Resta {{count}} tentativa antes de uma pausa de 30 segundos.",
+    "wrongPinRemaining_other": "PIN incorreto. Restam {{count}} tentativas antes de uma pausa de 30 segundos.",
+    "retryIn": "Tente de novo em {{seconds}} s.",
+    "demoPins": "PINs da demonstração",
+    "security": "Os valores dos check-ins ficam cifrados e abrem com o PIN; o cadastro e o plano de medicação ficam sem criptografia. A tela bloqueia sozinha depois de 5 minutos sem uso. Num produto real, a entrada seria a do sistema da agência."
+  },
+  "mission": {
+    "title": "Missão e rotina",
+    "of": "Missão de {{name}}",
+    "day": "Dia da missão",
+    "start": "Início",
+    "streak": "Check-ins seguidos",
+    "records": "Registros",
+    "gravity": "Contexto de readaptação à gravidade",
+    "gravitySource": "Fonte: NASA — intolerância ortostática (abre outro site)",
+    "privacy": "Privacidade e comunicação",
+    "privacyIntro": "Consulte os dados deste perfil ou escreva uma mensagem para mostrar à equipe de bordo.",
+    "yourData": "Seus dados",
+    "writeMedical": "Escrever ao oficial médico",
+    "environment": "Ambiente da missão",
+    "environmentIntro": "O ambiente muda a explicação dos alertas, nunca o nível. As faixas são as mesmas em todos.",
+    "reminders": "Lembretes de medida",
+    "remindersIntro": "Para indicadores que não precisam ser medidos todo dia.",
+    "indicator": "Indicador",
+    "lastMeasure": "Última medida",
+    "reminder": "Lembrete",
+    "never": "Nunca",
+    "measureToday": "Medir hoje",
+    "reminderFor": "Lembrete de {{indicator}}",
+    "noReminder": "Sem lembrete",
+    "everyDay": "Todo dia",
+    "everyTwoDays": "A cada 2 dias",
+    "everyThreeDays": "A cada 3 dias",
+    "weekly": "Uma vez por semana",
+    "demoData": "Dados da demonstração",
+    "demoExplanation": "Os três tripulantes e os 60 dias de registros são simulados. Recriar a demonstração apaga os check-ins, mensagens, pedidos de exclusão e o registro de acesso de todos os perfis neste navegador, e cria chaves novas. O aviso de privacidade permanece registrado.",
+    "medicalOnly": "Só o oficial médico de bordo pode recriar a demonstração.",
+    "resetConfirm": "Sim, apagar e recriar",
+    "reset": "Recriar dados de demonstração",
+    "gravityContext": {
+      "female": "Ao voltar a um ambiente com gravidade depois de um período em microgravidade, pode ocorrer tontura ao levantar. Relate sintomas à equipe de bordo e siga o protocolo individual de readaptação. A NASA descreve maior suscetibilidade à intolerância ortostática em mulheres nos estudos citados; isso não determina o risco individual nem altera as faixas deste app.",
+      "other": "Ao voltar a um ambiente com gravidade depois de um período em microgravidade, pode ocorrer tontura ao levantar. Relate sintomas à equipe de bordo e siga o protocolo individual de readaptação. A resposta varia entre pessoas; esta nota não estima risco individual nem altera as faixas deste app."
+    },
+    "everyFourDays": "A cada 4 dias",
+    "dayOf": "de {{total}}",
+    "goals": {
+      "title": "Metas da semana",
+      "intro": "Em quantos dos últimos {{window}} dias, contando hoje, cada indicador ficou na faixa verde. A meta é de {{target}} dias, para deixar folga para dias fora da rotina. Meta de demonstração, não é prescrição: o plano de cada tripulante vem da equipe médica.",
+      "range": "{{min}} a {{max}} {{unit}}",
+      "progress": "{{days}} dos últimos {{window}} dias na faixa · meta de {{target}} dias",
+      "met": " ✓ atingida",
+      "missing_one": ", falta {{count}}",
+      "missing_other": ", faltam {{count}}"
+    },
+    "gravityChange": {
+      "today": "hoje",
+      "tomorrow": "amanhã",
+      "inDays": "em {{days}} dias",
+      "soonAdvice": "Releia a orientação abaixo e combine com o oficial médico o protocolo de readaptação.",
+      "next": "Próxima mudança de gravidade: {{label}}, no dia {{day}} da missão (em {{inDays}} dias).",
+      "moonLanding": "Pouso na Lua",
+      "marsLanding": "Pouso em Marte",
+      "landing": "Pouso",
+      "earthReturn": "Volta à Terra"
+    },
+    "profile": {
+      "title": "Perfil da missão",
+      "intro": "O Sentinela serve para qualquer nave. O perfil diz o tipo de missão, a duração e as fases; a fase de hoje define o ambiente.",
+      "none": "Sem perfil (ambiente escolhido à mão)",
+      "vehicle": "Veículo",
+      "crew": "Tripulação",
+      "duration": "Duração prevista",
+      "durationDays": "{{days}} dias",
+      "currentPhase": "Fase atual: {{label}}",
+      "phase": "Fase: {{label}}",
+      "phaseDays": "dias {{from}} a {{to}} · {{environment}}",
+      "pastEnd": "Hoje é o dia {{day}}, depois do fim previsto ({{total}} dias): vale a última fase. ",
+      "source": "Fonte (abre outro site)",
+      "offPhase": "Ambiente trocado à mão. Pela fase da missão, hoje seria {{environment}}.",
+      "usePhase": "Usar o ambiente da fase"
+    }
+  },
+  "crewOverview": {
+    "officer": "Oficial médico de bordo",
+    "title": "Tripulação",
+    "intro": "Nível geral, check-in de hoje e alertas ainda não vistos de cada tripulante. Abrir os dados de alguém fica no registro de acesso da pessoa.",
+    "loading": "Carregando a tripulação…",
+    "you": "(você)",
+    "allExpected": "Tudo dentro do esperado",
+    "checkinDone": "✓ Check-in de hoje feito",
+    "checkinPending": "! Check-in de hoje pendente",
+    "immediate_one": "▲ {{count}} de atenção imediata",
+    "immediate_other": "▲ {{count}} de atenção imediata",
+    "unseen_one": "{{count}} não visto",
+    "unseen_other": "{{count}} não vistos",
+    "openDashboard": "Abrir painel",
+    "viewAlerts": "Ver alertas"
+  },
+  "crewStatus": {
+    "commander": "Comandante",
+    "title": "Tripulação",
+    "intro": "Aqui você vê só se cada colega já fez o check-in de hoje e se há alerta vermelho. O comandante não vê dados de saúde. Havendo alerta vermelho, chame o oficial médico de bordo.",
+    "empty": "Nenhum outro tripulante para mostrar.",
+    "checkinDone": "✓ Check-in feito",
+    "pending": "! Pendente",
+    "hasRed": "▲ Há alerta vermelho",
+    "noRed": "Sem alerta vermelho",
+    "callMedical": "Chame o oficial médico de bordo.",
+    "accessLog": "Só conta o que já chegou à central de bordo. Esta consulta fica no registro de acesso de cada colega."
+  },
+  "sync": {
+    "communication": "Comunicação",
+    "title": "Sincronização",
+    "intro": "Tudo acontece sozinho. O check-in vai do aparelho para a central de bordo pela rede da nave, e a central manda um pacote por dia para a equipe médica na Terra sempre que há conexão. Sem conexão, os pacotes esperam e saem quando ela volta. O alerta nunca espera a Terra: a decisão imediata é de bordo.",
+    "lastSync": "Última sincronização: {{date}}",
+    "failed": "A última sincronização falhou ({{error}}). Ela é tentada de novo sozinha a cada 5 segundos.",
+    "hub": "Central de bordo",
+    "hubIntro": "Recebe os registros de todos os aparelhos da nave.",
+    "arrived": "Tudo chegou à central",
+    "sending": "Enviando para a central",
+    "checkin": "Check-in",
+    "medicalNote": "Anotação do oficial médico",
+    "queued": "Na fila",
+    "earth": "Ligação com a Terra",
+    "delay": "Atraso de ida no ambiente atual ({{environment}}): {{delay}}. Um alerta vermelho passa na frente da fila.",
+    "offline": "Sem conexão. Os pacotes esperam na central e saem sozinhos quando ela voltar.",
+    "simulated": "Simulada neste navegador",
+    "noServer": " · Nenhum servidor da Terra configurado. Os pacotes “chegam” só aqui, para a demonstração.",
+    "checking": "Verificando o servidor da Terra…",
+    "connected": "Conectada ao servidor da Terra",
+    "unreachable": "O servidor da Terra não respondeu. Os pacotes esperam na central e o envio é tentado de novo sozinho.",
+    "destination": "Destino: {{name}}",
+    "checked": " · verificado {{date}}",
+    "lastError": " · último erro {{date}}: {{error}}",
+    "deliverNow": "Fazer chegar agora (demonstração)",
+    "packets": "Pacotes para a Terra",
+    "yourPackets": "Seus pacotes para a Terra",
+    "recentPackets": "Os mais recentes. Os da fila aparecem primeiro, na ordem em que vão sair.",
+    "noPackets": "Nenhum pacote ainda.",
+    "crewMember": "Tripulante",
+    "day": "Dia",
+    "priority": "Prioridade",
+    "situation": "Situação",
+    "redPriority": "Prioridade vermelha",
+    "normal": "Normal",
+    "hubQueue": "Na fila da central",
+    "inTransit": "A caminho, chega em {{duration}}",
+    "arrivedAt": "✓ Chegou {{date}}"
+  },
+  "ground": {
+    "notice": "Os dados chegam em pacotes, quando há janela de comunicação, com atraso de ida de {{delay}} ({{environment}}). O que está aqui pode já ter mudado a bordo. A decisão imediata é sempre de bordo.",
+    "allCrew": "← Toda a tripulação",
+    "title": "Visão do solo",
+    "physician": "Médico do solo",
+    "noCrewPacket": "Nenhum pacote deste tripulante chegou ainda.",
+    "noPacket": "Sem pacote",
+    "recorded": "Dado de",
+    "arrived": "Chegou",
+    "delay": "Atraso",
+    "packetsComing_one": "{{count}} pacote a caminho",
+    "packetsComing_other": "{{count}} pacotes a caminho",
+    "openPacket": "Abrir pacote →",
+    "packetTitle": "Pacote de {{date}} · dia {{day}} da missão",
+    "recordedAt": "Registro feito em {{date}}",
+    "sent": "Saiu da nave {{sent}} · chegou {{arrived}} · ambiente: {{environment}}",
+    "alerts": "Alertas",
+    "noAlerts": "Nenhum alerta neste registro.",
+    "notes": "Anotações do oficial médico",
+    "noNotes": "Nenhuma anotação neste pacote.",
+    "previous": "Pacotes anteriores"
+  },
+  "privacy": {
+    "before": "Antes de começar",
+    "title": "Sua privacidade no Sentinela",
+    "intro": "Uma demonstração local com perfis simulados. Não digite informações pessoais ou de saúde reais.",
+    "readError": "Não foi possível registrar a leitura. Tente novamente.",
+    "opening": "Abrindo…",
+    "acknowledge": "Li o aviso — abrir demonstração",
+    "law": "Consultar a LGPD — arts. 11 e 18 (abre outro site)",
+    "sections": {
+      "stored": {
+        "title": "O que fica neste navegador",
+        "text": "Perfil fictício (nome, função, sexo e início da missão), indicadores acompanhados, plano de medicação, valores e sintomas do check-in, anotações do oficial médico, mensagens, registro de acesso, pedidos de exclusão e preferências. Os valores do check-in, as anotações e o texto das mensagens ficam cifrados. Alertas, correlações e linha de base são calculados a partir dos registros."
+      },
+      "purpose": {
+        "title": "Para quê",
+        "text": "Demonstrar o acompanhamento de indicadores, a comparação com faixas e padrão pessoal e a organização de informações para uma conversa com o oficial médico. Use apenas informações fictícias; este protótipo não presta atendimento de saúde."
+      },
+      "access": {
+        "title": "Quem consegue ver",
+        "text": "Cada pessoa entra com o próprio perfil e PIN. Pelo app, o tripulante vê só os próprios dados; o oficial médico de bordo vê os de todos; o comandante vê só se cada colega fez o check-in e se há alerta vermelho; a equipe médica na Terra recebe um pacote diário cifrado por tripulante. Cada consulta aos seus dados fica registrada em Seus dados. Os seus dados ficam cifrados com uma chave só sua, que abre com o seu PIN e com o do oficial médico; o PIN de um colega não abre. Limites do protótipo: o PIN curto pode ser descoberto por quem copiar o banco, e a chave do solo fica neste mesmo navegador porque tudo roda num aparelho só. Exportar cria um arquivo sob seu controle; abrir fontes externas acessa os respectivos sites."
+      },
+      "retention": {
+        "title": "Por quanto tempo",
+        "text": "Os dados de saúde são registro da missão e ficam no dispositivo até a limpeza do navegador ou a recriação da demonstração; os pacotes enviados ficam também com a equipe na Terra. O navegador pode remover o armazenamento. Arquivos JSON já baixados são cópias separadas e precisam ser apagados onde foram salvos."
+      },
+      "legal": {
+        "title": "Base legal e limites do protótipo",
+        "text": "Para um serviço real, a LGPD prevê tutela da saúde no art. 11, II, f, exclusivamente em procedimento realizado por profissionais de saúde, serviços de saúde ou autoridade sanitária. Essa hipótese não é automaticamente aplicável a este demonstrador. Antes de usar dados reais, o responsável deverá definir a base legal e os controles necessários. Continuar aqui apenas registra a leitura deste aviso, não um consentimento genérico para tratar dados de saúde."
+      },
+      "rights": {
+        "title": "Seus direitos",
+        "text": "O art. 18 da LGPD prevê direitos como acesso, correção e, nas hipóteses legais, eliminação. A tela Seus dados oferece cópia JSON e o registro de um pedido de exclusão, que fica para a equipe avaliar: o tripulante não apaga o próprio histórico de saúde. Não há promessa de atendimento remoto nem de conformidade integral com a LGPD."
+      },
+      "medication": {
+        "title": "Medicação e limites da proteção",
+        "text": "O plano de medicação contém nomes e horários previstos. Se vinculado a uma pessoa real, é dado de saúde sensível. Neste protótipo, esse plano fica no cadastro sem criptografia, assim como os dados do perfil e a lista de indicadores. Quem acessa o armazenamento do navegador pode lê-los sem PIN. As marcações diárias de medicação tomada, estresse, carga de trabalho e tempos de exercício ficam cifradas com os demais valores do check-in. Use somente dados fictícios."
+      },
+      "missionContext": {
+        "title": "Contexto calculado da missão",
+        "text": "O perfil e o ambiente da missão ficam nas preferências compartilhadas do aparelho, sem criptografia. A estimativa óssea e a soma das doses registradas de radiação são calculadas na tela, sem criar uma nova medição. A cópia JSON inclui as doses diárias registradas, mas não essas contas nem as preferências compartilhadas da missão. Os dados da demonstração são simulados."
+      },
+      "reactionAndSource": {
+        "title": "Teste de reação e origem declarada",
+        "text": "O check-in pode guardar a média de reação em milissegundos, modo curto ou completo, conclusão, duração, quantidade de respostas válidas e antecipações. Esses dados e a origem declarada dos valores ficam cifrados junto do check-in e aparecem legíveis na cópia JSON. Não guardamos cada toque, gravações ou identificação de aparelhos. Selecionar sensor vestível ou dosímetro apenas informa de onde você copiou o número; o app não lê aparelhos. Metas semanais e avisos de readaptação são calculados na tela, sem diagnóstico."
+      }
+    }
+  },
+  "yourData": {
+    "eyebrow": "Privacidade · {{name}}",
+    "title": "Seus dados",
+    "intro": "As ações abaixo valem só para os seus dados, do perfil com que você entrou.",
+    "encryption": "Os valores dos check-ins, as anotações e o texto das mensagens ficam cifrados com uma chave por tripulante, aberta pelo seu PIN e pelo do oficial médico. O cadastro e o plano de medicação ficam sem criptografia. Limite do protótipo: o PIN curto pode ser descoberto por quem copiar o banco.",
+    "actions": "Cópia e pedido de exclusão",
+    "copyIncludes": "A cópia inclui o perfil e o plano de medicação, os check-ins (incluindo medicação tomada, estresse, carga de trabalho, exercício, resultado e detalhes do teste de reação e origem declarada, quando registrados), as anotações do oficial médico, as mensagens, o registro de acesso e o pedido de exclusão. Não inclui dados de outros tripulantes. O arquivo JSON baixado fica legível, sem criptografia; guarde-o com cuidado. É uma cópia para consulta, sem importação nem portabilidade regulamentada.",
+    "export": "Exportar meus dados em JSON",
+    "request": "Registrar pedido de exclusão",
+    "requestRecorded": "Pedido registrado localmente",
+    "exportDone": "Arquivo JSON preparado para download. Ele contém somente os dados deste perfil.",
+    "requestDone": "Pedido registrado. Nada foi apagado: o histórico de saúde é da missão, e o pedido fica para a equipe avaliar.",
+    "requestPending": "Pedido de {{date}} — pendente. Protocolo local: {{id}}.",
+    "noDelete": "O tripulante não apaga o próprio histórico de saúde: ele é registro da missão. O pedido de exclusão fica registrado para a equipe avaliar, como prevê a LGPD (art. 18), sem apagar nada na hora.",
+    "processing": "Processando…",
+    "readError": "Não foi possível ler o pedido de exclusão.",
+    "operationError": "Não foi possível concluir a operação no armazenamento local. Tente novamente.",
+    "accessTitle": "Quem abriu os seus dados",
+    "accessIntro": "Pelo app, o oficial médico de bordo vê os seus valores e alertas, a equipe médica na Terra vê os pacotes diários e o comandante vê só se você fez o check-in e se há alerta vermelho. Cada consulta fica registrada aqui.",
+    "loading": "Carregando…",
+    "nobody": "Ninguém além de você abriu os seus dados.",
+    "when": "Quando",
+    "who": "Quem",
+    "what": "O quê"
+  },
+  "medicalContact": {
+    "eyebrow": "Comunicação por texto · {{name}}",
+    "title": "Mensagem para o oficial médico",
+    "intro": "Se você não puder falar, escreva para mostrar a tela ao oficial médico de bordo.",
+    "urgent": "Sem envio ou atendimento por este app. Em uma situação urgente, acione a equipe de bordo pelo meio disponível. Não aguarde resposta nesta tela.",
+    "prompt": "O que você gostaria de comunicar? Use apenas um exemplo fictício.",
+    "help": "Pode contar o que sentiu e quando começou. {{count}}/{{max}} caracteres. Não há envio, confirmação de leitura ou previsão de resposta.",
+    "saving": "Salvando…",
+    "save": "Salvar mensagem local",
+    "saved": "Mensagem salva somente neste dispositivo. Não foi enviada ao oficial médico. Mostre a tela a ele.",
+    "saveError": "Não foi possível salvar. Verifique o texto e tente novamente.",
+    "messages": "Mensagens para mostrar à equipe",
+    "none": "Nenhuma mensagem salva neste perfil.",
+    "local": "Salva localmente — não enviada",
+    "export": "Exportar dados ou registrar pedido de exclusão em Seus dados →"
+  },
+  "disclaimer": {
+    "lead": "Protótipo, não é dispositivo médico.",
+    "details": "Apoio à decisão, sem diagnóstico. Dados da tripulação simulados e faixas de demonstração. Equipe CosmoTI · NASA Space Apps Challenge 2026.",
+    "yourData": "Seus dados",
+    "contact": "Comunicação por texto"
+  },
+  "context": {
+    "dayCount_one": "{{count}} dia",
+    "dayCount_other": "{{count}} dias",
+    "boneLoss": {
+      "estimate": "Estimativa, não medida: para {{days}} em microgravidade, a conta ilustrativa fica em torno de {{min}}% a {{max}}%. Ela multiplica pelo tempo uma média publicada pela NASA para ossos que sustentam peso ({{rateMin}}% a {{rateMax}}% ao mês, em missões de {{monthsMin}} a {{monthsMax}} meses). Não mede nem prevê a sua perda óssea; exercício, alimentação e diferenças individuais influenciam o resultado.",
+      "beyondStudied": "Depois de {{months}} meses, não se deve supor que a perda continua no mesmo ritmo; a extrapolação linear não foi validada.",
+      "partial_one": "{{count}} dia foi em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esse dia não entra na conta.",
+      "partial_other": "{{count}} dias foram em gravidade parcial (Lua ou Marte), onde a taxa de perda não é conhecida; esses dias não entram na conta.",
+      "shortPeriod": "Este período é menor que os {{monthsMin}} a {{monthsMax}} meses citados na fonte: extrapolar a média para uma missão curta não foi validado."
+    },
+    "radiation": {
+      "total": "Dose acumulada registrada na missão: {{dose}}, somando {{days}} com valor informado. Os dados da demonstração são simulados; o app não está conectado a um dosímetro.",
+      "missing_one": "{{count}} dia sem leitura válida não entra na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.",
+      "missing_other": "{{count}} dias sem leitura válida não entram na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.",
+      "notLimit": "É contexto, não limite: o app não avalia limites de dose da carreira nem eventos de radiação intensa."
+    }
+  },
+  "missionProfiles": {
+    "station": {
+      "label": "Estação em órbita baixa",
+      "example": "ex.: Estação Espacial Internacional",
+      "vehicle": "Estação espacial",
+      "crewSize": "3 a 7 pessoas",
+      "note": "Expedição típica de cerca de 6 meses. Algumas duram até cerca de 1 ano.",
+      "phases": {
+        "station": "Estação"
+      }
+    },
+    "lunarFlyby": {
+      "label": "Voo lunar curto, sem pouso",
+      "example": "ex.: Artemis II",
+      "vehicle": "Cápsula",
+      "crewSize": "4 pessoas",
+      "note": "Duração planejada de 10 dias, fora da magnetosfera da Terra.",
+      "phases": {
+        "transit": "Trânsito ao redor da Lua"
+      }
+    },
+    "mars": {
+      "label": "Missão a Marte (referência de planejamento)",
+      "example": "arquitetura de referência da NASA, não é uma missão marcada",
+      "vehicle": "Nave de trânsito e habitat de superfície",
+      "crewSize": "6 pessoas",
+      "note": "Cerca de 180 dias de ida, 539 dias em Marte e o restante de volta, num total de 914 dias.",
+      "phases": {
+        "outbound": "Ida",
+        "surface": "Superfície de Marte",
+        "return": "Volta"
+      }
+    }
+  }
+}

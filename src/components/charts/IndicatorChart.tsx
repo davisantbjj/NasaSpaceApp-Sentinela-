@@ -4,6 +4,7 @@ import {
 import { formatDate } from '../../lib/dates';
 import { formatNumber } from '../../lib/series';
 import type { Range } from '../../types';
+import i18n from '../../i18n';
 
 export interface ChartSeries {
   key: string;
@@ -108,8 +109,8 @@ export function IndicatorChart({ data, series, unit, bands, baselines, scaleLabe
         {series.map((s) => (
           <span key={s.key}><span className="swatch" style={{ color: s.color }} />{s.label}</span>
         ))}
-        {bands.length > 0 && <span><span className="swatch band" />Faixa geral</span>}
-        {baselines.length > 0 && <span><span className="swatch dash" />Seu padrão pessoal</span>}
+        {bands.length > 0 && <span><span className="swatch band" />{i18n.t('trends.generalRange')}</span>}
+        {baselines.length > 0 && <span><span className="swatch dash" />{i18n.t('trends.personalPattern')}</span>}
       </div>
     </div>
   );

@@ -44,6 +44,14 @@ export interface MedicationDose {
   taken: boolean;
 }
 
+export interface ReactionTestDetails {
+  mode: 'full' | 'short';
+  completed: boolean;
+  elapsedSeconds: number;
+  validResponses: number;
+  anticipations: number;
+}
+
 export interface DailyValues {
   bloodPressure?: { systolic: number; diastolic: number };
   heartRate?: number;
@@ -54,6 +62,7 @@ export interface DailyValues {
   stress?: 1 | 2 | 3 | 4 | 5; // 1 = muito baixo, 5 = muito alto
   workload?: 1 | 2 | 3 | 4 | 5; // 1 = muito leve, 5 = excessiva
   reactionTime?: number; // média do teste de reação, em ms (M4)
+  reactionTest?: ReactionTestDetails; // protocolo e qualidade; registros antigos podem não ter
   exerciseMinutes?: number; // total do dia (aeróbico + resistido)
   resistanceMinutes?: number; // parte do total feita em treino resistido (M3)
   radiationDose?: number;
@@ -126,7 +135,7 @@ export interface PacketPayload {
   environment: Environment;
   recordedAt: string;
   values: DailyValues;
-  alerts: { id: string; indicator: IndicatorId; level: Level; whatChanged: string }[];
+  alerts: { id: string; indicator: IndicatorId; level: Level; whatChanged: LocalizedText }[];
   notes: { indicator: IndicatorId; note: string; seenBy: string; seenAt: string }[];
 }
 
@@ -162,15 +171,20 @@ export interface Alert {
   region: BodyRegion;
   level: Level;
   trigger: 'generalRange' | 'baselineDeviation' | 'symptom' | 'missedMedication';
-  whatChanged: string;
-  reference: string;
+  whatChanged: LocalizedText;
+  reference: LocalizedText;
   whyItMatters: string;
   whatToDo: string;
   environmentNote?: string; // contexto do ambiente atual, só texto
   confidence: 'normal' | 'low';
-  confidenceNote?: string;
+  confidenceNote?: LocalizedText;
   notifyGround: boolean;
   sourceUrl: string;
+}
+
+export interface LocalizedText {
+  key: string;
+  params?: Record<string, string | number | string[] | LocalizedText>;
 }
 
 export interface Correlation {
@@ -178,7 +192,7 @@ export interface Correlation {
   indicators: [IndicatorId, IndicatorId];
   fromDate: string;
   toDate: string;
-  description: string;
+  description: LocalizedText;
 }
 
 export interface Settings {
@@ -233,18 +247,19 @@ export interface RangePair {
 
 export interface SymptomRule {
   id: string;
-  label: string;
+  labelKey: string;
   level: 'yellow' | 'red';
 }
 
 export interface IndicatorRule {
-  label: string; // nome usado nos textos de alerta
+  labelKey: string;
   region: BodyRegion;
   unit: string;
+  unitKey?: string;
   green?: Range; // sem faixa geral: o indicador só usa a linha de base
   yellow?: Range;
   components?: Record<BpComponent, RangePair>; // pressão arterial
-  valueLabels?: Record<string, string>; // texto de cada valor de uma escala
+  valueLabels?: Record<string, string>; // chave i18n de cada valor de uma escala
   useBaseline: boolean;
   deviationDirection?: 'both' | 'above' | 'below'; // sentido de risco do desvio pessoal
   nasaRisk: string;

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
+import i18n from '../../i18n';
+import type { ReactionTestDetails } from '../../types';
 
 // Teste de reação (M4), na linha do Reaction Self Test da NASA: esperar o sinal e responder o mais
 // rápido possível, repetidas vezes. O resultado é a média, em milissegundos, das respostas válidas.
@@ -14,22 +16,34 @@ const MIN_VALID = 3; // abaixo disso não dá resultado
 
 type Phase = 'idle' | 'waiting' | 'signal' | 'done';
 
-interface Props {
-  value?: number; // resultado já salvo hoje, em ms
-  onResult: (ms: number | undefined) => void;
+// "Modo curto, interrompido." ou, em registros antigos sem detalhes, "Modo não registrado…".
+function savedDetails(details?: ReactionTestDetails): string {
+  if (!details) return i18n.t('checkin:reaction.unknownMode');
+  return i18n.t('checkin:reaction.savedMode', {
+    mode: i18n.t(details.mode === 'short' ? 'checkin:reaction.modeShort' : 'checkin:reaction.modeFull'),
+    interrupted: details.completed ? '' : i18n.t('checkin:reaction.interrupted'),
+  });
 }
 
-export function ReactionTestStep({ value, onResult }: Props) {
+interface Props {
+  value?: number; // resultado já salvo hoje, em ms
+  details?: ReactionTestDetails;
+  onResult: (ms: number | undefined, details?: ReactionTestDetails) => void;
+}
+
+export function ReactionTestStep({ value, details, onResult }: Props) {
   const [phase, setPhase] = useState<Phase>(value !== undefined ? 'done' : 'idle');
   const [secondsLeft, setSecondsLeft] = useState(0);
-  const [summary, setSummary] = useState<string | undefined>(
-    value !== undefined ? `Resultado salvo hoje: ${value} ms.` : undefined,
+  const [summary, setSummary] = useState<{ key: string; params?: Record<string, unknown> } | undefined>(
+    value !== undefined ? { key: 'checkin:reaction.saved', params: { value, details: savedDetails(details) } } : undefined,
   );
 
   const target = useRef<HTMLButtonElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const ticker = useRef<number | undefined>(undefined);
   const endAt = useRef(0);
+  const startedAt = useRef(0);
+  const duration = useRef(FULL_SECONDS);
   const signalAt = useRef(0);
   const times = useRef<number[]>([]);
   const early = useRef(0);
@@ -52,14 +66,29 @@ export function ReactionTestStep({ value, onResult }: Props) {
     const valid = times.current;
     go('done');
     if (valid.length < MIN_VALID) {
-      setSummary(`Poucas respostas válidas (${valid.length}). Refaça o teste ou pule o passo.`);
+      setSummary({ key: 'checkin:reaction.tooFew', params: { valid: valid.length } });
       onResult(undefined);
       return;
     }
     const mean = Math.round(valid.reduce((sum, t) => sum + t, 0) / valid.length);
-    const earlyText = early.current === 0 ? '' : `; ${early.current} ${early.current === 1 ? 'antecipação' : 'antecipações'} fora da conta`;
-    setSummary(`Resultado: ${mean} ms (média de ${valid.length} respostas${earlyText}).`);
-    onResult(mean);
+    const completed = performance.now() >= endAt.current;
+    const resultDetails: ReactionTestDetails = {
+      mode: duration.current === FULL_SECONDS ? 'full' : 'short',
+      completed,
+      elapsedSeconds: Math.round((performance.now() - startedAt.current) / 1000),
+      validResponses: valid.length,
+      anticipations: early.current,
+    };
+    setSummary({
+      key: 'checkin:reaction.result',
+      params: {
+        mean,
+        mode: i18n.t(resultDetails.mode === 'short' ? 'checkin:reaction.modeShortLower' : 'checkin:reaction.modeFullLower'),
+        interrupted: completed ? '' : i18n.t('checkin:reaction.interrupted'),
+        valid: valid.length,
+      },
+    });
+    onResult(mean, resultDetails);
   };
 
   const scheduleSignal = () => {
@@ -81,10 +110,13 @@ export function ReactionTestStep({ value, onResult }: Props) {
     early.current = 0;
     setSummary(undefined);
     onResult(undefined);
-    endAt.current = performance.now() + seconds * 1000;
+    startedAt.current = performance.now();
+    duration.current = seconds;
+    endAt.current = startedAt.current + seconds * 1000;
     setSecondsLeft(seconds);
     ticker.current = window.setInterval(() => {
       setSecondsLeft(Math.max(0, Math.ceil((endAt.current - performance.now()) / 1000)));
+      if (performance.now() >= endAt.current) finish();
     }, 250);
     scheduleSignal();
     // Leva o foco para a área de resposta, para quem usa teclado.
@@ -109,6 +141,7 @@ export function ReactionTestStep({ value, onResult }: Props) {
 
   return (
     <div className="stack" style={{ gap: 12 }}>
+      <p className="small muted">{i18n.t('checkin:reaction.disclaimer')}</p>
       {running ? (
         <>
           <button
@@ -127,22 +160,22 @@ export function ReactionTestStep({ value, onResult }: Props) {
               }
             }}
           >
-            <span aria-live="assertive">{phase === 'signal' ? '● Toque agora!' : 'Aguarde o sinal…'}</span>
+            <span aria-live="assertive">{phase === 'signal' ? i18n.t('checkin:reaction.tapNow') : i18n.t('checkin:reaction.wait')}</span>
           </button>
           <div className="row-between">
-            <span className="small muted num">Faltam {secondsLeft} s</span>
-            <button type="button" className="btn btn-ghost" onClick={finish}>Encerrar agora</button>
+            <span className="small muted num">{i18n.t('checkin:reaction.secondsLeft', { seconds: secondsLeft })}</span>
+            <button type="button" className="btn btn-ghost" onClick={finish}>{i18n.t('checkin:reaction.stop')}</button>
           </div>
         </>
       ) : (
         <>
-          {summary && <p className="notice"><span className="notice-icon" aria-hidden="true">i</span><span>{summary}</span></p>}
+          {summary && <p className="notice"><span className="notice-icon" aria-hidden="true">i</span><span>{i18n.t(summary.key, summary.params ?? {})}</span></p>}
           <div className="row">
             <button type="button" className="btn btn-primary" onClick={() => start(FULL_SECONDS)}>
-              {phase === 'done' ? 'Refazer o teste (3 min)' : 'Começar o teste (3 min)'}
+              {phase === 'done' ? i18n.t('checkin:reaction.retake') : i18n.t('checkin:reaction.start')}
             </button>
             <button type="button" className="btn" onClick={() => start(SHORT_SECONDS)}>
-              Versão curta (30 s, para demonstração)
+              {i18n.t('checkin:reaction.short')}
             </button>
           </div>
         </>

@@ -2,14 +2,16 @@ import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { displayValue } from '../content/format';
-import { CHECKIN_ORDER, ENVIRONMENTS, INDICATORS } from '../content/indicators';
+import { CHECKIN_ORDER, environmentContent, indicatorContent } from '../content/indicators';
+import { translateText } from '../content/localize';
 import { useNow } from '../hooks/useNow';
 import { formatDate, formatDateTime, formatDuration } from '../lib/dates';
 import { worstLevel } from '../lib/levels';
 import { useAppStore } from '../store/useAppStore';
 import { packetStatus } from '../sync/packets';
 import type { GroundPacket } from '../types';
-import { SYMPTOM_LABELS } from './helpers';
+import { symptomLabels } from './helpers';
+import i18n from '../i18n';
 
 function packetLevel(packet: GroundPacket) {
   return worstLevel(...packet.payload.alerts.map((a) => a.level));
@@ -20,7 +22,7 @@ export function GroundPage() {
   const { crewId } = useParams();
   const { crew, sync, settings } = useAppStore();
   const now = useNow(1000);
-  const env = ENVIRONMENTS[settings.environment];
+  const env = environmentContent(settings.environment);
 
   const delivered = sync.delivered
     .filter((p) => packetStatus(p, now) === 'delivered')
@@ -31,8 +33,7 @@ export function GroundPage() {
     <p className="notice">
       <span className="notice-icon" aria-hidden="true">⏱</span>
       <span>
-        Os dados chegam em pacotes, quando há janela de comunicação, com atraso de ida de {env.signalDelayLabel} ({env.label}).
-        O que está aqui pode já ter mudado a bordo. A decisão imediata é sempre de bordo.
+        {i18n.t('ground.notice', { delay: env.signalDelayLabel, environment: env.label })}
       </span>
     </p>
   );
@@ -42,15 +43,15 @@ export function GroundPage() {
     const packets = delivered.filter((p) => p.crewId === crewId);
     return (
       <div className="page">
-        <Link className="link-arrow" to="/ground">← Toda a tripulação</Link>
+        <Link className="link-arrow" to="/ground">{i18n.t('ground.allCrew')}</Link>
         <header className="page-header">
-          <span className="eyebrow">Visão do solo</span>
+          <span className="eyebrow">{i18n.t('ground.title')}</span>
           <h1>{member?.name ?? crewId}</h1>
           {member && <p className="muted">{member.role}</p>}
         </header>
         {notice}
         {packets.length === 0 ? (
-          <section className="card empty"><p className="muted">Nenhum pacote deste tripulante chegou ainda.</p></section>
+          <section className="card empty"><p className="muted">{i18n.t('ground.noCrewPacket')}</p></section>
         ) : (
           <GroundPacketDetail packet={packets[0]} history={packets.slice(1)} />
         )}
@@ -61,8 +62,8 @@ export function GroundPage() {
   return (
     <div className="page">
       <header className="page-header">
-        <span className="eyebrow">Médico do solo</span>
-        <h1>Visão do solo</h1>
+        <span className="eyebrow">{i18n.t('ground.physician')}</span>
+        <h1>{i18n.t('ground.title')}</h1>
       </header>
       {notice}
       <ul className="crew-grid">
@@ -80,21 +81,21 @@ export function GroundPage() {
                 {latest && level ? (
                   <LevelBadge
                     level={level}
-                    label={latest.payload.alerts.length === 0 ? 'Tudo dentro do esperado' : `${latest.payload.alerts.length} ${latest.payload.alerts.length === 1 ? 'alerta' : 'alertas'}`}
+                    label={latest.payload.alerts.length === 0 ? i18n.t('dashboard.allExpected') : i18n.t('dashboard.alerts', { count: latest.payload.alerts.length })}
                   />
                 ) : (
-                  <span className="chip">Sem pacote</span>
+                  <span className="chip">{i18n.t('ground.noPacket')}</span>
                 )}
               </div>
               {latest && (
                 <dl className="ground-times">
-                  <div><dt>Dado de</dt><dd className="num">{formatDateTime(latest.payload.recordedAt)}</dd></div>
-                  <div><dt>Chegou</dt><dd className="num">{formatDateTime(latest.deliverAt!)}</dd></div>
-                  <div><dt>Atraso</dt><dd className="num">{formatDuration(Date.parse(latest.deliverAt!) - Date.parse(latest.payload.recordedAt))}</dd></div>
+                  <div><dt>{i18n.t('ground.recorded')}</dt><dd className="num">{formatDateTime(latest.payload.recordedAt)}</dd></div>
+                  <div><dt>{i18n.t('ground.arrived')}</dt><dd className="num">{formatDateTime(latest.deliverAt!)}</dd></div>
+                  <div><dt>{i18n.t('ground.delay')}</dt><dd className="num">{formatDuration(Date.parse(latest.deliverAt!) - Date.parse(latest.payload.recordedAt))}</dd></div>
                 </dl>
               )}
-              {coming > 0 && <p className="small" style={{ color: 'var(--accent)' }}>{coming} {coming === 1 ? 'pacote a caminho' : 'pacotes a caminho'}</p>}
-              {latest && <Link className="link-arrow" to={`/ground/${member.id}`}>Abrir pacote →</Link>}
+              {coming > 0 && <p className="small" style={{ color: 'var(--accent)' }}>{i18n.t('ground.packetsComing', { count: coming })}</p>}
+              {latest && <Link className="link-arrow" to={`/ground/${member.id}`}>{i18n.t('ground.openPacket')}</Link>}
             </li>
           );
         })}
@@ -115,23 +116,23 @@ function GroundPacketDetail({ packet, history }: { packet: GroundPacket; history
     void recordGroundAccess(packet.crewId, `Abriu na Terra o pacote de ${formatDate(packet.date)}`);
   }, [packet.id, packet.crewId, packet.date, recordGroundAccess]);
 
-  const measured = CHECKIN_ORDER.map((id) => ({ id, value: displayValue(payload.values, id, SYMPTOM_LABELS) })).filter((m) => m.value);
+  const measured = CHECKIN_ORDER.map((id) => ({ id, value: displayValue(payload.values, id, symptomLabels()) })).filter((m) => m.value);
 
   return (
     <>
       <section className="card stack">
         <div className="row-between">
           <div>
-            <span className="eyebrow">Pacote de {formatDate(packet.date)} · dia {payload.missionDay} da missão</span>
-            <h2>Registro feito em {formatDateTime(payload.recordedAt)}</h2>
-            <p className="small muted num">Saiu da nave {formatDateTime(packet.sentAt!)} · chegou {formatDateTime(packet.deliverAt!)} · ambiente: {ENVIRONMENTS[payload.environment].label}</p>
+            <span className="eyebrow">{i18n.t('ground.packetTitle', { date: formatDate(packet.date), day: payload.missionDay })}</span>
+            <h2>{i18n.t('ground.recordedAt', { date: formatDateTime(payload.recordedAt) })}</h2>
+            <p className="small muted num">{i18n.t('ground.sent', { sent: formatDateTime(packet.sentAt!), arrived: formatDateTime(packet.deliverAt!), environment: environmentContent(payload.environment).label })}</p>
           </div>
           <LevelBadge level={packetLevel(packet)} />
         </div>
         <ul className="summary-list">
           {measured.map(({ id, value }) => (
             <li key={id}>
-              <span>{INDICATORS[id].label}</span>
+              <span>{indicatorContent(id).label}</span>
               <span className="num">{value!.text}{value!.unit && <span className="muted"> {value!.unit}</span>}</span>
             </li>
           ))}
@@ -139,26 +140,26 @@ function GroundPacketDetail({ packet, history }: { packet: GroundPacket; history
       </section>
 
       <section className="card stack">
-        <h2>Alertas</h2>
+        <h2>{i18n.t('ground.alerts')}</h2>
         {payload.alerts.length === 0 ? (
-          <p className="muted">Nenhum alerta neste registro.</p>
+          <p className="muted">{i18n.t('ground.noAlerts')}</p>
         ) : (
           <ul className="summary-list">
             {payload.alerts.map((a) => (
-              <li key={a.id}><span>{a.whatChanged}</span><LevelBadge level={a.level} /></li>
+              <li key={a.id}><span>{translateText(a.whatChanged)}</span><LevelBadge level={a.level} /></li>
             ))}
           </ul>
         )}
       </section>
 
       <section className="card stack">
-        <h2>Anotações do oficial médico</h2>
+        <h2>{i18n.t('ground.notes')}</h2>
         {payload.notes.length === 0 ? (
-          <p className="muted">Nenhuma anotação neste pacote.</p>
+          <p className="muted">{i18n.t('ground.noNotes')}</p>
         ) : (
           payload.notes.map((n) => (
             <div key={`${n.indicator}_${n.seenAt}`} className="card-inner stack" style={{ gap: 4 }}>
-              <span className="small muted">{INDICATORS[n.indicator].label} · {n.seenBy}, {formatDateTime(n.seenAt)}</span>
+              <span className="small muted">{indicatorContent(n.indicator).label} · {n.seenBy}, {formatDateTime(n.seenAt)}</span>
               <p>{n.note}</p>
             </div>
           ))
@@ -167,7 +168,7 @@ function GroundPacketDetail({ packet, history }: { packet: GroundPacket; history
 
       {history.length > 0 && (
         <section className="card stack">
-          <h2>Pacotes anteriores</h2>
+          <h2>{i18n.t('ground.previous')}</h2>
           <ul className="summary-list">
             {history.slice(0, 10).map((p) => (
               <li key={p.id}>

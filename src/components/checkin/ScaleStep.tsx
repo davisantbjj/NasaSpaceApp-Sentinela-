@@ -1,9 +1,9 @@
-import type { ScaleOption } from '../../content/indicators';
+import type { TranslatedScaleOption } from '../../content/indicators';
 
 interface Props {
   name: string;
   legend: string;
-  options: ScaleOption[];
+  options: TranslatedScaleOption[];
   value?: number;
   onChange: (value: number) => void;
 }

@@ -1,3 +1,4 @@
+import i18n from '../i18n';
 import type { DailyRecord, IndicatorId, Rules } from '../types';
 import { addDays } from './dates';
 import { inRange } from './series';
@@ -7,7 +8,7 @@ import { inRange } from './series';
 
 export interface WeeklyGoal {
   indicator: IndicatorId;
-  label: string;
+  labelKey: string;
   daysInGreen: number;
   windowDays: number;
   targetDays: number;
@@ -31,12 +32,12 @@ export function weeklyGoals(records: DailyRecord[], today: string, rules: Rules)
     }).length;
     return [{
       indicator,
-      label: rule.label,
+      labelKey: rule.labelKey,
       daysInGreen,
       windowDays: config.windowDays,
       targetDays: config.targetDays,
       met: daysInGreen >= config.targetDays,
-      greenText: `${green.min} a ${green.max} ${rule.unit}`.trim(),
+      greenText: i18n.t('mission.goals.range', { min: green.min, max: green.max, unit: rule.unit }).trim(),
     }];
   });
 }

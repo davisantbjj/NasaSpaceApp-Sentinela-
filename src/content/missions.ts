@@ -5,56 +5,56 @@ import type { CrewMember, Environment, MissionProfileId } from '../types';
 // números de saúde e não mudam nenhum nível de alerta (o ambiente só muda o texto).
 
 export interface MissionPhase {
-  label: string;
+  labelKey: string;
   environment: Environment;
   fromDay: number; // primeiro dia da fase (o dia 1 é o início da missão)
   toDay: number; // último dia da fase
 }
 
 export interface MissionProfile {
-  label: string;
-  example: string;
-  vehicle: string;
-  crewSize: string;
+  labelKey: string;
+  exampleKey: string;
+  vehicleKey: string;
+  crewSizeKey: string;
   durationDays: number;
   phases: MissionPhase[];
-  note: string;
+  noteKey: string;
   sourceUrl: string;
 }
 
 export const MISSION_PROFILES: Record<MissionProfileId, MissionProfile> = {
   station: {
-    label: 'Estação em órbita baixa',
-    example: 'ex.: Estação Espacial Internacional',
-    vehicle: 'Estação espacial',
-    crewSize: '3 a 7 pessoas',
+    labelKey: 'common:missionProfiles.station.label',
+    exampleKey: 'common:missionProfiles.station.example',
+    vehicleKey: 'common:missionProfiles.station.vehicle',
+    crewSizeKey: 'common:missionProfiles.station.crewSize',
     durationDays: 180,
-    phases: [{ label: 'Estação', environment: 'station', fromDay: 1, toDay: 180 }],
-    note: 'Expedição típica de cerca de 6 meses. Algumas duram até cerca de 1 ano.',
+    phases: [{ labelKey: 'common:missionProfiles.station.phases.station', environment: 'station', fromDay: 1, toDay: 180 }],
+    noteKey: 'common:missionProfiles.station.note',
     sourceUrl: 'https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/',
   },
   lunarFlyby: {
-    label: 'Voo lunar curto, sem pouso',
-    example: 'ex.: Artemis II',
-    vehicle: 'Cápsula',
-    crewSize: '4 pessoas',
+    labelKey: 'common:missionProfiles.lunarFlyby.label',
+    exampleKey: 'common:missionProfiles.lunarFlyby.example',
+    vehicleKey: 'common:missionProfiles.lunarFlyby.vehicle',
+    crewSizeKey: 'common:missionProfiles.lunarFlyby.crewSize',
     durationDays: 10,
-    phases: [{ label: 'Trânsito ao redor da Lua', environment: 'transit', fromDay: 1, toDay: 10 }],
-    note: 'Duração planejada de 10 dias, fora da magnetosfera da Terra.',
+    phases: [{ labelKey: 'common:missionProfiles.lunarFlyby.phases.transit', environment: 'transit', fromDay: 1, toDay: 10 }],
+    noteKey: 'common:missionProfiles.lunarFlyby.note',
     sourceUrl: 'https://www.nasa.gov/mission/artemis-ii/',
   },
   mars: {
-    label: 'Missão a Marte (referência de planejamento)',
-    example: 'arquitetura de referência da NASA, não é uma missão marcada',
-    vehicle: 'Nave de trânsito e habitat de superfície',
-    crewSize: '6 pessoas',
+    labelKey: 'common:missionProfiles.mars.label',
+    exampleKey: 'common:missionProfiles.mars.example',
+    vehicleKey: 'common:missionProfiles.mars.vehicle',
+    crewSizeKey: 'common:missionProfiles.mars.crewSize',
     durationDays: 914,
     phases: [
-      { label: 'Ida', environment: 'transit', fromDay: 1, toDay: 180 },
-      { label: 'Superfície de Marte', environment: 'mars', fromDay: 181, toDay: 719 },
-      { label: 'Volta', environment: 'transit', fromDay: 720, toDay: 914 },
+      { labelKey: 'common:missionProfiles.mars.phases.outbound', environment: 'transit', fromDay: 1, toDay: 180 },
+      { labelKey: 'common:missionProfiles.mars.phases.surface', environment: 'mars', fromDay: 181, toDay: 719 },
+      { labelKey: 'common:missionProfiles.mars.phases.return', environment: 'transit', fromDay: 720, toDay: 914 },
     ],
-    note: 'Cerca de 180 dias de ida, 539 dias em Marte e o restante de volta, num total de 914 dias.',
+    noteKey: 'common:missionProfiles.mars.note',
     sourceUrl: 'https://ntrs.nasa.gov/api/citations/20100028285/downloads/20100028285.pdf',
   },
 };
@@ -81,23 +81,23 @@ export function daysByEnvironment(profile: MissionProfile, day: number): Partial
 // Próxima mudança para um ambiente com gravidade (M11): pouso na Lua ou em Marte depois de uma fase sem
 // gravidade, ou a volta à Terra no fim da missão. `inDays` 0 é hoje. Sem próxima mudança, undefined.
 export interface GravityChange {
-  label: string;
+  labelKey: string;
   day: number;
   inDays: number;
 }
 
 const WITH_GRAVITY: Environment[] = ['moon', 'mars'];
-const LANDING_LABEL: Partial<Record<Environment, string>> = { moon: 'Pouso na Lua', mars: 'Pouso em Marte' };
+const LANDING_LABEL: Partial<Record<Environment, string>> = { moon: 'common:mission.gravityChange.moonLanding', mars: 'common:mission.gravityChange.marsLanding' };
 
 export function nextGravityChange(profile: MissionProfile, day: number): GravityChange | undefined {
-  const changes: { label: string; day: number }[] = [];
+  const changes: { labelKey: string; day: number }[] = [];
   profile.phases.forEach((phase, i) => {
     const previous = profile.phases[i - 1];
     if (previous && WITH_GRAVITY.includes(phase.environment) && !WITH_GRAVITY.includes(previous.environment)) {
-      changes.push({ label: LANDING_LABEL[phase.environment] ?? 'Pouso', day: phase.fromDay });
+      changes.push({ labelKey: LANDING_LABEL[phase.environment] ?? 'common:mission.gravityChange.landing', day: phase.fromDay });
     }
   });
-  changes.push({ label: 'Volta à Terra', day: profile.durationDays + 1 });
+  changes.push({ labelKey: 'common:mission.gravityChange.earthReturn', day: profile.durationDays + 1 });
   const next = changes.find((c) => c.day >= day);
   return next ? { ...next, inDays: next.day - day } : undefined;
 }

@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react';
 import { formatDateTime } from '../../lib/dates';
 import type { AlertReview } from '../../types';
+import i18n from '../../i18n';
 
 interface Props {
   review?: AlertReview;
@@ -35,33 +36,33 @@ export function AlertReviewBox({ review, onReview }: Props) {
     <div className="card-inner stack review-box" style={{ gap: 10, color: 'var(--text)' }}>
       {review ? (
         <p className="small">
-          <strong style={{ color: 'var(--level-green)' }}>✓ Visto pelo oficial médico</strong>
-          <span className="muted"> · {review.seenBy}, {formatDateTime(review.seenAt)}{review.syncedAt ? '' : ' · ainda neste aparelho'}</span>
+          <strong style={{ color: 'var(--level-green)' }}>✓ {i18n.t('alerts:card.review.seen')}</strong>
+          <span className="muted"> · {review.seenBy}, {formatDateTime(review.seenAt)}{review.syncedAt ? '' : ` · ${i18n.t('alerts:card.review.unsynced')}`}</span>
         </p>
       ) : (
-        <p className="small muted">Ainda não visto pelo oficial médico.</p>
+        <p className="small muted">{i18n.t('alerts:card.review.notSeen')}</p>
       )}
       {review?.note && !onReview && (
-        <p><span className="small muted">Conduta: </span>{review.note}</p>
+        <p><span className="small muted">{i18n.t('alerts:card.review.note')} </span>{review.note}</p>
       )}
       {onReview && (
         <form className="stack" style={{ gap: 8 }} onSubmit={submit}>
-          <label htmlFor={noteId} className="small" style={{ fontWeight: 600 }}>Conduta (opcional)</label>
+          <label htmlFor={noteId} className="small" style={{ fontWeight: 600 }}>{i18n.t('alerts:card.review.optional')}</label>
           <textarea
             id={noteId}
             className="textarea"
             rows={2}
             value={note}
             onChange={(e) => { setNote(e.target.value); setSaved(false); }}
-            placeholder="Ex.: conversei com a tripulante, repetir a medida amanhã."
+            placeholder={i18n.t('alerts:card.review.placeholder')}
           />
           <div className="row">
             <button type="submit" className="btn" disabled={saving}>
-              {saving ? 'Salvando…' : review ? 'Atualizar anotação' : 'Marcar como visto'}
+              {saving ? i18n.t('alerts:card.review.saving') : review ? i18n.t('alerts:card.review.update') : i18n.t('alerts:card.review.markSeen')}
             </button>
-            {saved && <span className="small muted" role="status">Salvo. Vai para a central e para a Terra no próximo pacote.</span>}
+            {saved && <span className="small muted" role="status">{i18n.t('alerts:card.review.saved')}</span>}
           </div>
-          {error && <p className="field-error" role="alert">Não foi possível salvar: {error}</p>}
+          {error && <p className="field-error" role="alert">{i18n.t('alerts:card.review.saveError', { error })}</p>}
         </form>
       )}
     </div>
