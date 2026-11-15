@@ -5,7 +5,7 @@ export type Level = 'green' | 'yellow' | 'red';
 export type IndicatorId =
   | 'bloodPressure' | 'heartRate' | 'glucose' | 'temperature'
   | 'sleepHours' | 'mood' | 'stress' | 'workload' | 'reactionTime' | 'exerciseMinutes' | 'resistanceMinutes' | 'radiationDose'
-  | 'bodyMassKg' | 'vision' | 'symptoms' | 'medication';
+  | 'bodyMassKg' | 'vision' | 'conditioning' | 'symptoms' | 'medication';
 
 export type BodyRegion =
   | 'head' | 'heart' | 'musculoskeletal' | 'immune'
@@ -75,6 +75,15 @@ export interface ExerciseSession {
   resistanceStatus?: ResistanceStatus;
 }
 
+export type ConditioningApparatus = 'treadmill' | 'cycle' | 'rower' | 'resistive' | 'flywheel' | 'other';
+
+export interface ConditioningAssessment {
+  aerobicPercent: number;
+  strengthPercent: number;
+  aerobicApparatus: ConditioningApparatus;
+  strengthApparatus: ConditioningApparatus;
+}
+
 export interface DailyValues {
   bloodPressure?: { systolic: number; diastolic: number };
   heartRate?: number;
@@ -96,6 +105,7 @@ export interface DailyValues {
   sleepQuality?: 1 | 2 | 3 | 4 | 5; // preparado para N14
   vision?: 0 | 1 | 2;
   visionAmsler?: AmslerVisionResult; // N15; o resumo vision continua para histórico
+  conditioning?: ConditioningAssessment; // N17; avaliação periódica comparada ao pré-voo
   symptoms?: string[]; // ids de sintomas definidos em rules.json
   medication?: MedicationDose[]; // doses previstas no dia
   sources?: Partial<Record<IndicatorId, DataSource>>; // origem dos valores; ausente = digitado (M10)

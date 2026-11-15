@@ -11,6 +11,7 @@
     "symptoms": "Sintomas relatados: {{symptoms}}",
     "missedMedication": "Dose não tomada hoje: {{doses}}",
     "bodyMassLoss": "Massa corporal: {{percent}}% abaixo do início ({{value}} kg agora; {{start}} kg no início)"
+    ,"conditioning": "{{name}} está em {{value}} do valor antes do voo"
   },
   "values": {
     "bloodPressure": "{{systolic}}/{{diastolic}} {{unit}}",
@@ -33,6 +34,7 @@
     "noSymptoms": "Esperado: nenhum sintoma",
     "medication": "Esperado: todas as doses previstas no dia",
     "bodyMass": "Valor inicial: {{start}} {{unit}} · amarelo acima de {{yellow}}% de perda · vermelho acima de {{red}}%"
+    ,"conditioning": "Referência: pelo menos 80% do valor antes do voo"
   },
   "confidence": {
     "baselineForming": "Linha de base em formação ({{sampleDays}} de {{baselineDays}} dias)",
@@ -172,6 +174,11 @@
       "whyItMatters": "A massa corporal é um indicador de nutrição durante o voo. A comparação é com o valor inicial desta missão, não com uma faixa universal.",
       "yellow": "Revise alimentação, hidratação e o plano com o oficial médico.",
       "red": "Avise o oficial médico agora para revisar nutrição e o plano da missão."
+    },
+    "conditioning": {
+      "whyItMatters": "O condicionamento físico ajuda a preservar a capacidade de trabalho durante a missão e a readaptação após o voo.",
+      "yellow": "Repita a avaliação conforme o plano e converse com o oficial médico antes de alterar o treino.",
+      "red": "Não é gerado por este critério."
     }
   },
   "symptoms": {

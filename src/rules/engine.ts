@@ -277,6 +277,41 @@ function evaluateBodyMass(
   };
 }
 
+function evaluateConditioning(
+  rule: IndicatorRule,
+  record: DailyRecord,
+): Alert[] {
+  const assessment = record.values.conditioning;
+  if (!assessment) return [];
+  return ([
+    ['aerobic', assessment.aerobicPercent],
+    ['strength', assessment.strengthPercent],
+  ] as const)
+    .filter(([, value]) => Number.isFinite(value) && value < 80)
+    .map(([kind, value]) => ({
+      id: `${record.id}_conditioning_${kind}`,
+      crewId: record.crewId,
+      date: record.date,
+      indicator: 'conditioning' as const,
+      region: rule.region,
+      level: 'yellow' as const,
+      trigger: 'generalRange' as const,
+      whatChanged: {
+        key: 'alerts:change.conditioning',
+        params: {
+          nameKey: `indicators:conditioning.${kind}`,
+          value: { key: 'alerts:values.number', params: { value, unit: '%' } },
+        },
+      },
+      reference: { key: 'alerts:reference.conditioning' },
+      whyItMatters: rule.messages.whyItMatters,
+      whatToDo: rule.messages.whatToDo.yellow,
+      confidence: 'normal' as const,
+      notifyGround: false,
+      sourceUrl: rule.sourceUrl,
+    }));
+}
+
 // Medicação: alerta quando uma dose prevista no dia não foi marcada como tomada.
 // O nível vem de `missedLevel` no rules.json.
 function evaluateMedication(
@@ -332,14 +367,17 @@ export function evaluateRecord(
     if (!rule) continue;
     const indicator = id as IndicatorId;
     const alert =
-      indicator === 'symptoms'
+      indicator === 'conditioning'
+        ? evaluateConditioning(rule, record)
+        : indicator === 'symptoms'
         ? evaluateSymptoms(rule, record, rules, environment, context)
         : indicator === 'medication'
           ? evaluateMedication(rule, record, rules, environment)
           : indicator === 'bodyMassKg'
             ? evaluateBodyMass(rule, record, context)
           : evaluateIndicator(indicator, rule, record, previous, own, rules, environment);
-    if (alert) alerts.push(alert);
+    if (Array.isArray(alert)) alerts.push(...alert);
+    else if (alert) alerts.push(alert);
   }
   return alerts.sort((a, b) => compareLevels(b.level, a.level));
 }

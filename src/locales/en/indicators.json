@@ -144,6 +144,13 @@
     "howToMeasure": "Take the test somewhere quiet. When the signal appears, tap the area or press Space as fast as you can. Do not respond before the signal. The full test takes 3 minutes.",
     "whyMeasure": "NASA's Reaction Self Test tracks attention and performance. This test is a demo and has not been validated as equivalent; the time also depends on the device and the interaction. A single result does not diagnose fatigue or prove fitness."
   },
+  "conditioning": {
+    "label": "Physical conditioning",
+    "aerobic": "Aerobic capacity",
+    "strength": "Strength",
+    "howToMeasure": "Complete the periodic assessment defined by the medical team and enter the result as a percentage of the preflight value, along with the apparatus used.",
+    "whyMeasure": "NASA operational guidance recommends maintaining at least 80% of preflight aerobic capacity and strength. This record does not replace a fitness assessment."
+  },
   "resistanceMinutes": {
     "label": "Resistance training",
     "howToMeasure": "Minutes of training against a load or resistance, entered in the exercise step.",

@@ -43,6 +43,28 @@ describe('levelForRange', () => {
     expect(levelForRange(121, green, yellow)).toBe('red');
   });
 
+  describe('condicionamento periódico (N17)', () => {
+    const assessment = (aerobicPercent: number, strengthPercent: number): DailyValues => ({
+      conditioning: {
+        aerobicPercent,
+        strengthPercent,
+        aerobicApparatus: 'treadmill',
+        strengthApparatus: 'resistive',
+      },
+    });
+
+    it('gera um alerta separado para cada capacidade abaixo de 80%', () => {
+      const alerts = evaluateLast([assessment(79, 75)]);
+      expect(alerts).toHaveLength(2);
+      expect(alerts.map((alert) => alert.level)).toEqual(['yellow', 'yellow']);
+      expect(alerts.every((alert) => alert.indicator === 'conditioning')).toBe(true);
+    });
+
+    it('não alerta quando as duas capacidades atingem 80%', () => {
+      expect(evaluateLast([assessment(80, 100)])).toEqual([]);
+    });
+  });
+
   it('sem faixa geral fica verde', () => {
     expect(levelForRange(999)).toBe('green');
   });

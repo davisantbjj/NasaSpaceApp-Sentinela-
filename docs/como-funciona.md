@@ -6,7 +6,7 @@ Explicação completa do aplicativo: o que ele faz, como cada indicador é medid
 
 ## 1. Ideia geral
 
-O astronauta faz um **check-in diário**: informa até quinze indicadores de saúde. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
+O astronauta faz um **check-in diário**: informa os indicadores de saúde que estão previstos para aquele perfil e período. O app compara cada valor com **duas referências** e mostra o resultado de três formas:
 
 - numa **figura humana** em que cada sistema do corpo fica verde, amarelo ou vermelho;
 - numa **lista de alertas**, cada um explicando o que mudou e o que fazer;
@@ -42,10 +42,10 @@ Os alertas e as linhas de base não são gravados. São recalculados a partir do
 | Estresse | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o seu estresse na maior parte do dia. |
 | Carga de trabalho | escala de 1 a 5 | Mente e sono | Escolha o número que melhor descreve o volume de trabalho de hoje. |
 | Tempo de reação | ms (média do teste) | Mente e sono | Teste no próprio app: quando aparecer o sinal, tocar na área ou apertar espaço o mais rápido possível. 3 minutos, ou 30 s na versão curta para demonstração. Respostas antes do sinal não entram na média. |
-| Exercício | minutos | Ossos e músculos | Digite os minutos de aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência), com o equipamento da nave. O app soma os dois. Não depende de um aparelho específico: vale para a esteira, a bicicleta e o aparelho resistido da estação e para o aparelho compacto da Orion. |
-| Treino resistido | minutos | Ossos e músculos | É o segundo campo do passo de exercício, sem passo próprio. |
+| Exercício | sessão | Ossos e músculos | Registre o tipo (aeróbico, resistido ou os dois), a duração, a frequência cardíaca média do aeróbico e se o resistido foi feito, parcial ou não feito. Os aparelhos de referência são esteira, bicicleta ergométrica, remo, aparelho resistido da estação e flywheel da Orion. |
 | Radiação | µSv (microsieverts) | Corpo inteiro | Leia a dose acumulada no dia no seu dosímetro pessoal e digite o valor. |
-| Visão | 0, 1 ou 2 | Olhos e visão | Leia o cartão de teste de perto com um olho de cada vez e compare com o que via no começo da missão. 0 = sem mudança, 1 = mudança leve, 2 = mudança clara. |
+| Visão | grade de Amsler | Olhos e visão | Observe a grade com um olho de cada vez e responda sobre linhas tortas, áreas faltando e piora na leitura de perto. O autoteste pode ser pulado e não diagnostica SANS. |
+| Condicionamento físico | percentual | Ossos e músculos | Em uma avaliação periódica, informe o resultado aeróbico e de força como percentual do valor antes do voo e selecione o aparelho utilizado. Abaixo de 80% gera alerta. |
 | Medicação | lista de marcar | Corpo inteiro | Marque cada dose prevista para hoje que você já tomou. A dose que ficar sem marcar conta como não tomada. Só aparece para quem tem medicação prevista. |
 | Sintomas | lista de marcar | Corpo inteiro | Marque tudo o que sentiu hoje. Se não sentiu nada, avance sem marcar. |
 
@@ -221,6 +221,12 @@ Nos passos de **sono**, **frequência cardíaca** e **radiação**, o check-in p
 ### Readaptação à gravidade
 
 Com um perfil de missão, o cartão "Contexto de readaptação à gravidade", em Missão, mostra a próxima mudança de gravidade: pouso na Lua ou em Marte depois de uma fase sem gravidade, ou a volta à Terra no fim da missão. Faltando **7 dias ou menos** (`rules.json`, `context.readaptation`), a mudança aparece em destaque, com o pedido de reler a orientação e combinar o protocolo com o oficial médico. A orientação em si é a mesma de antes (tontura ao levantar, com fonte da NASA) e não muda nenhum nível.
+
+### Condicionamento periódico
+
+O indicador de condicionamento registra separadamente a **capacidade aeróbica** e a **força**, sempre como percentual do valor medido antes do voo. O critério de acompanhamento é manter pelo menos **80%** em cada resultado; abaixo disso, o motor gera um alerta amarelo para o oficial médico. A referência vem da orientação operacional da NASA/OCHMO e não é uma faixa demonstrativa.
+
+O registro também guarda o aparelho usado: esteira, bicicleta ergométrica, remo ergométrico, aparelho resistido, flywheel da Orion ou outro. Isso identifica a origem da avaliação, mas não transforma o app em um teste físico automático. A frequência da avaliação é periódica e ainda deve ser definida pela equipe médica; a cadência detalhada fica na N18.
 
 ### Metas da semana
 

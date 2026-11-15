@@ -35,6 +35,14 @@ export function displayValue(
     }
     return { text: i18n.t('indicators:display.doseNotTaken', { doses: missed.map((dose) => dose.label).join(', ') }), unit: '' };
   }
+  if (indicator === 'conditioning') {
+    const assessment = values.conditioning;
+    if (!assessment) return undefined;
+    return {
+      text: `${i18n.t('indicators:conditioning.aerobic')}: ${formatNumber(assessment.aerobicPercent)}%; ${i18n.t('indicators:conditioning.strength')}: ${formatNumber(assessment.strengthPercent)}%`,
+      unit: '',
+    };
+  }
   const value = values[indicator];
   if (typeof value !== 'number') return undefined;
   if (indicator === 'reactionTime') {

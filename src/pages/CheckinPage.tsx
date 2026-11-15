@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { LevelBadge } from '../components/alerts/LevelBadge';
 import { AmslerStep } from '../components/checkin/AmslerStep';
 import { ExerciseSessionStep } from '../components/checkin/ExerciseSessionStep';
+import { ConditioningStep } from '../components/checkin/ConditioningStep';
 import { ChecklistStep } from '../components/checkin/ChecklistStep';
 import { ReactionTestStep } from '../components/checkin/ReactionTestStep';
 import { SourcePicker } from '../components/checkin/SourcePicker';
@@ -16,7 +17,7 @@ import i18n from '../i18n';
 import { todayISO } from '../lib/dates';
 import { rules } from '../rules/rules';
 import { useActiveCrew, useAppStore, useViewingOther } from '../store/useAppStore';
-import type { Alert, AmslerVisionResult, CrewMember, DailyValues, DataSource, IndicatorId, ReactionTestDetails, ExerciseSession } from '../types';
+import type { Alert, AmslerVisionResult, ConditioningAssessment, CrewMember, DailyValues, DataSource, IndicatorId, ReactionTestDetails, ExerciseSession } from '../types';
 import { latestRecord, symptomLabels, trackedInOrder } from './helpers';
 
 // Indicadores respondidos numa escala (passo ScaleStep).
@@ -34,6 +35,7 @@ interface Draft {
   reactionTest?: ReactionTestDetails;
   amsler?: AmslerVisionResult;
   exerciseSession?: ExerciseSession;
+  conditioning?: ConditioningAssessment;
   sources: Partial<Record<IndicatorId, DataSource>>; // origem escolhida em cada passo (M10)
 }
 
@@ -65,6 +67,7 @@ function draftFrom(values: DailyValues | undefined, member: CrewMember | undefin
     scale,
     amsler: values?.visionAmsler,
     exerciseSession: values?.exerciseSession,
+    conditioning: values?.conditioning,
     symptoms: values?.symptoms,
     medicationTaken,
     reactionTime: values?.reactionTime,
@@ -106,6 +109,8 @@ function toValues(steps: IndicatorId[], draft: Draft, member: CrewMember): Daily
       values.resistanceMinutes = resistanceDone && (session.type === 'resistance' || session.type === 'both')
         ? session.durationMinutes
         : 0;
+    } else if (indicator === 'conditioning') {
+      if (draft.conditioning) values.conditioning = draft.conditioning;
     } else if (indicator === 'vision') {
       if (draft.amsler) {
         const eyes = [draft.amsler.left, draft.amsler.right].filter((eye): eye is NonNullable<typeof eye> => eye !== undefined);
@@ -222,6 +227,7 @@ function OwnCheckin() {
         reactionTest: indicator === 'reactionTime' ? undefined : d.reactionTest,
         amsler: indicator === 'vision' ? undefined : d.amsler,
         exerciseSession: indicator === 'exerciseMinutes' ? undefined : d.exerciseSession,
+        conditioning: indicator === 'conditioning' ? undefined : d.conditioning,
         sources: { ...d.sources, [indicator]: undefined },
       };
     });
@@ -375,6 +381,12 @@ function OwnCheckin() {
           <AmslerStep
             value={draft.amsler}
             onChange={(amsler) => setDraft((d) => ({ ...d, amsler }))}
+          />
+        )}
+        {indicator === 'conditioning' && (
+          <ConditioningStep
+            value={draft.conditioning}
+            onChange={(conditioning) => setDraft((d) => ({ ...d, conditioning }))}
           />
         )}
         {indicator === 'reactionTime' && (

@@ -440,6 +440,32 @@
       },
       "demo": true
     },
+    "conditioning": {
+      "labelKey": "indicators:conditioning.label",
+      "region": "musculoskeletal",
+      "unit": "%",
+      "green": { "min": 80, "max": 200 },
+      "yellow": { "min": 0, "max": 79.99 },
+      "useBaseline": false,
+      "nasaRisk": "Reduced Cardiorespiratory and Musculoskeletal Fitness",
+      "hazards": ["gravity"],
+      "messages": {
+        "whyItMatters": "alerts:rules.conditioning.whyItMatters",
+        "whatToDo": {
+          "yellow": "alerts:rules.conditioning.yellow",
+          "red": "alerts:rules.conditioning.red"
+        }
+      },
+      "sourceUrl": "https://www.nasa.gov/?p=808462",
+      "rangeEvidence": {
+        "status": "official-threshold-not-demo-range",
+        "generalReferenceUrls": ["https://www.nasa.gov/?p=808462"],
+        "green": "Pelo menos 80% do valor de antes do voo, conforme a referência OCHMO.",
+        "yellow": "Abaixo de 80%: critério de acompanhamento da capacidade aeróbica ou força durante o voo.",
+        "red": "Não há segundo corte definido nesta tarefa; o motor gera alerta amarelo abaixo de 80%."
+      },
+      "demo": false
+    },
     "medication": {
       "labelKey": "indicators:medication.label",
       "region": "wholeBody",
