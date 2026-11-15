@@ -9,6 +9,8 @@ import { sealRecord } from './recordsRepo';
 
 // Dados SIMULADOS para a demonstração. Nenhum valor aqui vem de uma pessoa real.
 // Os registros vão até ontem, para o check-in de hoje ficar pendente.
+// Cada tripulante tem regiões verdes, amarelas e vermelhas no último registro,
+// com indicadores diferentes em alerta. O estado geral reflete o pior nível (vermelho).
 
 const SEED_DAYS = 60;
 
@@ -44,7 +46,7 @@ interface SeedProfile {
 
 const PROFILES: SeedProfile[] = [
   {
-    // Caso preparado para a demonstração: o sono cai por vários dias e depois o humor.
+    // Sono e humor amarelos; frequência cardíaca vermelha no último dia.
     member: { id: 'ana', name: 'Ana Ribeiro', role: 'Comandante', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.ana, startBodyMassKg: DEMO_START_BODY_MASS_KG.ana },
     seed: 11,
     base: { systolic: 116, diastolic: 74, heartRate: 66, glucose: 88, temperature: 36.6, sleepHours: 7.5, exerciseMinutes: 88, radiationDose: 420, bodyMassKg: 67.2 },
@@ -63,22 +65,29 @@ const PROFILES: SeedProfile[] = [
       }
       if (daysLeft === 5 || daysLeft === 6 || daysLeft === 24 || daysLeft === 41) takeSleepAid(values);
       if (daysLeft < reaction.length) values.reactionTime = reaction[daysLeft];
+      if (daysLeft === 0) values.heartRate = 130;
     },
   },
   {
-    // Tudo dentro do esperado. É o único que acompanha glicemia.
+    // Glicemia vermelha e exercício amarelo no último dia. É o único que acompanha glicemia.
     member: { id: 'kenji', name: 'Kenji Mori', role: 'Médico de bordo', sex: 'male', trackedIndicators: ['glucose', ...ALL_BUT_GLUCOSE], startBodyMassKg: DEMO_START_BODY_MASS_KG.kenji },
     seed: 23,
     base: { systolic: 121, diastolic: 78, heartRate: 71, glucose: 86, temperature: 36.5, sleepHours: 7.8, exerciseMinutes: 95, radiationDose: 415, bodyMassKg: 77.2 },
+    story: (values, daysLeft) => {
+      if (daysLeft === 0) {
+        values.glucose = 140;
+        values.exerciseMinutes = 45;
+      }
+    },
   },
   {
-    // Mudança leve na visão nos últimos dias, com dor de cabeça.
+    // Visão amarela e sintoma vermelho no último dia; as demais regiões continuam verdes.
     member: { id: 'lia', name: 'Lia Santos', role: 'Engenheira de voo', sex: 'female', trackedIndicators: [...ALL_BUT_GLUCOSE, 'medication'], medications: DEMO_MEDICATIONS.lia, startBodyMassKg: DEMO_START_BODY_MASS_KG.lia },
     seed: 37,
     base: { systolic: 112, diastolic: 72, heartRate: 74, glucose: 90, temperature: 36.7, sleepHours: 7.6, exerciseMinutes: 82, radiationDose: 425, bodyMassKg: 61.2 },
     story: (values, daysLeft) => {
       if (daysLeft < 2) values.vision = 1;
-      if (daysLeft === 0) values.symptoms = ['headache'];
+      if (daysLeft === 0) values.symptoms = ['headache', 'chestPain'];
     },
   },
 ];

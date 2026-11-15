@@ -473,6 +473,16 @@ Três tripulantes fictícios e 60 dias gerados por código com semente fixa, o q
 
 A Ana tem um caso preparado: o sono cai durante vários dias e o humor cai depois. É o que mostra correlação e desvio sustentado numa demonstração curta. A massa corporal simulada de cada tripulante é comparada ao valor inicial da missão; o CO2 começa em 2,3 mmHg e pode ser alterado na tela Missão.
 
+O último registro mostra os três níveis dentro do painel de cada tripulante, com casos diferentes:
+
+| Tripulante | Verde (exemplo) | Amarelo | Vermelho |
+| --- | --- | --- | --- |
+| Ana Ribeiro — comandante | Visão e temperatura | Sono de 5,2 h e humor 3/5 | Frequência cardíaca de 130 bpm |
+| Kenji Mori — médico de bordo | Sono e frequência cardíaca | Exercício de 45 min | Glicemia de 140 mg/dL |
+| Lia Santos — engenheira de voo | Sono e frequência cardíaca | Visão 1/2 | Sintomas: dor no peito junto de dor de cabeça |
+
+Os níveis continuam calculados pelas regras existentes. O estado geral dos três fica vermelho, pois reflete o pior nível; as três cores aparecem nas regiões e nos indicadores de cada painel. Verde indica valor dentro do esperado e não gera um cartão na lista de alertas. O resumo da comandante sinaliza os vermelhos sem revelar indicadores ou valores dos colegas. Para carregar esses casos em um navegador que já contém dados, entrar como Kenji (PIN `2222`) e usar **Missão → Recriar dados de demonstração**; essa ação apaga os dados locais anteriores da demonstração. Após a recriação, entrar novamente e abrir os painéis pela tela Tripulação.
+
 ## Estado dos dados novos após a fase 12
 
 Os quatro dados abaixo já têm interface na base `2769fb5`. Isso não conclui validação clínica, cadência ou avaliação de acessibilidade. Tarefas em [tarefas-nasa-2026-11-15.md](tarefas-nasa-2026-11-15.md).
