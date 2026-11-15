@@ -202,14 +202,16 @@ Revisado em 14/11 depois das melhorias M1 e M2 e dos papéis do Davi, que já es
 
 ### Larissa: pesquisa, LGPD e apresentação
 
-Revisado em 15/11 sobre o código real da branch da Talita: só M1–M3 estão feitas. Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`.
+Revisado em 15/11 após integrar a branch da Talita até `097d2fd`: M1–M3, M5, M6 e M8 estão feitas. Apresentação, roteiro, capturas, recursos NASA para a entrega e slides ficam para a conclusão de todo o escopo, conforme Larissa. Continuação registrada em `docs/continuidade-larissa-2026-11-15.md`.
 
 - [x] Revisão **documental** das faixas, com referências e limites de evidência por nível em `rules.json` (`rangeEvidence`) e `docs/pesquisa/revisao-faixas.md`. Aprovação clínica da fase 2 continua pendente; nenhum corte numérico foi alterado
 - [x] **(fase 11, M1–M3)** Revisão documental de medicação, estresse, carga e treino resistido em `docs/pesquisa/revisao-faixas.md`, com NASA e estudos originais, limites de evidência e referências no `rangeEvidence`. Cortes mantidos; não constitui aprovação clínica
-- [ ] **(fase 11, depende de implementação)** Completar revisão de teste de reação (M4), fadiga (M7), metas semanais (M9) e estimativa óssea (M5), incluindo população e duração das missões da fonte. Nenhuma destas melhorias foi validada nesta etapa
+- [x] **(fase 11, M5–M6)** Revisão documental da taxa óssea NASA e sua população/período, com estudo original complementar; avisos de extrapolação e conta ilustrativa. Revisados também os limites da soma de radiação: valores informados, dias ausentes e ausência de conexão com dosímetro ou limite de carreira. Sem alterar cortes de alerta
+- [ ] **(fase 11, depende de implementação)** Completar revisão de teste de reação (M4), fadiga (M7) e metas semanais (M9). Essas melhorias ainda não estão implementadas nesta base
 - [x] Nota educativa pelo sexo em Missão, com fonte NASA e orientação de readaptação à gravidade. Não muda faixas nem níveis; sem `sex`, usa texto geral
 - [x] Texto e tela "Seus dados": finalidade, acesso real no protótipo, retenção, cópia JSON por perfil e pedido local de exclusão. O tripulante não exclui o próprio histórico (decisão da equipe em 14/11). Limites em `docs/privacidade.md`
 - [x] **(fase 11, M1–M3)** Privacidade em `docs/privacidade.md`, aviso versionado e "Seus dados": plano de medicação sem cifra, valores diários cifrados e JSON baixado legível sem cifra. Corrigida a promessa de exclusão imediata de mensagens
+- [x] **(fase 11, M5–M6/M8)** Privacidade dos cálculos derivados e das preferências de missão compartilhadas sem cifra, fora da cópia individual; aviso v5. Script de integração ampliado ao perfil de missão e ao contexto ósseo/radiação
 - [ ] **(fase 11, depende de implementação)** Rever privacidade e exportação para teste de reação (M4) e origem do dado (M10), quando existirem
 - [x] Corrigir e executar `scripts/verify-larissa.mjs`: login por PIN, check-in M1–M3, download JSON legível e restrito ao perfil, pedido sem exclusão, persistência e reset pelo oficial médico. M4 ainda pendente
 - [x] Aviso antes da primeira entrada: finalidade e limites da base legal (art. 11, II, f), sem presumir tutela da saúde ou consentimento genérico para o hackathon

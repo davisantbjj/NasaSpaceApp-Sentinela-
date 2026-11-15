@@ -1,6 +1,28 @@
 # Continuidade da Larissa — 15/11/2026
 
 Branch: `feat/larissa-revisao-privacidade-fase-11`.
+
+## Atualização após os novos commits da Talita
+
+Integrados `8587439` (M8 perfil de missão e M5 estimativa óssea) e `097d2fd` (M6 soma de radiação) por merge, preservando o commit anterior da Larissa `412cb19`. Não houve conflitos. A branch da Talita não foi modificada.
+
+**Estado atual:** M1–M3, M5, M6 e M8 implementadas. M4, M7, M9, M10 e M11 seguem pendentes. A entrega das mensagens continua tarefa conjunta com Davi e não foi implementada nesta revisão. Apresentação, roteiro, capturas e slides continuam reservados à entrega final.
+
+**Tasks concluídas nesta atualização:**
+
+- Revisão documental de M5 com fonte NASA e estudo original de Gabel et al. (2022), diferenciando taxa média de grupo, período de 4–6 meses, simplificação linear e ausência de previsão individual. `context.boneLoss.demo` agora identifica a conta como demonstrativa; fórmula e cortes de alerta preservados.
+- Texto de M5 esclarece extrapolação tanto para missões curtas quanto acima de seis meses. O texto do exercício também deixa explícita a população/período da taxa citada.
+- Revisão de M6: soma de valores informados, sem conexão com dosímetro ou limite de carreira. Dias ausentes significam registro incompleto, sem quantificar a exposição desconhecida. Valores negativos/não finitos não entram na soma; zero continua válido.
+- Privacidade das preferências de missão sem cifra e dos cálculos de tela. Aviso v5: resultados derivados e preferências compartilhadas não integram a cópia individual; as doses diárias continuam no JSON. M4/M10 não são anunciadas como existentes.
+- Script ampliado para trocar o perfil pela interface, abrir as regiões óssea e corpo inteiro e conferir o contexto exibido. As verificações anteriores de PIN, check-in, mensagem, pedido de exclusão e JSON foram mantidas.
+- Documentos operacionais atualizados; removida a descrição antiga de botão de exclusão do histórico em `docs/como-funciona.md`.
+
+**Verificação desta atualização:** build com TypeScript passou; 69 testes em 5 arquivos passaram; script de integração passou no Edge com perfil temporário; `git diff --check` sem erros. Nenhuma captura foi regenerada.
+
+**Para continuar:** integrar M4/M7/M9/M10/M11 quando existirem e revisar os respectivos dados/regras; coordenar entrega das mensagens com Davi; manter a aprovação clínica e a proteção do plano de medicação como pendências explícitas. A permissão para mudar perfil/fase da missão é responsabilidade da frente de Davi. Apresentação somente após concluir o projeto.
+
+## Registro da primeira entrega (antes desses commits)
+
 Base: `origin/tasks-fase-11-melhorias-desafio`, commit `8911672`, de Talita Santos. A base contém M1–M3; M4–M11 continuam pendentes, apesar de algumas tarefas anteriores terem sido redigidas supondo toda a fase concluída.
 
 ## Entregue nesta branch

@@ -200,11 +200,11 @@ Os perfis ficam em `src/content/missions.ts`. Não são números de saúde e nã
 
 ### Perda óssea estimada
 
-No painel, a região **Ossos e músculos** mostra uma nota com a perda óssea **estimada, não medida**: os dias sem gravidade (estação e trânsito) vezes a média da NASA de 1% a 1,5% ao mês, que vale para missões de 4 a 6 meses e é um valor de grupo. Depois de 6 meses, a nota avisa que a NASA ainda não sabe se a perda continua no mesmo ritmo. Dias em gravidade parcial (Lua, Marte) não entram na conta, porque a taxa não é conhecida, e a nota diz isso. É contexto: não gera alerta. A taxa fica em `rules.json` (`context.boneLoss`).
+No painel, a região **Ossos e músculos** mostra uma conta ilustrativa, **estimativa, não medida**: dias em estação/trânsito divididos por 30, multiplicados pela média NASA de 1% a 1,5% ao mês em ossos que sustentam peso, publicada para missões de 4 a 6 meses. O texto avisa sobre extrapolação antes de 4 e depois de 6 meses e não prevê perda individual. Dias em gravidade parcial não entram por falta de taxa validada, não por ausência de risco. Sem perfil, a conta atribui todo o período ao ambiente atual; com perfil, usa as fases de referência, sem medir a exposição real. É contexto: não gera alerta. A taxa fica em `rules.json` (`context.boneLoss`), e a conta permanece demonstrativa. Referências e limites em `docs/pesquisa/revisao-faixas.md`.
 
 ### Radiação acumulada
 
-No painel, a região **Corpo inteiro** mostra a dose acumulada registrada na missão: a soma das doses do dia digitadas, em µSv ou, a partir de 1.000 µSv, em mSv. Se houver dias sem leitura até o último registro, a nota diz quantos e que o total real é maior. É contexto, **não limite**: o app não avalia limites de dose da carreira nem eventos de radiação intensa, e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
+No painel, a região **Corpo inteiro** mostra a soma dos valores diários informados e válidos (finitos, não negativos), em µSv ou, a partir de 1.000 µSv, em mSv. Zero é válido. Havendo dias sem leitura, o total registrado é incompleto; a exposição desses dias não é conhecida. Os dados são simulados, sem conexão com dosímetro. É contexto, **não limite**: o app não avalia limites de carreira ou eventos de radiação intensa e não gera alerta pela soma. A fonte fica em `rules.json` (`context.radiationTotal`).
 
 ## 10. As telas
 
@@ -259,7 +259,7 @@ O motor é feito de funções puras, sem banco e sem React. Por isso dá para te
 
 Antes da primeira entrada, o app apresenta finalidade, dados, acesso, retenção e condições da base legal. Depois da leitura, as rotas **Seus dados** e **Comunicação por texto** podem ser abertas por Missão ou rodapé. A comunicação também é acessível em Alertas.
 
-Seus dados exporta somente o perfil selecionado e seus registros, mensagens e pedido. Registrar o pedido não executa nem envia exclusão. O botão separado de exclusão pede confirmação e apaga o histórico local daquele perfil, preservando o perfil fictício e os outros tripulantes. Recarregar não recria registros; recriar a demonstração é uma ação explícita que também limpa mensagens e pedidos de todos. Cópias JSON já baixadas não são apagadas.
+Seus dados exporta somente o perfil de quem entrou e seus registros, anotações, mensagens, acessos e pedido, em JSON legível. Registrar o pedido não executa nem envia exclusão; não existe botão de exclusão imediata do histórico pelo tripulante. Recarregar exige novo login e preserva os registros. Recriar a demonstração é uma ação explícita do oficial médico que limpa os dados locais de todos. Cópias JSON já baixadas não são apagadas. Plano de medicação e preferências da missão ficam sem cifra; estimativa óssea e soma de radiação são cálculos de tela e não integram a cópia individual.
 
 Mensagens são texto local para mostrar à equipe: não são entregues nem têm confirmação de leitura. Cada pessoa entra com o próprio PIN, e o texto fica cifrado no aparelho. Detalhes em `docs/privacidade.md`.
 

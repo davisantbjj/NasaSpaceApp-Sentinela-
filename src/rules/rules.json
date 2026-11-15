@@ -267,7 +267,7 @@
       "nasaRisk": "Reduced Cardiorespiratory and Musculoskeletal Fitness",
       "hazards": ["gravity"],
       "messages": {
-        "whyItMatters": "Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção.",
+        "whyItMatters": "A microgravidade afeta ossos e músculos. A NASA relata perda média de 1% a 1,5% ao mês nos ossos que sustentam peso em missões de 4 a 6 meses; não é uma previsão individual. Exercício faz parte das contramedidas da missão.",
         "whatToDo": {
           "yellow": "Registre o tipo de treino e reponha a sessão conforme o seu plano individual.",
           "red": "Fale com o médico de bordo antes de retomar ou ajustar o plano de treino."
@@ -452,7 +452,7 @@
       "daysPerMonth": 30,
       "studiedMonths": { "min": 4, "max": 6 },
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
-      "demo": false
+      "demo": true
     },
     "radiationTotal": {
       "sourceUrl": "https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/"

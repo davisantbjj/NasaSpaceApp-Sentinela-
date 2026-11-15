@@ -1,6 +1,6 @@
 # Revisão documental das faixas
 
-Revisão de Larissa, iniciada em 14/11/2026 e complementada em 15/11/2026 para M1–M3 da branch da Talita. Esta é uma conferência de rastreabilidade, não uma validação médica. Os números existentes foram mantidos para preservar a demonstração; todas as regras continuam com `demo: true`.
+Revisão de Larissa, iniciada em 14/11/2026 e complementada em 15/11/2026 para M1–M3 e, após os commits da Talita até `097d2fd`, M5–M6. Esta é uma conferência de rastreabilidade, não uma validação médica. Os cortes dos indicadores foram mantidos para preservar a demonstração; todos continuam com `demo: true`.
 
 Cada indicador em `src/rules/rules.json` agora tem `rangeEvidence`: referências gerais, justificativa e limites de evidência separados para verde, amarelo e vermelho. `sourceUrl` continua sendo a fonte do risco e da explicação; não deve ser interpretado como validação de todos os cortes numéricos.
 
@@ -14,7 +14,7 @@ Cada indicador em `src/rules/rules.json` agora tem `rangeEvidence`: referências
 | Exercício | A NASA descreve média de aproximadamente duas horas diárias na ISS. Isso não valida 60–150, 30–180 ou limites universais; prescrição, intensidade e modalidade importam. | [NASA: Astronaut Exercise](https://www.nasa.gov/general/astronaut-exercise/) |
 | Humor | Escala própria 1–5, com cortes 4/3/2. A fonte explica o risco comportamental, sem validar a escala ou seus níveis. | [NASA: risco comportamental](https://www.nasa.gov/reference/risk-of-behavioral-conditions-and-psychiatric-disorders/) |
 | Visão | Escala própria 0–2. Os níveis não diagnosticam SANS, e a fonte não valida esse autoteste. | [NASA: SANS](https://www.nasa.gov/reference/risk-of-spaceflight-associated-neuro-ocular-syndrome-sans/) |
-| Radiação | Sem faixa geral. O algoritmo pessoal é demonstrativo e não representa limite de exposição; não cobre dose acumulada ou eventos agudos. Cerca de 150 µSv/dia no Radi-N2 descreve somente nêutrons na ISS. | [CSA: Radi-N2](https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp) |
+| Radiação | Sem faixa geral. O algoritmo pessoal é demonstrativo e não representa limite de exposição ou de dose acumulada, nem detecta eventos agudos. M6 soma as doses registradas apenas como contexto. Cerca de 150 µSv/dia no Radi-N2 descreve somente nêutrons na ISS. | [CSA: Radi-N2](https://www.asc-csa.gc.ca/eng/sciences/radi-n2.asp) |
 | Sintomas | A classificação fixa de cada sintoma é de demonstração. A página de riscos da NASA fornece contexto, sem validar uma regra de triagem para essa lista. | [NASA: riscos](https://www.nasa.gov/hrp/risks/) |
 
 Os parâmetros de linha de base (7 amostras), persistência (3 registros) e desvio (15%) também são decisões de demonstração, sem validação clínica. Registros não precisam ser dias consecutivos no calendário no motor atual. Ausência de alerta significa apenas ausência de gatilho nas regras disponíveis, não ausência de risco.
@@ -35,9 +35,27 @@ Consulta às fontes em 15/11/2026. Escopo implementado: medicação, estresse, c
 - **Estresse e carga:** o estudo observacional de Jones e colaboradores acompanhou 24 astronautas em missões de aproximadamente seis meses e encontrou associação entre sono curto, desempenho e estresse. Usou escalas visuais analógicas de autorrelato, diferentes das cinco opções do Sentinela. Associação não demonstra causalidade nem permite diagnóstico individual. Referência: *Sleep deficiency in spaceflight is associated with degraded neurobehavioral functions and elevated stress in astronauts on six-month missions aboard the International Space Station*, Sleep, 2022, [texto e métodos](https://pmc.ncbi.nlm.nih.gov/articles/PMC8919197/).
 - **Exercício:** o SPRINT comparou nove participantes no programa experimental com 17 no grupo de comparação, em voos longos. Intensidade e volume foram considerados, com limitações de amostra e evolução do programa de comparação. Sustenta distinguir modalidades; não oferece um corte universal em minutos nem valida o algoritmo pessoal do app. Referência: English KL et al., *High intensity training during spaceflight: results from the NASA Sprint Study*, npj Microgravity, 2020;6:21, [doi:10.1038/s41526-020-00111-x](https://doi.org/10.1038/s41526-020-00111-x).
 
+## Complemento M5–M6 após a atualização da Talita
+
+### Estimativa óssea (M5)
+
+A [NASA: risco de alterações ósseas](https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/) apresenta perda **média de 1%–1,5% ao mês** em ossos que sustentam peso, em missões de **4–6 meses**. É uma descrição de grupo, com incerteza sobre a manutenção da taxa em missões mais longas. Não valida uma curva linear diária, uma previsão individual ou uma taxa para Lua/Marte.
+
+O app calcula `dias em estação/trânsito ÷ 30 × taxa mensal`. O mês de 30 dias, o ritmo constante e aplicar a média a uma pessoa são simplificações da demonstração. Dias em gravidade parcial são excluídos por falta de taxa validada, **não** porque tenham risco zero. Sem perfil, todos os dias são atribuídos ao ambiente atual; com perfil, usa-se o cronograma de referência, não um histórico de exposição medido. Trocar o perfil pode recalcular o passado ilustrativo. A conta não ajusta exercício, nutrição, tratamento, local do esqueleto ou recuperação entre fases.
+
+Foi mantida a fórmula e reforçado o texto: não mede nem prevê perda individual; há aviso de extrapolação abaixo de 4 e acima de 6 meses. `context.boneLoss.demo` passou a `true`, pois a conta do protótipo é ilustrativa mesmo que a taxa venha de fonte oficial. Não há faixa de alerta ou mudança de nível decorrente dela.
+
+Como estudo original complementar, [Gabel et al., Scientific Reports, 2022;12:9446](https://pmc.ncbi.nlm.nih.gov/articles/PMC9247070/), doi:10.1038/s41598-022-13461-1, acompanhou 17 astronautas com tomografia de alta resolução de tíbia e rádio antes/depois do voo e durante a recuperação. Nove não recuperaram completamente a densidade total da tíbia em 12 meses. Isso reforça a variabilidade e a necessidade de medição direta; o estudo não valida a fórmula do Sentinela nem transforma a média NASA em prescrição ou diagnóstico.
+
+### Radiação acumulada (M6)
+
+A [NASA: risco de câncer induzido por radiação](https://www.nasa.gov/reference/risk-of-radiation-induced-cancers/) sustenta acompanhar exposição e seus riscos, mas não valida os valores simulados, a qualidade do dado digitado ou um limite de carreira no app. O código soma valores finitos não negativos em µSv e apresenta mSv a partir de 1.000 µSv. Zero é valor válido; dados ausentes não recebem dose presumida.
+
+O resultado é **soma dos valores informados**, não medição direta da exposição total. Dias sem leitura tornam o registro incompleto: não é possível quantificar esses dias nem afirmar estritamente que a dose real seja maior. Não há conexão com dosímetro, correção por tipo de radiação ou comparação com limite ocupacional. Não misturar componentes distintos de dose nem aplicar os 150 µSv/dia de nêutrons do Radi-N2 como dose total universal. Os dados atuais são fictícios. Nenhum alerta é gerado pela soma.
+
 ### Itens que aguardam implementação
 
-M4 (teste de reação), M5 (estimativa óssea), M7 (fadiga) e M9 (metas semanais) não estão implementadas nesta base. Seus cortes e textos finais ainda não foram revisados nem aprovados. A revisão destes itens permanece aberta; não antecipar uma validação a partir de tarefas planejadas. Apresentação, roteiro e material da entrega serão revisados após a conclusão do escopo, conforme Larissa.
+M4 (teste de reação), M7 (fadiga), M9 (metas semanais), M10 (origem do dado) e M11 (destaque de readaptação) não estão implementadas nesta base. M5–M6 foram revisadas documentalmente e M8 está integrada; isso não constitui aprovação clínica. Não antecipar uma validação a partir de tarefas planejadas. Apresentação, roteiro e material da entrega serão revisados após a conclusão do escopo, conforme Larissa.
 
 ## O que ainda depende da equipe
 

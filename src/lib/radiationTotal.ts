@@ -20,16 +20,16 @@ export function radiationTotal(records: DailyRecord[], missionDay: number, rules
   if (!context) return undefined;
   const doses = records
     .map((r) => r.values.radiationDose)
-    .filter((v): v is number => typeof v === 'number');
+    .filter((v): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0);
   if (doses.length === 0) return undefined;
 
   const total = doses.reduce((sum, dose) => sum + dose, 0);
   const missing = Math.max(0, missionDay - doses.length);
   const parts = [
-    `Dose acumulada registrada na missão: ${doseText(total)}, somando ${doses.length} ${doses.length === 1 ? 'dia' : 'dias'} com leitura do dosímetro.`,
+    `Dose acumulada registrada na missão: ${doseText(total)}, somando ${doses.length} ${doses.length === 1 ? 'dia' : 'dias'} com valor informado. Os dados da demonstração são simulados; o app não está conectado a um dosímetro.`,
   ];
   if (missing > 0) {
-    parts.push(`${missing} ${missing === 1 ? 'dia sem leitura não entra' : 'dias sem leitura não entram'} na soma, então o total real é maior.`);
+    parts.push(`${missing} ${missing === 1 ? 'dia sem leitura válida não entra' : 'dias sem leitura válida não entram'} na soma. O total registrado está incompleto; não é possível determinar a exposição desses dias.`);
   }
   parts.push('É contexto, não limite: o app não avalia limites de dose da carreira nem eventos de radiação intensa.');
   return { text: parts.join(' '), sourceUrl: context.sourceUrl };

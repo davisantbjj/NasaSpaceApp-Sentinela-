@@ -1,12 +1,12 @@
 # Privacidade e comunicação no protótipo
 
-Revisado por Larissa em 15/11/2026 sobre a branch da Talita, com M1–M3 implementadas. Use somente dados fictícios. O protótipo não oferece serviço de saúde nem declaração de conformidade integral com a LGPD.
+Revisado por Larissa em 15/11/2026 sobre a branch da Talita, com M1–M3, M5, M6 e M8 implementadas. Use somente dados fictícios. O protótipo não oferece serviço de saúde nem declaração de conformidade integral com a LGPD.
 
 ## Primeira entrada
 
 Antes de criar a demonstração ou liberar o login, o app apresenta finalidade, armazenamento, acesso, retenção e limites da base legal. O botão registra a leitura em `preferences`, no IndexedDB. Isso não identifica uma pessoa nem constitui consentimento genérico. Outro navegador tem sua própria leitura. A recriação da demonstração preserva essa preferência.
 
-O aviso foi atualizado para `2026-11-15-v4`, explicitando o plano de medicação sem cifra. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
+O aviso foi atualizado para `2026-11-15-v5`, mantendo a explicação do plano sem cifra da v4 e acrescentando contexto calculado e preferências da missão. Uma leitura da versão anterior não dispensa a leitura do novo aviso. A atualização do aviso não apaga o histórico.
 
 ## Dados armazenados e proteção real
 
@@ -18,6 +18,8 @@ O aviso foi atualizado para `2026-11-15-v4`, explicitando o plano de medicação
 | Pacote para o solo e resumo do comandante | Conteúdo selado para cada destinatário | Metadados de fila ficam abertos; o protótipo simula os destinatários no mesmo navegador. |
 | Registro de acesso, pedidos de exclusão e preferências | Sem cifra | Também precisam de uma política de proteção e retenção para uso real. |
 | Arquivo JSON exportado | Legível e sem cifra fora do banco | O PIN não protege o arquivo baixado. O usuário precisa cuidar das cópias. |
+| Perfil de missão e substituição manual do ambiente (M8) | Preferências compartilhadas em `settings`, sem cifra | Qualquer perfil de bordo pode alterar pela interface atual; a definição de permissões continua com Davi. Não integram a cópia individual. |
+| Estimativa óssea e soma de radiação (M5–M6) | Calculadas no painel, sem nova tabela | Não são novas medições. O JSON contém as doses diárias registradas e o início da missão no cadastro, mas não exporta essas contas nem um histórico real das fases. |
 
 M4 (teste de reação) e M10 (origem do dado) ainda não estão implementadas nesta base. Seus resultados e metadados não são anunciados como coletados ou exportados. Rever este documento e o aviso quando esses dados passarem a existir.
 
@@ -62,8 +64,8 @@ npm.cmd run dev -- --host 127.0.0.1 --port 5173 --strictPort
 node scripts/verify-larissa.mjs
 ```
 
-O script usa perfil temporário isolado e downloads fictícios, sem acessar o navegador pessoal. `EDGE_PATH` permite indicar outra instalação do Edge. Verifica aviso atualizado antes do seed, login pela interface, check-in M1–M3, mensagem como texto, pedido idempotente sem exclusão, download JSON legível e restrito ao perfil, cifra dos valores no banco, persistência após recarregar/reautenticar e reset pelo oficial médico preservando o aviso.
+O script usa perfil temporário isolado e downloads fictícios, sem acessar o navegador pessoal. `EDGE_PATH` permite indicar outra instalação do Edge. Verifica aviso atualizado antes do seed, login pela interface, escolha de perfil de missão e contexto M5–M6, check-in M1–M3, mensagem como texto, pedido idempotente sem exclusão, download JSON legível e restrito ao perfil, cifra dos valores no banco, persistência após recarregar/reautenticar e reset pelo oficial médico preservando o aviso.
 
 Não cobre migração de bancos antigos, todas as permissões, teste de reação ou origem do dado ainda inexistentes. Não substitui revisão clínica, jurídica ou acessibilidade com leitor de tela. `--screenshots` é opcional; as capturas e a apresentação final ficam para depois da conclusão do escopo.
 
-Em 15/11/2026, passaram o build (com checagem de tipos), os 59 testes Vitest e o script acima no Edge. Detalhes e pendências em [continuidade da Larissa](continuidade-larissa-2026-11-15.md).
+Em 15/11/2026, após integrar M5/M6/M8, passaram o build (com checagem de tipos), os 69 testes Vitest e o script acima no Edge. Detalhes e pendências em [continuidade da Larissa](continuidade-larissa-2026-11-15.md).

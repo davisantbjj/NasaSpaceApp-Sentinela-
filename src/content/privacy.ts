@@ -10,6 +10,10 @@ export const PRIVACY_SECTIONS = [
     text: 'O plano de medicação contém nomes e horários previstos. Se vinculado a uma pessoa real, é dado de saúde sensível. Neste protótipo, esse plano fica no cadastro sem criptografia, assim como os dados do perfil e a lista de indicadores. Quem acessa o armazenamento do navegador pode lê-los sem PIN. As marcações diárias de medicação tomada, estresse, carga de trabalho e tempos de exercício ficam cifradas com os demais valores do check-in. Use somente dados fictícios.',
   },
   {
+    title: 'Contexto calculado da missão',
+    text: 'O perfil e o ambiente da missão ficam nas preferências compartilhadas do aparelho, sem criptografia. A estimativa óssea e a soma das doses registradas de radiação são calculadas na tela, sem criar uma nova medição. A cópia JSON inclui as doses diárias registradas, mas não essas contas nem as preferências compartilhadas da missão. Os dados da demonstração são simulados.',
+  },
+  {
     title: 'Para quê',
     text: 'Demonstrar o acompanhamento de indicadores, a comparação com faixas e padrão pessoal e a organização de informações para uma conversa com o oficial médico. Use apenas informações fictícias; este protótipo não presta atendimento de saúde.',
   },

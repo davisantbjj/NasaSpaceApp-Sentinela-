@@ -103,7 +103,7 @@ export const INDICATORS: Record<IndicatorId, IndicatorContent> = {
     label: 'Exercício',
     unit: 'min',
     howToMeasure: 'Digite os minutos de exercício aeróbico (correr, pedalar, remar) e de treino resistido (contra carga ou resistência, como agachamento) feitos hoje, com o equipamento da sua nave. O app soma os dois. Use 0 se não fez um deles.',
-    whyMeasure: 'Sem gravidade, os ossos perdem de 1% a 1,5% de densidade por mês e os músculos enfraquecem. O exercício é a principal proteção, e o treino resistido é o que mais protege os ossos.',
+    whyMeasure: 'A microgravidade afeta ossos e músculos. A NASA relata perda média de 1% a 1,5% ao mês nos ossos que sustentam peso em missões de 4 a 6 meses; isso não prevê a sua perda. Exercício aeróbico e resistido fazem parte das contramedidas, conforme o plano individual.',
     input: { min: 0, max: 600, step: 1 },
   },
   resistanceMinutes: {

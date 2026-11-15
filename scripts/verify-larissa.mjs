@@ -94,13 +94,32 @@ try {
   await waitFor("document.body.innerText.includes('Li o aviso')");
   assert.equal(await inspect('return await db.crew.count();'), 0, 'Seed criado antes da leitura');
   assert.ok(await evaluate("document.body.innerText.includes('sem criptografia')"));
-  await inspect("await db.preferences.put({ key: 'privacyNotice', value: '2026-11-14-v3' });");
+  await inspect("await db.preferences.put({ key: 'privacyNotice', value: '2026-11-15-v4' });");
   await command('Page.reload');
   await waitFor("document.body.innerText.includes('Li o aviso')");
   assert.equal(await inspect('return await privacy.hasAcknowledgedPrivacyNotice();'), false);
   await click('Li o aviso — abrir demonstração');
   await login('lia', '3333');
   console.log('PASS: aviso versionado antes do seed e login da Lia pela interface');
+
+  await evaluate("location.hash = '#/mission'");
+  await waitFor(`!!document.querySelector('select[aria-label="Perfil da missão"]')`);
+  await evaluate(`(() => {
+    const select = document.querySelector('select[aria-label="Perfil da missão"]');
+    Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value').set.call(select, 'lunarFlyby');
+    select.dispatchEvent(new Event('change', { bubbles: true }));
+  })()`);
+  await waitFor("document.body.innerText.includes('10 dias') && document.body.innerText.includes('Trânsito ao redor da Lua')");
+  await evaluate("location.hash = '#/'");
+  await waitFor("!!document.querySelector('.region-button')");
+  await evaluate("[...document.querySelectorAll('.region-button')].find(b => b.textContent.includes('Ossos e músculos')).click()");
+  await waitFor("document.body.innerText.includes('Estimativa, não medida')");
+  assert.ok(await evaluate("document.body.innerText.includes('Não mede nem prevê')"));
+  assert.ok(await evaluate("document.body.innerText.includes('missão curta não foi validado')"));
+  await evaluate("[...document.querySelectorAll('.region-button')].find(b => b.textContent.includes('Corpo inteiro')).click()");
+  await waitFor("document.body.innerText.includes('Dose acumulada registrada na missão')");
+  assert.ok(await evaluate("document.body.innerText.includes('não está conectado a um dosímetro')"));
+  console.log('PASS: perfil lunar M8 e contexto ósseo/radiação M5–M6 sem promessa de medição individual');
 
   await evaluate("location.hash = '#/checkin'");
   await waitFor("!!document.querySelector('form.step')");
@@ -169,6 +188,7 @@ try {
   assert.ok(downloaded, 'Download JSON não concluído');
   const copy = JSON.parse(await readFile(join(profile, downloaded), 'utf8'));
   assert.equal(copy.crew.id, 'lia');
+  assert.equal('missionProfile' in copy, false, 'Preferência compartilhada incluída como dado individual');
   assert.ok(copy.crew.medications.some((m) => m.id === 'eyeDrops'));
   assert.equal(copy.records.length, 61, 'Pedido apagou registros ou check-in não foi salvo');
   assert.equal(copy.medicalMessages.length, 1);
