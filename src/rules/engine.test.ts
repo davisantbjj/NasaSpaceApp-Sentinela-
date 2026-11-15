@@ -232,6 +232,40 @@ describe('evaluateRecord', () => {
     expect(findCorrelations(short, baselines, rules).some(c => c.indicators.includes('reactionTime'))).toBe(false);
   });
 
+  it('temperatura com linha de base: 7 dias a 36,6 °C seguidos de 3 dias a 37,0 °C gera amarelo por desvio (N1)', () => {
+    // Linha de base em 36,6 °C. 37,0 °C é ~1,09% acima (limite 1,0%), gerando alerta após 3 dias.
+    const normal = repeat({ temperature: 36.6 }, 7);
+    const elevated = repeat({ temperature: 37.0 }, 3);
+    const alerts = evaluateLast([...normal, ...elevated]);
+    expect(alerts.map((a) => [a.indicator, a.level, a.trigger])).toEqual([
+      ['temperature', 'yellow', 'baselineDeviation'],
+    ]);
+    expect(alerts[0].region).toBe('immune');
+
+    // Desvio de menos de 3 dias não gera alerta
+    expect(evaluateLast([...normal, ...repeat({ temperature: 37.0 }, 2)])).toEqual([]);
+
+    // Desvio para baixo não gera alerta pessoal porque deviationDirection é "above"
+    expect(evaluateLast([...normal, ...repeat({ temperature: 36.2 }, 3)])).toEqual([]);
+  });
+
+  it('temperatura: subida lenta ao longo de 60 dias não gera alerta todo dia (N1)', () => {
+    // Sobe suavemente de 36,5 °C a 36,8 °C; as variações ficam dentro do limite de desvio pessoal
+    const history: DailyValues[] = Array.from({ length: 60 }, (_, i) => ({
+      temperature: Math.round((36.5 + (i / 60) * 0.3) * 10) / 10,
+    }));
+    const all = records(history);
+    const baselines = computeBaselines('c1', all, rules);
+    let alertedDays = 0;
+    for (let i = 7; i < all.length; i++) {
+      const dayAlerts = evaluateRecord(all[i], all.slice(0, i), baselines, rules, 'station');
+      if (dayAlerts.some((a) => a.indicator === 'temperature')) {
+        alertedDays++;
+      }
+    }
+    expect(alertedDays).toBe(0);
+  });
+
   it('medicação: alerta só quando uma dose prevista não foi tomada', () => {
     const vitaminD = { id: 'vitaminD', label: 'Suplemento de vitamina D' };
     const eyeDrops = { id: 'eyeDrops', label: 'Colírio lubrificante' };

@@ -90,7 +90,8 @@ function sustainedDeviation(
   rule: IndicatorRule,
   rules: Rules,
 ): SeriesResult['sustained'] {
-  const { sustainedDays, baselineDeviationPercent } = rules.config;
+  const { sustainedDays } = rules.config;
+  const deviationLimit = rule.baselineDeviationPercent ?? rules.config.baselineDeviationPercent;
   const recent = [...previous, record]
     .map((r) => seriesValue(r.values, indicator, component))
     .filter((v): v is number => v !== undefined)
@@ -98,7 +99,7 @@ function sustainedDeviation(
   if (recent.length < sustainedDays) return undefined;
 
   const percents = recent.map((v) => deviationPercent(v, baseline.mean));
-  const allDeviate = percents.every((p) => isDeviation(p, baselineDeviationPercent, rule.deviationDirection));
+  const allDeviate = percents.every((p) => isDeviation(p, deviationLimit, rule.deviationDirection));
   const sameSign = percents.every((p) => Math.sign(p) === Math.sign(percents[0]));
   if (!allDeviate || !sameSign) return undefined;
   return { percent: percents[percents.length - 1], days: sustainedDays };

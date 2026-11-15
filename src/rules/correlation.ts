@@ -11,10 +11,11 @@ function movedAway(record: DailyRecord, indicator: IndicatorId, baselines: Basel
     const { green } = rangesFor(rule, component);
     if (green && !inRange(value, green)) return true;
     const baseline = findBaseline(baselines, indicator, component);
+    const deviationLimit = rule.baselineDeviationPercent ?? rules.config.baselineDeviationPercent;
     return (
       rule.useBaseline &&
       isBaselineReady(baseline, rules) &&
-      isDeviation(deviationPercent(value, baseline!.mean), rules.config.baselineDeviationPercent, rule.deviationDirection)
+      isDeviation(deviationPercent(value, baseline!.mean), deviationLimit, rule.deviationDirection)
     );
   });
 }

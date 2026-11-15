@@ -102,7 +102,9 @@
       "unit": "°C",
       "green": { "min": 36.1, "max": 37.2 },
       "yellow": { "min": 35.5, "max": 37.9 },
-      "useBaseline": false,
+      "useBaseline": true,
+      "deviationDirection": "above",
+      "baselineDeviationPercent": 1.0,
       "nasaRisk": "Altered Immune System Responses",
       "hazards": ["isolation", "hostileEnvironment"],
       "messages": {
@@ -116,10 +118,11 @@
       "rangeEvidence": {
         "status": "demo-not-clinically-validated",
         "generalReferenceUrls": [
-          "https://medlineplus.gov/ency/article/002341.htm"
+          "https://medlineplus.gov/ency/article/002341.htm",
+          "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5701078/"
         ],
         "green": "36,1–37,2 °C: escolha anterior mantida como demonstração. A referência consultada informa 36,5–37,3 °C; local e método de medida importam.",
-        "yellow": "35,5–37,9 °C: escolha de demonstração, sem validação clínica.",
+        "yellow": "35,5–37,9 °C ou desvio acima de 1,0% do padrão pessoal por 3 dias: escolha de demonstração. Estudo com 11 astronautas encontrou temperatura central cerca de 1 °C mais alta ao longo de 2,5 meses (Stahn et al., 2017), medida com sensor na testa, sem validar termômetro comum.",
         "red": "Fora da amarela: lógica de demonstração, sem validar urgência por método de medida."
       },
       "demo": true

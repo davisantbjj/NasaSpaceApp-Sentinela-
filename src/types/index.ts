@@ -262,6 +262,7 @@ export interface IndicatorRule {
   valueLabels?: Record<string, string>; // chave i18n de cada valor de uma escala
   useBaseline: boolean;
   deviationDirection?: 'both' | 'above' | 'below'; // sentido de risco do desvio pessoal
+  baselineDeviationPercent?: number; // percentual de desvio pessoal específico do indicador (N1)
   nasaRisk: string;
   hazards: string[];
   messages: {

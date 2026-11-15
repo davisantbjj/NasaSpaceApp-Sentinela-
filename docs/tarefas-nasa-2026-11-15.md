@@ -49,7 +49,7 @@ Nenhuma muda o formato dos dados, então não precisam de versão nova do banco.
 
 ### N1. Temperatura com linha de base
 
-- [ ] **N1.** Em `rules.json`, trocar `"useBaseline": false` por `true` na temperatura, com `"deviationDirection": "above"`.
+- [x] **N1.** Em `rules.json`, trocar `"useBaseline": false` por `true` na temperatura, com `"deviationDirection": "above"`.
   - **Por quê:** um estudo com 11 astronautas encontrou a temperatura central em repouso cerca de 1 °C mais alta, subindo aos poucos ao longo de 2,5 meses ([Stahn et al., 2017](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5701078/)). Com faixa fixa da Terra, um tripulante saudável no terceiro mês ficaria amarelo todos os dias.
   - **Cuidado:** o estudo mediu temperatura central com sensor na testa, não com termômetro comum. Isso vai no `rangeEvidence`, não vira faixa nova.
   - **Arquivos:** `src/rules/rules.json`, `src/rules/engine.test.ts`.
